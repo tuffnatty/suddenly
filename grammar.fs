@@ -1,0 +1,40 @@
+DEFER (slot-prolog)  ( warp -- warp top-warp )
+DEFER (slot-epilog)  ( warp -- warp top-warp )
+DEFER (form-prolog)  ( warp top-warp c-addr len -- warp top-warp' )
+DEFER (form-epilog)  ( n addr u -- )
+
+: slot:
+  : POSTPONE (slot-prolog) ;
+
+: [form]
+  BL PARSE POSTPONE SLITERAL POSTPONE (form-prolog) ; IMMEDIATE
+
+: |   ( n sstr -- )
+  POSTPONE (form-epilog) ; IMMEDIATE
+
+VARIABLE paradigm-slot-bitmap
+: slot-empty!  ( n -- )
+  1 SWAP LSHIFT INVERT paradigm-slot-bitmap @ AND paradigm-slot-bitmap ! ;
+: slot-full!  ( n -- )
+  1 SWAP LSHIFT paradigm-slot-bitmap @ OR paradigm-slot-bitmap ! ;
+: slot-empty?  ( n -- f )
+  1 SWAP LSHIFT paradigm-slot-bitmap @ AND 0= ;
+: slot-range-full? ( n1 n2 -- f)
+  0 { mask }
+  BEGIN 2DUP <= WHILE
+    1 OVER LSHIFT mask OR TO mask
+  1- REPEAT 2DROP paradigm-slot-bitmap @ mask AND ;
+: slot-range-empty? ( n1 n2 -- f )
+  slot-range-full? NOT ;
+: slot-full?  ( n -- f )
+  1 SWAP LSHIFT paradigm-slot-bitmap @ AND ;
+
+VARIABLE paradigm-flags
+: flag-set  ( n -- )
+  paradigm-flags @ OR paradigm-flags ! ;
+: flag-clear  ( n -- )
+  INVERT paradigm-flags @ AND paradigm-flags ! ;
+: flag-is?  ( n -- f )
+  paradigm-flags @ AND ;
+: flag-empty?  ( n -- f )
+  paradigm-flags @ AND 0= ;
