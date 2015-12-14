@@ -9,11 +9,11 @@ REQUIRE warp.fs
 %010000 CONSTANT tr-confluence
 %100000 CONSTANT tr-fallout
 VARIABLE transform-flags
-: transform-flag-set
+: transform-flag-set  ( flag -- )
   transform-flags @ OR transform-flags ! ;
-: transform-flags-clear
+: transform-flags-clear  ( -- )
   0 transform-flags ! ;
-: transform-performed?
+: transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
 
@@ -342,7 +342,7 @@ CREATE fallout-buf 3 cyrs ALLOT
     ELSE FALSE THEN             ( addr u addr' ofs | addr u FALSE )
   THEN
   ?DUP-IF                                      ( addr u addr' ofs )
-    >R >R OVER R@ SWAP - 2cyrs <=        ( addr u f  R: addr' ofs ) 
+    >R >R OVER R@ SWAP - 2cyrs <=        ( addr u f  R: addr' ofs )
     R@ XC@ [CHAR] у =  AND              ( addr u f'  R: addr' ofs )
     R@ cyr+ XC@ [CHAR] у =  AND  IF         ( addr u R: addr' ofs )
       R> R> fallout-reverse-uu         ( addr u addr' ofs srclist )
