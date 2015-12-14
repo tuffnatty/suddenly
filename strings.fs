@@ -1,3 +1,6 @@
+: XC!  ( u addr -- )
+  5 XC!+? DROP 2DROP ;
+
 STRUCT
   CELL% FIELD cstr-len
   CELL% FIELD cstr-ptr
@@ -8,6 +11,10 @@ END-STRUCT cstr%
 
 : .cstr  ( cstr -- )
   cstr-get TYPE ;
+
+: cstr-append-xc  { xc cstr -- }
+  xc  cstr cstr-get +  XC!
+  xc XC-SIZE  cstr cstr-len  +! ;
 
 cstr%
   CELL% FIELD sstr-count
@@ -40,13 +47,16 @@ VARIABLE sstr-last
     THEN
   LOOP count ;
 
-: sstr-preparse  { sstr -- }
-  sstr sstr-count @ IF sstr sstr-arr @ FREE IF ABORT" Free error while preparsing" THEN THEN
-  sstr cstr-get  count-words  sstr sstr-count !
+: sstr-allocate-arr  { sstr -- }
   sstr sstr-count @ cstr% %SIZE * ALLOCATE IF
     ABORT" Allocation error while preparsing"
   THEN
-  sstr sstr-arr !
+  sstr sstr-arr ! ;
+
+: sstr-preparse  { sstr -- }
+  sstr sstr-count @ IF sstr sstr-arr @ FREE IF ABORT" Free error while preparsing" THEN THEN
+  sstr cstr-get  count-words  sstr sstr-count !
+  sstr sstr-allocate-arr
   sstr cstr-ptr @ 0 0 0 0 { start n in-word cur arr-ptr }
   sstr cstr-len @  0 DO
     sstr cstr-ptr @ I + DUP C@ BL = IF              ( ptr )
@@ -72,13 +82,15 @@ VARIABLE sstr-last
   THEN
   ;
 
+: sstr-create  ( buf-len -- sstr )
+  DUP ALLOCATE IF ABORT" ALLOCATION ERROR" THEN  ( buf-len buf )
+  sstr% %ALLOC { sstr }
+  sstr cstr-ptr !  sstr cstr-len !  sstr ;
+
 : "  ( "string" -- sstr )
-  [CHAR] " PARSE   ( addr u )
-  DUP ALLOCATE IF ABORT" ALLOCATION ERROR" THEN  ( addr u buf )
-  sstr% %ALLOC { sstr }  ( addr u buf )
-  DUP  sstr cstr-ptr !
-  SWAP DUP  sstr cstr-len !   ( addr buf u )
-  CMOVE                               ( )
+  [CHAR] " PARSE { str len }
+  len sstr-create { sstr }
+  str  sstr cstr-ptr @  len CMOVE
   0 sstr sstr-count !
   sstr sstr-preparse
   sstr sstr-last !
@@ -96,7 +108,6 @@ VARIABLE sstr-last
   CMOVE                                                       ( )
   sstr sstr-preparse
   ; IMMEDIATE
-
 
 cstr%
   CELL% 100 * FIELD bstr-buffer
@@ -178,9 +189,6 @@ END-STRUCT bstr%  \ a string for fast prepending
 : cs-buf-size  ( cs -- cs u )
   POSTPONE DUP POSTPONE C@ POSTPONE 1+ ; IMMEDIATE
 
-: XC!  ( u addr -- )
-  5 XC!+? DROP 2DROP ;
-
 :noname  ( addr -- u )
   @ DUP 128 AND IF
     DUP 31 AND 6 LSHIFT SWAP 8 RSHIFT 63 AND OR
@@ -214,3 +222,27 @@ INTERPRET/COMPILE: cyrs
 
 : str-trim-last-cyr  ( addr len -- addr len' )
   DUP cyr > IF cyr - THEN ;
+
+: last-sound-ptr  ( addr u -- ptr )
+  + XCHAR- ;
+
+: prev-sound-ptr  ( addr u -- ptr )
+  + XCHAR- XCHAR- ;
+
+: last-sound ( addr u -- u )
+  last-sound-ptr XC@ ;
+: prev-sound ( addr u -- u )
+  prev-sound-ptr XC@ ;
+: third-sound ( addr u -- u )
+  prev-sound-ptr XCHAR- XC@ ;
+: last-sound-change  ( xc addr u -- )
+  last-sound-ptr XC! ;
+: last-sound-add ( u cs -- )
+  SWAP OVER COUNT + XC!  ( cs )
+  DUP C@ cyr+ SWAP C! ;
+: last-sound-cut  ( cs -- )
+  DUP COUNT last-sound-ptr OVER 1+ - SWAP C! ;
+: prev-sound-cut  ( cs -- )
+  DUP COUNT last-sound-ptr DUP XC@ SWAP XCHAR- XC!
+  DUP C@ cyr - SWAP C! ;
+

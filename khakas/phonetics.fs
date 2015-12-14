@@ -59,3 +59,6 @@ sound-class;
 sound-class o-yo
   sound о sound ӧ
 sound-class;
+
+
+REQUIRE phonetics-common.fs

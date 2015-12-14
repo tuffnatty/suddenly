@@ -4,7 +4,8 @@ REQUIRE grammar.fs
 REQUIRE strings.fs
 REQUIRE filters.fs
 
-:noname ; IS (slot-prolog)
+:noname
+  ; IS (slot-prolog)
 
 :noname ; IS (slot-epilog)
 
@@ -36,17 +37,6 @@ REQUIRE debug.fs
   ; IS (form-prolog)
 
 REQUIRE rules.fs
-: rule-cv-fb ['] rule-cv-fb ;
-: rule-fb ['] rule-fb ;
-: rule-nvu ['] rule-nvu ;
-: rule-nvu-fb ['] rule-nvu-fb ;
-: rule-vu ['] rule-vu ;
-: rule-vu-fb ['] rule-vu-fb ;
-[IFDEF] rule-fbl
-  : rule-fbl ['] rule-fbl ;
-  : rule-cv-fbl ['] rule-cv-fbl ;
-[ENDIF]
-
 REQUIRE loaddefs.fs
 
 : check-stem  ( stem -- )
@@ -82,7 +72,7 @@ REQUIRE loaddefs.fs
 \ an awful big word
 :noname  ( addr u rule sstr -- addr u )
   \." " parse-depth 1+ TO parse-depth
-  \." " indent ." form-epilog " 2>R 2dup type 2R> dup .sstr ."  rule=" over .rule ." ]" cr
+  \." " indent ." form-epilog " 2>r 2dup type bl emit 2r> 2dup >r ?dup-if >name .id else ." rule-0" then r> .sstr cr
   { rule sstr }  ( addr u )
   sstr IF
     sstr sstr-count @ 0 DO
@@ -121,13 +111,13 @@ REQUIRE loaddefs.fs
     formform bstr-pop
     \\." " indent ." out of parse-try" CR
   THEN
-  \\." " indent ." form-epilog ending:" 2dup type cr
   \." " parse-depth 1- TO parse-depth
+  \\." " indent ." form-epilog ending:" 2dup type cr
   formname bstr-pop
   ; IS (form-epilog)
 
 : parse-yield  ( cs1 cs2 -- )
-  COUNT TYPE 9 EMIT COUNT TYPE 1 n-forms +! ;
+  COUNT TYPE  9 EMIT  COUNT TYPE  1 n-forms +! ;
 
 : parse-form  ( cs -- )
   \ untransform2  ( cs1..csN n )  0 ?DO parse-one LOOP

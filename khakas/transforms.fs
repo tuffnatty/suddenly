@@ -302,26 +302,37 @@ CREATE fallout-buf 3 cyrs ALLOT
     tr-fallout transform-flag-set
   THEN ;
 
-: untransform-fallout-add  ( addr u addr' ofs affix-ptr len list ptrlist-node -- addr u addr' ofs affix-ptr len list' )
-  ptrlist-ptr @  { addr u addr' ofs affix-ptr len list src }
+
+GET-CURRENT  ( wid )
+VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
+
+0 VALUE addr
+0 VALUE u
+0 VALUE fallout-start
+0 VALUE ofs-into-affix
+0 VALUE affix-ptr
+0 VALUE affix-len
+0 VALUE list
+
+: untransform-fallout-add  ( ptrlist-node -- )
+  ptrlist-ptr @  { src }
   \ ." ofs is " ofs . ." affix is " affix-ptr len type cr
   \ ." ComparingA " affix-ptr 3cyrs ofs - TYPE ."  and " src ofs +  3cyrs ofs - TYPE CR
   \ affix-ptr  3cyrs ofs -  src ofs +  OVER  STR= IF
     \ ." ComparingB " addr' 2cyrs +  u OVER addr - TYPE ."  and " affix-ptr ofs +  len ofs -  TYPE CR
     \ addr' 2cyrs +  u OVER addr -  affix-ptr ofs +  len ofs -  STR= IF
       list  addr  u cyr+  strlist-prepend-alloc TO list
-      addr' addr -  list strlist-str 1+  +  ( cs-ptr )
-      DUP  DUP cyr+  u addr' addr - - MOVE
+      fallout-start addr -  list strlist-str 1+  +  ( cs-ptr )
+      DUP  DUP cyr+  u fallout-start addr - - MOVE
       src  OVER  3cyrs MOVE
       \ ." constructed " list strlist-str count type cr
       \ ." should compare " dup ofs +  list strlist-str count + over - type ."  with " affix-ptr len type cr
-      ofs +  list strlist-str count + over -  ( cs-ptr' cs-len' )
-      affix-ptr len COMPARE IF ( )
+      ofs-into-affix +  list strlist-str count + over -  ( cs-ptr' cs-len' )
+      affix-ptr affix-len COMPARE IF ( )
         list list-swallow TO list
       THEN ( )
-    \ THEN  
+    \ THEN
   \ THEN
-  addr u addr' ofs affix-ptr len list
   ;
 
 : g/gh+vowel?  ( addr u -- f )
@@ -330,32 +341,40 @@ CREATE fallout-buf 3 cyrs ALLOT
     SWAP cyr+ XC@ vowel? AND                              ( f )
   ELSE DROP FALSE THEN ;
 
-: untransform-fallout  ( addr u affix len -- strlist )
-  { affix-ptr len }                                      ( addr u )
-  0 { list }
-  2DUP list -ROT strlist-prepend-alloc TO list
-  DUP len cyr - >=  affix-ptr len g/gh+vowel? AND IF
-    2DUP + len -  cyr                          ( addr u addr' ofs )
+: уу?  ( addr -- f )
+  DUP XC@ [CHAR] у = IF
+    cyr+ XC@ [CHAR] у =  ( f )
+  ELSE DROP FALSE THEN ;
+
+: untransform-get-fallout-start-and-ofs-into-affix  ( -- f )
+  \ if u >= affix.len - 1 and affix ~= /[гғ]V/, e.g. суу = су+ға
+  u  affix-len cyr -  >=  affix-ptr affix-len g/gh+vowel? AND IF
+    \ (end of form - affix.len (c|уу), 1)
+    addr u + affix-len -  TO fallout-start
+    cyr TO ofs-into-affix
   ELSE
-    DUP len >  affix-ptr XC@ vowel?  AND IF
-      2DUP + len - cyr - 2cyrs                 ( addr u addr' ofs )
-    ELSE FALSE THEN             ( addr u addr' ofs | addr u FALSE )
+    \ if u > affix.len and affix ~= /V/, e.g. суғ+ы > суу
+    u affix-len >  affix-ptr XC@ vowel?  AND IF
+      \ (end of form - affix.len - 1 (c|уу), 2)
+      addr u + affix-len - cyr - TO fallout-start
+      2cyrs TO ofs-into-affix
+    ELSE FALSE EXIT THEN
+  THEN TRUE ;
+
+( wid ) SET-CURRENT  \ public words follow
+
+: untransform-fallout  ( D: str D: affix -- strlist )
+  TO affix-len TO affix-ptr TO u TO addr                     ( )
+  0 addr u strlist-prepend-alloc TO list  \ add original
+  untransform-get-fallout-start-and-ofs-into-affix IF
+    fallout-start addr -  2cyrs <=  fallout-start уу?  AND IF
+      fallout-reverse-uu                    ( srclist )
+    ELSE fallout-start fallout-reverse-find THEN ( srclist | 0 )
+    ?DUP-IF ['] untransform-fallout-add  list-map THEN       ( )
   THEN
-  ?DUP-IF                                      ( addr u addr' ofs )
-    >R >R OVER R@ SWAP - 2cyrs <=        ( addr u f  R: addr' ofs )
-    R@ XC@ [CHAR] у =  AND              ( addr u f'  R: addr' ofs )
-    R@ cyr+ XC@ [CHAR] у =  AND  IF         ( addr u R: addr' ofs )
-      R> R> fallout-reverse-uu         ( addr u addr' ofs srclist )
-    ELSE
-      R> R> OVER fallout-reverse-find  ( addr u addr' ofs srclist )
-    THEN
-    ?DUP-IF
-      >R affix-ptr len list R>         ( addr u addr' ofs affix-ptr len list srclist )
-      ['] untransform-fallout-add  list-map TO list  2DROP  ( addr u addr' ofs )
-    THEN
-    2DROP  ( addr u )
-  THEN
-  2DROP list ;
+  list ;
+
+PREVIOUS
 
 2VARIABLE trans-timer
 : transform2  ( warp -- warp )

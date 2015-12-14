@@ -7,79 +7,127 @@ REQUIRE strings.fs
 : vowel-long-middle?  ( ptr -- f )
   DUP XC@ SWAP XCHAR- XC@ = ;
 
-: last-sound-ptr  ( addr u -- ptr )
-  + XCHAR- ;
-
-: prev-sound-ptr  ( addr u -- ptr )
-  + XCHAR- XCHAR- ;
-
-: last-char-vowel ( addr u -- u | 0 )
-  OVER >R
-  0 -ROT last-sound-ptr BEGIN ( vowel cs-cur  r: cs )
-    DUP XC@ DUP unchar-vowel? IF  ( vowel cs-cur cs-cur@ )
-      -ROT NIP XCHAR- DUP R@ <    ( vowel cs-cur 0 )
-    ELSE DUP front-vowel? IF      ( vowel cs-cur cs-cur@ )
-      -ROT NIP 1                  ( vowel cs-cur 1 )
-    ELSE DUP back-vowel? IF
-      -ROT NIP 1
-    ELSE DROP XCHAR- DUP R@ <     ( vowel cs-next f )
-    THEN THEN THEN
-  UNTIL
-  DROP RDROP ;
-
-: last-sound ( addr u -- u )
-  last-sound-ptr XC@ ;
-: prev-sound ( addr u -- u )
-  prev-sound-ptr XC@ ;
-: third-sound ( addr u -- u )
-  prev-sound-ptr XCHAR- XC@ ;
-: last-sound-change  ( xc addr u -- )
-  last-sound-ptr XC! ;
-: last-sound-add ( u cs -- )
-  SWAP OVER COUNT + XC!  ( cs )
-  DUP C@ cyr+ SWAP C! ;
-: last-sound-cut  ( cs -- )
-  DUP COUNT last-sound-ptr OVER 1+ - SWAP C! ;
-: prev-sound-cut  ( cs -- )
-  DUP COUNT last-sound-ptr DUP XC@ SWAP XCHAR- XC!
-  DUP C@ cyr - SWAP C! ;
-
-
-0 CONSTANT cl-voiced
-1 CONSTANT cl-unvoiced
-2 CONSTANT cl-nasal
-: class-nvu  ( u -- class )
-  DUP nasal? IF DROP cl-nasal
-  ELSE unvoiced? IF cl-unvoiced
-  ELSE cl-voiced THEN THEN ;
-: class-vu  ( u -- class )
-  unvoiced? IF cl-unvoiced ELSE cl-voiced THEN ;
-
-0 CONSTANT cl-back
-1 CONSTANT cl-front
-: class-fb  ( u -- class )
-  back-vowel? IF cl-back ELSE cl-front THEN ;
-
-0 CONSTANT cl-consonant
-1 CONSTANT cl-vowel
-: class-cv  ( u -- class )
-  vowel? IF cl-vowel ELSE cl-consonant THEN ;
+: rule-cv   ( addr u -- addr u table-index )
+  2DUP last-sound class-cv ;
+: rule-cv ['] rule-cv ;
 
 : rule-cv-fb   ( addr u -- addr u table-index )
   2DUP last-sound class-cv >R 2DUP last-char-vowel class-fb 2* R> + ;
+: rule-cv-fb ['] rule-cv-fb ;
+
 : rule-fb      ( addr u -- addr u table-index )
   2DUP last-char-vowel class-fb ;
+: rule-fb ['] rule-fb ;
+
 : rule-nvu  ( addr u -- addr u table-index )
   2DUP last-sound class-nvu ;
+: rule-nvu ['] rule-nvu ;
+
 : rule-nvu-fb  ( addr u -- addr u table-index )
   2DUP last-sound class-nvu >R 2DUP last-char-vowel class-fb 3 * R> + ;
+: rule-nvu-fb ['] rule-nvu-fb ;
+
 : rule-vu  ( addr u -- addr u table-index )
   2DUP last-sound class-vu ;
+: rule-vu ['] rule-vu ;
+
 : rule-vu-fb   ( addr u -- addr u table-index )
   2DUP last-sound class-vu >R 2DUP last-char-vowel class-fb 2* R> + ;
+: rule-vu-fb ['] rule-vu-fb ;
+
+\ : rule-cv-nvu-fb  ( addr u -- addr u table-index )
+\   2DUP last-sound class-cv >R  ( addr u R: class-cv )
+\   R@ cl-vowel = IF cl-voiced ELSE R@ class-nvu THEN 2* 2*
+: rule-cv-vu  ( addr u -- addr u table-index )
+  2DUP last-sound >R R@ class-cv  ( addr u class-cv  R: xc )
+  DUP cl-vowel = IF cl-voiced RDROP ELSE R> class-vu THEN 2* + ;
+: rule-cv-vu ['] rule-cv-vu ;
+
+: rule-cv-nvu  ( addr u -- addr u table-index )
+  2DUP last-sound >R R@ class-cv  ( addr u class-cv  R: xc )
+  DUP cl-vowel = IF cl-voiced RDROP ELSE R> class-nvu THEN 2* + ;
+: rule-cv-nvu ['] rule-cv-nvu ;
+
+: rule-cv-vu-fb  ( addr u -- addr u table-index )
+  rule-cv-vu EXECUTE  ( addr u class-cv-vu )
+  >R 2DUP last-char-vowel class-fb R> 2* + ;
+: rule-cv-vu-fb ['] rule-cv-vu-fb ;
+
+: rule-cv-nvu-fb  ( addr u -- addr u table-index )
+  rule-cv-nvu EXECUTE  ( addr u class-cv-nvu )
+  >R 2DUP last-char-vowel class-fb R> 2* + ;
+: rule-cv-nvu-fb ['] rule-cv-nvu-fb ;
 
 : .rule  ( xt -- )
   >NAME ?DUP-IF .NAME ELSE ." 0" THEN ;
+
+: rule+  ( rule1 rule2 -- rule1+rule2 )
+  DUP 0= IF DROP EXIT THEN
+  2DUP = IF DROP EXIT THEN
+  DUP rule-cv-nvu-fb = IF NIP EXIT THEN
+  2DUP rule-cv-fb rule-vu-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
+  2DUP rule-vu-fb rule-cv-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
+  2DUP rule-fb rule-nvu-fb D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-vu rule-nvu-fb D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-vu rule-fb D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-fb rule-vu D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-cv rule-vu D= IF 2DROP rule-cv-vu EXIT THEN
+  2DUP rule-vu rule-cv D= IF 2DROP rule-cv-vu EXIT THEN
+  2DUP rule-nvu rule-fb D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-fb rule-nvu D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-vu rule-nvu D= IF 2DROP rule-nvu EXIT THEN
+  2DUP rule-nvu rule-vu D= IF 2DROP rule-nvu EXIT THEN
+  2DUP rule-vu rule-vu-fb D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-fb rule-vu-fb D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-nvu rule-vu-fb D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-cv-fb rule-vu D= IF 2DROP rule-cv-vu-fb EXIT THEN
+  2DUP rule-vu-fb rule-fb D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-vu-fb rule-vu D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-vu-fb rule-nvu D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-fb rule-cv-fb D= IF 2DROP rule-cv-fb EXIT THEN
+  2DUP rule-fb rule-cv-vu D= IF 2DROP rule-cv-vu-fb EXIT THEN
+  2DUP rule-fb rule-cv-vu-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
+  2DUP rule-fb rule-cv-nvu D= IF 2DROP rule-cv-nvu-fb EXIT THEN
+  2DUP rule-nvu rule-cv D= IF 2DROP rule-cv-nvu EXIT THEN
+  ." Could not combine rules " >NAME .ID ." and " >NAME .ID
+  ABORT ;
+
+: rule-index-convert  ( n rule1 rule2 -- n' )
+  2DUP = IF 2DROP EXIT THEN
+  2DUP rule-nvu-fb rule-nvu D= IF 2DROP 3 MOD EXIT THEN
+  2DUP rule-nvu-fb rule-vu D= IF 2DROP 3 MOD 2 MOD EXIT THEN
+  2DUP rule-nvu-fb rule-fb D= IF 2DROP 3 / EXIT THEN
+  2DUP rule-vu-fb rule-vu D= IF 2DROP 2 MOD EXIT THEN
+  2DUP rule-vu-fb rule-fb D= IF 2DROP 2/ EXIT THEN
+  2DUP rule-cv-fb rule-fb D= IF 2DROP 2/ EXIT THEN
+  2DUP rule-cv-nvu rule-cv D= IF 2DROP 2 MOD EXIT THEN
+  2DUP rule-cv-nvu rule-nvu D= IF 2DROP 2/ EXIT THEN
+  2DUP rule-cv-vu rule-cv D= IF 2DROP 2 MOD EXIT THEN
+  2DUP rule-cv-vu rule-vu D= IF 2DROP 2/ EXIT THEN
+  2DUP rule-cv-nvu-fb rule-fb D= IF 2DROP 2 MOD EXIT THEN
+  2DUP rule-cv-nvu-fb rule-cv D= IF 2DROP 2/ 2 MOD EXIT THEN
+  2DUP rule-cv-nvu-fb rule-nvu D= IF 2DROP 2/ 2/ EXIT THEN
+  2DUP rule-cv-vu-fb rule-fb D= IF 2DROP 2 MOD EXIT THEN
+  2DUP rule-cv-vu-fb rule-cv D= IF 2DROP 2/ 2 MOD EXIT THEN
+  2DUP rule-cv-vu-fb rule-vu D= IF 2DROP 2/ 2/ EXIT THEN
+  2DUP rule-cv-vu-fb rule-cv-fb D= IF 2DROP 4 MOD EXIT THEN
+  2DUP rule-cv-vu-fb rule-vu-fb D= IF 2DROP DUP 2 MOD 2* SWAP 2 MOD + EXIT THEN
+  ." Could not convert index to rule " >NAME .ID ."  from " >NAME .ID ."  index " .
+  ABORT ;
+
+: rule-capacity  ( rule -- n )
+  DUP 0= IF DROP 1 EXIT THEN
+  DUP rule-nvu-fb = IF DROP 6 EXIT THEN
+  DUP rule-vu = IF DROP 2 EXIT THEN
+  DUP rule-fb = IF DROP 2 EXIT THEN
+  DUP rule-nvu = IF DROP 3 EXIT THEN
+  DUP rule-vu-fb = IF DROP 4 EXIT THEN
+  DUP rule-cv-fb = IF DROP 4 EXIT THEN
+  DUP rule-cv-vu = IF DROP 4 EXIT THEN
+  DUP rule-cv-vu-fb = IF DROP 8 EXIT THEN
+  DUP rule-cv-nvu-fb = IF DROP 12 EXIT THEN
+  ." Could not compute capacity of rule " >NAME .ID
+  ABORT ;
 
 : envoice  ( u -- u )
   unvoiceds# CELLS 0 ?DO
