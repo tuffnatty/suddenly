@@ -344,12 +344,11 @@ slot: <Ptcl2>  \ 15
   15 slot-empty!
   [form] -noemph 0 0 |
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
-    filter-start( flag-RPast-or-Cond flag-empty? )
-      15 slot-full!
+  filter-start( flag-RPast-or-Cond flag-empty? )
+    15 slot-full!
 
-      [form] Ass2  rule-fb  " ох ӧк" |
-  filter-end filter-end
+    [form] Ass2  rule-fb  " ох ӧк" |
+  filter-end
   ;
 
 slot: <Person>  \ 16
@@ -358,48 +357,47 @@ slot: <Person>  \ 16
 
   16 slot-full!
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
+  filter-start( full-person-allowed? )
+    [form] 1prs.sg         rule-nvu-fb " бын пын мын "
+                                      +" бін пін мін" |
+  filter-end
 
-    filter-start( full-person-allowed? )
-      [form] 1prs.sg         rule-nvu-fb " бын пын мын "
-                                        +" бін пін мін" |
-    filter-end
+  filter-start( 9 15 slot-range-empty? )
+    [form] 1prs.sg.br      rule-cv-fb  " ым м "
+                                      +" ім м" |
+  filter-end
 
-    filter-start( 9 15 slot-range-empty? )
-      [form] 1prs.sg.br      rule-cv-fb  " ым м "
-                                        +" ім м" |
-    filter-end
+  filter-start( full-person-allowed? )
+    [form] 2prs.sg         rule-vu-fb  " зың сың "
+                                      +" зің сің" |
+  filter-end
 
-    filter-start( full-person-allowed? )
-      [form] 2prs.sg         rule-vu-fb  " зың сың "
-                                        +" зің сің" |
-    filter-end
+  filter-start( 9 15 slot-range-empty? )
+    [form] 2prs.sg.br      rule-cv-fb  " ың ң "
+                                      +" ің ң" |
+  filter-end
 
-    filter-start( 9 15 slot-range-empty? )
-      [form] 2prs.sg.br      rule-cv-fb  " ың ң "
-                                        +" ің ң" |
-    filter-end
+  filter-start( flag-Past-or-Hab flag-is? )
+    [form] 3prs            rule-fb     " дыр дір" |
+  filter-end
 
-    filter-start( flag-Past-or-Hab flag-is? )
-      [form] 3prs            rule-fb     " дыр дір" |
-    filter-end
+  [form] 1prs.pl           rule-nvu-fb " быс пыс мыс "
+                                      +" біс піс міс" |
+  filter-start( full-person-allowed? )
+    [form] 2prs.pl         rule-vu-fb  " зар сар "
+                                      +" зер сер" |
+  filter-end
 
-    [form] 1prs.pl           rule-nvu-fb " быс пыс мыс "
-                                        +" біс піс міс" |
-    filter-start( full-person-allowed? )
-      [form] 2prs.pl         rule-vu-fb  " зар сар "
-                                        +" зер сер" |
-    filter-end
+  filter-start( 9 15 slot-range-empty? )
+    [form] 2prs.pl.br      rule-cv-fb  " ыңар ңар "
+                                      +" іңер ңер" |
+  filter-end
 
-    filter-start( 9 15 slot-range-empty? )
-      [form] 2prs.pl.br      rule-cv-fb  " ыңар ңар "
-                                        +" іңер ңер" |
-    filter-end
+  [form] 3prs.pl           rule-nvu-fb " лар тар нар "
+                                      +" лер тер нер" |
 
-    [form] 3prs.pl           rule-nvu-fb " лар тар нар "
-                                        +" лер тер нер" |
-
-    filter-start( 7 15 slot-range-empty?  flag-Neg.cumul flag-empty? AND )
+  filter-start( 7 15 slot-range-empty?  flag-Neg.cumul flag-empty? AND )
+    filter-start( verb? )
       [form] Imp1prs.sg      0           " им" |
       [form] Imp3prs.sg      rule-vu-fb  " зын сын "
                                         +" зін сін" |
@@ -422,16 +420,15 @@ slot: <Person>  \ 16
                                         +" іңердек ңердек" |
       [form] Prec3prs.pl     rule-vu-fb  " зыннардах сыннардах "
                                         +" зіннердек сіннердек" |
-      [form] Past1prs.sg     rule-vu-fb  " ғам хам "
-                                        +" гем кем" |
-      [form] Past2prs.sg     rule-vu-fb  " ғаӊ хаӊ "
-                                        +" геӊ кеӊ" |
-      [form] Past1prs.pl     rule-vu-fb  " ғабыс хабыс "
-                                        +" гебіс кебіс" |
-      [form] Past2prs.pl     rule-vu-fb  " ғазар хазар "
-                                        +" гезер кезер" |
     filter-end
-
+    [form] Past1prs.sg     rule-vu-fb  " ғам хам "
+                                      +" гем кем" |
+    [form] Past2prs.sg     rule-vu-fb  " ғаӊ хаӊ "
+                                      +" геӊ кеӊ" |
+    [form] Past1prs.pl     rule-vu-fb  " ғабыс хабыс "
+                                      +" гебіс кебіс" |
+    [form] Past2prs.pl     rule-vu-fb  " ғазар хазар "
+                                      +" гезер кезер" |
   filter-end
   ;
 
