@@ -161,11 +161,15 @@ END-STRUCT bstr%  \ a string for fast prepending
 : cs-ends ( cs1 cs2 -- f )
   SWAP COUNT ROT COUNT string-ends ;
 
+: string-addr  ( addr u -- addr )
+  POSTPONE DROP ; IMMEDIATE
+
 : string-length  ( addr u -- u )
   POSTPONE NIP ; IMMEDIATE
 
 : string-strip  ( addr u count -- addr u' )
   POSTPONE - ; IMMEDIATE
+
 : u-search  ( u array size -- f )
   CELLS SWAP >R 0 SWAP R@ + R> ?DO  ( u f )
     DROP DUP I @ = DUP ?LEAVE
