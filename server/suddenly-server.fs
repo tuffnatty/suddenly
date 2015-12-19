@@ -1,4 +1,4 @@
-#! /usr/bin/gforth-fast -m12M
+#! /usr/bin/gforth-fast -m22M
 
 REQUIRE servecommon.fs
 
@@ -8,7 +8,11 @@ VARIABLE server
 
 : parse-cmdline  ( -- )
   ARGC @ 3 < IF
-    ." Syntax: " 0 ARG TYPE ."  language_path port" CR BYE
+    ." Syntax: " 0 ARG TYPE ."  language_path port [DEBUG]" CR BYE
+  THEN
+  ARGC @ 4 = IF
+    ." Running in debug mode" CR
+    1 TO debug-mode?
   THEN
   0 0  2 ARG  >NUMBER  2DROP D>S  ( port )
   CREATE-SERVER server !               ( )
@@ -60,6 +64,7 @@ REQUIRE parser.fs
   ['] my-type IS TYPE
   ['] my-xemit IS XEMIT
   query query-len parse-args
+
   parse-mode @ IF
     input-word parse-khak
   THEN
