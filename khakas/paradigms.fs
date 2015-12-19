@@ -99,7 +99,7 @@ slot: <Perf/Prosp>  \ 4
 
     \ 5. Показатель позиции 4 Prosp встречается только перед
     \ формами на чА (Dur)
-    filter-start( flag-Dur flag-is? OR )
+    filter-start( flag-Dur flag-is? )
       form" Prosp (А)К"
     filter-end
   filter-end
