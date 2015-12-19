@@ -69,39 +69,45 @@ REQUIRE loaddefs.fs
   DUP IF SWAP >R EXECUTE R> =
   ELSE 2DROP TRUE THEN ;
 
+: process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
+  { D: affix rule n-rule }  ( addr u )
+  affix formform form-prepend
+  2DUP affix untransform-fallout  ( addr u strlist )
+  BEGIN DUP WHILE
+    DUP list-next @ 0=  { unchanged? }
+    DUP strlist-get  { D: left-part }
+    unchanged? IF
+      left-part affix untransform-envoice  ( ... pairlist )
+    ELSE
+      \." " indent ." After fallout check with affix " affix TYPE ." : " left-part TYPE CR
+      0  left-part  affix string-length  string-strip  affix pairlist-prepend  ( ... pairlist )
+      \." " indent ." Pairlist: " dup pair-1 type ." +" dup pair-2 type cr
+    THEN
+    BEGIN DUP WHILE
+      DUP pair-1  ( ... pairlist addr' u' )
+      \\." " rule if rule execute . ." expected, " n-rule . ." actual" cr then
+      n-rule rule rule-check IF
+        \." " indent ." Trying " 2DUP TYPE ." +" affix TYPE CR
+        parse-try  ( ... pairlist )
+        \." " indent ." out of parse-try" cr
+      ELSE 2DROP THEN  ( ... pairlist )
+      list-swallow  ( ... pairlist' )
+    REPEAT DROP  ( ... )
+    list-swallow  ( addr u strlist' )
+  REPEAT DROP  ( addr u )
+  formform bstr-pop ;
+
 \ an awful big word
 :noname  ( addr u rule sstr -- addr u )
   \." " parse-depth 1+ TO parse-depth
-  \." " indent ." form-epilog " 2>r 2dup type bl emit 2r> 2dup >r ?dup-if >name .id else ." rule-0" then r> .sstr cr
+  \." " indent ." form-epilog " 2>r 2dup type bl emit 2r> 2dup .sstr .rule cr
   { rule sstr }  ( addr u )
   sstr IF
     sstr sstr-count @ 0 DO
       I sstr sstr-select { D: affix }
-      affix formform form-prepend
-      2DUP affix untransform-fallout  ( addr u strlist )
-      BEGIN DUP WHILE
-        DUP list-next @ 0=  { unchanged? }
-        DUP strlist-get  { D: left-part }
-        unchanged? IF
-          left-part affix untransform-envoice  ( ... pairlist )
-        ELSE
-          \." " indent ." After fallout check with affix " affix TYPE ." : " 2DUP TYPE CR
-          0  left-part  affix string-length  string-strip  affix pairlist-prepend  ( ... pairlist )
-          \." " indent ." Pairlist: " dup pair-1 type ." +" dup pair-2 type cr
-        THEN
-        BEGIN DUP WHILE
-          DUP pair-1  ( ... pairlist addr' u' )
-          \\." " rule if rule execute . ." expected, " i . ." actual" cr then
-          I rule rule-check IF
-            \." " indent ." Trying " 2DUP TYPE ." +" affix TYPE CR
-            parse-try
-            \." " indent ." out of parse-try, processing " >r 2dup type r> cr
-          ELSE 2DROP THEN  ( ... pairlist )
-          list-swallow  ( ... pairlist' )
-        REPEAT DROP  ( ... )
-        list-swallow  ( addr u strlist' )
-      REPEAT DROP  ( addr u )
-      formform bstr-pop
+      affix string-length IF
+        affix rule I process-single-representation
+      THEN
     LOOP
     \\." " cr
   ELSE

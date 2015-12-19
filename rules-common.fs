@@ -59,7 +59,7 @@ REQUIRE strings.fs
 : rule-cv-nvu-fb ['] rule-cv-nvu-fb ;
 
 : .rule  ( xt -- )
-  >NAME ?DUP-IF .NAME ELSE ." 0" THEN ;
+  >NAME ?DUP-IF .NAME ELSE ." rule-0" THEN ;
 
 : rule+  ( rule1 rule2 -- rule1+rule2 )
   DUP 0= IF DROP EXIT THEN
@@ -84,6 +84,7 @@ REQUIRE strings.fs
   2DUP rule-vu-fb rule-fb D= IF 2DROP rule-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-vu D= IF 2DROP rule-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-nvu D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-fb rule-cv D= IF 2DROP rule-cv-fb EXIT THEN
   2DUP rule-fb rule-cv-fb D= IF 2DROP rule-cv-fb EXIT THEN
   2DUP rule-fb rule-cv-vu D= IF 2DROP rule-cv-vu-fb EXIT THEN
   2DUP rule-fb rule-cv-vu-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
@@ -100,6 +101,7 @@ REQUIRE strings.fs
   2DUP rule-vu-fb rule-vu D= IF 2DROP 2 MOD EXIT THEN
   2DUP rule-vu-fb rule-fb D= IF 2DROP 2/ EXIT THEN
   2DUP rule-cv-fb rule-fb D= IF 2DROP 2/ EXIT THEN
+  2DUP rule-cv-fb rule-cv D= IF 2DROP 2 MOD EXIT THEN
   2DUP rule-cv-nvu rule-cv D= IF 2DROP 2 MOD EXIT THEN
   2DUP rule-cv-nvu rule-nvu D= IF 2DROP 2/ EXIT THEN
   2DUP rule-cv-vu rule-cv D= IF 2DROP 2 MOD EXIT THEN
@@ -124,6 +126,7 @@ REQUIRE strings.fs
   DUP rule-vu-fb = IF DROP 4 EXIT THEN
   DUP rule-cv-fb = IF DROP 4 EXIT THEN
   DUP rule-cv-vu = IF DROP 4 EXIT THEN
+  DUP rule-cv-nvu = IF DROP 6 EXIT THEN
   DUP rule-cv-vu-fb = IF DROP 8 EXIT THEN
   DUP rule-cv-nvu-fb = IF DROP 12 EXIT THEN
   ." Could not compute capacity of rule " >NAME .ID
