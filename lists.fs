@@ -58,6 +58,20 @@ END-STRUCT strlist%
 : strlist-prepend-alloc  ( list addr u -- list' )
   strlist% %ALLOC strlist-prepend-common ;
 
+: strlists-intersect?  ( list1 list2 -- f )
+  { list2 }                       ( list1 )
+  BEGIN DUP WHILE
+    DUP strlist-get       ( list1' addr u )
+    list2 BEGIN DUP WHILE  { list2' }
+      list2' strlist-get  2OVER STR= IF
+        2DROP DROP TRUE EXIT
+      THEN
+      list2' list-next @         ( list2' )
+    REPEAT DROP 2DROP            ( list1' )
+    list-next @
+  REPEAT                              ( 0 )
+  ;
+
 
 list%
   CELL%      FIELD pair-1-len

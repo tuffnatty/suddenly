@@ -15,7 +15,9 @@ flag-RPast flag-Cond OR         CONSTANT flag-RPast-or-Cond
 flag-RPast-or-Cond flag-Opt OR  CONSTANT flag-RPast-or-Cond-or-Opt
 flag-Past flag-Hab OR           CONSTANT flag-Past-or-Hab
 
-: is-пар/кел?  0 ;  \ TODO!!!!
+0  S" пар" strlist-prepend-alloc  S" кил"  strlist-prepend-alloc  CONSTANT пар|кил
+: is-пар/кил?  ( -- f )
+  paradigm-stems @  пар|кил  strlists-intersect? ;
 
 \ 2. Заполнение позиций 11–16 может происходить либо сразу после
 \ позиции 0 (если слово имеет помету Nomen, частица, наречие),
@@ -117,7 +119,7 @@ slot: <Dur>  \ 5
     \ 1, 3, 4 не заполнены, а в позиции 0 стоит пар- или кил-
     \ (но при этих основах может выбираться с тем же успехом и
     \ показатель Dur чА(Т), свободное варьирование).
-    filter-start( 1 slot-empty?  3 4 slot-range-empty?  AND  is-пар/кел? AND )
+    filter-start( 1 slot-empty?  3 4 slot-range-empty?  AND  is-пар/кил? AND )
       form" Dur1₁ и"
       \ 15.2. Только вариант Dur1 и выбирается перед показате-
       \ лем Past КАн (8), во всех прочих случаях варианты и и

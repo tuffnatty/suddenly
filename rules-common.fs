@@ -156,7 +156,7 @@ REQUIRE strings.fs
   REPEAT 2DROP DROP 0 ;
 
 VARIABLE paradigm-p-o-s
+VARIABLE paradigm-stems
 REQUIRE p-o-s.fs
 : verb?  ( -- f )
   paradigm-p-o-s @  pos-v = ;
-

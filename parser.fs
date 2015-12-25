@@ -41,6 +41,7 @@ REQUIRE loaddefs.fs
 
 : check-stem  ( stem -- )
   DUP stem-p-o-s paradigm-p-o-s !
+  DUP stem-dict @ dict-stems @  paradigm-stems !
   \." about to check filters for: " formname .bstr CR DUP .stem-single CR
   filters-check IF
     ." FOUND STEM: " formname .bstr SPACE formform .bstr CR .stem-single CR
