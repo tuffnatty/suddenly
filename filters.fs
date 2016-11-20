@@ -1,10 +1,11 @@
 \ filters stack. Each element is 2 cells: xt negation
-CREATE filters 0 , 32 CELLS ALLOT
+CREATE filters 0 , 64 CELLS ALLOT
 
 : filters-top-ptr  ( -- ptr )
   filters @ 2* CELLS filters + ;
 
-: .filter  filters-top-ptr 2@ DROP XT-SEE ;
+: .filter  ( -- )
+  filters-top-ptr 2@ DROP >BODY SEE-THREADED ;
 
 : >filters  ( xt f -- )
   filters @ 1+ filters !
@@ -14,7 +15,9 @@ CREATE filters 0 , 32 CELLS ALLOT
 
 : filters-drop  ( -- )
   \\."  DROPPING FILTER: " .filter cr
-  filters @ 1- filters ! ;
+  filters @  ( depth )
+  ASSERT( DUP 0> )  \ filter stack underflow
+  1- filters ! ;
 
 : filters>  ( -- xt f )
   filters-top-ptr 2@ filters-drop ;
@@ -31,7 +34,7 @@ CREATE filters 0 , 32 CELLS ALLOT
 : filter-end  ( -- )
   POSTPONE filters-drop ; IMMEDIATE
 
-: filters-check  ( -- f )
+: filters-check  ( stem -- stem f )
   \." flags: " paradigm-flags @ 2 base ! . ."  bmp:" paradigm-slot-bitmap @ . decimal cr
   filters-top-ptr BEGIN DUP filters > WHILE
     DUP 2@ >R
