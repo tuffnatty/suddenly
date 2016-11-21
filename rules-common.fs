@@ -82,8 +82,10 @@ REQUIRE strings.fs
   2DUP rule-nvu rule-vu-fb D= IF 2DROP rule-nvu-fb EXIT THEN
   2DUP rule-cv-fb rule-vu D= IF 2DROP rule-cv-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-fb D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-vu-fb rule-cv-vu-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-vu D= IF 2DROP rule-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-nvu D= IF 2DROP rule-nvu-fb EXIT THEN
+  2DUP rule-vu-fb rule-nvu-fb D= IF 2DROP rule-nvu-fb EXIT THEN
   2DUP rule-fb rule-cv D= IF 2DROP rule-cv-fb EXIT THEN
   2DUP rule-fb rule-cv-fb D= IF 2DROP rule-cv-fb EXIT THEN
   2DUP rule-fb rule-cv-vu D= IF 2DROP rule-cv-vu-fb EXIT THEN
@@ -98,6 +100,7 @@ REQUIRE strings.fs
   2DUP rule-nvu-fb rule-nvu D= IF 2DROP 3 MOD EXIT THEN
   2DUP rule-nvu-fb rule-vu D= IF 2DROP 3 MOD 2 MOD EXIT THEN
   2DUP rule-nvu-fb rule-fb D= IF 2DROP 3 / EXIT THEN
+  2DUP rule-nvu-fb rule-vu-fb D= IF 2DROP 3 /MOD >R 2 MOD R> 2* + EXIT THEN
   2DUP rule-vu-fb rule-vu D= IF 2DROP 2 MOD EXIT THEN
   2DUP rule-vu-fb rule-fb D= IF 2DROP 2/ EXIT THEN
   2DUP rule-cv-fb rule-fb D= IF 2DROP 2/ EXIT THEN
@@ -157,6 +160,10 @@ REQUIRE strings.fs
 
 VARIABLE paradigm-p-o-s
 VARIABLE paradigm-stems
+2VARIABLE paradigm-stem
 REQUIRE p-o-s.fs
 : verb?  ( -- f )
   paradigm-p-o-s @  pos-v = ;
+
+: indecl?  ( -- f )
+  paradigm-p-o-s @  pos-i = ;
