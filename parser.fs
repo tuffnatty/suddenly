@@ -17,6 +17,28 @@ CREATE formform bstr% %ALLOT bstr-init
   S" -" R> bstr-prepend
   ;
 
+: form-get-slot  ( n bstr -- addr u )
+  SWAP >R  ( bstr  R: n )
+  cstr-get BOUNDS BEGIN  ( end ptr )
+    2DUP > WHILE
+      DUP C@ [CHAR] - = IF R> 1- >R THEN  ( end ptr R: n' )
+    R@ WHILE
+    1+                                    ( end ptr' )
+  REPEAT THEN
+  RDROP DUP -ROT -  ( addr u  R: )
+  ;
+
+: form-slot-xc-at-left  ( n -- xc )
+  formform form-get-slot DROP XCHAR- BEGIN  ( addr' )
+    DUP formform cstr-ptr @ > WHILE
+    DUP C@ [CHAR] - = WHILE
+      XCHAR-
+  REPEAT THEN
+  DUP formform cstr-ptr @ <= IF
+    DROP paradigm-stem 2@ last-sound           ( xc )
+  ELSE XC@ THEN                                ( xc )
+  ;
+
 : current-form-is-poss?  ( -- f )
   formname cstr-get  2 /STRING  S" pos" STRING-PREFIX? ;
 
@@ -39,14 +61,24 @@ REQUIRE debug.fs
 REQUIRE rules.fs
 REQUIRE loaddefs.fs
 
-: check-stem  ( stem -- )
+: yield-stem  ( stem -- )
+  ." FOUND STEM: " formname .bstr SPACE formform .bstr CR .stem-single CR
+  1 n-forms +! ;
+
+: check-stem  ( addr u stem -- addr u )
+  >R 2DUP paradigm-stem 2! R>
   DUP stem-p-o-s paradigm-p-o-s !
   DUP stem-dict @ dict-stems @  paradigm-stems !
-  \." about to check filters for: " formname .bstr CR DUP .stem-single CR
-  filters-check IF
-    ." FOUND STEM: " formname .bstr SPACE formform .bstr CR .stem-single CR
-    1 n-forms +!
-  ELSE DROP THEN ;
+  indecl? IF
+    slot-all-empty? IF
+      yield-stem
+    ELSE DROP THEN
+  ELSE
+    \." about to check filters for: " formname .bstr CR DUP .stem-single CR
+    filters-check IF
+      yield-stem
+    ELSE DROP THEN
+  THEN ;
 
 : parse-try  ( addr u -- )
   \ ." stackin " .s 2dup type cr
