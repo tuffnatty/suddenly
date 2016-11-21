@@ -28,6 +28,8 @@ VARIABLE paradigm-slot-bitmap
   1- REPEAT 2DROP paradigm-slot-bitmap @ mask AND ;
 : slot-range-empty?  ( n1 n2 -- f )
   slot-range-full? NOT ;
+: slot-all-empty?  ( -- f )
+  paradigm-slot-bitmap @ 0= ;
 : slot-full?  ( n -- f )
   1 SWAP LSHIFT paradigm-slot-bitmap @ AND ;
 
