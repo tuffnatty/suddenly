@@ -1,83 +1,137 @@
 \ after entering new data, repeat this command until no matches:
 \ :3,$s/"\(.*\)\([aceiopxyöÿ]\)/\="\"" . submatch(1) . tr(submatch(2),"aceiopxyöÿ", "асеіорхуӧӱ")/gI
 
-%0000000001 CONSTANT flag-Cond
-%0000000010 CONSTANT flag-Dur
-%0000000100 CONSTANT flag-Form.Neg
-%0000001000 CONSTANT flag-Form2
-%0000010000 CONSTANT flag-Hab
-%0000100000 CONSTANT flag-Opt
-%0001000000 CONSTANT flag-Past
-%0010000000 CONSTANT flag-Perf
-%0100000000 CONSTANT flag-RPast
-%1000000000 CONSTANT flag-3pos
-flag-RPast flag-Cond OR         CONSTANT flag-RPast-or-Cond
-flag-RPast-or-Cond flag-Opt OR  CONSTANT flag-RPast-or-Cond-or-Opt
-flag-Past flag-Hab OR           CONSTANT flag-Past-or-Hab
+%000000000000000000000000001 CONSTANT flag-Cond
+%000000000000000000000000010 CONSTANT flag-Conv.Neg
+%000000000000000000000000100 CONSTANT flag-Conv2
+%000000000000000000000001000 CONSTANT flag-Cunc
+%000000000000000000000010000 CONSTANT flag-Dur
+%000000000000000000000100000 CONSTANT flag-Dur1.i
+%000000000000000000001000000 CONSTANT flag-Dur1.ir
+%000000000000000000010000000 CONSTANT flag-Fut.a
+%000000000000000000100000000 CONSTANT flag-Fut.ar
+%000000000000000001000000000 CONSTANT flag-Hab
+%000000000000000010000000000 CONSTANT flag-Hab.ca
+%000000000000000100000000000 CONSTANT flag-Hab.cang
+%000000000000001000000000000 CONSTANT flag-Imp
+%000000000000010000000000000 CONSTANT flag-Imp.3
+%000000000000100000000000000 CONSTANT flag-Iter
+%000000000001000000000000000 CONSTANT flag-Neg6
+%000000000010000000000000000 CONSTANT flag-Neg7
+%000000000100000000000000000 CONSTANT flag-Opt-or-Assum
+%000000001000000000000000000 CONSTANT flag-Past
+%000000010000000000000000000 CONSTANT flag-Perf
+%000000100000000000000000000 CONSTANT flag-Person.br
+%000001000000000000000000000 CONSTANT flag-Poss1.nonpl
+%000010000000000000000000000 CONSTANT flag-Pres
+%000100000000000000000000000 CONSTANT flag-RPast
+%001000000000000000000000000 CONSTANT flag-1sg.br
+%010000000000000000000000000 CONSTANT flag-1.pl
+%100000000000000000000000000 CONSTANT flag-3pos
+flag-Dur flag-Pres OR                            CONSTANT flag-Dur-or-Pres
+flag-RPast flag-Cond OR                          CONSTANT flag-RPast-or-Cond
+flag-RPast-or-Cond flag-Pres OR flag-Conv2 OR    CONSTANT flag-RPast-or-Cond-or-Pres-or-Conv2
+flag-Past flag-Hab OR                            CONSTANT flag-Past-or-Hab
+flag-Iter flag-Opt-or-Assum OR flag-Cunc OR
+flag-Dur1.ir OR flag-Hab.cang OR flag-Fut.ar OR  CONSTANT flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar
+flag-Pres flag-Dur1.i OR flag-Past OR
+flag-Hab.ca OR flag-Fut.a OR                     CONSTANT flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a
 
 0  S" пар" strlist-prepend-alloc  S" кил"  strlist-prepend-alloc  CONSTANT пар|кил
 : is-пар/кил?  ( -- f )
   paradigm-stems @  пар|кил  strlists-intersect? ;
 
-\ 2. Заполнение позиций 11–16 может происходить либо сразу после
-\ позиции 0 (если слово имеет помету Nomen, частица, наречие),
-\ либо непосредственно после заполненной позиции 8 (если слово
-\ имеет помету Verbum); но не в случае, если позиция 8 заполнена
-\ аффиксами RPast ТI, Cond СА, Opt КАй.
-: nomen-or-verb-with-Tense-non-RPast-Cond-Opt?  ( -- f )
+: form-slot-vowel-at-left? ( -- f )
+  form-slot-xc-at-left vowel? ;
+
+\ 2. Заполнение позиций 10-19 (падежно-посессивный блок) может
+\ происходить либо сразу после позиции 0 (если слово имеет
+\ помету Nomen), либо непосредственно после заполненной позиции
+\ 7 (если слово имеет помету Verbum); но не в случае, если
+\ позиция 7 заполнена аффиксами RPast ТI, Cond СА, Pres чА или
+\ любым из Conv.
+: nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2?  ( -- f )
   verb? IF
-    8 slot-empty? IF FALSE EXIT THEN
-    flag-RPast-or-Cond-or-Opt flag-is? IF FALSE EXIT THEN
-    9 10 slot-range-empty?
+    7 slot-empty? IF FALSE EXIT THEN
+    flag-RPast-or-Cond-or-Pres-or-Conv2 flag-is? IF FALSE EXIT THEN
+    8 9 slot-range-empty?
   ELSE TRUE THEN ;
 
-\ 21. Полные лично-числовые показатели (Pers) могут следовать
-\ после любых морфем, за исключением показателя недавно
-\ прошедшего времени (RPast) и показателя условного наклонения
-\ (Cond) непосредственно перед ними; краткие разрешены только
-\ у глаголов при незаполненных позициях с 11 по 17.
+\ 20. К словам с пометой NOMEN присоединяются полные
+\ лично-числовые показатели (список внутри Person), которые
+\ могут следовать после любых морфем. У глаголов заполнение
+\ Person возможно только при незаполненных позициях с 10 по 16 и
+\ при наличии показателей: для полных форм: Iter дIр, Irr ЧIК,
+\ Opt ГАй, Assum ГАдАГ, Indir ТIр, Cunc ГАлАК, Dur1 в форме ир,
+\ Hab в форме ҶАң, Fut в форме Ар; для смешанных форм: Pres ЧА,
+\ Dur1 в форме и, Past ГА(н), Hab в форме ҶА, Fut в форме А; для
+\ кратких форм: Cond СА, Rpast ТI.
 : full-person-allowed?  ( -- f )
-  flag-RPast-or-Cond flag-empty?  9 17 slot-range-full?  OR ;
+  verb? NOT
+  10 16 slot-range-empty?  8 9 slot-range-full?  flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar flag-is?  OR  AND  OR ;
+: mix-person-allowed?  ( -- f )
+  verb?
+  10 16 slot-range-empty?  AND
+  flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a flag-is? AND ;
 : short-person-allowed?  ( -- f )
-  verb?  11 17 slot-range-empty?  AND ;
+  verb?
+  10 16 slot-range-empty?  AND
+  flag-RPast-or-Cond flag-is?  AND ;
+
 
 slot: <Distr>  \ 1
   1 slot-empty!
   form" -nodistr "
 
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     1 slot-full!
     form" Distr КлА"
   filter-end
   ;
 
-slot: <Form1>  \ 2
+slot: <Conv1>  \ 2
   2 slot-empty!
-  form" -noform1 "
+  form" -noconv1 "
 
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
-    2 slot-full!
+    \ 4. Показатели позиции 2 (Conv1/Conv.Neg) могут встретиться
+    \ только в словоформе, где есть также показатель позиции 3
+    \ (частицы), либо Dur чАТ, либо Pres чА, либо Indir ТIр,
+    \ либо комбинации этих морфем.
+    filter-start( 3 slot-full?
+                  flag-Dur-or-Pres flag-is? OR
+                  8 slot-full? OR )
+      \ 11. Показатели Neg.Fut ПАС, Neg.Conv Пин, Neg.Сonv.Abl
+      \ Пин.Аң исключают заполнение поз.2 и 6.
+      filter-start( flag-Neg7 flag-empty? )
+        2 slot-full!
 
-    form" Form1 (Б)"
+        form" Conv.p (І)п"
 
-    flag-Form.Neg flag-set
-      form" Form.Neg Бин"
-    flag-Form.Neg flag-clear
+        flag-Conv.Neg flag-set
+          form" Conv.Neg Пин"
+        flag-Conv.Neg flag-clear
+      filter-end
+    filter-end
   filter-end
   ;
 
 slot: <Ptcl1>  \ 3
   3 slot-empty!
-  form" -noemph1 "
+  form" -noptcl1 "
 
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
-    3 slot-full!
-    form" Emph ТАА"
-    form" Delim ЛА"
-    form" Ass1 ОК"
+    \ 5. Показатели поз. 3 (внутренние частицы) допускаются
+    \ только при заполненной позиции 7 (время).
+    filter-start( 7 slot-full? )
+      3 slot-full!
+      form" Add ТАА"
+      form" Cont LА"
+      form" Ass1 ОК"
+    filter-end
   filter-end
   ;
 
@@ -85,24 +139,25 @@ slot: <Perf/Prosp>  \ 4
   4 slot-empty!
   form" -noperf "
 
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     4 slot-full!
 
-    \ 3. Показатели позиции 2 (Form1) и показатель Perf (I)бIС
+    \ 3. Показатели позиции 2 (Conv1) и показатель Perf (I)бIС
     \ (4) в пределах одной словоформы встречаются только в
     \ случае заполнения позиции 2 кумулятивным показателем
-    \ Form.Neg
-    filter-start( 2 slot-empty?  flag-Form.Neg flag-is? OR )
+    \ Conv.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
+    \ – (кончить-Convп-Add-Perf-RPast-Pl) ‘почти закончили’].
+    filter-start( 2 slot-empty?  flag-Conv.Neg flag-is? OR  3 slot-full? OR )
       flag-Perf flag-set
         form" Perf (І)бІс"
       flag-Perf flag-clear
     filter-end
 
-    \ 5. Показатель позиции 4 Prosp встречается только перед
-    \ формами на чА (Dur)
-    filter-start( flag-Dur flag-is? )
-      form" Prosp (А)К"
+    \ 6. Показатель позиции 4 Prosp АК встречается только перед
+    \ формами на чА (Dur, Pres)
+    filter-start( flag-Dur-or-Pres flag-is? )
+      form" Prosp АК"
     filter-end
   filter-end
   ;
@@ -111,446 +166,545 @@ slot: <Dur>  \ 5
   5 slot-empty!
   form" -nodur "
 
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой
   \ Verbum
   filter-start( verb? )
     5 slot-full!
-    \ 14. Показатель Dur1 и(р) заполняется только, если позиции
+    \ 7. Показатель Dur1 и(р) заполняется только, если позиции
     \ 1, 3, 4 не заполнены, а в позиции 0 стоит пар- или кил-
     \ (но при этих основах может выбираться с тем же успехом и
-    \ показатель Dur чА(Т), свободное варьирование).
+    \ показатель Dur чАТ, свободное варьирование). [Кажется,
+    \ между париган (Dur1) и парчатхан (Dur) есть семантическая
+    \ разница, но объяснение в грамматике непонятное.]
     filter-start( 1 slot-empty?  3 4 slot-range-empty?  AND  is-пар/кил? AND )
-      form" Dur1₁ и"
-      \ 15.2. Только вариант Dur1 и выбирается перед показате-
-      \ лем Past КАн (8), во всех прочих случаях варианты и и
-      \ ир находятся в свободном варьировании.
-      filter-start( flag-Past flag-empty? )
-        form" Dur1₂ ир"
+      \ 8. Показатель Dur1 может стоять либо непосредственно перед
+      \ пробелом, либо непосредственно перед Person (позиция 20),
+      \ либо непосредственно перед показателем Past ГА(н) (позиция 8).
+      filter-start( 6 22 slot-range-empty?
+                    6 19 slot-range-empty?  20 slot-full?  AND
+                    6 7 slot-range-empty?  flag-Past flag-is?  AND
+                    OR OR )
+        flag-Dur1.i flag-set
+          form" Dur1₁ и"
+        flag-Dur1.i flag-clear
+        \ 8.1. Dur1 перед Past ГА(н) может принять только форму и;
+        \ во всех прочих случаях (т.е. перед Person и концом
+        \ словоформы) варианты и и ир находятся в свободном
+        \ варьировании.
+        filter-start( flag-Past flag-empty? )
+          flag-Dur1.ir flag-set
+            form" Dur1₂ ир"
+          flag-Dur1.ir flag-clear
+        filter-end
       filter-end
     filter-end
 
-    \ 12. Показатель Dur чА(Т) заполняется только, если
-    \ заполнена хотя бы одна из позиций 2, 4, (т.е. Form1 или
-    \ Perf).
-    filter-start( 2 slot-full?  4 slot-full?  OR )
+    \ 26. Для каждого из следующих показателей: Dur чАТ, Pres чА, Indir
+    \ тIр верно следующее: они не могут быть заполнены, если при этом
+    \ непосредственно перед ними обнаруживается морфема, оканчивающаяся
+    \ на гласную - кроме морфем из позиции Ptcl1.
+    filter-start( 3 slot-full?  4 slot-empty?  AND
+                  5 form-slot-vowel-at-left?  NOT
+                  OR )
       flag-Dur flag-set
-        \ 15. Вариант Dur ча выбирается только непосредственно
-        \ перед Iter дIр, личными окончаниями или концом слова,
-        \ вариант чат – в прочих случаях и в конце слова (2
-        \ встреченных примера, правда, были не презенсом, а 2 л.
-        \ императивом; но, возможно,надо ставить свободное
-        \ варьирование).
-        filter-start( 6 slot-empty?  7 slot-full?  AND
-                      6 17 slot-range-empty?  18 slot-full?  AND  OR
-                      6 19 slot-range-empty?  OR )
-          form" Dur₁ чА"
-        filter-end
-        filter-start( 6 slot-empty?  7 slot-full?  AND
-                      6 17 slot-range-empty?  18 slot-full?  AND
-                      OR  NOT )
-          form" Dur₂ чАт"
-        filter-end
+        form" Dur чАт"
       flag-Dur flag-clear
     filter-end
   filter-end
   ;
 
-slot: <Neg/Form2>  \ 6
+slot: <Neg/Iter>  \ 6
   6 slot-empty!
-  form" -noneg "
+  form" -noneg/iter "
 
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
-    6 slot-full!
-    \ 7. Если в поз. 2 есть показатель Form.Neg, то в поз. 6 не
-    \ может быть отр. показателей Neg, Neg.Fut, Neg.Conv,
-    \ Neg.Сonv.Abl.
-    filter-start( flag-Form.Neg flag-empty? )
-      form" Neg БА"
-      form" Neg.Fut БАс"
-      form" Neg.Conv Бин"
-      form" Neg.Conv.Abl БинАң"
-    filter-end
-    flag-Form2 flag-set
-      form" Form2 А"
-    flag-Form2 flag-clear
-  filter-end
-  ;
+    \ 11. Показатели Neg.Fut ПАС, Neg.Conv Пин, Neg.Сonv.Abl
+    \ Пин.Аң исключают заполнение поз.2 и 6.
+    filter-start( flag-Neg7 flag-empty? )
+      6 slot-full!
 
-slot: <Iter>  \ 7
-  7 slot-empty!
-  form" -noiter "
-
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
-  filter-start( verb? )
-    7 slot-full!
-    form" Iter дІр"
-  filter-end
-  ;
-
-slot: <Tense/Mood>  \ 8
-  8 slot-empty!
-  form" -notense "
-
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
-  filter-start( verb? )
-    \ 4. Показатели позиции 2 (Form1) и все показатели поз. 8
-    \ (Fut, Past, RPast, Hab, Cond и др) непосредственно рядом
-    \ не встречаются.
-    filter-start( 2 slot-empty?  3 7 slot-range-full?  OR  )
-      \ 6. Непосредственно после показателя позиции 6 Form2 А
-      \ может следовать только показатель Iter дIр.
-      filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-        8 slot-full!
-        flag-Past flag-set
-          form" Past КАн"
-        flag-Past flag-clear
-        form" Fut Ар"
-        flag-Hab flag-set
-          form" Hab ЧАң"
-        flag-Hab flag-clear
-        flag-RPast flag-set
-          form" RPast ТІ"
-        flag-RPast flag-clear
-        \ 8. Показатель Cond заполняется только, если  позиции 1- 7 незаполнены
-        \ 9. Показатель Opt заполняется только, если  позиции 1-7 незаполнены
-        \ 10. Показатель Assum заполняется только, если  позиции 1-7 незаполнены
-        \ 11. Показатель Cunc заполняется только, если  позиции 1-7 незаполнены
-        filter-start( 1 7 slot-range-empty? )
-          \ 16. Показатель Perf и показатель Cunc в пределах
-          \ одной словоформы не встречаются
-          filter-start( flag-Perf flag-empty? )
-            form" Cunc КАлАК"
-          filter-end
-          flag-Cond flag-set
-            form" Cond СА"
-          flag-Cond flag-clear
-          flag-Opt flag-set
-            form" Opt КАй"
-          flag-Opt flag-clear
-          form" Assum КАдаК"
-        filter-end
-        form" Conv1 (І)п"
-        form" Conv1dial АбАс"
-        form" Conv2 А"
-        form" Lim КАли"
-  filter-end filter-end filter-end
-  ;
-
-slot: <Evid>  \ 9
-  9 slot-empty!
-  form" -noevid "
-
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
-  filter-start( verb? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-      \ 19. Непосредственно после показателя недавно прошедшего
-      \ времени (RPast) может следовать только лично-числовой
-      \ показатель (Pers) или показатель ирреалиса (Irr)
-      filter-start( flag-RPast flag-empty? )
-        \ 20. Непосредственно после показателя условного
-        \ наклонения (Cond) может следовать только
-        \ лично-числовой показатель (Pers);
-        filter-start( flag-Cond flag-empty? )
-          9 slot-full!
-          form" Indir ТІр"
-  filter-end filter-end filter-end filter-end
-  ;
-
-slot: <Irr>  \ 10
-  10 slot-empty!
-  form" -noirr "
-
-  \ 1. Позиции 1–10 могут заполняться только у слов с пометой Verbum
-  filter-start( verb? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty? )
-      \ 20. Непосредственно после показателя условного
-      \ наклонения (Cond) может следовать только
-      \ лично-числовой показатель (Pers);
-      filter-start( flag-Cond flag-empty?  9 9 slot-range-full?  OR )
-        10 slot-full!
-        form" Irr ЧІК"
-  filter-end filter-end filter-end
-  ;
-
-slot: <Comit>  \ 11
-  11 slot-empty!
-  form" -nocomit "
-
-  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Opt? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-      \ 19. Непосредственно после показателя недавно прошедшего
-      \ времени (RPast) может следовать только лично-числовой
-      \ показатель (Pers) или показатель ирреалиса (Irr)
-      filter-start( flag-RPast flag-empty?  9 10 slot-range-full?  OR )
-        \ 20. Непосредственно после показателя условного
-        \ наклонения (Cond) может следовать только
-        \ лично-числовой показатель (Pers);
-        filter-start( flag-Cond flag-empty?  9 10 slot-range-full?  OR )
-          11 slot-full!
-
-          form" Comit ЛІГ"
-  filter-end filter-end filter-end filter-end
-  ;
-
-slot: <Num>  \ 12
-  12 slot-empty!
-  form" -nonum "
-
-  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Opt? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-      \ 19. Непосредственно после показателя недавно прошедшего
-      \ времени (RPast) может следовать только лично-числовой
-      \ показатель (Pers) или показатель ирреалиса (Irr)
-      filter-start( flag-RPast flag-empty?  9 11 slot-range-full?  OR )
-        \ 20. Непосредственно после показателя условного
-        \ наклонения (Cond) может следовать только
-        \ лично-числовой показатель (Pers);
-        filter-start( flag-Cond flag-empty?  9 11 slot-range-full?  OR )
-          12 slot-full!
-
-          form" Pl ЛАр"
-  filter-end filter-end filter-end filter-end
-  ;
-
-slot: <Poss>  \ 13
-  13 slot-empty!
-  form" -noposs "
-
-  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Opt? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-      \ 19. Непосредственно после показателя недавно прошедшего
-      \ времени (RPast) может следовать только лично-числовой
-      \ показатель (Pers) или показатель ирреалиса (Irr)
-      filter-start( flag-RPast flag-empty?  9 12 slot-range-full?  OR )
-        \ 20. Непосредственно после показателя условного
-        \ наклонения (Cond) может следовать только
-        \ лично-числовой показатель (Pers);
-        filter-start( flag-Cond flag-empty?  9 12 slot-range-full?  OR )
-          13 slot-full!
-
-          form" 1pos.sg (І)м"
-          form" 2pos.sg (І)ң"
-          flag-3pos flag-set
-            form" 3pos (з)І"
-          flag-3pos flag-clear
-          form" 1pos.pl (І)бІс"
-          form" 2pos.pl (І)ңАр"
-  filter-end filter-end filter-end filter-end
-  ;
-
-slot: <Apos>  \ 14
-  14 slot-empty!
-  form" -noapos "
-
-  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Opt? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-      \ 19. Непосредственно после показателя недавно прошедшего
-      \ времени (RPast) может следовать только лично-числовой
-      \ показатель (Pers) или показатель ирреалиса (Irr)
-      filter-start( flag-RPast flag-empty?  9 13 slot-range-full?  OR )
-        \ 20. Непосредственно после показателя условного
-        \ наклонения (Cond) может следовать только
-        \ лично-числовой показатель (Pers);
-        filter-start( flag-Cond flag-empty?  9 13 slot-range-full?  OR )
-          14 slot-full!
-
-          form" Apos Ни"
-  filter-end filter-end filter-end filter-end
-;
-
-slot: <Case>  \ 15
-  15 slot-empty!
-  form" -nocase "
-
-  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Opt? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-      \ 19. Непосредственно после показателя недавно прошедшего
-      \ времени (RPast) может следовать только лично-числовой
-      \ показатель (Pers) или показатель ирреалиса (Irr)
-      filter-start( flag-RPast flag-empty?  9 14 slot-range-full?  OR )
-        \ 20. Непосредственно после показателя условного
-        \ наклонения (Cond) может следовать только
-        \ лично-числовой показатель (Pers);
-        filter-start( flag-Cond flag-empty?  9 14 slot-range-full?  OR )
-          15 slot-full!
-
-          form" Gen НІң"
-
-          \ 17. Аффиксы посессивного склонения выбираются только
-          \ в случае заполнения позиции 13 (Poss) или 14 (Apos);
-          filter-start( 13 14 slot-range-empty? )
-            form" Dat (К)А"
-            form" Acc НІ"
-            form" Loc ТА"
-            form" All САр"
-            form" Prol ЧА"
-            form" Comp ТАГ"
-          filter-else
-            form" Dat₁ (К)А"
-            form" Dat₂ нА"
-            filter-start( 14 slot-empty?  flag-3pos flag-is?  AND )
-              form" Acc₂ Н"
-            filter-else
-              form" Acc₁ НІ"
-            filter-end
-            form" Loc (н)ТА"
-            form" All (н)САр"
-            form" Prol (н)ЧА"
-            form" Comp (н)ДАГ"
-          filter-end
-
-          form" Abl ДАң"
-          form" Instr нАң"
-          form" Delib ДАңАр"
-          form" Temp (І)н"
-  filter-end filter-end filter-end filter-end
-  ;
-
-slot: <Attr>  \ 16
-  16 slot-empty!
-  form" -noattr "
-
-  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Opt? )
-    \ 6. Непосредственно после показателя позиции 6 Form2 А
-    \ может следовать только показатель Iter дIр.
-    filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-      \ 19. Непосредственно после показателя недавно прошедшего
-      \ времени (RPast) может следовать только лично-числовой
-      \ показатель (Pers) или показатель ирреалиса (Irr)
-      filter-start( flag-RPast flag-empty?  9 15 slot-range-full?  OR )
-        \ 20. Непосредственно после показателя условного
-        \ наклонения (Cond) может следовать только
-        \ лично-числовой показатель (Pers);
-        filter-start( flag-Cond flag-empty?  9 15 slot-range-full?  OR )
-          16 slot-full!
-
-          form" Attr КІ"
-  filter-end filter-end filter-end filter-end
-  ;
-
-slot: <Ptcl2>  \ 17
-  17 slot-empty!
-  form" -noemph "
-
-  \ 6. Непосредственно после показателя позиции 6 Form2 А
-  \ может следовать только показатель Iter дIр.
-  filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-    \ 19. Непосредственно после показателя недавно прошедшего
-    \ времени (RPast) может следовать только лично-числовой
-    \ показатель (Pers) или показатель ирреалиса (Irr)
-    filter-start( flag-RPast flag-empty?  9 16 slot-range-full?  OR )
-      \ 20. Непосредственно после показателя условного
-      \ наклонения (Cond) может следовать только
-      \ лично-числовой показатель (Pers);
-      filter-start( flag-Cond flag-empty?  9 16 slot-range-full?  OR )
-        17 slot-full!
-
-        form" Ass2 ОК"
-  filter-end filter-end filter-end
-  ;
-
-slot: <Person>  \ 18
-  18 slot-empty!
-  form" -3prs.sg "
-
-  \ 6. Непосредственно после показателя позиции 6 Form2 А
-  \ может следовать только показатель Iter дIр.
-  filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-    18 slot-full!
-
-    filter-start( full-person-allowed? )
-      form" 1prs.sg БІн"
-      form" 2prs.sg СІң"
-
-      \ 22. Личные показатели 3prs.sg -дыр, -дiр могут следовать
-      \ только непосредственно после показателей КАн и Hab ЧАӊ.
-      filter-start( flag-Past-or-Hab flag-is?  9 17 slot-range-empty?  AND )
-        form" 3prs дІр"
+      \ 11.1. Показатель Conv.Neg исключает заполнение Neg в поз. 6.
+      filter-start( flag-Conv.Neg flag-empty? )
+        flag-Neg6 flag-set
+        form" Neg ПА"
+        flag-Neg6 flag-clear
       filter-end
 
-      form" 1prs.pl БІс"
-      form" 2prs.pl САр"
-      form" 3prs.pl СІңнАр"
-    filter-end
+      \ 14. После Iter возможны только: Past ГА(н), Irr ЧIК,
+      \ Person или конец словоформы.
+      filter-start( flag-Past flag-is?
+                    7 8 slot-range-empty?  9 slot-full?  AND  OR
+                    7 22 slot-range-empty?  OR )
+        form" Iter АдІр"
+      filter-end
 
-    filter-start( short-person-allowed? )
-      form" 1prs.sg.br м"
-      form" 2prs.sg.br ң"
-      form" 2prs.pl.br (І)ңАр"
-      form" 3prs.pl ЛАр"
-    filter-end
-
-    \ 18. Показатели поз. 18 (Person) с пометами Imp и Prec могут
-    \ быть только у слов, имеющих помету Verbum; они следуют
-    \ непосредственно после заполнителя позиции с номером <= 6
-    filter-start( verb?  7 17 slot-range-empty?  AND )
-      form" Imp1prs.sg им"
-      form" Imp3prs.sg СІн"
-      form" Imp1prs.dual Аң"
-      form" Imp1prs.pl ибІс"
-      form" Imp1prs.plIncl АңАр"
-      form" Imp2prs.pl (І)ңАр"
-      form" Imp3prs.pl СІннАр"
-      form" Prec1prs.sg имдАК"
-      form" Prec2prs.sg ТАК"
-      form" Prec3prs.sg СІндАК"
-      form" Prec1prs.dual АңдАК"
-      form" Prec1prs.pl ибІстАК"
-      form" Prec1prs.plIncl АңАрдАК"
-      form" Prec2prs.pl (І)ңАрдАК"
-      form" Prec3prs.pl СІннАрдАК"
-      \ [form] Past1prs.sg     rule-vu-fb  " ғам хам "
-      \                                   +" гем кем" |
-      \ [form] Past2prs.sg     rule-vu-fb  " ғаӊ хаӊ "
-      \                                   +" геӊ кеӊ" |
-      \ [form] Past1prs.pl     rule-vu-fb  " ғабыс хабыс "
-      \                                   +" гебіс кебіс" |
-      \ [form] Past2prs.pl     rule-vu-fb  " ғазар хазар "
-      \                                   +" гезер кезер" |
+      form" Dur.Iter чАдІр"
     filter-end
   filter-end
   ;
 
-slot: <Adv>  \ 19
-  19 slot-empty!
-  form" -noadv "
+slot: <Tense/Mood/Conv2>  \ 7
+  7 slot-empty!
+  form" -notense "
 
-  \ 6. Непосредственно после показателя позиции 6 Form2 А
-  \ может следовать только показатель Iter дIр.
-  filter-start( flag-Form2 flag-empty?  7 slot-full?  OR )
-    \ 19. Непосредственно после показателя недавно прошедшего
-    \ времени (RPast) может следовать только лично-числовой
-    \ показатель (Pers) или показатель ирреалиса (Irr)
-    filter-start( flag-RPast flag-empty?  9 18 slot-range-full?  OR )
-      \ 20. Непосредственно после показателя условного
-      \ наклонения (Cond) может следовать только
-      \ лично-числовой показатель (Pers);
-      filter-start( flag-Cond flag-empty?  9 18 slot-range-full?  OR )
-        19 slot-full!
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  filter-start( verb? )
+    7 slot-full!
 
-        form" Adv Ли"
-  filter-end filter-end filter-end
+    \ 26. Для каждого из следующих показателей: Dur чАТ, Pres чА, Indir
+    \ тIр верно следующее: они не могут быть заполнены, если при этом
+    \ непосредственно перед ними обнаруживается морфема, оканчивающаяся
+    \ на гласную - кроме морфем из позиции Ptcl1.
+    filter-start( 3 slot-full?  4 6 slot-range-empty?  AND
+                  7 form-slot-vowel-at-left?  NOT
+                  OR )
+      flag-Pres flag-set
+        form" Pres чА"
+      flag-Pres flag-clear
+    filter-end
+
+    flag-Neg7 flag-set
+      form" Neg.Fut ПАс"
+      flag-Conv2 flag-set
+        form" Neg.Conv Пин"
+        form" Neg.Conv.Abl ПинАң"
+      flag-Conv2 flag-clear
+    flag-Neg7 flag-clear
+
+    flag-Past flag-set
+      \ 9.1. Past ГА(н) всегда принимает форму ГА непосредственно
+      \ перед всеми Person: пар-га-м 'я шел', тiк-ке-зер 'вы шили'.
+      \ В остальных случаях принимается форма ГАн
+      filter-start( 8 19 slot-range-empty?  20 slot-full?  AND )
+        form" Past₁ ГА"
+      filter-else
+        form" Past₂ ГАн"
+      filter-end
+    flag-Past flag-clear
+
+    \ 9.3. Показатель Fut А(р) принимает форму А непосредственно
+    \ перед 1.sg.br: пар-а-м ‘я пойду’, ади-м ‘я буду называть’,
+    \ кил-е-м ‘я прийду’. [В диалектах Fut может также принимать
+    \ форму А непосредственно перед показателем Dat ГА: пар-ар-ға
+    \ > пар-а-ға 'идти'.] В прочих случаях фигурирует только форма Ар.
+    filter-start( 8 19 slot-range-empty?  flag-1sg.br flag-is?  AND )
+      flag-Fut.a flag-set
+        form" Fut₁ А"
+      flag-Fut.a flag-clear
+    filter-else
+      flag-Fut.ar flag-set
+        form" Fut₂ Ар"
+      flag-Fut.ar flag-clear
+    filter-end
+
+    flag-Hab flag-set
+      \ 9.2. Показатель Hab ҶА(ң) может принимать форму ҶА
+      \ непосредственно перед всеми Person: ырла-ӌаң-мын //
+      \ ырла-ча-м ‘я пел (обычно)’, кил-бе-ҷең-міс //
+      \ кил-бе-ҷе-біс ‘мы не приходили (обычно)’. А может и
+      \ принимать форму ҶАң. В остальных случаях принимается
+      \ форма ҶАң
+      filter-start( 8 19 slot-range-empty?  20 slot-full?  AND )
+        flag-Hab.ca flag-set
+          form" Hab₁ ЧА"
+        flag-Hab.ca flag-clear
+      filter-end
+      flag-Hab.cang flag-set
+        form" Hab₂ ЧАң"
+      flag-Hab.cang flag-clear
+    flag-Hab flag-clear
+
+    flag-RPast flag-set
+      \ 12. Непосредственно после показателя недавно прошедшего
+      \ времени (RPast) может следовать только краткий
+      \ лично-числовой показатель (Person) или показатель
+      \ ирреалиса (Irr);
+      filter-start( 8 22 slot-range-empty?
+                    8 19 slot-range-empty?  flag-Person.br flag-is?  AND  OR
+                    8 slot-empty?  9 slot-full?  AND  OR )
+        form" RPast ТІ"
+      filter-end
+    flag-RPast flag-clear
+
+    \ 10. Показатель Cunc не встречается в одной
+    \ словоформе с показателями Perf или отрицательными
+    \ (всеми, в названия которых входит элемент Neg);
+    filter-start( flag-Perf flag-empty?
+                  flag-Conv.Neg flag-empty? AND
+                  flag-Neg6 flag-empty? AND
+                  flag-Neg7 flag-empty? AND )
+      form" Cunc ГАлАГ"
+    filter-end
+
+    flag-Cond flag-set
+      \ 13. Непосредственно после показателя условного
+      \ наклонения (Cond) может следовать только краткий
+      \ лично-числовой показатель (Person);
+      filter-start( 8 22 slot-range-empty?
+                    8 19 slot-range-empty?  flag-Person.br flag-is?  AND  OR )
+        form" Cond СА"
+      filter-end
+    flag-Cond flag-clear
+    flag-Opt-or-Assum flag-set
+      form" Opt ГАй"
+      form" Assum ГАдАК"
+    flag-Opt-or-Assum flag-clear
+
+    form" Lim ГАли"
+    flag-Conv2 flag-set
+      form" Conv.p (І)п"
+      form" Conv.pas АбАс"
+      form" Conv.a А"
+    flag-Conv2 flag-clear
+  filter-end
+  ;
+
+slot: <Indir>  \ 8
+  8 slot-empty!
+  form" -noindir "
+
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  filter-start( verb? )
+    \ 15. Показатель поз. 8 Indir TIр бывает либо при
+    \ незаполненных позициях 6, 7, либо при одновременном
+    \ заполнении позиций 6 и 7 показателями Neg (ПА) и Past
+    \ (ГАн).
+    filter-start( 6 7 slot-range-empty?
+                  flag-Neg6 flag-is?  flag-Past flag-is?  AND  OR )
+      8 slot-full!
+      form" Indir ТІр"
+    filter-end
+  filter-end
+  ;
+
+slot: <Irr>  \ 9
+  9 slot-empty!
+  form" -noirr "
+
+  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  filter-start( verb? )
+    9 slot-full!
+    form" Irr ЧІК"
+  filter-end
+  ;
+
+slot: <Comit>  \ 10
+  10 slot-empty!
+  form" -nocomit "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    10 slot-full!
+
+    form" Comit ЛІГ"
+  filter-end
+  ;
+
+slot: <Pl₁>  \ 11
+  11 slot-empty!
+  form" -nopl1 "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    \ 16. Показатели позиций 11, 12, 13 могут присутствовать в
+    \ словоформе только вместе с пок. поз. 14 Attr КI – и
+    \ наоборот, для вычленения Attr в словоформе нужно
+    \ присутствие одного или нескольких из этих полей.
+    filter-start( 14 slot-full? )
+      11 slot-full!
+      form" Pl₁ ЛАр"
+    filter-end
+  filter-end
+  ;
+
+slot: <Poss₁>  \ 12
+  12 slot-empty!
+  form" -noposs1 "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    \ 16. Показатели позиций 11, 12, 13 могут присутствовать в
+    \ словоформе только вместе с пок. поз. 14 Attr КI – и
+    \ наоборот, для вычленения Attr в словоформе нужно
+    \ присутствие одного или нескольких из этих полей.
+    filter-start( 14 slot-full? )
+      12 slot-full!
+
+      flag-Poss1.nonpl flag-set
+        form" 1pos.sg (І)м"
+        form" 2pos.sg (І)ң"
+        flag-3pos flag-set
+          form" 3pos (з)І"
+        flag-3pos flag-clear
+      flag-Poss1.nonpl flag-clear
+      form" 1pos.pl (І)бІс"
+      form" 2pos.pl (І)ңАр"
+    filter-end
+  filter-end
+  ;
+
+slot: <Case₁>  \ 13
+  13 slot-empty!
+  form" -nocase1 "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    \ 16. Показатели позиций 11, 12, 13 могут присутствовать в
+    \ словоформе только вместе с пок. поз. 14 Attr КI – и
+    \ наоборот, для вычленения Attr в словоформе нужно
+    \ присутствие одного или нескольких из этих полей.
+    filter-start( 14 slot-full? )
+      13 slot-full!
+
+      \ 17. В поз. 13/18 Case набор аффиксов посессивного
+      \ склонения выбирается: а) в случае заполнения позиций
+      \ 12/16 (Poss) аффиксами не-множественного числа (т.е.
+      \ 1pos.sg, 2pos.sg и 3pos); б) при заполнении поз. 17
+      \ (Apos); в) после основ, которые указаны в словарных
+      \ статьях у Nomen в поле FORM [там приведены стяженные
+      \ формы 3pos].
+      filter-start( flag-Poss1.nonpl flag-empty? )
+        form" Dat ГА"
+        form" Loc ТА"
+        form" All САр"
+      filter-else
+        form" Dat (н)А"
+        form" Loc (н)ТА"
+        form" All (н)САр"
+      filter-end
+    filter-end
+  filter-end
+  ;
+
+slot: <Attr>  \ 14
+  14 slot-empty!
+  form" -noattr "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    \ 16. Показатели позиций 11, 12, 13 могут присутствовать в
+    \ словоформе только вместе с пок. поз. 14 Attr КI – и
+    \ наоборот, для вычленения Attr в словоформе нужно
+    \ присутствие одного или нескольких из этих полей.
+    filter-start( 11 13 slot-range-full? )
+      14 slot-full!
+      form" Attr КІ"
+    filter-end
+  filter-end
+  ;
+
+slot: <Pl₂>  \ 15
+  15 slot-empty!
+  form" -nopl2 "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    15 slot-full!
+
+    form" Pl₂ ЛАр"
+  filter-end
+  ;
+
+slot: <Poss₂>  \ 16
+  16 slot-empty!
+  form" -noposs2 "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    16 slot-full!
+
+    form" 1pos.sg (І)м"
+    form" 2pos.sg (І)ң"
+    flag-3pos flag-set
+      form" 3pos (з)І"
+    flag-3pos flag-clear
+    form" 1pos.pl (І)бІс"
+    form" 2pos.pl (І)ңАр"
+  filter-end
+  ;
+
+slot: <Apos>  \ 17
+  17 slot-empty!
+  form" -noapos "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    17 slot-full!
+
+    form" Apos Ни"
+  filter-end
 ;
 
+slot: <Case₂>  \ 18
+  18 slot-empty!
+  form" -nocase2 "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    18 slot-full!
+
+    form" Gen НІң"
+
+    \ 17. В поз. 13/18 Case набор аффиксов посессивного
+    \ склонения выбирается: а) в случае заполнения позиций
+    \ 12/16 (Poss) аффиксами не-множественного числа (т.е.
+    \ 1pos.sg, 2pos.sg и 3pos); б) при заполнении поз. 17
+    \ (Apos); в) после основ, которые указаны в словарных
+    \ статьях у Nomen в поле FORM [там приведены стяженные
+    \ формы 3pos].
+    filter-start( flag-Poss1.nonpl flag-empty?
+                  17 slot-empty?  OR )
+      form" Dat ГА"
+      form" Acc НІ"
+      form" Loc ТА"
+      form" Abl ДАң"
+      form" All САр"
+      form" Prol ЧА"
+      form" Delib ДАңАр"
+      form" Comp ТАГ"
+    filter-else
+      form" Dat (н)А"
+      filter-start( 14 slot-empty?  flag-3pos flag-is?  AND )
+        form" Acc₂ Н"
+      filter-else
+        form" Acc₁ НІ"
+      filter-end
+      form" Loc (н)ТА"
+      form" Abl нАң"
+      form" All (н)САр"
+      form" Prol (н)ЧА"
+      form" Delib (н)нАңАр"
+      form" Comp (н)ТАГ"
+    filter-end
+
+    form" Instr нАң"
+  filter-end
+  ;
+
+slot: <Ptcl₂>  \ 19
+  19 slot-empty!
+  form" -noptcl2 "
+
+  filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
+    19 slot-full!
+
+    form" Ass ОК"
+    \ 18. Аффиксам Adv, Adv1, Adv 2 из поз. 19 непосредственно
+    \ предшествует Attr КI из поз. 14 или падеж (один из
+    \ показателей поз. 18). Аффикс Adv Ли может также
+    \ присоединяться к показателям поз. 7 (причастиям).
+    filter-start( 14 slot-full?  16 18 slot-range-empty?  AND
+                  18 slot-full?  OR )
+      form" Adv1 (І)зІн"
+      form" Аdv2 ТІн"
+    filter-end
+    filter-start( 14 slot-full?  16 18 slot-range-empty?  AND
+                  18 slot-full?  OR
+                  7 slot-full?  8 18 slot-range-empty?  AND  OR )
+      form" Adv Ли"
+    filter-end
+  filter-end
+  ;
+
+slot: <Person>  \ 20
+  20 slot-empty!
+  form" -3prs.sg "
+
+  20 slot-full!
+
+  filter-start( full-person-allowed? )
+    form" 1sg ПІн"
+    form" 1sg.dial СІм"
+    form" 2sg СІң"
+
+    flag-1.pl flag-set
+      form" 1pl ПІс"
+    flag-1.pl flag-clear
+    form" 2pl САр"
+    form" 2pl.dial СІңАр"
+  filter-end
+
+  filter-start( mix-person-allowed? )
+    flag-1sg.br flag-set
+      form" 1sg.mix м"
+    flag-1sg.br flag-clear
+    form" 2sg.mix СІң"
+
+    flag-1.pl flag-set
+      form" 1pl.mix ПІс"
+    flag-1.pl flag-clear
+    form" 2pl.mix САр"
+  filter-end
+
+  filter-start( short-person-allowed? )
+    flag-Person.br flag-set
+      flag-1sg.br flag-set
+        form" 1sg.br м"
+      flag-1sg.br flag-clear
+      form" 2sg.br ң"
+      form" 1pl.br ПІс"
+      form" 2pl.br (І)ңАр"
+    flag-Person.br flag-clear
+  filter-end
+
+  \ 19. Показатели поз. 20 (Person) с пометой Imp могут быть
+  \ только у слов, имеющих помету Verbum; они следуют
+  \ непосредственно после заполнителя позиции с номером меньше
+  \ или равно 6
+  filter-start( verb?  7 19 slot-range-empty?  AND )
+    flag-Imp flag-set
+      form" Imp.1sg им"
+      form" Imp.1pl ибІс"
+      form" Imp.1.Incl Аң"
+      form" Imp.1pl.Incl АңАр"
+      form" Imp.1pl.Incl.dial АлАр"
+      form" Imp.2pl (І)ңАр"
+      flag-Imp.3 flag-set
+        form" Imp.3 СІн"
+      flag-Imp.3 flag-clear
+    flag-Imp flag-clear
+  filter-end
+  ;
+
+slot: <PredPl>  \ 21
+  21 slot-empty!
+  form" -nopredpl "
+
+  21 slot-full!
+  \ 21. Показатель поз. 21 PredPl ЛАр сочетается только с
+  \ определенными аффиксами из поз. 20 Person: 1.pl ПIC, Imp.3
+  \ CIн.
+  filter-start( flag-1.pl flag-Imp.3 OR  flag-is? )
+    form" PredPl ЛАр"
+  filter-end
+  ;
+
+slot: <Ptcl₃>  \ 22
+  22 slot-empty!
+  form" -noptcl3 "
+
+  22 slot-full!
+
+  form" Ass ОК"
+  \ 23. Пок-тель Foc может встретиться: а) в словоформах с
+  \ пометой Nomen; б) в глаголах, у которых есть временные
+  \ показатели Past ГАн и Hab ЧАӊ.
+  filter-start( verb? NOT
+                flag-Past-or-Hab flag-is?  OR )
+    form" Foc ТІр"
+  filter-end
+
+  \ 22. Показатель Perm присоединяется только к императивным показателям из поз. 20 Person.
+  filter-start( 21 slot-empty?  flag-Imp flag-is?  AND )
+    form" Perm ТАК"
+  filter-end
+  ;
+
 CREATE slot-stack
- ' <Distr> , ' <Form1> , ' <Ptcl1> , ' <Perf/Prosp> ,
- ' <Dur> , ' <Neg/Form2> , ' <Iter> , ' <Tense/Mood> ,
- ' <Evid> , ' <Irr> , ' <Comit> , ' <Num> ,
- ' <Poss> , ' <Apos> , ' <Case> , ' <Attr> ,
- ' <Ptcl2> , ' <Person> , ' <Adv> , 0 ,
+ ' <Distr> , ' <Conv1> , ' <Ptcl1> , ' <Perf/Prosp> ,
+ ' <Dur> , ' <Neg/Iter> , ' <Tense/Mood/Conv2> ,
+ ' <Indir> , ' <Irr> , ' <Comit> , ' <Pl₁> ,
+ ' <Poss₁> ,
+ ' <Case₁> ,
+ ' <Attr> ,
+ ' <Pl₂> ,
+ ' <Poss₂> ,
+ ' <Apos> , 
+ ' <Case₂> ,
+ ' <Ptcl₂> ,
+ ' <Person> ,
+ ' <PredPl> ,
+ ' <Ptcl₃> , 0 ,
 HERE slot-stack - 1- CELL / CONSTANT /slot-stack
