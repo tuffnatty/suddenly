@@ -29,7 +29,7 @@ sound-class very-narrow-vowel
 sound-class;
 
 sound-class nasal
-  sound м sound н sound ӊ
+  sound м sound н sound ң
 sound-class;
 
 sound-class unvoiced
