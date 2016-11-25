@@ -1,6 +1,7 @@
 \ after entering new data, repeat this command until no matches:
 \ :3,$s/"\(.*\)\([aceiopxyöÿ]\)/\="\"" . submatch(1) . tr(submatch(2),"aceiopxyöÿ", "асеіорхуӧӱ")/gI
 
+\ flags in different slots must be distinct!
 %000000000000000000000000001 CONSTANT flag-Cond
 %000000000000000000000000010 CONSTANT flag-Conv.Neg
 %000000000000000000000000100 CONSTANT flag-Conv2
@@ -23,11 +24,11 @@
 %000000010000000000000000000 CONSTANT flag-Perf
 %000000100000000000000000000 CONSTANT flag-Person.br
 %000001000000000000000000000 CONSTANT flag-Poss1.nonpl
-%000010000000000000000000000 CONSTANT flag-Pres
-%000100000000000000000000000 CONSTANT flag-RPast
-%001000000000000000000000000 CONSTANT flag-1sg.br
-%010000000000000000000000000 CONSTANT flag-1.pl
-%100000000000000000000000000 CONSTANT flag-3pos
+%000010000000000000000000000 CONSTANT flag-Poss2.nonpl
+%000100000000000000000000000 CONSTANT flag-Pres
+%001000000000000000000000000 CONSTANT flag-RPast
+%010000000000000000000000000 CONSTANT flag-1sg.br
+%100000000000000000000000000 CONSTANT flag-1.pl
 flag-Dur flag-Pres OR                            CONSTANT flag-Dur-or-Pres
 flag-RPast flag-Cond OR                          CONSTANT flag-RPast-or-Cond
 flag-RPast-or-Cond flag-Pres OR flag-Conv2 OR    CONSTANT flag-RPast-or-Cond-or-Pres-or-Conv2
@@ -431,9 +432,7 @@ slot: <Poss₁>  \ 12
       flag-Poss1.nonpl flag-set
         form" 1pos.sg (І)м"
         form" 2pos.sg (І)ң"
-        flag-3pos flag-set
-          form" 3pos (з)І"
-        flag-3pos flag-clear
+        form" 3pos (з)І"
       flag-Poss1.nonpl flag-clear
       form" 1pos.pl (І)бІс"
       form" 2pos.pl (І)ңАр"
@@ -460,7 +459,8 @@ slot: <Case₁>  \ 13
       \ (Apos); в) после основ, которые указаны в словарных
       \ статьях у Nomen в поле FORM [там приведены стяженные
       \ формы 3pos].
-      filter-start( flag-Poss1.nonpl flag-empty? )
+      filter-start( flag-Poss1.nonpl flag-empty?  flag-Poss2.nonpl flag-empty?  AND
+                    17 slot-empty?  AND )
         form" Dat ГА"
         form" Loc ТА"
         form" All САр"
@@ -507,11 +507,11 @@ slot: <Poss₂>  \ 16
   filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
     16 slot-full!
 
-    form" 1pos.sg (І)м"
-    form" 2pos.sg (І)ң"
-    flag-3pos flag-set
+    flag-Poss2.nonpl flag-set
+      form" 1pos.sg (І)м"
+      form" 2pos.sg (І)ң"
       form" 3pos (з)І"
-    flag-3pos flag-clear
+    flag-Poss2.nonpl flag-clear
     form" 1pos.pl (І)бІс"
     form" 2pos.pl (І)ңАр"
   filter-end
@@ -544,8 +544,8 @@ slot: <Case₂>  \ 18
     \ (Apos); в) после основ, которые указаны в словарных
     \ статьях у Nomen в поле FORM [там приведены стяженные
     \ формы 3pos].
-    filter-start( flag-Poss1.nonpl flag-empty?
-                  17 slot-empty?  OR )
+    filter-start( flag-Poss1.nonpl flag-empty?  flag-Poss2.nonpl flag-empty?  AND
+                  17 slot-empty?  AND )
       form" Dat ГА"
       form" Acc НІ"
       form" Loc ТА"
@@ -556,7 +556,7 @@ slot: <Case₂>  \ 18
       form" Comp ТАГ"
     filter-else
       form" Dat (н)А"
-      filter-start( 14 slot-empty?  flag-3pos flag-is?  AND )
+      filter-start( 18 form-slot-vowel-at-left? )
         form" Acc₂ Н"
       filter-else
         form" Acc₁ НІ"
@@ -701,7 +701,7 @@ CREATE slot-stack
  ' <Attr> ,
  ' <Pl₂> ,
  ' <Poss₂> ,
- ' <Apos> , 
+ ' <Apos> ,
  ' <Case₂> ,
  ' <Ptcl₂> ,
  ' <Person> ,
