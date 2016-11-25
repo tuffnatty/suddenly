@@ -72,7 +72,10 @@ REQUIRE loaddefs.fs
   indecl? IF
     slot-all-empty? IF
       yield-stem
-    ELSE DROP THEN
+    ELSE
+      \." indeclinate stem but there are affixes: " DUP .stem-single CR
+      DROP
+    THEN
   ELSE
     \." about to check filters for: " formname .bstr CR DUP .stem-single CR
     filters-check IF
@@ -118,7 +121,7 @@ REQUIRE loaddefs.fs
     THEN
     BEGIN DUP WHILE
       DUP pair-1  ( ... pairlist addr' u' )
-      \\." " rule if rule execute . ." expected, " n-rule . ." actual" cr then
+      \." " rule if rule execute . ." expected, " n-rule . ." actual" cr then
       n-rule rule rule-check IF
         \." " indent ." Trying " 2DUP TYPE ." +" affix TYPE CR
         parse-try  ( ... pairlist )
@@ -130,19 +133,24 @@ REQUIRE loaddefs.fs
   REPEAT DROP  ( addr u )
   formform bstr-pop ;
 
+: process-representations  ( addr u rule sstr -- )
+  { rule sstr }                         ( addr u )
+  sstr sstr-count @ 0 DO
+    I sstr sstr-select { D: affix }
+    affix string-length IF
+      affix rule I process-single-representation
+    THEN
+  LOOP
+  \\." " cr
+  ;
+
 \ an awful big word
 :noname  ( addr u rule sstr -- addr u )
   \." " parse-depth 1+ TO parse-depth
   \." " indent ." form-epilog " 2>r 2dup type bl emit 2r> 2dup .sstr .rule cr
   { rule sstr }  ( addr u )
-  sstr IF
-    sstr sstr-count @ 0 DO
-      I sstr sstr-select { D: affix }
-      affix string-length IF
-        affix rule I process-single-representation
-      THEN
-    LOOP
-    \\." " cr
+  sstr IF  \ Non-empty affix
+    rule sstr process-representations
   ELSE
     \." " indent ." Trying 0 " 2dup type ." +0" CR
     0 formform form-prepend
