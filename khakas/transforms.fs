@@ -227,6 +227,11 @@ REQUIRE heredoc.fs
 ӱги > ии
 ӱгӧ* > ӧӧ
 ӱгӱ* > ӱӱ
+
+гг > г
+ғғ > ғ
+ңг > ң
+ңғ > ң
 fallout-rule-src
 \ уғы > уу
 
@@ -238,36 +243,39 @@ TABLE CONSTANT fallout-reverse-table
    S" уға" DROP  ptrlist-prepend
    S" уғо" DROP  ptrlist-prepend  CONSTANT fallout-reverse-uu
 
-: fallout-reverse-find  ( ptr -- 0 | ptrlist )
-  2cyrs fallout-reverse-table SEARCH-WORDLIST IF EXECUTE
+: fallout-reverse-find  ( addr u -- 0 | ptrlist )
+  fallout-reverse-table SEARCH-WORDLIST IF EXECUTE
   ELSE 0 THEN ;
 
 : fallout-rule-prepare  ( -- )
   GET-CURRENT
   fallout-rule-src OVER + SWAP BEGIN 2DUP > WHILE   ( end ptr )
-    DUP C@ 128 AND IF
+    DUP cyr? IF
       fallout-table SET-CURRENT
       DUP >R                                 ( end ptr R: src )
-      DUP 3cyrs NEXTNAME
-      3cyrs + BEGIN DUP C@ 128 AND 0= WHILE 1+ REPEAT
+      DUP DUP count-cyrs DUP >R NEXTNAME R> +      ( end ptr' )
+      skip-latin
       DUP CONSTANT
-      DUP fallout-reverse-find ?DUP-IF  ( end ptr list R: src )
+      DUP DUP count-cyrs fallout-reverse-find ?DUP-IF  ( end ptr list R: src )
         R> ptrlist-append                           ( end ptr )
       ELSE
         fallout-reverse-table SET-CURRENT
-        DUP 2cyrs NEXTNAME
+        DUP DUP count-cyrs NEXTNAME
         0 R> ptrlist-prepend CONSTANT
       THEN                                          ( end ptr )
-      2cyrs +
+      skip-cyrs
     ELSE 1+ THEN
   REPEAT 2DROP
   SET-CURRENT ;
 
 fallout-rule-prepare
 
-: fallout-rule-find  ( ptr -- 0 | ptr' )
-  3cyrs fallout-table SEARCH-WORDLIST IF EXECUTE
-  ELSE 0 THEN ;
+: fallout-rule-find  { ptr -- 0 | ptr' }
+  ptr 3cyrs fallout-table SEARCH-WORDLIST IF
+    EXECUTE
+  ELSE ptr 2cyrs fallout-table SEARCH-WORDLIST IF
+    EXECUTE
+  ELSE 0 THEN THEN ;
 
 CREATE fallout-buf 3 cyrs ALLOT
 : transform-fallout  ( cs addr len -- cs addr len )
@@ -309,6 +317,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 0 VALUE addr
 0 VALUE u
 0 VALUE fallout-start
+0 VALUE fallout-len
 0 VALUE ofs-into-affix
 0 VALUE affix-ptr
 0 VALUE affix-len
@@ -322,12 +331,13 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     \ ." ComparingB " addr' 2cyrs +  u OVER addr - TYPE ."  and " affix-ptr ofs +  len ofs -  TYPE CR
     \ addr' 2cyrs +  u OVER addr -  affix-ptr ofs +  len ofs -  STR= IF
       list  addr  u cyr+  strlist-prepend-alloc TO list
-      fallout-start addr -  list strlist-str 1+  +  ( cs-ptr )
-      DUP  DUP cyr+  u fallout-start addr - - MOVE
-      src  OVER  3cyrs MOVE
+      fallout-start addr -  { fallout-ofs }
+      list strlist-str 1+  fallout-ofs +  { cs-ptr }
+      cs-ptr  cs-ptr cyr+  u fallout-ofs - MOVE       \ с|уу. -> с|ууу  э|гей. -> э|ггей
+      src  cs-ptr  src count-cyrs  MOVE               \ с|ууу -> с|уға  э|ггей -> э|ггей
       \ ." constructed " list strlist-str count type cr
       \ ." should compare " dup ofs +  list strlist-str count + over - type ."  with " affix-ptr len type cr
-      ofs-into-affix +  list strlist-str count + over -  ( cs-ptr' cs-len' )
+      cs-ptr ofs-into-affix +  list strlist-str count + over -  ( cs-ptr' cs-len' )
       affix-ptr affix-len COMPARE IF ( )
         list list-swallow TO list
       THEN ( )
@@ -368,9 +378,13 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   0 addr u strlist-prepend-alloc TO list  \ add original
   untransform-get-fallout-start-and-ofs-into-affix IF
     fallout-start addr -  2cyrs <=  fallout-start уу?  AND IF
-      fallout-reverse-uu                    ( srclist )
-    ELSE fallout-start fallout-reverse-find THEN ( srclist | 0 )
-    ?DUP-IF ['] untransform-fallout-add  list-map THEN       ( )
+      fallout-reverse-uu                             ( srclist )
+    ELSE fallout-start 2cyrs fallout-reverse-find THEN ( srclist | 0 )
+    ?DUP-IF ['] untransform-fallout-add  list-map            ( )
+    ELSE
+      fallout-start cyr fallout-reverse-find ( srclist | 0 )
+      ?DUP-IF ['] untransform-fallout-add  list-map THEN       ( )
+    THEN
   THEN
   list ;
 

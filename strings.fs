@@ -205,6 +205,18 @@ INTERPRET/COMPILE: cyrs
 : 3cyrs 3 cyrs POSTPONE LITERAL ; IMMEDIATE
 : cyr+ POSTPONE cyr POSTPONE + ; IMMEDIATE
 
+: cyr?  ( addr -- f )
+  C@ 128 AND ;
+
+: skip-cyrs  ( addr -- addr' )
+  BEGIN DUP cyr? WHILE cyr+ REPEAT ;
+
+: skip-latin ( addr -- addr' )
+  BEGIN DUP cyr? 0= WHILE 1+ REPEAT ;
+
+: count-cyrs  ( addr -- n )
+  DUP skip-cyrs SWAP - ;
+
 : is-1-char?  ( addr len -- f )
   cyr = NIP ;
 
