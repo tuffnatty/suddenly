@@ -69,6 +69,7 @@ REQUIRE loaddefs.fs
   >R 2DUP paradigm-stem 2! R>
   DUP stem-p-o-s paradigm-p-o-s !
   DUP stem-dict @ dict-stems @  paradigm-stems !
+  \." " CR
   indecl? IF
     slot-all-empty? IF
       yield-stem
@@ -77,7 +78,7 @@ REQUIRE loaddefs.fs
       DROP
     THEN
   ELSE
-    \." about to check filters for: " formname .bstr CR DUP .stem-single CR
+    \." about to check filters for: " formname .bstr CR DUP .stem-single
     filters-check IF
       yield-stem
     ELSE DROP THEN

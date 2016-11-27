@@ -1,42 +1,46 @@
 \ after entering new data, repeat this command until no matches:
 \ :3,$s/"\(.*\)\([aceiopxyöÿ]\)/\="\"" . submatch(1) . tr(submatch(2),"aceiopxyöÿ", "асеіорхуӧӱ")/gI
 
+: flag  ( u "name" -- )
+  debug-mode? IF VALUE ELSE CONSTANT THEN
+  ; IMMEDIATE
+
 \ flags in different slots must be distinct!
-%000000000000000000000000001 CONSTANT flag-Cond
-%000000000000000000000000010 CONSTANT flag-Conv.Neg
-%000000000000000000000000100 CONSTANT flag-Conv2
-%000000000000000000000001000 CONSTANT flag-Cunc
-%000000000000000000000010000 CONSTANT flag-Dur
-%000000000000000000000100000 CONSTANT flag-Dur1.i
-%000000000000000000001000000 CONSTANT flag-Dur1.ir
-%000000000000000000010000000 CONSTANT flag-Fut.a
-%000000000000000000100000000 CONSTANT flag-Fut.ar
-%000000000000000001000000000 CONSTANT flag-Hab
-%000000000000000010000000000 CONSTANT flag-Hab.ca
-%000000000000000100000000000 CONSTANT flag-Hab.cang
-%000000000000001000000000000 CONSTANT flag-Imp
-%000000000000010000000000000 CONSTANT flag-Imp.3
-%000000000000100000000000000 CONSTANT flag-Iter
-%000000000001000000000000000 CONSTANT flag-Neg6
-%000000000010000000000000000 CONSTANT flag-Neg7
-%000000000100000000000000000 CONSTANT flag-Opt-or-Assum
-%000000001000000000000000000 CONSTANT flag-Past
-%000000010000000000000000000 CONSTANT flag-Perf
-%000000100000000000000000000 CONSTANT flag-Person.br
-%000001000000000000000000000 CONSTANT flag-Poss1.nonpl
-%000010000000000000000000000 CONSTANT flag-Poss2.nonpl
-%000100000000000000000000000 CONSTANT flag-Pres
-%001000000000000000000000000 CONSTANT flag-RPast
-%010000000000000000000000000 CONSTANT flag-1sg.br
-%100000000000000000000000000 CONSTANT flag-1.pl
-flag-Dur flag-Pres OR                            CONSTANT flag-Dur-or-Pres
-flag-RPast flag-Cond OR                          CONSTANT flag-RPast-or-Cond
-flag-RPast-or-Cond flag-Pres OR flag-Conv2 OR    CONSTANT flag-RPast-or-Cond-or-Pres-or-Conv2
-flag-Past flag-Hab OR                            CONSTANT flag-Past-or-Hab
+%000000000000000000000000001 flag flag-Cond
+%000000000000000000000000010 flag flag-Conv.Neg
+%000000000000000000000000100 flag flag-Conv2
+%000000000000000000000001000 flag flag-Cunc
+%000000000000000000000010000 flag flag-Dur
+%000000000000000000000100000 flag flag-Dur1.i
+%000000000000000000001000000 flag flag-Dur1.ir
+%000000000000000000010000000 flag flag-Fut.a
+%000000000000000000100000000 flag flag-Fut.ar
+%000000000000000001000000000 flag flag-Hab
+%000000000000000010000000000 flag flag-Hab.ca
+%000000000000000100000000000 flag flag-Hab.cang
+%000000000000001000000000000 flag flag-Imp
+%000000000000010000000000000 flag flag-Imp.3
+%000000000000100000000000000 flag flag-Iter
+%000000000001000000000000000 flag flag-Neg6
+%000000000010000000000000000 flag flag-Neg7
+%000000000100000000000000000 flag flag-Opt-or-Assum
+%000000001000000000000000000 flag flag-Past
+%000000010000000000000000000 flag flag-Perf
+%000000100000000000000000000 flag flag-Person.br
+%000001000000000000000000000 flag flag-Poss1.nonpl
+%000010000000000000000000000 flag flag-Poss2.nonpl
+%000100000000000000000000000 flag flag-Pres
+%001000000000000000000000000 flag flag-RPast
+%010000000000000000000000000 flag flag-1sg.br
+%100000000000000000000000000 flag flag-1.pl
+flag-Dur flag-Pres OR                            flag flag-Dur-or-Pres
+flag-RPast flag-Cond OR                          flag flag-RPast-or-Cond
+flag-RPast-or-Cond flag-Pres OR flag-Conv2 OR    flag flag-RPast-or-Cond-or-Pres-or-Conv2
+flag-Past flag-Hab OR                            flag flag-Past-or-Hab
 flag-Iter flag-Opt-or-Assum OR flag-Cunc OR
-flag-Dur1.ir OR flag-Hab.cang OR flag-Fut.ar OR  CONSTANT flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar
+flag-Dur1.ir OR flag-Hab.cang OR flag-Fut.ar OR  flag flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar
 flag-Pres flag-Dur1.i OR flag-Past OR
-flag-Hab.ca OR flag-Fut.a OR                     CONSTANT flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a
+flag-Hab.ca OR flag-Fut.a OR                     flag flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a
 
 0  S" пар" strlist-prepend-alloc  S" кил"  strlist-prepend-alloc  CONSTANT пар|кил
 : is-пар/кил?  ( -- f )

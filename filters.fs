@@ -35,7 +35,7 @@ CREATE filters 0 , 64 CELLS ALLOT
   POSTPONE filters-drop ; IMMEDIATE
 
 : filters-check  ( stem -- stem f )
-  \." flags: " paradigm-flags @ 2 base ! . ."  bmp:" paradigm-slot-bitmap @ . decimal cr
+  \." flags: " paradigm-flags @ 2 base ! . ."  slots:" paradigm-slot-bitmap @ . decimal cr
   filters-top-ptr BEGIN DUP filters > WHILE
     DUP 2@ >R
     \." checking filter: " dup >name ?dup-if .id else dup xt-see then r@ if ."  negated" then cr

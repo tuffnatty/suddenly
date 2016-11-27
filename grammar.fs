@@ -35,14 +35,14 @@ VARIABLE paradigm-slot-bitmap
 
 VARIABLE paradigm-flags
 : flag-set  ( n -- )
-  \." setting flag " DUP . BL EMIT
+  \." setting flag "  2 BASE !  DUP .  BL EMIT
   paradigm-flags @ OR paradigm-flags !
-  \." flags are " paradigm-flags @ . CR
+  \." flags are " paradigm-flags @ .  DECIMAL CR
   ;
 : flag-clear  ( n -- )
-  \." clearing flag " DUP . CR
+  \." clearing flag "  2 BASE !  DUP .  BL EMIT
   INVERT paradigm-flags @ AND paradigm-flags !
-  \." flags are " paradigm-flags @ . CR
+  \." flags are " paradigm-flags @ .  DECIMAL CR
   ;
 : flag-is?  ( n -- f )
   paradigm-flags @ AND ;
