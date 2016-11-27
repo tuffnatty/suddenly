@@ -16,7 +16,8 @@ require rules.fs
   REPEAT 2DROP rule-sum ;
 
 : morphonemic-sstr-prepare  { capacity len -- sstr }
-  capacity  len 1+ * 1- { buf-len }
+  len 1+ 1 INVERT AND TO len
+  capacity  len 1+  * 1- { buf-len }
   buf-len sstr-create { sstr }
   sstr cstr-get BLANK
   capacity  sstr sstr-count  !
