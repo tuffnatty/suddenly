@@ -65,22 +65,25 @@ flag-Hab.ca OR flag-Fut.a OR                     flag flag-Pres-or-Dur1.i-or-Pas
 \ 20. К словам с пометой NOMEN присоединяются полные
 \ лично-числовые показатели (список внутри Person), которые
 \ могут следовать после любых морфем. У глаголов заполнение
-\ Person возможно только при незаполненных позициях с 10 по 16 и
-\ при наличии показателей: для полных форм: Iter дIр, Irr ЧIК,
+\ Person возможно только при незаполненных позициях с 15 по 18 и
+\ при наличии показателей: для полных форм: Iter дIр, Affirm ЧIК,
 \ Opt ГАй, Assum ГАдАГ, Indir ТIр, Cunc ГАлАК, Dur1 в форме ир,
 \ Hab в форме ҶАң, Fut в форме Ар; для смешанных форм: Pres ЧА,
 \ Dur1 в форме и, Past ГА(н), Hab в форме ҶА, Fut в форме А; для
 \ кратких форм: Cond СА, Rpast ТI.
 : full-person-allowed?  ( -- f )
   verb? NOT
-  10 16 slot-range-empty?  8 9 slot-range-full?  flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar flag-is?  OR  AND  OR ;
+  15 18 slot-range-empty?
+  8 slot-full?  10 slot-full?  OR  flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar flag-is?  OR
+  AND
+  OR ;
 : mix-person-allowed?  ( -- f )
   verb?
-  10 16 slot-range-empty?  AND
+  15 18 slot-range-empty?  AND
   flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a flag-is? AND ;
 : short-person-allowed?  ( -- f )
   verb?
-  10 16 slot-range-empty?  AND
+  15 18 slot-range-empty?  AND
   flag-RPast-or-Cond flag-is?  AND ;
 
 
@@ -88,7 +91,7 @@ slot: <Distr>  \ 1
   1 slot-empty!
   form" -nodistr "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     1 slot-full!
     form" Distr КлА"
@@ -99,7 +102,7 @@ slot: <Conv1>  \ 2
   2 slot-empty!
   form" -noconv1 "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     \ 4. Показатели позиции 2 (Conv1/Conv.Neg) могут встретиться
     \ только в словоформе, где есть также показатель позиции 3
@@ -127,7 +130,7 @@ slot: <Ptcl1>  \ 3
   3 slot-empty!
   form" -noptcl1 "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     \ 5. Показатели поз. 3 (внутренние частицы) допускаются
     \ только при заполненной позиции 7 (время).
@@ -144,7 +147,7 @@ slot: <Perf/Prosp>  \ 4
   4 slot-empty!
   form" -noperf "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     4 slot-full!
 
@@ -171,7 +174,7 @@ slot: <Dur>  \ 5
   5 slot-empty!
   form" -nodur "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой
   \ Verbum
   filter-start( verb? )
     5 slot-full!
@@ -222,7 +225,7 @@ slot: <Neg/Iter>  \ 6
   6 slot-empty!
   form" -noneg/iter "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     \ 11. Показатели Neg.Fut ПАС, Neg.Conv Пин, Neg.Сonv.Abl
     \ Пин.Аң исключают заполнение поз.2 и 6.
@@ -236,12 +239,14 @@ slot: <Neg/Iter>  \ 6
         flag-Neg6 flag-clear
       filter-end
 
-      \ 14. После Iter возможны только: Past ГА(н), Irr ЧIК,
-      \ Person или конец словоформы.
+      \ 14. Непосредственно после Iter возможны только: Past ГА(н), Person, Pl, Ptcl или конец словоформы.
       filter-start( flag-Past flag-is?
+                    7 19 slot-range-empty?  20 slot-full?  AND  OR
                     7 8 slot-range-empty?  9 slot-full?  AND  OR
-                    7 22 slot-range-empty?  OR )
-        form" Iter АдІр"
+                    7 21 slot-range-empty?  OR )
+        flag-Iter flag-set
+          form" Iter АдІр"
+        flag-Iter flag-clear
       filter-end
 
       form" Dur.Iter чАдІр"
@@ -253,7 +258,7 @@ slot: <Tense/Mood/Conv2>  \ 7
   7 slot-empty!
   form" -notense "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     7 slot-full!
 
@@ -271,10 +276,6 @@ slot: <Tense/Mood/Conv2>  \ 7
 
     flag-Neg7 flag-set
       form" Neg.Fut ПАс"
-      flag-Conv2 flag-set
-        form" Neg.Conv Пин"
-        form" Neg.Conv.Abl ПинАң"
-      flag-Conv2 flag-clear
     flag-Neg7 flag-clear
 
     flag-Past flag-set
@@ -339,7 +340,7 @@ slot: <Tense/Mood/Conv2>  \ 7
                   flag-Conv.Neg flag-empty? AND
                   flag-Neg6 flag-empty? AND
                   flag-Neg7 flag-empty? AND )
-      form" Cunc ГАлАГ"
+      form" Cunc ГАлАG"
     filter-end
 
     flag-Cond flag-set
@@ -356,12 +357,25 @@ slot: <Tense/Mood/Conv2>  \ 7
       form" Assum ГАдАК"
     flag-Opt-or-Assum flag-clear
 
-    form" Lim ГАли"
-    flag-Conv2 flag-set
-      form" Conv.p (І)п"
-      form" Conv.pas АбАс"
-      form" Conv.a А"
-    flag-Conv2 flag-clear
+    \ 25. Показатели Lim ГАли, Convп (I)П, Convа; Convпас;
+    \ Neg.Conv и Neg.Conv.Abl, находясь в позиции 7, могут
+    \ только заканчивать словоформу
+    filter-start( 8 22 slot-range-empty? )
+      form" Lim ГАли"
+
+      flag-Neg7 flag-set
+        flag-Conv2 flag-set
+          form" Neg.Conv Пин"
+          form" Neg.Conv.Abl ПинАң"
+        flag-Conv2 flag-clear
+      flag-Neg7 flag-clear
+
+      flag-Conv2 flag-set
+        form" Conv.p (І)п"
+        form" Conv.pas АбАс"
+        form" Conv.a А"
+      flag-Conv2 flag-clear
+    filter-end
   filter-end
   ;
 
@@ -369,7 +383,7 @@ slot: <Indir>  \ 8
   8 slot-empty!
   form" -noindir "
 
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
+  \ 1. Позиции 1–8 могут заполняться только у слов с пометой Verbum
   filter-start( verb? )
     \ 15. Показатель поз. 8 Indir TIр бывает либо при
     \ незаполненных позициях 6, 7, либо при одновременном
@@ -383,26 +397,23 @@ slot: <Indir>  \ 8
   filter-end
   ;
 
-slot: <Irr>  \ 9
+slot: <Comit>  \ 9
   9 slot-empty!
-  form" -noirr "
-
-  \ 1. Позиции 1–9 могут заполняться только у слов с пометой Verbum
-  filter-start( verb? )
-    9 slot-full!
-    form" Irr ЧІК"
-  filter-end
-  ;
-
-slot: <Comit>  \ 10
-  10 slot-empty!
   form" -nocomit "
 
   filter-start( nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2? )
-    10 slot-full!
+    9 slot-full!
 
-    form" Comit ЛІГ"
+    form" Comit ЛІG"
   filter-end
+  ;
+
+slot: <Affirm>  \ 10
+  10 slot-empty!
+  form" -noaffirm "
+
+  10 slot-full!
+  form" Affirm ЧІК"
   ;
 
 slot: <Pl₁>  \ 11
@@ -557,7 +568,7 @@ slot: <Case₂>  \ 18
       form" All САр"
       form" Prol ЧА"
       form" Delib ДАңАр"
-      form" Comp ТАГ"
+      form" Comp ТАG"
     filter-else
       form" Dat (н)А"
       filter-start( 18 form-slot-vowel-at-left? )
@@ -570,7 +581,7 @@ slot: <Case₂>  \ 18
       form" All (н)САр"
       form" Prol (н)ЧА"
       form" Delib (н)нАңАр"
-      form" Comp (н)ТАГ"
+      form" Comp (н)ТАG"
     filter-end
 
     form" Instr нАң"
@@ -667,10 +678,19 @@ slot: <PredPl>  \ 21
   form" -nopredpl "
 
   21 slot-full!
-  \ 21. Показатель поз. 21 PredPl ЛАр сочетается только с
-  \ определенными аффиксами из поз. 20 Person: 1.pl ПIC, Imp.3
-  \ CIн.
-  filter-start( flag-1.pl flag-Imp.3 OR  flag-is? )
+  \ 21. Показатель поз. 21 PredPl может стоять после: а) пок-ля
+  \ времени (позиция 7 (за исключением ConvA, ConvP, Neg.Conv
+  \ (.Abl), Lim, согласно правилу 25) + TIр + ЧIК), б) пок-ля
+  \ падежа (п. 18) или посессивности (п. 16), в) некоторых пок-
+  \ лей Person (1pl, Imp.3), г) чистой именной основы.
+  filter-start( 7 slot-full?  8 20 slot-range-empty?  AND
+                8 slot-full?  9 20 slot-range-empty?  AND
+                10 slot-full?  11 20 slot-range-empty?  AND
+                16 slot-full?  17 20 slot-range-empty?  AND
+                18 slot-full?  19 20 slot-range-empty?  AND
+                flag-1.pl flag-Imp.3 OR  flag-is?
+                1 20 slot-range-empty?
+                OR OR OR OR OR OR )
     form" PredPl ЛАр"
   filter-end
   ;
@@ -699,7 +719,7 @@ slot: <Ptcl₃>  \ 22
 CREATE slot-stack
  ' <Distr> , ' <Conv1> , ' <Ptcl1> , ' <Perf/Prosp> ,
  ' <Dur> , ' <Neg/Iter> , ' <Tense/Mood/Conv2> ,
- ' <Indir> , ' <Irr> , ' <Comit> , ' <Pl₁> ,
+ ' <Indir> , ' <Comit> , ' <Affirm> , ' <Pl₁> ,
  ' <Poss₁> ,
  ' <Case₁> ,
  ' <Attr> ,
