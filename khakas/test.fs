@@ -77,6 +77,7 @@ T{ CHAR ң class-nvu -> cl-nasal }T
 
 REQUIRE khakas/gentest.fs
 : check-failures
+  n_failures . ."  tests FAILED" CR
   n_failures ABORT"  test failures found!" ;
 check-failures
 BYE
