@@ -12,10 +12,11 @@ VARIABLE n-forms
 : debug-init
   utime timer 2! ;
 
-: debug-bye
+DEFER debug-bye
+:noname
   n-forms @ . ."  wordforms generated in " utime timer 2@ D- D. ." μs." cr
   \ trans-timer 2@ D. ." μs in transform." cr
-  ;
+  ; IS debug-bye
 
 : \."
   debug-mode? IF

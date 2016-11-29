@@ -61,9 +61,10 @@ REQUIRE debug.fs
 REQUIRE rules.fs
 REQUIRE loaddefs.fs
 
-: yield-stem  ( stem -- )
-  ." FOUND STEM: " formname .bstr SPACE formform .bstr CR .stem-single CR
-  1 n-forms +! ;
+DEFER yield-stem  ( stem -- )
+:noname  ( stem -- )
+  ." FOUND STEM: " formname .bstr SPACE formform .bstr CR .stem-single CR  ( )
+  1 n-forms +! ; IS yield-stem
 
 : check-stem  ( addr u stem -- addr u )
   >R 2DUP paradigm-stem 2! R>
@@ -72,16 +73,16 @@ REQUIRE loaddefs.fs
   \." " CR
   indecl? IF
     slot-all-empty? IF
-      yield-stem
+      yield-stem  ( addr u )
     ELSE
       \." indeclinate stem but there are affixes: " DUP .stem-single CR
-      DROP
+      DROP  ( addr u )
     THEN
   ELSE
     \." about to check filters for: " formname .bstr CR DUP .stem-single
     filters-check IF
-      yield-stem
-    ELSE DROP THEN
+      yield-stem  ( addr u )
+    ELSE DROP THEN  ( addr u )
   THEN ;
 
 : parse-try  ( addr u -- )
