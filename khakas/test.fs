@@ -3,11 +3,6 @@
 S" ~+"  FPATH  ALSO-PATH
 REQUIRE test/ttester.fs
 
-REQUIRE khakas/phonetics.fs
-REQUIRE phonetics-common.fs
-
-T{ CHAR ң class-nvu -> cl-nasal }T
-
 S" khakas"  FPATH  ALSO-PATH
 REQUIRE ~+/debug.fs
 REQUIRE parser.fs
@@ -15,6 +10,7 @@ CREATE wordform-buffer 0 , 255 ALLOT
 0 VALUE expected-str
 0 VALUE expected-len
 0 VALUE expected-found
+0 VALUE n_failures
 : check-result  { stem -- }
   \ ~~ stem .stem-single CR formform .bstr CR  paradigm-stem 2@ TYPE CR
   \ ." <found" expected-found . CR
@@ -67,5 +63,20 @@ CREATE wordform-buffer 0 , 255 ALLOT
   ['] noop IS debug-bye
   wordform-buffer parse-khak expected-found 0> ;
 
+: test-error
+   ERROR1
+   n_failures 1+ TO n_failures
+;
+
+' test-error ERROR-XT !
+
+REQUIRE khakas/phonetics.fs
+REQUIRE phonetics-common.fs
+
+T{ CHAR ң class-nvu -> cl-nasal }T
+
 REQUIRE khakas/gentest.fs
+: check-failures
+  n_failures ABORT"  test failures found!" ;
+check-failures
 BYE

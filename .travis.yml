@@ -1,0 +1,3 @@
+language: generic
+before_install: sudo apt-get install -y gforth
+script: gforth khakas/test.fs
