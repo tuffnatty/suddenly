@@ -49,17 +49,24 @@ flag-Hab.ca OR flag-Fut.a OR                     flag flag-Pres-or-Dur1.i-or-Pas
 : form-slot-vowel-at-left? ( -- f )
   form-slot-xc-at-left vowel? ;
 
-\ 2. Заполнение позиций 10-19 (падежно-посессивный блок) может
+\ 2. Заполнение позиций 11-19 (падежно-посессивный блок) может
 \ происходить либо сразу после позиции 0 (если слово имеет
 \ помету Nomen), либо непосредственно после заполненной позиции
 \ 7 (если слово имеет помету Verbum); но не в случае, если
 \ позиция 7 заполнена аффиксами RPast ТI, Cond СА, Pres чА или
-\ любым из Conv.
+\ любым из Conv (т.е. только в случаях Past, Fut, Neg.Fut, Hab,
+\ Cunc, Assum, Opt); либо непосредственно после заполненной
+\ позиции 9 (Comit), либо непосредственно после заполненной
+\ позиции 10 (Affirm).
 : nomen-or-verb-with-Tense-non-RPast-Cond-Pres-Conv2?  ( -- f )
   verb? IF
-    7 slot-empty? IF FALSE EXIT THEN
-    flag-RPast-or-Cond-or-Pres-or-Conv2 flag-is? IF FALSE EXIT THEN
-    8 9 slot-range-empty?
+    9 10 slot-range-full? IF
+      TRUE
+    ELSE
+      7 slot-full?   8 10 slot-range-empty?  AND IF
+        flag-RPast-or-Cond-or-Pres-or-Conv2 flag-is? 0=
+      ELSE FALSE THEN
+    THEN
   ELSE TRUE THEN ;
 
 \ 20. К словам с пометой NOMEN присоединяются полные
@@ -72,11 +79,12 @@ flag-Hab.ca OR flag-Fut.a OR                     flag flag-Pres-or-Dur1.i-or-Pas
 \ Dur1 в форме и, Past ГА(н), Hab в форме ҶА, Fut в форме А; для
 \ кратких форм: Cond СА, Rpast ТI.
 : full-person-allowed?  ( -- f )
-  verb? NOT
-  15 18 slot-range-empty?
-  8 slot-full?  10 slot-full?  OR  flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar flag-is?  OR
-  AND
-  OR ;
+  verb? IF
+    15 18 slot-range-empty? IF
+      8 slot-full?  10 slot-full?  OR
+      flag-Iter-or-Opt-or-Assum-or-Cunc-or-Dur1.ir-or-Hab.cang-or-Fut.ar flag-is?  OR
+    ELSE FALSE THEN
+  ELSE TRUE THEN ;
 : mix-person-allowed?  ( -- f )
   verb?
   15 18 slot-range-empty?  AND
@@ -187,10 +195,10 @@ slot: <Dur>  \ 5
     filter-start( 1 slot-empty?  3 4 slot-range-empty?  AND  is-пар/кил? AND )
       \ 8. Показатель Dur1 может стоять либо непосредственно перед
       \ пробелом, либо непосредственно перед Person (позиция 20),
-      \ либо непосредственно перед показателем Past ГА(н) (позиция 8).
+      \ либо непосредственно перед показателем Past ГА(н) (позиция 7).
       filter-start( 6 22 slot-range-empty?
                     6 19 slot-range-empty?  20 slot-full?  AND
-                    6 7 slot-range-empty?  flag-Past flag-is?  AND
+                    6 slot-empty?  flag-Past flag-is?  AND
                     OR OR )
         flag-Dur1.i flag-set
           form" Dur1₁ и"
@@ -239,10 +247,10 @@ slot: <Neg/Iter>  \ 6
         flag-Neg6 flag-clear
       filter-end
 
-      \ 14. Непосредственно после Iter возможны только: Past ГА(н), Person, Pl, Ptcl или конец словоформы.
+      \ 14. Непосредственно после Iter возможны только: Past ГА(н), Person, PredPl, Ptcl или конец словоформы.
       filter-start( flag-Past flag-is?
                     7 19 slot-range-empty?  20 slot-full?  AND  OR
-                    7 8 slot-range-empty?  9 slot-full?  AND  OR
+                    7 20 slot-range-empty?  21 slot-full?  AND  OR
                     7 21 slot-range-empty?  OR )
         flag-Iter flag-set
           form" Iter АдІр"
@@ -340,7 +348,7 @@ slot: <Tense/Mood/Conv2>  \ 7
                   flag-Conv.Neg flag-empty? AND
                   flag-Neg6 flag-empty? AND
                   flag-Neg7 flag-empty? AND )
-      form" Cunc ГАлАG"
+      form" Cunc ГАлАК"
     filter-end
 
     flag-Cond flag-set
@@ -354,7 +362,7 @@ slot: <Tense/Mood/Conv2>  \ 7
     flag-Cond flag-clear
     flag-Opt-or-Assum flag-set
       form" Opt ГАй"
-      form" Assum ГАдАК"
+      form" Assum ГАдАG"
     flag-Opt-or-Assum flag-clear
 
     \ 25. Показатели Lim ГАли, Convп (I)П, Convа; Convпас;
@@ -680,17 +688,19 @@ slot: <PredPl>  \ 21
   21 slot-full!
   \ 21. Показатель поз. 21 PredPl может стоять после: а) пок-ля
   \ времени (позиция 7 (за исключением ConvA, ConvP, Neg.Conv
-  \ (.Abl), Lim, согласно правилу 25) + TIр + ЧIК), б) пок-ля
-  \ падежа (п. 18) или посессивности (п. 16), в) некоторых пок-
-  \ лей Person (1pl, Imp.3), г) чистой именной основы.
-  filter-start( 7 slot-full?  8 20 slot-range-empty?  AND
-                8 slot-full?  9 20 slot-range-empty?  AND
-                10 slot-full?  11 20 slot-range-empty?  AND
-                16 slot-full?  17 20 slot-range-empty?  AND
-                18 slot-full?  19 20 slot-range-empty?  AND
+  \ (.Abl), Lim, согласно правилу 25) + Indir TIр + Affirm ЧIК +
+  \ Iter AдIр + Dur.Iter чАдIр), б) пок-ля падежа (п. 18) или
+  \ посессивности (п. 16), в) некоторых поклей Person (1pl,
+  \ Imp.3), г) чистой именной основы.
+  filter-start( 6 slot-full?  7 20 slot-range-empty?  AND  flag-Neg6 flag-empty? AND  \ Iter
+                7 slot-full?  8 20 slot-range-empty?  AND  \ Tense
+                8 slot-full?  9 20 slot-range-empty?  AND  \ Indir
+                10 slot-full?  11 20 slot-range-empty?  AND  \ Affirm
+                16 slot-full?  17 20 slot-range-empty?  AND  \ Poss
+                18 slot-full?  19 20 slot-range-empty?  AND  \ Case
                 flag-1.pl flag-Imp.3 OR  flag-is?
                 1 20 slot-range-empty?
-                OR OR OR OR OR OR )
+                OR OR OR OR OR OR OR )
     form" PredPl ЛАр"
   filter-end
   ;
