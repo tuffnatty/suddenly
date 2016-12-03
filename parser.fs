@@ -54,7 +54,7 @@ REQUIRE debug.fs
   OVER C@  [CHAR] -  = IF  2DROP 0  THEN ;
 
 :noname  ( [addr u] affix-name len -- [addr u] )
-  \." " indent ." form-prolog: " 2>R 2dup type bl emit 2R> 2dup type cr
+  \." " indent ." form-prolog: " 2>R over . dup . 2dup type ." +" 2R> 2dup type .s cr
   affix-name-clean formname form-prepend  ( )
   ; IS (form-prolog)
 
@@ -109,6 +109,7 @@ DEFER yield-stem  ( stem -- )
 
 : process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }  ( addr u )
+  \\." <Singlerep> " 2DUP type ." +" affix type rule . n-rule . .s CR
   affix formform form-prepend
   affix string-length IF
     \\." BEFORE:" .s CR
@@ -143,6 +144,7 @@ DEFER yield-stem  ( stem -- )
 
 : process-representations  ( addr u rule sstr -- )
   { rule sstr }                         ( addr u )
+  \\." <All-reps>" 2DUP TYPE ." +" sstr .sstr rule . .s CR
   sstr sstr-count @ 0 DO
     I sstr sstr-select { D: affix }
     affix string-length IF
@@ -155,7 +157,7 @@ DEFER yield-stem  ( stem -- )
 \ an awful big word
 :noname  ( addr u rule sstr -- addr u )
   \." " parse-depth 1+ TO parse-depth
-  \." " indent ." form-epilog " 2>r 2dup type bl emit 2r> 2dup .sstr .rule cr
+  \." " indent ." form-epilog " 2>r 2dup type ." +" 2r> 2dup .sstr .rule .s cr
   { rule sstr }  ( addr u )
   sstr IF  \ Non-empty affix
     rule sstr process-representations
@@ -167,7 +169,7 @@ DEFER yield-stem  ( stem -- )
     \\." " indent ." out of parse-try" CR
   THEN
   \." " parse-depth 1- TO parse-depth
-  \\." " indent ." form-epilog ending:" 2dup type cr
+  \." " indent ." form-epilog ending:" over . dup . 2dup type .s cr
   formname bstr-pop
   ; IS (form-epilog)
 
