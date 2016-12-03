@@ -15,12 +15,20 @@ sound-buf 2 + CONSTANT sound-buf-name
   PARSE-NAME DROP XC@ SWAP !  ( size buf )
   SWAP 1+ SWAP ;
 
+: sound-each  ( start )
+  POSTPONE BEGIN POSTPONE DUP POSTPONE @ POSTPONE ?DUP-IF
+  1 CS-ROLL ; IMMEDIATE
+: sound-next  ( ptr )
+  POSTPONE CELL+ POSTPONE AGAIN POSTPONE THEN POSTPONE DROP ; IMMEDIATE
+
 : sound-class;  { len size buf -- }
-  size CELLS ALLOT
+  size CELLS ALLOT  0 ,
+  \ Create vowels# VARIABLE with class size
   len 1+ { len' }
   [CHAR] #  sound-buf-name len' +  C!
   sound-buf-name len' 1+ NEXTNAME CREATE
   size ,
+  \ Create vowel? ( xc -- f ) word
   [CHAR] ?  sound-buf-name len + C!
   S" : " string-addr  sound-buf 2 MOVE
   sound-buf 2 + len' + ( ptr )
@@ -30,7 +38,8 @@ sound-buf 2 + CONSTANT sound-buf-name
     S"  = IF EXIT THEN" S+/
   LOOP
   S"  DROP 0 ;" s+/
-  sound-buf - sound-buf SWAP EVALUATE ;
+  sound-buf - sound-buf SWAP EVALUATE
+  ;
 
 
 TABLE CONSTANT morphonemes-table
