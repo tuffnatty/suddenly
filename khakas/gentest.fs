@@ -61,7 +61,7 @@ T{ S" суғ+ға" S" суға" parse-test -> TRUE }T
 T{ S" суғ+ы" S" суу" parse-test -> TRUE }T
 T{ S" сӱрдег+і" S" сӱрдее" parse-test -> TRUE }T
 T{ S" сурығ+ы" S" сурии" parse-test -> TRUE }T
-T{ S" сыда+ҷаң+ы" S" сыдаҷаа" parse-test -> TRUE }T
+T{ S" сыда+ӌаң+ы" S" сыдаӌаа" parse-test -> TRUE }T
 T{ S" тағ+ы" S" таа" parse-test -> TRUE }T
 T{ S" таны+ған" S" танаан" parse-test -> TRUE }T
 T{ S" тап+ып" S" таап" parse-test -> TRUE }T
