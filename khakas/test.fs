@@ -12,6 +12,7 @@ CREATE wordform-buffer 0 , 255 ALLOT
 0 VALUE expected-len
 0 VALUE expected-found
 0 VALUE n_failures
+0 VALUE n_tests
 : check-result  { stem -- }
   \ ~~ stem .stem-single CR formform .bstr CR  paradigm-stem 2@ TYPE CR
   \ ." <found" expected-found . CR
@@ -56,6 +57,7 @@ CREATE wordform-buffer 0 , 255 ALLOT
   THEN
   ;
 : parse-test  { D: expected D: wordform }
+  n_tests 1+ TO n_tests
   wordform wordform-buffer 1+ SWAP MOVE
   wordform NIP wordform-buffer C!
   expected TO expected-len TO expected-str
@@ -78,7 +80,7 @@ T{ CHAR ң class-nvu -> cl-nasal }T
 
 REQUIRE khakas/gentest.fs
 : check-failures
-  n_failures . ."  tests FAILED" CR
+  n_failures . ." / " n_tests . ." tests FAILED ( " n_failures 100 * n_tests / . ." % )" CR
   n_failures ABORT"  test failures found!" ;
 check-failures
 BYE
