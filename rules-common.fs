@@ -149,14 +149,17 @@ REQUIRE strings.fs
     THEN
   CELL +LOOP ;
 
-: polysyllabic?  ( cs -- f )
-  0 SWAP DUP COUNT + SWAP 1+  ( cnt cs-end ptr )
+: polysyllabic?  ( addr u -- f )
+  OVER + SWAP ( cs-end ptr )
+  0 { cnt }
   BEGIN 2DUP > WHILE
     XC@+ vowel? IF
-      ROT IF DROP EXIT THEN       ( cs-end ptr )
-      1 -ROT
+      cnt IF 2DROP TRUE EXIT THEN
+      1 TO cnt
     THEN
-  REPEAT 2DROP DROP 0 ;
+  REPEAT 2DROP FALSE ;
+: polysyllabic-cs?  ( cs -- f )
+  COUNT polysyllabic? ;
 
 VARIABLE paradigm-p-o-s
 VARIABLE paradigm-stems

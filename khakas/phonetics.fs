@@ -8,6 +8,27 @@ sound-class vowel
   sound е sound і sound ӧ sound ӱ
 sound-class;
 
+sound-class short-back-vowel
+  sound а sound ы sound у
+sound-class;
+
+sound-class short-front-vowel
+  sound е sound і sound ӱ
+sound-class;
+
+sound-class short-narrow-back-vowel
+  sound у sound ы
+sound-class;
+
+sound-class short-narrow-front-vowel
+  sound і sound ӱ
+sound-class;
+
+sound-class short-vowel
+  sound а sound ы sound у
+  sound е sound і sound ӱ
+sound-class;
+
 sound-class unchar-vowel
   sound и
 sound-class;
