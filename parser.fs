@@ -110,11 +110,17 @@ DEFER yield-stem  ( stem -- )
 : process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }  ( addr u )
   affix formform form-prepend
-  2DUP affix untransform-fallout  ( addr u strlist )
+  affix string-length IF
+    \\." BEFORE:" .s CR
+    2DUP affix untransform-fallout2  ( addr u strlist )
+    \\." AFTER:" .s BL EMIT DUP .strlist CR
+  ELSE 2DUP 0 -ROT strlist-prepend-alloc THEN  ( addr u strlist )
   BEGIN DUP WHILE
     DUP list-next @ 0=  { unchanged? }
+    \\." list: " DUP .strlist CR
     DUP strlist-get  { D: left-part }
     unchanged? IF
+      \\." untransform-envoice: " left-part type .s cr
       left-part affix untransform-envoice  ( ... pairlist )
     ELSE
       \." " indent ." After fallout check with affix " affix TYPE ." : " left-part TYPE CR
