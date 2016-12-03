@@ -15,19 +15,46 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
+: c/[ае]/  ( xc -- f )
+  DUP [CHAR] а = SWAP [CHAR] е = OR ;
+
+: c/[лң]/  ( xc -- f )
+  DUP [CHAR] л = SWAP [CHAR] ң = OR ;
+
+: c/[ркх]/  ( xc -- f )
+  DUP [CHAR] р = IF DROP TRUE EXIT THEN
+  DUP [CHAR] к = IF DROP TRUE EXIT THEN
+  [CHAR] х = IF TRUE EXIT THEN
+  FALSE ;
+
 : /[ае][лң]/  ( D: s -- f )
   cyr > IF
-    XC@+ DUP [CHAR] а = SWAP [CHAR] е = OR IF
-      XC@ DUP [CHAR] л = SWAP [CHAR] ң = OR EXIT
+    XC@+ c/[ае]/ IF
+      XC@ c/[лң]/ EXIT
     THEN
   THEN DROP FALSE ;
+
+: /[ае]($|[ркх])/  ( D: s -- f )
+  DUP cyr > IF
+    DROP XC@+ c/[ае]/ IF
+      XC@ c/[ркх]/ EXIT
+    THEN
+  ELSE
+    cyr = IF XC@ c/[ае]/ EXIT THEN
+  THEN DROP FALSE
+  ;
 
 : /(аа|ее)/  ( D: s -- f )
   cyr > IF
     XC@+ >R XC@ R@ = IF  ( R: xc )
-      R@ [CHAR] а =  R> [CHAR] е =  OR EXIT
+      R> c/[ае]/ EXIT
     THEN RDROP
   THEN FALSE ;
+
+: /и/  ( D: s -- f )
+  cyr >= IF
+    XC@ [CHAR] и = EXIT
+  THEN DROP FALSE ;
 
 : /ии/  ( D: s -- f )
   cyr > IF
@@ -569,7 +596,6 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 : untransform-fallout2-vv-Imp.1.Incl  { D: s  D: affix  fallout-ofs -- }
   affix /[ае][лң]/ IF
     s fallout-ofs /STRING { D: fallout }
-    s string-addr fallout-ofs + { fallout-start }
     fallout /(аа|ее)/ IF
       fallout string-addr XC@ { vowel2 }
       vowel2 back-vowel? IF back-vowels ELSE front-vowels THEN sound-each { vowel1 }
@@ -577,6 +603,21 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       sound-next
     THEN
   THEN ;
+
+: untransform-fallout2-VА>и  { D: s  D: affix  fallout-ofs -- }
+  affix /[ае]($|[ркх])/ IF
+    s fallout-ofs /STRING { D: fallout }
+    fallout /и/ IF
+      [CHAR] е  front-vowels  { vowel2 vowels }
+      s last-char-vowel back-vowel? IF
+        [CHAR] а TO vowel2  back-vowels TO vowels
+      THEN
+      vowels sound-each { vowel1 }
+        s affix fallout-ofs vowel1 vowel2 untransform-fallout-add-vv
+      sound-next
+    THEN
+  THEN
+  ;
 
 : untransform-fallout2  { D: s  D: affix -- strlist }
   \stack-mark
@@ -612,14 +653,24 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \\." vv-Imp.1.Incl? " s TYPE ." +" affix TYPE .s CR
       s affix fallout-ofs untransform-fallout2-vv-Imp.1.Incl
 
+      fallout-ofs cyr+ TO fallout-ofs
+
       \ I.1. императив 1 числа: В глаголе поглощение первой
       \ гласной аффикса императива предыдущей любой гласной
       \ основы (другими словами: выпадение любой последней гласной
       \ основы при присоединении личных афф. императива 1 лица
       \ Imp.1 на -и (-им, -ибыс, -ибiс)) [всегда]:
-      fallout-ofs cyr+ TO fallout-ofs
       \\." vv-Imp.1? " s TYPE ." +" affix TYPE .s CR
       s affix fallout-ofs untransform-fallout2-vv-Imp.1
+
+      \ I.3. А с аллофоном и: В глаголах правила слияния с
+      \ фонетическими преобразованиями для афф. Fut -Ар, Convа
+      \ -А, Prosp АК. Эти аффиксы не имеют вариантов,
+      \ начинающихся на согласную. При присоединении их к основе
+      \ на гласную происходит стяжение двух кратких гласных в
+      \ нейтральную и без долготы [всегда]
+      \\." VА>и? " s TYPE ." +" affix TYPE .s CR
+      s affix fallout-ofs untransform-fallout2-VА>и
     THEN
 
     \\." final list: " list .strlist .s CR
