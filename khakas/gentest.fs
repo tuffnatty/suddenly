@@ -56,7 +56,7 @@ T{ S" сіліг+і" S" сілии" parse-test -> TRUE }T
 T{ S" скандинав+тар" S" скандинавтар" parse-test -> TRUE }T
 T{ S" соғ+ар" S" соор" parse-test -> TRUE }T
 T{ S" соғ+ы" S" соғы" parse-test -> TRUE }T
-T{ S" сӧле+ебес," S" сӧлибес" parse-test -> TRUE }T
+T{ S" сӧле+ебес" S" сӧлибес" parse-test -> TRUE }T
 T{ S" суғ+ға" S" суға" parse-test -> TRUE }T
 T{ S" суғ+ы" S" суу" parse-test -> TRUE }T
 T{ S" сӱрдег+і" S" сӱрдее" parse-test -> TRUE }T
@@ -103,7 +103,7 @@ T{ S" чілің+і" S" чілии" parse-test -> TRUE }T
 T{ S" чӧгіг+і" S" чӧгии" parse-test -> TRUE }T
 T{ S" чӧлег+і" S" чӧлее" parse-test -> TRUE }T
 T{ S" чӧлег+ім" S" чӧлеем" parse-test -> TRUE }T
-T{ S" чӧр+ҷаң+ы" S" чӧрҷее" parse-test -> TRUE }T
+T{ S" чӧр+ӌең+і" S" чӧрӌее" parse-test -> TRUE }T
 T{ S" чӱг+і" S" чӱгі" parse-test -> TRUE }T
 T{ S" чӱзӱг+і" S" чӱзии" parse-test -> TRUE }T
 T{ S" чӱк+і" S" чӱгі" parse-test -> TRUE }T
