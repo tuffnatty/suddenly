@@ -29,15 +29,19 @@ VARIABLE transform-flags
     THEN RDROP
   THEN FALSE ;
 
+: /и[мб]/  ( D: s -- f )
+  cyr > IF XC@+ ( addr' xc )
+    [CHAR] и = IF XC@ DUP [CHAR] м = SWAP [CHAR] б = OR EXIT THEN
+  THEN DROP FALSE ;
+
 : /г/  ( D: s -- f )
   IF XC@ [CHAR] г = ELSE DROP FALSE THEN ;
 
 : /[гғ]/  ( D: s -- f )
   IF XC@ CASE
-    [CHAR] г OF TRUE ENDOF
-    [CHAR] ғ OF TRUE ENDOF
-    ( xc )  FALSE SWAP  ( f xc )
-  ENDCASE ELSE DROP FALSE THEN ;
+    [CHAR] г OF TRUE EXIT ENDOF
+    [CHAR] ғ OF TRUE EXIT ENDOF
+  ENDCASE ELSE DROP THEN FALSE ;
 
 : /[ғгң]/  ( D: s -- f )
   IF XC@ gh-g-ng? ELSE DROP FALSE THEN ;
@@ -59,6 +63,11 @@ VARIABLE transform-flags
 : s/(.*).$/ғ\1/  { str len -- }
   str  str cyr+  len cyr -  MOVE
   [CHAR] ғ str XC! ;
+
+: s/.(.*).$/$1$2\1/  { str len $1 $2 -- }
+  str  str cyr+  len cyr -  MOVE
+  $1 str XC!
+  $2 str XCHAR+ XC! ;
 
 : s/..(.*).$/$1$2$3\1/  { str len $1 $2 $3 -- }
   str  str cyr+  len cyr -  MOVE
@@ -443,6 +452,14 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   cs-fallout affix untransform-fallout2-check
   ;
 
+: untransform-fallout-add-vv  { D: s  D: affix  fallout-ofs vowel1 vowel2 -- }
+  \ \." trying " vowel1 XEMIT vowel2 XEMIT CR
+  s fallout-ofs untransform-fallout2-add { D: cs-fallout }
+  cs-fallout vowel1 vowel2 s/.(.*).$/$1$2\1/
+  \ \." got " cs-fallout TYPE CR
+  cs-fallout affix untransform-fallout2-check
+  ;
+
 : untransform-fallout2-aa/ee { D: s  D: affix  fallout-ofs vowel1 consonant  D: vowels }
   vowels CELLS BOUNDS ?DO  ( )
     I @ { vowel2 }
@@ -525,12 +542,32 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     THEN
   THEN ;
 
+: untransform-fallout2-vv-Imp.1  { D: s  D: affix  fallout-ofs -- }
+  affix /и[мб]/ IF
+    \ \." им/иб " s fallout-ofs /STRING TYPE CR
+    s string-addr fallout-ofs + { fallout-start }
+    fallout-start XC@ [CHAR] и = IF
+      \ \." и" CR
+      s last-char-vowel back-vowel? IF
+        back-vowels  back-vowels# @
+      ELSE
+        front-vowels  front-vowels# @
+      THEN CELLS BOUNDS ?DO
+        I @ { vowel1 }
+        s affix fallout-ofs vowel1 [CHAR] и untransform-fallout-add-vv
+      CELL +LOOP
+    THEN
+  THEN ;
+
 : untransform-fallout2  { D: s  D: affix -- strlist }
   0 s strlist-prepend-alloc TO list  \ add original
   s affix untransform-get-fallout-coord IF TO ofs-into-affix { fallout-start }
     fallout-start s affix untransform-check-fallout-start
     fallout-start  s string-addr  -  { fallout-ofs }
+
+    \\." confluence? " s TYPE ." +" affix TYPE .s CR
     s affix fallout-ofs untransform-fallout2-confluence
+
     \ 3. Выпадения со стяжением гласных в интервокале
     \ 3.2 Выпадение сонанта ң в интервокальной позиции и
     \ последующее стяжение двух обрамлявших его гласных в одну
@@ -538,8 +575,24 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     \ морфонемы Г. В аффиксах бывает конечная ң, которая может
     \ попасть в интервокал: Hab ЧАң и 2pos.sg (I)ӊ. Правило
     \ действует на Hab и не действует на посессив
+    \\." vgv-non-first? " s TYPE ." +" affix TYPE .s CR
     s affix fallout-ofs untransform-fallout2-vgv-non-first
+    \\." vgv-first? " s TYPE ." +" affix TYPE .s CR
     s affix fallout-ofs untransform-fallout2-vgv-first
+
+    \ I.1. императив 1 числа: В глаголе поглощение первой
+    \ гласной аффикса императива предыдущей любой гласной
+    \ основы (другими словами: выпадение любой последней гласной
+    \ основы при присоединении личных афф. императива 1 лица
+    \ Imp.1 на -и (-им, -ибыс, -ибiс)) [всегда]:
+    ofs-into-affix 2cyrs = IF
+      fallout-ofs cyr+ TO fallout-ofs
+      ofs-into-affix cyr - TO ofs-into-affix
+      \\." vv-Imp.1? " s TYPE ." +" affix TYPE .s CR
+      s affix fallout-ofs untransform-fallout2-vv-Imp.1
+    THEN
+
+    \\." final list: " list .strlist .s CR
   THEN
   list ;
 
