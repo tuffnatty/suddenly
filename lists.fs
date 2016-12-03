@@ -35,7 +35,7 @@ END-STRUCT ptrlist%
 
 
 list%
-  CELL% 32 * FIELD strlist-str
+  CELL% 64 * FIELD strlist-str
 END-STRUCT strlist%
 
 : strlist-get  ( list -- addr u )
@@ -56,7 +56,8 @@ END-STRUCT strlist%
   strlist% %ALLOT strlist-prepend-common ;
 
 : strlist-prepend-alloc  ( list addr u -- list' )
-  strlist% %ALLOC strlist-prepend-common ;
+  strlist% %ALLOC strlist-prepend-common
+  ;
 
 : strlists-intersect?  ( list1 list2 -- f )
   { list2 }                       ( list1 )

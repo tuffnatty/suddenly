@@ -175,6 +175,9 @@ END-STRUCT bstr%  \ a string for fast prepending
 : string-addr  ( addr u -- addr )
   POSTPONE DROP ; IMMEDIATE
 
+: string-end  ( addr u -- addr+u )
+  POSTPONE + ; IMMEDIATE
+
 : string-length  ( addr u -- u )
   POSTPONE NIP ; IMMEDIATE
 
@@ -236,10 +239,10 @@ INTERPRET/COMPILE: cyrs
   DUP cyr > IF cyr - THEN ;
 
 : last-sound-ptr  ( addr u -- ptr )
-  + XCHAR- ;
+  string-end XCHAR- ;
 
 : prev-sound-ptr  ( addr u -- ptr )
-  + XCHAR- XCHAR- ;
+  string-end XCHAR- XCHAR- ;
 
 : last-sound ( addr u -- u )
   last-sound-ptr XC@ ;

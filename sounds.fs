@@ -15,22 +15,22 @@ sound-buf 2 + CONSTANT sound-buf-name
   PARSE-NAME DROP XC@ SWAP !  ( size buf )
   SWAP 1+ SWAP ;
 
-: sound-class;  ( len size buf -- )
-  OVER CELLS ALLOT
-  ROT 1+                              ( size buf len' )
-  DUP sound-buf-name + [CHAR] # SWAP C!
-  >R sound-buf-name R@ 1+ NEXTNAME CREATE  ( size buf )
-  OVER , R> 1-                        ( size buf len' )
-  DUP sound-buf-name + [CHAR] ? SWAP C!
-  S" : " DROP sound-buf 2 MOVE
-  sound-buf 2 + + 1+                   ( size buf ptr )
-  ROT 0 ?DO                                 ( buf ptr )
-    S"  DUP " s+/                          ( buf ptr' )
-    OVER I CELLS + @ S>D <<# #s #> s+/ #>>
-    S"  = IF EXIT THEN" s+/
+: sound-class;  { len size buf -- }
+  size CELLS ALLOT
+  len 1+ { len' }
+  [CHAR] #  sound-buf-name len' +  C!
+  sound-buf-name len' 1+ NEXTNAME CREATE
+  size ,
+  [CHAR] ?  sound-buf-name len + C!
+  S" : " string-addr  sound-buf 2 MOVE
+  sound-buf 2 + len' + ( ptr )
+  size 0 ?DO
+    S"  DUP " s+/
+    buf I CELLS + @ S>D <<# #s #> s+/ #>>
+    S"  = IF EXIT THEN" S+/
   LOOP
   S"  DROP 0 ;" s+/
-  sound-buf - sound-buf SWAP EVALUATE DROP ;
+  sound-buf - sound-buf SWAP EVALUATE ;
 
 
 TABLE CONSTANT morphonemes-table
