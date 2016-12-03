@@ -4,6 +4,7 @@ T{ S" ағ+ы" S" ағы" parse-test -> TRUE }T
 T{ S" ан+да+ох" S" андох" parse-test -> TRUE }T
 T{ S" аң+ы" S" аңы" parse-test -> TRUE }T
 T{ S" аң+ы" S" аа" parse-test -> FALSE }T
+T{ S" ат+ың+а" S" адаа" parse-test -> FALSE }T
 T{ S" завод+тар" S" заводтар" parse-test -> TRUE }T
 T{ S" ирін+і" S" ирні" parse-test -> TRUE }T
 T{ S" ізі+гелек" S" ізеелек" parse-test -> TRUE }T
@@ -69,6 +70,7 @@ T{ S" таста+ар+ға" S" тастирға" parse-test -> TRUE }T
 T{ S" тег+іп" S" тееп" parse-test -> TRUE }T
 T{ S" теп+іп" S" тееп" parse-test -> TRUE }T
 T{ S" ті+ген" S" теен" parse-test -> TRUE }T
+T{ S" ті+ер" S" тир" parse-test -> TRUE }T
 T{ S" тӧзе+е" S" тӧзи" parse-test -> TRUE }T
 T{ S" тӧзе+е+дір" S" тӧзидір" parse-test -> TRUE }T
 T{ S" тоң+ар" S" тоор" parse-test -> TRUE }T
