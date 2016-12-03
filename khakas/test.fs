@@ -5,6 +5,7 @@ REQUIRE test/ttester.fs
 
 S" khakas"  FPATH  ALSO-PATH
 REQUIRE ~+/debug.fs
+\ 1 TO debug-mode?
 REQUIRE parser.fs
 CREATE wordform-buffer 0 , 255 ALLOT
 0 VALUE expected-str
