@@ -24,7 +24,7 @@ S" бпм" rule-nvu morphoneme П
 S" 0б0п0м" rule-cv-nvu morphoneme (П)
 S" дтн" rule-nvu morphoneme Д
 S" 0з" rule-cv morphoneme (з)
-S" ғхгк" rule-vu-fb morphoneme К
+S" хк" rule-fb morphoneme К
 S" лтн" rule-nvu morphoneme Л
 S" нт" rule-vu morphoneme Н
 S" 0н" rule-cv morphoneme (н)
