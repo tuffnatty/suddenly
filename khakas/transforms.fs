@@ -477,7 +477,8 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
 : untransform-fallout2-add  { D: s  fallout-ofs -- D: cs-fallout }
   list s strlist-get-buffer TO list  ( D: buffer )
-  fallout-ofs /STRING ;
+  fallout-ofs /STRING
+  ;
 
 : untransform-fallout2-check  { D: cs-fallout  D: affix  -- }
   cs-fallout ofs-into-affix /STRING  affix  COMPARE IF
@@ -494,8 +495,10 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   \ ‘замерз’.
   s fallout-ofs /STRING  /[ғгң]/ IF
     affix /[гғ]/ IF
+      s string-addr fallout-ofs + XC@ { stem-consonant }
+      stem-consonant [CHAR] г = IF [CHAR] г ELSE [CHAR] ғ THEN { lost-consonant }
       s fallout-ofs untransform-fallout2-add  { D: cs-fallout }
-      cs-fallout  cs-fallout /г/ IF s/(.*).$/г\1/ ELSE s/(.*).$/ғ\1/ THEN
+      cs-fallout stem-consonant lost-consonant s/.(.*).$/$1$2\1/
       cs-fallout affix untransform-fallout2-check
     THEN
   THEN ;
@@ -660,7 +663,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     fallout-start s affix untransform-check-fallout-start
     fallout-start  s string-addr  -  { fallout-ofs }
 
-    \\." confluence? " s TYPE ." +" affix TYPE ." ofs-into:" ofs-into-affix . .s CR
+    \\." confluence? " s TYPE ." +" affix TYPE ."  fallout-ofs:" fallout-ofs . ."  ofs-into:" ofs-into-affix . .s CR
     s affix fallout-ofs untransform-fallout2-confluence
 
     \ 3. Выпадения со стяжением гласных в интервокале
