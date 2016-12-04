@@ -6,33 +6,34 @@
   ; IMMEDIATE
 
 \ flags in different slots must be distinct!
-%000000000000000000000000001 flag flag-Cond
-%000000000000000000000000010 flag flag-Conv.Neg
-%000000000000000000000000100 flag flag-Conv2
-%000000000000000000000001000 flag flag-Cunc
-%000000000000000000000010000 flag flag-Dur
-%000000000000000000000100000 flag flag-Dur1.i
-%000000000000000000001000000 flag flag-Dur1.ir
-%000000000000000000010000000 flag flag-Fut.a
-%000000000000000000100000000 flag flag-Fut.ar
-%000000000000000001000000000 flag flag-Hab
-%000000000000000010000000000 flag flag-Hab.ca
-%000000000000000100000000000 flag flag-Hab.cang
-%000000000000001000000000000 flag flag-Imp
-%000000000000010000000000000 flag flag-Imp.3
-%000000000000100000000000000 flag flag-Iter
-%000000000001000000000000000 flag flag-Neg6
-%000000000010000000000000000 flag flag-Neg7
-%000000000100000000000000000 flag flag-Opt-or-Assum
-%000000001000000000000000000 flag flag-Past
-%000000010000000000000000000 flag flag-Perf
-%000000100000000000000000000 flag flag-Person.br
-%000001000000000000000000000 flag flag-Poss1.nonpl
-%000010000000000000000000000 flag flag-Poss2.nonpl
-%000100000000000000000000000 flag flag-Pres
-%001000000000000000000000000 flag flag-RPast
-%010000000000000000000000000 flag flag-1sg.br
-%100000000000000000000000000 flag flag-1.pl
+%0000000000000000000000000001 flag flag-fallout-occured
+%0000000000000000000000000010 flag flag-Cond
+%0000000000000000000000000100 flag flag-Conv.Neg
+%0000000000000000000000001000 flag flag-Conv2
+%0000000000000000000000010000 flag flag-Cunc
+%0000000000000000000000100000 flag flag-Dur
+%0000000000000000000001000000 flag flag-Dur1.i
+%0000000000000000000010000000 flag flag-Dur1.ir
+%0000000000000000000100000000 flag flag-Fut.a
+%0000000000000000001000000000 flag flag-Fut.ar
+%0000000000000000010000000000 flag flag-Hab
+%0000000000000000100000000000 flag flag-Hab.ca
+%0000000000000001000000000000 flag flag-Hab.cang
+%0000000000000010000000000000 flag flag-Imp
+%0000000000000100000000000000 flag flag-Imp.3
+%0000000000001000000000000000 flag flag-Iter
+%0000000000010000000000000000 flag flag-Neg6
+%0000000000100000000000000000 flag flag-Neg7
+%0000000001000000000000000000 flag flag-Opt-or-Assum
+%0000000010000000000000000000 flag flag-Past
+%0000000100000000000000000000 flag flag-Perf
+%0000001000000000000000000000 flag flag-Person.br
+%0000010000000000000000000000 flag flag-Poss1.nonpl
+%0000100000000000000000000000 flag flag-Poss2.nonpl
+%0001000000000000000000000000 flag flag-Pres
+%0010000000000000000000000000 flag flag-RPast
+%0100000000000000000000000000 flag flag-1sg.br
+%1000000000000000000000000000 flag flag-1.pl
 flag-Dur flag-Pres OR                            flag flag-Dur-or-Pres
 flag-RPast flag-Cond OR                          flag flag-RPast-or-Cond
 flag-RPast-or-Cond flag-Pres OR flag-Conv2 OR    flag flag-RPast-or-Cond-or-Pres-or-Conv2
@@ -453,7 +454,9 @@ slot: <Poss₁>  \ 12
 
     flag-Poss1.nonpl flag-set
       form" 1pos.sg (І)м"
-      form" 2pos.sg (І)ң"
+      filter-start( flag-fallout-occured flag-empty? )
+        form" 2pos.sg (І)ң"
+      filter-end
       form" 3pos (з)І"
     flag-Poss1.nonpl flag-clear
     form" 1pos.pl (І)бІс"
@@ -522,7 +525,9 @@ slot: <Poss₂>  \ 16
 
   flag-Poss2.nonpl flag-set
     form" 1pos.sg (І)м"
-    form" 2pos.sg (І)ң"
+    filter-start( flag-fallout-occured flag-empty? )
+      form" 2pos.sg (І)ң"
+    filter-end
     form" 3pos (з)І"
   flag-Poss2.nonpl flag-clear
   form" 1pos.pl (І)бІс"

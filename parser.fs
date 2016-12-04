@@ -126,6 +126,7 @@ DEFER yield-stem  ( stem -- )
     ELSE
       \." " indent ." After fallout check with affix " affix TYPE ." : " left-part TYPE CR
       0  left-part  affix string-length  string-strip  affix pairlist-prepend  ( ... pairlist )
+      flag-fallout-occured flag-set
       \." " indent ." Pairlist: " dup pair-1 type ." +" dup pair-2 type cr
     THEN
     BEGIN DUP WHILE
@@ -138,6 +139,9 @@ DEFER yield-stem  ( stem -- )
       ELSE 2DROP THEN  ( ... pairlist )
       list-swallow  ( ... pairlist' )
     REPEAT DROP  ( ... )
+    unchanged? 0= IF
+      flag-fallout-occured flag-clear
+    THEN
     list-swallow  ( addr u strlist' )
   REPEAT DROP  ( addr u )
   formform bstr-pop ;
