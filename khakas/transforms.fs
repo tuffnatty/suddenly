@@ -21,16 +21,29 @@ VARIABLE transform-flags
 : c/[лң]/  ( xc -- f )
   DUP [CHAR] л = SWAP [CHAR] ң = OR ;
 
+: c/[оӧ]/  ( xc -- f )
+  DUP [CHAR] о = SWAP [CHAR] ӧ = OR ;
+
 : c/[ркх]/  ( xc -- f )
   DUP [CHAR] р = IF DROP TRUE EXIT THEN
   DUP [CHAR] к = IF DROP TRUE EXIT THEN
   [CHAR] х = IF TRUE EXIT THEN
   FALSE ;
 
+: c/[хк]/  ( xc -- f )
+  DUP [CHAR] х = SWAP [CHAR] к = OR ;
+
 : /[ае][лң]/  ( D: s -- f )
   cyr > IF
     XC@+ c/[ае]/ IF
       XC@ c/[лң]/ EXIT
+    THEN
+  THEN DROP FALSE ;
+
+: /[оӧ][хк]/  ( D: s -- f )
+  cyr > IF
+    XC@+ c/[оӧ]/ IF
+      XC@ c/[хк]/ EXIT
     THEN
   THEN DROP FALSE ;
 
@@ -619,6 +632,22 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   THEN
   ;
 
+: untransform-fallout2-OK  { D: s  D: affix  fallout-ofs -- }
+  affix /[оӧ][хк]/ IF
+    s string-addr  fallout-ofs cyr+  { D: s[:fallout+1] }
+    s[:fallout+1] polysyllabic? IF
+      s string-addr fallout-ofs + cyr - XC@ consonant? IF
+        short-unrounded-front-vowels { vowels }
+        s fallout-ofs /STRING { D: fallout }
+        fallout string-addr XC@ { vowel2 }
+        vowel2 back-vowel? IF short-unrounded-back-vowels TO vowels THEN
+        vowels sound-each { vowel1 }
+          s affix fallout-ofs vowel1 vowel2 untransform-fallout-add-vv
+        sound-next
+      THEN
+    THEN
+  THEN
+  ;
 : untransform-fallout2  { D: s  D: affix -- strlist }
   \stack-mark
   \\." here? " s TYPE ." +" affix TYPE .s CR
@@ -646,7 +675,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     ofs-into-affix 2cyrs = IF  \ that is, affix starts with a vowel
       ofs-into-affix cyr - TO ofs-into-affix
 
-      \ I.2. императив инклюзивный. Аффиксы инклюзивного
+      \ II.2. императив инклюзивный. Аффиксы инклюзивного
       \ императива Imp.1.Incl Аң, Imp.1.Incl.Pl АңАр/Алар при
       \ присодинении к основам на гласную поглощают гласную
       \ основы, на месте стяжения образуется долгая аа/ее
@@ -655,7 +684,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
       fallout-ofs cyr+ TO fallout-ofs
 
-      \ I.1. императив 1 числа: В глаголе поглощение первой
+      \ II.1. императив 1 числа: В глаголе поглощение первой
       \ гласной аффикса императива предыдущей любой гласной
       \ основы (другими словами: выпадение любой последней гласной
       \ основы при присоединении личных афф. императива 1 лица
@@ -663,7 +692,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \\." vv-Imp.1? " s TYPE ." +" affix TYPE .s CR
       s affix fallout-ofs untransform-fallout2-vv-Imp.1
 
-      \ I.3. А с аллофоном и: В глаголах правила слияния с
+      \ II.3. А с аллофоном и: В глаголах правила слияния с
       \ фонетическими преобразованиями для афф. Fut -Ар, Convа
       \ -А, Prosp АК. Эти аффиксы не имеют вариантов,
       \ начинающихся на согласную. При присоединении их к основе
@@ -671,6 +700,19 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ нейтральную и без долготы [всегда]
       \\." VА>и? " s TYPE ." +" affix TYPE .s CR
       s affix fallout-ofs untransform-fallout2-VА>и
+
+      \ II.5. поглощение гласных перед -ох: Выпадение конечной
+      \ краткой гласной основы или аффикса перед аффиксом -ох,
+      \ -öк (производным от одноименной усилительной частицы)
+      \ [всегда]: краткая неогубленная гласная не первого слога,
+      \ будь то гласная основы или аффикса, предшествующая
+      \ аффиксу -ох, -öк, выпадает: турох < тура ‘дом’ + ох;
+      \ андох ‘там же’ < анда ‘там’ + ох ‘же’. С долгой гласной
+      \ этого не происходит: мағаа ‘Dat от мин’ + ох > мағааох.
+      \ В первом слоге гласная любой длины не стягивается: пу
+      \ ‘этот’ +ох > пуох 'этот же'.
+      \\." OK? " s TYPE ." +" affix TYPE .s CR
+      s affix fallout-ofs untransform-fallout2-OK
     THEN
 
     \\." final list: " list .strlist .s CR

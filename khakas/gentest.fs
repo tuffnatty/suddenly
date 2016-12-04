@@ -1,7 +1,7 @@
 T{ S" абылағ+ы" S" абылаа" parse-test -> TRUE }T
 \ искл? T{ S" ағ+ы" S" аа" parse-test -> FALSE }T
 T{ S" ағ+ы" S" ағы" parse-test -> TRUE }T
-T{ S" ан+да+ох" S" андох" parse-test -> TRUE }T
+T{ S" анда+ох" S" андох" parse-test -> TRUE }T
 T{ S" аң+ы" S" аңы" parse-test -> TRUE }T
 T{ S" аң+ы" S" аа" parse-test -> FALSE }T
 T{ S" ат+ың+а" S" адаа" parse-test -> FALSE }T

@@ -24,6 +24,14 @@ sound-class short-narrow-front-vowel
   sound і sound ӱ
 sound-class;
 
+sound-class short-unrounded-back-vowel
+  sound а sound ы
+sound-class;
+
+sound-class short-unrounded-front-vowel
+  sound е sound і
+sound-class;
+
 sound-class short-vowel
   sound а sound ы sound у
   sound е sound і sound ӱ
@@ -62,6 +70,13 @@ sound-class voiced
 sound-class;
 
 sound-class glide
+  sound й sound л sound р
+sound-class;
+
+sound-class consonant
+  sound м sound н sound ң
+  sound п sound ф sound к sound х sound т sound ш sound с sound ц sound ч sound щ
+  sound б sound в sound г sound ғ sound д sound ж sound з sound з sound ӌ sound щ
   sound й sound л sound р
 sound-class;
 
