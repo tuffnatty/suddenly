@@ -24,11 +24,14 @@ VARIABLE transform-flags
 : c/[оӧ]/  ( xc -- f )
   DUP [CHAR] о = SWAP [CHAR] ӧ = OR ;
 
-: c/[ркх]/  ( xc -- f )
-  DUP [CHAR] р = IF DROP TRUE EXIT THEN
-  DUP [CHAR] к = IF DROP TRUE EXIT THEN
-  [CHAR] х = IF TRUE EXIT THEN
-  FALSE ;
+: c/[бркх]/  ( xc -- f )
+  CASE
+    [CHAR] б OF TRUE ENDOF
+    [CHAR] р OF TRUE ENDOF
+    [CHAR] к OF TRUE ENDOF
+    [CHAR] х OF TRUE ENDOF
+    FALSE SWAP
+  ENDCASE ;
 
 : c/[хк]/  ( xc -- f )
   DUP [CHAR] х = SWAP [CHAR] к = OR ;
@@ -47,10 +50,10 @@ VARIABLE transform-flags
     THEN
   THEN DROP FALSE ;
 
-: /[ае]($|[ркх])/  ( D: s -- f )
+: /[ае]($|[бркх])/  ( D: s -- f )
   DUP cyr > IF
     DROP XC@+ c/[ае]/ IF
-      XC@ c/[ркх]/ EXIT
+      XC@ c/[бркх]/ EXIT
     THEN
   ELSE
     cyr = IF XC@ c/[ае]/ EXIT THEN
@@ -618,7 +621,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   THEN ;
 
 : untransform-fallout2-VА>и  { D: s  D: affix  fallout-ofs -- }
-  affix /[ае]($|[ркх])/ IF
+  affix /[ае]($|[бркх])/ IF
     s fallout-ofs /STRING { D: fallout }
     fallout /и/ IF
       [CHAR] е  front-vowels  { vowel2 vowels }
@@ -694,10 +697,11 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
       \ II.3. А с аллофоном и: В глаголах правила слияния с
       \ фонетическими преобразованиями для афф. Fut -Ар, Convа
-      \ -А, Prosp АК. Эти аффиксы не имеют вариантов,
-      \ начинающихся на согласную. При присоединении их к основе
-      \ на гласную происходит стяжение двух кратких гласных в
-      \ нейтральную и без долготы [всегда]
+      \ -А, Convпас A.бАс (диал.), Prosp АК. Эти аффиксы не
+      \ имеют вариантов, начинающихся на согласную. При
+      \ присоединении их к основе на гласную происходит стяжение
+      \ двух кратких гласных в нейтральную и без долготы
+      \ [всегда]
       \\." VА>и? " s TYPE ." +" affix TYPE .s CR
       s affix fallout-ofs untransform-fallout2-VА>и
 
