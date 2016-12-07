@@ -577,15 +577,25 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
 : untransform-fallout2-vgv-first  { D: s  D: affix  fallout-ofs -- }
   \ В односложных основах правило действует и на долгие, и на
-  \ краткие гласные. На месте стяжения образуется длинная
-  \ гласная, идентичная корневой.
+  \ краткие гласные.
   s string-addr  fallout-ofs cyr+  polysyllabic? 0= IF
     s string-addr fallout-ofs + { fallout-start }
     fallout-start vowel-long? IF
       fallout-start XC@ { vowel1 }
-      vowel1 back-vowel? IF
-           back-vowels   [CHAR] ғ
-      ELSE front-vowels  [CHAR] г  THEN { consonant } sound-each { vowel2 }
+      vowel1 back-vowel? { back? }
+      back? IF [CHAR] ғ ELSE [CHAR] г THEN { consonant }
+
+      \ Односложные глаголы, оканчивающиеся на
+      \ краткую гласную, стягиваются с аффиксами так же, как
+      \ многосложные: теен ‘сказал’ < тi ‘сказать’ + ған Past,
+      \ чеелек ‘еще не поел’ < чi ‘есть’ + гелек Cunc.
+      affix /[гғ]/ IF
+        s affix fallout-ofs [CHAR] і consonant vowel1 untransform-fallout-add-vcv
+      THEN
+
+      \ В прочих случаях на месте стяжения образуется длинная
+      \ гласная, идентичная корневой.
+      back? IF back-vowels ELSE front-vowels THEN sound-each { vowel2 }
         s affix fallout-ofs vowel1 consonant vowel2 untransform-fallout-add-vcv
         s affix fallout-ofs vowel1 [CHAR] ң vowel2 untransform-fallout-add-vcv
 
@@ -673,9 +683,9 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     \ морфонемы Г. В аффиксах бывает конечная ң, которая может
     \ попасть в интервокал: Hab ЧАң и 2pos.sg (I)ӊ. Правило
     \ действует на Hab и не действует на посессив
-    \\." vgv-non-first? " s TYPE ." +" affix TYPE .s CR
+    \\." vgv-non-first? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
     s affix fallout-ofs untransform-fallout2-vgv-non-first
-    \\." vgv-first? " s TYPE ." +" affix TYPE .s CR
+    \\." vgv-first? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
     s affix fallout-ofs untransform-fallout2-vgv-first
 
     ofs-into-affix 2cyrs = IF  \ that is, affix starts with a vowel
@@ -685,7 +695,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ императива Imp.1.Incl Аң, Imp.1.Incl.Pl АңАр/Алар при
       \ присодинении к основам на гласную поглощают гласную
       \ основы, на месте стяжения образуется долгая аа/ее
-      \\." vv-Imp.1.Incl? " s TYPE ." +" affix TYPE .s CR
+      \\." vv-Imp.1.Incl? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
       s affix fallout-ofs untransform-fallout2-vv-Imp.1.Incl
 
       fallout-ofs cyr+ TO fallout-ofs
@@ -695,7 +705,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ основы (другими словами: выпадение любой последней гласной
       \ основы при присоединении личных афф. императива 1 лица
       \ Imp.1 на -и (-им, -ибыс, -ибiс)) [всегда]:
-      \\." vv-Imp.1? " s TYPE ." +" affix TYPE .s CR
+      \\." vv-Imp.1? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
       s affix fallout-ofs untransform-fallout2-vv-Imp.1
 
       \ II.3. А с аллофоном и: В глаголах правила слияния с
@@ -705,7 +715,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ присоединении их к основе на гласную происходит стяжение
       \ двух кратких гласных в нейтральную и без долготы
       \ [всегда]
-      \\." VА>и? " s TYPE ." +" affix TYPE .s CR
+      \\." VА>и? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
       s affix fallout-ofs untransform-fallout2-VА>и
 
       \ II.5. поглощение гласных перед -ох: Выпадение конечной
@@ -718,7 +728,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ этого не происходит: мағаа ‘Dat от мин’ + ох > мағааох.
       \ В первом слоге гласная любой длины не стягивается: пу
       \ ‘этот’ +ох > пуох 'этот же'.
-      \\." OK? " s TYPE ." +" affix TYPE .s CR
+      \\." OK? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
       s affix fallout-ofs untransform-fallout2-OK
     THEN
 

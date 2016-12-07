@@ -25,13 +25,14 @@ T{ S" нуғ+ар" S" нуур" parse-test -> TRUE }T
 T{ S" ӧң+і" S" ӧӧ" parse-test -> TRUE }T
 T{ S" орын+ы" S" орны" parse-test -> TRUE }T
 T{ S" пағ+ы" S" паа" parse-test -> TRUE }T
-T{ S" пар+ар+ға" S" параға" parse-test -> TRUE }T
+T{ S" пар+а+ға" S" параға" parse-test -> TRUE }T
 T{ S" пар+и+ған" S" париған" parse-test -> TRUE }T
 T{ S" пас+ды+ңар" S" пасдар" parse-test -> TRUE }T
 T{ S" пас+па+за+ңар" S" паспазар" parse-test -> TRUE }T
 T{ S" пас+са+ңар" S" пассар" parse-test -> TRUE }T
 T{ S" поғ+ып" S" пооп" parse-test -> TRUE }T
 T{ S" пӧрік+ім" S" пӧриим" parse-test -> TRUE }T
+T{ S" пӧрік+ім" S" пӧрігім" parse-test -> TRUE }T
 T{ S" пуғ+ы" S" пуу" parse-test -> TRUE }T
 T{ S" пу+ох" S" пуох" parse-test -> TRUE }T
 T{ S" пурун+ы" S" пурны" parse-test -> TRUE }T
@@ -90,14 +91,17 @@ T{ S" уйғу+ға" S" уйғаа" parse-test -> TRUE }T
 T{ S" улуғ+ы" S" улии" parse-test -> TRUE }T
 \ T{ S" хан-пиг+і" S" хан-пигі" parse-test -> TRUE }T
 T{ S" харах+ым" S" хараам" parse-test -> TRUE }T
+T{ S" харах+ым" S" харағым" parse-test -> TRUE }T
 T{ S" харын+ы" S" харны" parse-test -> TRUE }T
 T{ S" хах+ы" S" хағы" parse-test -> TRUE }T
 T{ S" хузух+ым" S" хузиим" parse-test -> TRUE }T
+T{ S" хузух+ым" S" хузуғым" parse-test -> TRUE }T
 T{ S" хулун+ы" S" хулуны" parse-test -> TRUE }T
 T{ S" хус+тар" S" хустар" parse-test -> TRUE }T
 T{ S" чазы+ға" S" чазаа" parse-test -> TRUE }T
 T{ S" чайлағ+ы" S" чайлаа" parse-test -> TRUE }T
 T{ S" чарын+ы" S" чарны" parse-test -> TRUE }T
+T{ S" чі+гелек" S" чеелек" parse-test -> TRUE }T
 T{ S" чилін+і" S" чилні" parse-test -> TRUE }T
 T{ S" чиң+ер" S" чиңер" parse-test -> TRUE }T
 T{ S" чиң+іп" S" чиип" parse-test -> TRUE }T
