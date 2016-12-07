@@ -45,7 +45,7 @@ CREATE formform bstr% %ALLOT bstr-init
 REQUIRE transforms.fs
 
 \ Trace output
-REQUIRE debug.fs
+REQUIRE debugging.fs
 0 VALUE parse-depth
 : indent
   parse-depth spaces ;
@@ -109,29 +109,30 @@ DEFER yield-stem  ( stem -- )
 
 : process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }  ( addr u )
-  \\." <Singlerep> " 2DUP type ." +" affix type rule . n-rule . .s CR
+  \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule . n-rule . .s CR
   affix formform form-prepend
   affix string-length IF
-    \\." BEFORE:" .s CR
+    \ \." BEFORE:" .s CR
     2DUP affix untransform-fallout2  ( addr u strlist )
-    \\." AFTER:" .s BL EMIT DUP .strlist CR
+    \ \." AFTER:" .s BL EMIT DUP .strlist CR
   ELSE 2DUP 0 -ROT strlist-prepend-alloc THEN  ( addr u strlist )
   BEGIN DUP WHILE
     DUP list-next @ 0=  { unchanged? }
-    \\." list: " DUP .strlist CR
+    \\." " indent ." Remaining list: " DUP .strlist CR
     DUP strlist-get  { D: left-part }
     unchanged? IF
-      \\." untransform-envoice: " left-part type .s cr
+      \\." " indent ." untransform-envoice: " left-part type .s cr
       left-part affix untransform-envoice  ( ... pairlist )
     ELSE
       \." " indent ." After fallout check with affix " affix TYPE ." : " left-part TYPE CR
       0  left-part  affix string-length  string-strip  affix pairlist-prepend  ( ... pairlist )
       flag-fallout-occured flag-set
-      \." " indent ." Pairlist: " dup pair-1 type ." +" dup pair-2 type cr
+      \." " indent ." Pairlist: " dup pair-1 type ." +" dup pair-2 type
+      \."  while processing " formname cstr-get type ."  " formform cstr-get type cr
     THEN
     BEGIN DUP WHILE
       DUP pair-1  ( ... pairlist addr' u' )
-      \." " rule if rule execute . ." expected, " n-rule . ." actual" cr then
+      \." " indent rule if rule execute . ." expected, " n-rule . ." actual" cr then
       n-rule rule rule-check IF
         \." " indent ." Trying " 2DUP TYPE ." +" affix TYPE CR
         parse-try  ( ... pairlist )
@@ -148,7 +149,7 @@ DEFER yield-stem  ( stem -- )
 
 : process-representations  ( addr u rule sstr -- )
   { rule sstr }                         ( addr u )
-  \\." <All-reps>" 2DUP TYPE ." +" sstr .sstr rule . .s CR
+  \\." " indent ." <All-reps>" 2DUP TYPE ." +" sstr .sstr rule . .s CR
   sstr sstr-count @ 0 DO
     I sstr sstr-select { D: affix }
     affix string-length IF

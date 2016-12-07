@@ -13,7 +13,7 @@ CREATE input-word 0 C, 255 ALLOT
 ;
 
 VARIABLE parse-mode
-REQUIRE debug.fs
+REQUIRE debugging.fs
 
 : parse-args  ( ptr len -- )
   2DUP S" debug=" SEARCH IF  ( ptr len value n-rest )

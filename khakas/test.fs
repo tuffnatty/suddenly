@@ -1,11 +1,11 @@
-#! /usr/bin/gforth-fast -m22M
+#! /usr/local/bin/gforth -m22M
 
 S" ~+"  FPATH  ALSO-PATH
 REQUIRE test/ttester.fs
 
 S" khakas"  FPATH  ALSO-PATH
-REQUIRE ~+/debug.fs
-\ 1 TO debug-mode?
+REQUIRE debugging.fs
+\ 2 TO debug-mode?
 REQUIRE parser.fs
 CREATE wordform-buffer 0 , 255 ALLOT
 0 VALUE expected-str
@@ -77,6 +77,9 @@ REQUIRE khakas/phonetics.fs
 REQUIRE phonetics-common.fs
 
 T{ CHAR ң class-nvu -> cl-nasal }T
+
+\ T{ S" ті+ген" S" теен" parse-test -> TRUE }T
+\ BYE
 
 REQUIRE khakas/gentest.fs
 : check-failures

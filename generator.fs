@@ -1,5 +1,5 @@
 REQUIRE slot-stack.fs
-REQUIRE debug.fs
+REQUIRE debugging.fs
 REQUIRE dictionary.fs
 REQUIRE formname.fs
 REQUIRE grammar.fs
