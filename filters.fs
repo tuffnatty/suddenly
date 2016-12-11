@@ -5,7 +5,7 @@ CREATE filters 0 , 64 CELLS ALLOT
   filters @ 2* CELLS filters + ;
 
 : .filter  ( -- )
-  filters-top-ptr 2@ DROP >BODY SEE-THREADED ;
+  filters-top-ptr 2@ IF ." negated: " THEN >BODY SEE-THREADED ;
 
 : >filters  ( xt f -- )
   filters @ 1+ filters !

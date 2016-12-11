@@ -4,6 +4,9 @@
   LOOP
   drop ;
 
+: bin.  ( u -- )
+  BASE @  2 BASE !  SWAP .  BASE ! ;
+
 VARIABLE n-forms
 2VARIABLE timer
 
@@ -37,7 +40,7 @@ DEFER debug-bye
 
 : \\." debug-mode? 1 > IF POSTPONE ." ELSE POSTPONE \ THEN ; IMMEDIATE
 : .as  ( -- )
-  \." AS:" slot-stack DUP @ . CELL+ BEGIN DUP @ DUP . WHILE CELL+ REPEAT DROP CR
+  \." AS:" slot-stack DUP @ HEX. CELL+ BEGIN DUP @ DUP HEX. WHILE CELL+ REPEAT DROP CR
   ;
 
 : \stack-mark  ( -- )

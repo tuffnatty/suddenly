@@ -54,7 +54,7 @@ REQUIRE debugging.fs
   OVER C@  [CHAR] -  = IF  2DROP 0  THEN ;
 
 :noname  ( [addr u] affix-name len -- [addr u] )
-  \." " indent ." form-prolog: " 2>R over . dup . 2dup type ." +" 2R> 2dup type .s cr
+  \." " indent ." form-prolog: " 2>R over HEX. dup . 2dup type ." +" 2R> 2dup type .s cr
   affix-name-clean formname form-prepend  ( )
   ; IS (form-prolog)
 
@@ -81,9 +81,11 @@ DEFER yield-stem  ( stem -- )
   ELSE
     \." about to check filters for: " formname .bstr CR DUP .stem-single
     filters-check IF
+      \." yielding" CR
       yield-stem  ( addr u )
     ELSE DROP THEN  ( addr u )
-  THEN ;
+  THEN
+  ;
 
 : parse-try  ( addr u -- )
   \ ." stackin " .s 2dup type cr
@@ -101,7 +103,8 @@ DEFER yield-stem  ( stem -- )
     THEN
     2DROP
   THEN
-  slot-stack-push ;
+  slot-stack-push
+  ;
 
 : rule-check  ( i xt | 0 -- f )
   DUP IF SWAP >R EXECUTE R> =
@@ -109,7 +112,8 @@ DEFER yield-stem  ( stem -- )
 
 : process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }  ( addr u )
-  \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule . n-rule . .s CR
+  \ 2DUP TO for-after-fallout
+  \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule HEX. n-rule . .s CR
   affix formform form-prepend
   affix string-length IF
     \ \." BEFORE:" .s CR
@@ -149,7 +153,7 @@ DEFER yield-stem  ( stem -- )
 
 : process-representations  ( addr u rule sstr -- )
   { rule sstr }                         ( addr u )
-  \\." " indent ." <All-reps>" 2DUP TYPE ." +" sstr .sstr rule . .s CR
+  \\." " indent ." <All-reps>" 2DUP TYPE ." +" sstr .sstr rule HEX. .s CR
   sstr sstr-count @ 0 DO
     I sstr sstr-select { D: affix }
     affix string-length IF
@@ -174,7 +178,7 @@ DEFER yield-stem  ( stem -- )
     \\." " indent ." out of parse-try" CR
   THEN
   \." " parse-depth 1- TO parse-depth
-  \." " indent ." form-epilog ending:" over . dup . 2dup type .s cr
+  \." " indent ." form-epilog ending:" over HEX. dup . 2dup type .s cr
   formname bstr-pop
   ; IS (form-epilog)
 
