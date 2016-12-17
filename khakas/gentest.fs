@@ -45,7 +45,7 @@ T{ S" салаа+ға" S" салааға" parse-test -> TRUE }T
 T{ S" сана+а" S" сани" parse-test -> TRUE }T
 T{ S" сана+абас" S" санибас" parse-test -> TRUE }T
 T{ S" сана+ар" S" санир" parse-test -> TRUE }T
-T{ S" сана+а+дыр" S" санидыр" parse-test -> TRUE }T
+T{ S" сана+адыр" S" санидыр" parse-test -> TRUE }T
 T{ S" сана+ған" S" санаан" parse-test -> TRUE }T
 T{ S" сап+ып" S" саап" parse-test -> TRUE }T
 T{ S" сиг+ер" S" сиир" parse-test -> TRUE }T
@@ -74,7 +74,7 @@ T{ S" теп+іп" S" тееп" parse-test -> TRUE }T
 T{ S" ті+ген" S" теен" parse-test -> TRUE }T
 T{ S" ті+ер" S" тир" parse-test -> TRUE }T
 T{ S" тӧзе+е" S" тӧзи" parse-test -> TRUE }T
-T{ S" тӧзе+е+дір" S" тӧзидір" parse-test -> TRUE }T
+T{ S" тӧзе+едір" S" тӧзидір" parse-test -> TRUE }T
 T{ S" тоң+ар" S" тоор" parse-test -> TRUE }T
 T{ S" тоң+ған" S" тоңан" parse-test -> TRUE }T
 T{ S" тоң+ып" S" тооп" parse-test -> TRUE }T
