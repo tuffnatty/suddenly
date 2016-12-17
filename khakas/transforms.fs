@@ -173,7 +173,7 @@ VARIABLE transform-flags
       ELSE 2DROP THEN                                    ( )
     THEN
   THEN
-  \\." " list IF ." SUCCESS" cr THEN
+  \\." " list IF ." SUCCESS" ELSE ." NO SUCCESS" THEN CR
   list ;
 
 \ 3. Беглые гласные [не всегда]. В многосложных основах узкие
