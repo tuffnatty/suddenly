@@ -121,11 +121,9 @@ END-STRUCT bstr%  \ a string for fast prepending
   0 SWAP cstr-len ! ;
 
 : bstr-prepend  ( addr u bstr -- )
-  >R                                ( addr u  R: bstr )
-  DUP R@ cstr-len +!
-  DUP NEGATE R@ cstr-ptr +!
-  R> cstr-ptr @ SWAP CMOVE
-  ;
+  2DUP cstr-len +!
+  OVER NEGATE OVER cstr-ptr +!
+  cstr-ptr @ SWAP CMOVE ;
 
 : bstr-pop  ( bstr -- )
   \ ." popping" dup .bstr cr
@@ -147,15 +145,14 @@ END-STRUCT bstr%  \ a string for fast prepending
   COUNT ROT COUNT STR= ;
 
 : s-to-cs  ( addr u cs -- )
-  >R DUP R@ C!  ( addr u  R: cs )
-  R> 1+ SWAP CMOVE ;
+  ]] 2DUP C!  1+ SWAP CMOVE [[ ; IMMEDIATE
 
 : cs-copy  ( src target -- )
-  POSTPONE OVER POSTPONE C@ POSTPONE 1+ POSTPONE CMOVE ; IMMEDIATE
+  ]] OVER C@ 1+ CMOVE [[ ; IMMEDIATE
 
 : cs-copy-truncate  ( src target len -- )
-  POSTPONE 2DUP POSTPONE SWAP POSTPONE C!
-  POSTPONE >R POSTPONE >R POSTPONE 1+  POSTPONE R> POSTPONE 1+  POSTPONE R> POSTPONE CMOVE ; IMMEDIATE
+  ]] 2DUP SWAP C!
+  ROT 1+ ROT 1+ ROT CMOVE [[ ; IMMEDIATE
 
 : stuff  { cs ptr n-del addr u -- }
   cs COUNT +             ( cs-end )
@@ -164,10 +161,10 @@ END-STRUCT bstr%  \ a string for fast prepending
   addr ptr u MOVE DROP ;
 
 : string-ends  { addr1 u1 addr2 u2 -- f }
-  \ addr1 u1 type ." |" addr2 u2 type ."  string-ends?" cr
+  \ \." " addr1 u1 type ." |" addr2 u2 type ."  string-ends?" cr
   u1 u2 - DUP 0>= IF  ( len-delta )
     addr1 + u2 addr2 u2 STR=
-    \ ." result " dup . cr
+    \ \." result " dup . cr
   ELSE DROP FALSE THEN ;
 : cs-ends ( cs1 cs2 -- f )
   SWAP COUNT ROT COUNT string-ends ;
@@ -190,15 +187,19 @@ END-STRUCT bstr%  \ a string for fast prepending
   CELL +LOOP NIP ;
 
 : cs-buf-size  ( cs -- cs u )
-  POSTPONE DUP POSTPONE C@ POSTPONE 1+ ; IMMEDIATE
+  ]] DUP C@ 1+ [[ ; IMMEDIATE
 
 :noname  ( addr -- u )
-  @ DUP 128 AND IF
+  UW@ DUP 128 AND IF
     DUP 31 AND 6 LSHIFT SWAP 8 RSHIFT 63 AND OR
   ELSE 127 AND THEN ;
 IS XC@
 : xc+@  ( addr1 -- addr2 u )
-  XCHAR+ DUP XC@ ;
+  ]] XCHAR+ DUP XC@ [[ ; IMMEDIATE
+
+: +x/string@  ( addr u -- addr' u' xc )
+  ]] OVER XC@ -ROT +X/STRING ROT [[ ; IMMEDIATE
+
 
 :noname 2* ;
 :noname POSTPONE 2* ;
@@ -206,10 +207,10 @@ INTERPRET/COMPILE: cyrs
 : cyr 2 POSTPONE LITERAL ; IMMEDIATE
 : 2cyrs 2 cyrs POSTPONE LITERAL ; IMMEDIATE
 : 3cyrs 3 cyrs POSTPONE LITERAL ; IMMEDIATE
-: cyr+ POSTPONE cyr POSTPONE + ; IMMEDIATE
+: cyr+ ]] cyr + [[ ; IMMEDIATE
 
 : cyr?  ( addr -- f )
-  C@ 128 AND ;
+  ]] C@ 128 AND [[ ; IMMEDIATE
 
 : skip-cyrs  ( addr -- addr' )
   BEGIN DUP cyr? WHILE cyr+ REPEAT ;
