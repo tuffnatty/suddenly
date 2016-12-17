@@ -27,6 +27,7 @@ T{ S" орын+ы" S" орны" parse-test -> TRUE }T
 T{ S" пағ+ы" S" паа" parse-test -> TRUE }T
 T{ S" пар+а+ға" S" параға" parse-test -> TRUE }T
 T{ S" пар+и+ған" S" париған" parse-test -> TRUE }T
+T{ S" пар+тыр+лар" S" партырлар" parse-test -> TRUE }T
 T{ S" пас+ды+ңар" S" пасдар" parse-test -> TRUE }T
 T{ S" пас+па+за+ңар" S" паспазар" parse-test -> TRUE }T
 T{ S" пас+са+ңар" S" пассар" parse-test -> TRUE }T
