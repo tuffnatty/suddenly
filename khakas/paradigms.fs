@@ -686,7 +686,7 @@ slot: <PredPl>  \ 21
                 16 slot-full?  17 20 slot-range-empty?  AND  \ Poss
                 18 slot-full?  19 20 slot-range-empty?  AND  \ Case
                 flag-1.pl flag-Imp.3 OR  flag-is?
-                1 20 slot-range-empty?
+                1 20 slot-range-empty?  verb? NOT  AND
                 OR OR OR OR OR OR OR )
     form" PredPl ЛАр"
   filter-end
