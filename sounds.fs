@@ -16,10 +16,10 @@ sound-buf 2 + CONSTANT sound-buf-name
   SWAP 1+ SWAP ;
 
 : sound-each  ( start )
-  POSTPONE BEGIN POSTPONE DUP POSTPONE @ POSTPONE ?DUP-IF
+  ]] BEGIN DUP @ ?DUP-IF [[
   1 CS-ROLL ; IMMEDIATE
 : sound-next  ( ptr )
-  POSTPONE CELL+ POSTPONE AGAIN POSTPONE THEN POSTPONE DROP ; IMMEDIATE
+  ]] CELL+ AGAIN THEN DROP [[ ; IMMEDIATE
 
 : sound-class;  { len size buf -- }
   size CELLS ALLOT  0 ,
@@ -45,7 +45,7 @@ sound-buf 2 + CONSTANT sound-buf-name
 TABLE CONSTANT morphonemes-table
 
 : morphoneme-choose-variant  ( xt n -- xc )
-  >R >BODY R> 2 + CELLS + @ ;
+  SWAP >BODY SWAP 2 + CELLS + @ ;
 
 : morphoneme  ( addr u rule "name" -- )
   GET-CURRENT morphonemes-table SET-CURRENT  >R
@@ -59,7 +59,7 @@ DOES>  ( cs buf -- xc )
 \   POSTPONE >BODY  POSTPONE @ ; IMMEDIATE
 
 : morphoneme-size  ( xt -- rule )
-  POSTPONE >BODY  POSTPONE CELL+  POSTPONE @ ; IMMEDIATE
+  ]] >BODY CELL+ @ [[ ; IMMEDIATE
 
 : morphoneme-width  ( addr u1 -- u2 )
   OVER XC@ DUP [CHAR] ( = IF  ( addr u1 xc )
