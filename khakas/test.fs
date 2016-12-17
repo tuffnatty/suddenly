@@ -81,7 +81,11 @@ T{ CHAR ң class-nvu -> cl-nasal }T
 \ T{ S" ті+ген" S" теен" parse-test -> TRUE }T
 \ BYE
 
+utime 2VALUE timer
 REQUIRE khakas/gentest.fs
+utime timer D- D. ." µs" CR
+.TIMES CR
+
 : check-failures
   n_failures . ." / " n_tests . ." tests FAILED ( " n_failures 100 * n_tests / . ." % )" CR
   n_failures ABORT"  test failures found!" ;
