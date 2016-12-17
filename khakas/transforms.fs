@@ -388,21 +388,21 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     THEN
   THEN  FALSE ;
 
-( wid ) SET-CURRENT  \ public words follow
+0 VALUE guess-size
 
-: strlist-get-buffer  ( list  D: src -- D: buf  list' )
-  cyr+ strlist-prepend-alloc >R R@ strlist-get R> ;
 
-: untransform-fallout2-add  { D: s  fallout-ofs -- D: cs-fallout }
-  list s strlist-get-buffer TO list  ( D: buffer )
-  fallout-ofs /STRING
-  ;
+: guess-make  { D: s fallout-ofs -- D: guess-fallout }
+  s  cyr+ TO guess-size  PAD guess-size MOVE
+  PAD guess-size fallout-ofs /STRING ;
 
-: untransform-fallout2-check  { D: cs-fallout  D: affix  -- }
-  cs-fallout ofs-into-affix /STRING  affix  COMPARE IF
-    list list-swallow TO list
-  THEN
-  ;
+: guess-yield  ( -- )
+  list PAD guess-size strlist-prepend-alloc TO list ;
+
+: guess-check  { D: guess-fallout  D: affix -- }
+  guess-fallout ofs-into-affix /STRING  affix STR= IF
+    guess-yield
+  THEN ;
+
 
 : untransform-fallout2-confluence  { D: s  D: affix  fallout-ofs -- }
   \ 2. Выпадение Г после Г, ң без стяжения. При стечении по-
@@ -411,39 +411,40 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   \ Г) выпадает, согласная основы остается: суғ + -ға > суғ-а
   \ ‘воде’, эг + -гей > эгей ‘пусть гнет’, тоң + -ған > тоңан
   \ ‘замерз’.
-  s fallout-ofs /STRING  /[ғгң]/ IF
-    affix /[гғ]/ IF
-      s string-addr fallout-ofs + XC@ { stem-consonant }
-      stem-consonant [CHAR] г = IF [CHAR] г ELSE [CHAR] ғ THEN { lost-consonant }
-      s fallout-ofs untransform-fallout2-add  { D: cs-fallout }
-      cs-fallout stem-consonant lost-consonant s/.(.*).$/$1$2\1/
-      cs-fallout affix untransform-fallout2-check
+  s fallout-ofs /STRING { D: fallout }
+  fallout ~/ [ғгң]/ IF
+    affix ~/ [гғ]/ IF
+      fallout string-addr XC@ { c1 }
+      fallout ~/ г/ IF [CHAR] г ELSE [CHAR] ғ THEN { c2 }
+      s fallout-ofs guess-make { D: guess-fallout }
+      guess-fallout c1 c2 s/.(.*).$/$1$2\1/
+      guess-fallout affix guess-check
     THEN
   THEN ;
 
-: untransform-fallout-add-vcv  { D: s  D: affix  fallout-ofs vowel1 consonant vowel2 -- }
-  s fallout-ofs untransform-fallout2-add { D: cs-fallout }
-  cs-fallout vowel1 consonant vowel2 s/..(.*).$/$1$2$3\1/
-  cs-fallout affix untransform-fallout2-check
+: untransform-fallout-add-vcv  { D: s  D: affix  fallout-ofs v1 c v2 -- }
+  s fallout-ofs guess-make { D: guess-fallout }
+  guess-fallout v1 c v2 s/..(.*).$/$1$2$3\1/
+  guess-fallout affix guess-check
   ;
 
-: untransform-fallout-add-vv  { D: s  D: affix  fallout-ofs vowel1 vowel2 -- }
-  \\." trying " vowel1 XEMIT vowel2 XEMIT CR
-  s fallout-ofs untransform-fallout2-add { D: cs-fallout }
-  cs-fallout vowel1 vowel2 s/.(.*).$/$1$2\1/
-  vowel2 0= IF
-    list strlist-str DUP C@ cyr - SWAP C!
-    cs-fallout cyr - TO cs-fallout
+: untransform-fallout-add-vv  { D: s  D: affix  fallout-ofs v1 v2 -- }
+  \\." trying " v1 XEMIT v2 XEMIT CR
+  s fallout-ofs guess-make { D: guess-fallout }
+  guess-fallout v1 v2 s/.(.*).$/$1$2\1/
+  v2 0= IF
+    guess-size cyr - TO guess-size
+    guess-fallout cyr - TO guess-fallout
   THEN
-  \\." got " cs-fallout TYPE CR
-  cs-fallout affix untransform-fallout2-check
+  \\." got " guess-fallout TYPE CR
+  guess-fallout affix guess-check
   ;
 
-: untransform-fallout2-aa/ee { D: s  D: affix  fallout-ofs vowel1 consonant vowels }
-  vowels sound-each { vowel2 }
-    s affix fallout-ofs vowel1 consonant vowel2 untransform-fallout-add-vcv
-    vowel1 vowel2 <> IF
-      s affix fallout-ofs vowel2 consonant vowel1 untransform-fallout-add-vcv
+: untransform-fallout2-aa/ee { D: s  D: affix  fallout-ofs v1 c vowels }
+  vowels sound-each { v2 }
+    s affix fallout-ofs v1 c v2 untransform-fallout-add-vcv
+    v1 v2 <> IF
+      s affix fallout-ofs v2 c v1 untransform-fallout-add-vcv
     THEN
   sound-next
   ;
@@ -463,33 +464,34 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   \ позиции всегда.
   s string-addr  fallout-ofs cyr+  polysyllabic? IF
     s fallout-ofs /STRING { D: fallout }
-    [CHAR] г { consonant }
+    [CHAR] г { c }
     fallout /(аа|ее)/ IF
+      fallout string-addr XC@ { v1 }
       s string-addr fallout-ofs + { fallout-start }
-      fallout-start XC@ { vowel1 }
       short-front-vowels { vowels }
-      vowel1 [CHAR] а = IF
-        [CHAR] ғ TO consonant
+      v1 [CHAR] а = IF
+        [CHAR] ғ TO c
         short-back-vowels TO vowels
       THEN
-      s affix fallout-ofs vowel1 consonant vowels untransform-fallout2-aa/ee
-      s affix fallout-ofs vowel1 [CHAR] ң  vowels untransform-fallout2-aa/ee
-    ELSE fallout /ии/ IF
-      0 0 { vowel1 vowel2 }
-      s string-addr  fallout-ofs  last-char-vowel back-vowel? IF
-        [CHAR] ғ TO consonant
-        [CHAR] ы TO vowel1  [CHAR] у TO vowel2
+      s affix fallout-ofs v1 c        vowels untransform-fallout2-aa/ee
+      s affix fallout-ofs v1 [CHAR] ң vowels untransform-fallout2-aa/ee
+    ELSE fallout ~/ ии/ IF
+      0 0 { v1 v2 }
+      s string-addr  fallout-ofs  { D: left-part }
+      left-part last-char-vowel back-vowel? IF
+        [CHAR] ғ TO c
+        [CHAR] ы TO v1  [CHAR] у TO v2
       ELSE
-        [CHAR] і TO vowel1  [CHAR] ӱ TO vowel2
+        [CHAR] і TO v1  [CHAR] ӱ TO v2
       THEN
-      s affix fallout-ofs vowel1 consonant vowel1 untransform-fallout-add-vcv
-      s affix fallout-ofs vowel1 consonant vowel2 untransform-fallout-add-vcv
-      s affix fallout-ofs vowel2 consonant vowel1 untransform-fallout-add-vcv
-      s affix fallout-ofs vowel2 consonant vowel2 untransform-fallout-add-vcv
-      s affix fallout-ofs vowel1 [CHAR] ң vowel1 untransform-fallout-add-vcv
-      s affix fallout-ofs vowel1 [CHAR] ң vowel2 untransform-fallout-add-vcv
-      s affix fallout-ofs vowel2 [CHAR] ң vowel1 untransform-fallout-add-vcv
-      s affix fallout-ofs vowel2 [CHAR] ң vowel2 untransform-fallout-add-vcv
+      s affix fallout-ofs v1 c        v1 untransform-fallout-add-vcv
+      s affix fallout-ofs v1 c        v2 untransform-fallout-add-vcv
+      s affix fallout-ofs v2 c        v1 untransform-fallout-add-vcv
+      s affix fallout-ofs v2 c        v2 untransform-fallout-add-vcv
+      s affix fallout-ofs v1 [CHAR] ң v1 untransform-fallout-add-vcv
+      s affix fallout-ofs v1 [CHAR] ң v2 untransform-fallout-add-vcv
+      s affix fallout-ofs v2 [CHAR] ң v1 untransform-fallout-add-vcv
+      s affix fallout-ofs v2 [CHAR] ң v2 untransform-fallout-add-vcv
     THEN THEN
   THEN ;
 
@@ -499,93 +501,99 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   s string-addr  fallout-ofs cyr+  polysyllabic? 0= IF
     s string-addr fallout-ofs + { fallout-start }
     fallout-start vowel-long? IF
-      fallout-start XC@ { vowel1 }
-      vowel1 back-vowel? { back? }
-      back? IF [CHAR] ғ ELSE [CHAR] г THEN { consonant }
+      fallout-start XC@ { v1 }
+      v1 back-vowel? { back? }
+      back? IF [CHAR] ғ ELSE [CHAR] г THEN { c }
 
       \ Односложные глаголы, оканчивающиеся на
       \ краткую гласную, стягиваются с аффиксами так же, как
       \ многосложные: теен ‘сказал’ < тi ‘сказать’ + ған Past,
       \ чеелек ‘еще не поел’ < чi ‘есть’ + гелек Cunc.
-      affix /[гғ]/ IF
-        s affix fallout-ofs [CHAR] і consonant vowel1 untransform-fallout-add-vcv
+      affix ~/ [гғ]/ IF
+        s affix fallout-ofs [CHAR] і c v1 untransform-fallout-add-vcv
       THEN
 
       \ В прочих случаях на месте стяжения образуется длинная
       \ гласная, идентичная корневой.
-      back? IF back-vowels ELSE front-vowels THEN sound-each { vowel2 }
-        s affix fallout-ofs vowel1 consonant vowel2 untransform-fallout-add-vcv
-        s affix fallout-ofs vowel1 [CHAR] ң vowel2 untransform-fallout-add-vcv
+      back? IF back-vowels ELSE front-vowels THEN sound-each { v2 }
+        s affix fallout-ofs v1 c        v2 untransform-fallout-add-vcv
+        s affix fallout-ofs v1 [CHAR] ң v2 untransform-fallout-add-vcv
 
         \ 3.3. Выпадение конечной губной -п односложной
         \ глагольной основы при прибавлении афф. Convп -ып
         \ [всегда]: тап ‘находить’ + -ып > таап ‘найдя’, сап
         \ ‘ударять’ + -ып > саап ‘ударяя’, теп ‘толкать’ + -іп >
         \ тееп ‘толкая’.
-        vowel2 [CHAR] ы =  vowel2 [CHAR] і =  OR  affix /[ыі]п/  AND IF
-          s affix fallout-ofs vowel1 [CHAR] п vowel2 untransform-fallout-add-vcv
+        v2 [CHAR] ы =  v2 [CHAR] і =  OR  affix ~/ [ыі]п/  AND IF
+          s affix fallout-ofs v1 [CHAR] п v2 untransform-fallout-add-vcv
         THEN
       sound-next
     THEN
   THEN ;
 
 : untransform-fallout2-vv-Imp.1  { D: s  D: affix  fallout-ofs -- }
-  affix /и[мб]/ IF
-    s string-addr fallout-ofs + { fallout-start }
-    fallout-start XC@ [CHAR] и = IF
-      s last-char-vowel back-vowel? IF back-vowels ELSE front-vowels THEN sound-each { vowel1 }
-        s affix fallout-ofs vowel1 [CHAR] и untransform-fallout-add-vv
+  affix ~/ и[мб]/ IF
+    s fallout-ofs /STRING { D: fallout }
+    fallout ~/ и/ IF
+      s last-char-vowel back-vowel? IF back-vowels ELSE front-vowels THEN sound-each { v1 }
+        s affix fallout-ofs v1 [CHAR] и untransform-fallout-add-vv
       sound-next
     THEN
   THEN
   ;
 
 : untransform-fallout2-vv-Imp.1.Incl  { D: s  D: affix  fallout-ofs -- }
-  affix /[ае][лң]/ IF
+  affix ~/ [ае][лң]/ IF
     s fallout-ofs /STRING { D: fallout }
     fallout /(аа|ее)/ IF
-      fallout string-addr XC@ { vowel2 }
-      vowel2 back-vowel? IF back-vowels ELSE front-vowels THEN sound-each { vowel1 }
-        s affix fallout-ofs vowel1 0 untransform-fallout-add-vv
+      fallout string-addr XC@ { v2 }
+      v2 back-vowel? IF back-vowels ELSE front-vowels THEN sound-each { v1 }
+        s affix fallout-ofs v1 0 untransform-fallout-add-vv
       sound-next
     THEN
   THEN ;
 
 : untransform-fallout2-VА>и  { D: s  D: affix  fallout-ofs -- }
-  affix /[ае]($|[бркх])/ IF
+  affix /[ае]($|[бдркх])/ IF
     s fallout-ofs /STRING { D: fallout }
-    fallout /и/ IF
-      [CHAR] е  front-vowels  { vowel2 vowels }
+    fallout ~/ и/ IF
+      [CHAR] е  front-vowels  { v2 vowels }
       s last-char-vowel back-vowel? IF
-        [CHAR] а TO vowel2  back-vowels TO vowels
+        [CHAR] а TO v2  back-vowels TO vowels
       THEN
-      vowels sound-each { vowel1 }
-        s affix fallout-ofs vowel1 vowel2 untransform-fallout-add-vv
+      vowels sound-each { v1 }
+        s affix fallout-ofs v1 v2 untransform-fallout-add-vv
       sound-next
     THEN
   THEN
   ;
 
 : untransform-fallout2-OK  { D: s  D: affix  fallout-ofs -- }
-  affix /[оӧ][хк]/ IF
+  affix ~/ [оӧ][хк]/ IF
+    s fallout-ofs /STRING { D: fallout }
     s string-addr  fallout-ofs cyr+  { D: s[:fallout+1] }
     s[:fallout+1] polysyllabic? IF
       s string-addr fallout-ofs + cyr - XC@ consonant? IF
         short-unrounded-front-vowels { vowels }
-        s fallout-ofs /STRING { D: fallout }
-        fallout string-addr XC@ { vowel2 }
-        vowel2 back-vowel? IF short-unrounded-back-vowels TO vowels THEN
-        vowels sound-each { vowel1 }
-          s affix fallout-ofs vowel1 vowel2 untransform-fallout-add-vv
+        fallout string-addr XC@ { v2 }
+        v2 back-vowel? IF short-unrounded-back-vowels TO vowels THEN
+        vowels sound-each { v1 }
+          s affix fallout-ofs v1 v2 untransform-fallout-add-vv
         sound-next
       THEN
     THEN
   THEN
   ;
+
+
+( wid ) SET-CURRENT  \ public words follow
+
+
 : untransform-fallout2  { D: s  D: affix -- strlist }
   \stack-mark
   \\." here? " s TYPE ." +" affix TYPE .s CR
-  0 s strlist-prepend-alloc TO list  \ add original
+  \ 0 s strlist-prepend-alloc TO list  \ add original
+  0 TO list
   \\." coords? " s TYPE ." +" affix TYPE .s CR
   s affix untransform-get-fallout-coord IF TO ofs-into-affix { fallout-start }
     fallout-start s affix untransform-check-fallout-start
@@ -628,11 +636,11 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
       \ II.3. А с аллофоном и: В глаголах правила слияния с
       \ фонетическими преобразованиями для афф. Fut -Ар, Convа
-      \ -А, Convпас A.бАс (диал.), Prosp АК. Эти аффиксы не
-      \ имеют вариантов, начинающихся на согласную. При
-      \ присоединении их к основе на гласную происходит стяжение
-      \ двух кратких гласных в нейтральную и без долготы
-      \ [всегда]
+      \ -А, Convпас A.бАс (диал.), Prosp АК, Iter АдIр. Эти
+      \ аффиксы не имеют вариантов, начинающихся на согласную.
+      \ При присоединении их к основе на гласную происходит
+      \ стяжение двух кратких гласных в нейтральную и без
+      \ долготы [всегда]
       \\." VА>и? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
       s affix fallout-ofs untransform-fallout2-VА>и
 
@@ -653,7 +661,8 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     \\." final list: " list .strlist .s CR
   THEN
   \stack-check
-  list ;
+  list
+  ;
 
 PREVIOUS
 

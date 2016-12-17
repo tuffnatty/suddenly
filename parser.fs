@@ -110,46 +110,57 @@ DEFER yield-stem  ( stem -- )
   DUP IF SWAP >R EXECUTE R> =
   ELSE 2DROP TRUE THEN ;
 
+0 0 2VALUE for-after-fallout
+: after-fallout  { D: left-part  rule  n-rule  D: affix  unchanged? -- }
+  \ for-after-fallout 0
+  unchanged? IF
+    \\." " indent ." untransform-envoice: " left-part type .s cr
+    left-part affix untransform-envoice  ( ... pairlist )
+  ELSE
+    \." " indent ." After fallout check with affix " affix TYPE ." : " left-part TYPE CR
+    0  left-part  affix string-length  string-strip  affix pairlist-prepend  ( ... pairlist )
+    flag-fallout-occured flag-set
+  THEN
+  \." " indent ." Pairlist: " dup if dup pair-1 type ." +" dup pair-2 type then
+  \."  while processing " formname cstr-get type ."  " formform cstr-get type cr
+  BEGIN DUP WHILE
+    DUP pair-1  ( ... pairlist addr' u' )
+    \." " indent rule if rule execute . ." expected, " n-rule . ." actual" cr then
+    n-rule rule rule-check IF
+      \." " indent ." Trying " 2DUP TYPE ." +" affix TYPE CR
+      parse-try  ( ... pairlist )
+      \." " indent ." out of parse-try" cr
+    ELSE 2DROP THEN  ( ... pairlist )
+    list-swallow  ( ... pairlist' )
+  REPEAT DROP  ( ... )
+  unchanged? 0= IF
+    flag-fallout-occured flag-clear
+  THEN
+  \ 2DROP DROP
+  ;
 : process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }  ( addr u )
   \ 2DUP TO for-after-fallout
   \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule HEX. n-rule . .s CR
   affix formform form-prepend
+  0 { strlist }
   affix string-length IF
     \ \." BEFORE:" .s CR
-    2DUP affix untransform-fallout2  ( addr u strlist )
+    2DUP affix untransform-fallout2 TO strlist
     \ \." AFTER:" .s BL EMIT DUP .strlist CR
-  ELSE 2DUP 0 -ROT strlist-prepend-alloc THEN  ( addr u strlist )
-  BEGIN DUP WHILE
-    DUP list-next @ 0=  { unchanged? }
+  THEN
+  strlist BEGIN DUP WHILE
+    \ DUP list-next @ 0=  { unchanged? }
     \\." " indent ." Remaining list: " DUP .strlist CR
     DUP strlist-get  { D: left-part }
-    unchanged? IF
-      \\." " indent ." untransform-envoice: " left-part type .s cr
-      left-part affix untransform-envoice  ( ... pairlist )
-    ELSE
-      \." " indent ." After fallout check with affix " affix TYPE ." : " left-part TYPE CR
-      0  left-part  affix string-length  string-strip  affix pairlist-prepend  ( ... pairlist )
-      flag-fallout-occured flag-set
-      \." " indent ." Pairlist: " dup pair-1 type ." +" dup pair-2 type
-      \."  while processing " formname cstr-get type ."  " formform cstr-get type cr
-    THEN
-    BEGIN DUP WHILE
-      DUP pair-1  ( ... pairlist addr' u' )
-      \." " indent rule if rule execute . ." expected, " n-rule . ." actual" cr then
-      n-rule rule rule-check IF
-        \." " indent ." Trying " 2DUP TYPE ." +" affix TYPE CR
-        parse-try  ( ... pairlist )
-        \." " indent ." out of parse-try" cr
-      ELSE 2DROP THEN  ( ... pairlist )
-      list-swallow  ( ... pairlist' )
-    REPEAT DROP  ( ... )
-    unchanged? 0= IF
-      flag-fallout-occured flag-clear
-    THEN
+    \ rule n-rule left-part affix unchanged?  after-fallout
+    left-part rule n-rule affix FALSE  after-fallout
     list-swallow  ( addr u strlist' )
   REPEAT DROP  ( addr u )
-  formform bstr-pop ;
+  \\." " indent ." Unchanged guess: " 2DUP TYPE CR
+  2DUP rule n-rule affix TRUE  after-fallout
+  formform bstr-pop
+  ;
 
 : process-representations  ( addr u rule sstr -- )
   { rule sstr }                         ( addr u )
