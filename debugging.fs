@@ -49,3 +49,8 @@ DEFER debug-bye
 : \stack-check  ( -- )
   debug-mode? IF POSTPONE depth-stack-check THEN ; immediate
 
+[IFUNDEF] SEE-THREADED
+ALSO see-voc
+: see-threaded SEE-THREADED ;
+PREVIOUS
+[THEN]
