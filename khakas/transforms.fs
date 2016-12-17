@@ -1,3 +1,4 @@
+REQUIRE minire.fs
 REQUIRE phonetics.fs
 REQUIRE warp.fs
 
@@ -15,96 +16,27 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
-: c/[ае]/  ( xc -- f )
-  DUP [CHAR] а = SWAP [CHAR] е = OR ;
 
-: c/[лң]/  ( xc -- f )
-  DUP [CHAR] л = SWAP [CHAR] ң = OR ;
 
-: c/[оӧ]/  ( xc -- f )
-  DUP [CHAR] о = SWAP [CHAR] ӧ = OR ;
-
-: c/[бркх]/  ( xc -- f )
-  CASE
-    [CHAR] б OF TRUE ENDOF
-    [CHAR] р OF TRUE ENDOF
-    [CHAR] к OF TRUE ENDOF
-    [CHAR] х OF TRUE ENDOF
-    FALSE SWAP
-  ENDCASE ;
-
-: c/[хк]/  ( xc -- f )
-  DUP [CHAR] х = SWAP [CHAR] к = OR ;
-
-: /[ае][лң]/  ( D: s -- f )
-  cyr > IF
-    XC@+ c/[ае]/ IF
-      XC@ c/[лң]/ EXIT
-    THEN
-  THEN DROP FALSE ;
-
-: /[оӧ][хк]/  ( D: s -- f )
-  cyr > IF
-    XC@+ c/[оӧ]/ IF
-      XC@ c/[хк]/ EXIT
-    THEN
-  THEN DROP FALSE ;
-
-: /[ае]($|[бркх])/  ( D: s -- f )
-  DUP cyr > IF
-    DROP XC@+ c/[ае]/ IF
-      XC@ c/[бркх]/ EXIT
-    THEN
-  ELSE
-    cyr = IF XC@ c/[ае]/ EXIT THEN
-  THEN DROP FALSE
+: /[ае]($|[бдркх])/  ( D: s -- f )
+  2DUP ~/ [ае]/ IF
+    cyr /STRING
+    DUP 0= IF 2DROP TRUE EXIT THEN
+    ~/ [бдркх]/ EXIT
+  ELSE 2DROP FALSE THEN
   ;
 
 : /(аа|ее)/  ( D: s -- f )
   cyr > IF
     XC@+ >R XC@ R@ = IF  ( R: xc )
-      R> c/[ае]/ EXIT
+      R> DUP [CHAR] а = IF DROP TRUE ELSE [CHAR] е = THEN EXIT
     THEN RDROP
   THEN FALSE ;
-
-: /и/  ( D: s -- f )
-  cyr >= IF
-    XC@ [CHAR] и = EXIT
-  THEN DROP FALSE ;
-
-: /ии/  ( D: s -- f )
-  cyr > IF
-    XC@+ [CHAR] и = IF
-      XC@ [CHAR] и = EXIT
-    THEN
-  THEN DROP FALSE ;
-
-: /и[мб]/  ( D: s -- f )
-  cyr > IF XC@+ ( addr' xc )
-    [CHAR] и = IF XC@ DUP [CHAR] м = SWAP [CHAR] б = OR EXIT THEN
-  THEN DROP FALSE ;
-
-: /г/  ( D: s -- f )
-  IF XC@ [CHAR] г = ELSE DROP FALSE THEN ;
-
-: /[гғ]/  ( D: s -- f )
-  IF XC@ CASE
-    [CHAR] г OF TRUE EXIT ENDOF
-    [CHAR] ғ OF TRUE EXIT ENDOF
-  ENDCASE ELSE DROP THEN FALSE ;
-
-: /[ғгң]/  ( D: s -- f )
-  IF XC@ gh-g-ng? ELSE DROP FALSE THEN ;
-
-: /[ғгң]$/  ( D: s -- f )
-  X\STRING- /[ғгң]/ ;
-
-: /[ыі]п/  ( D: s -- f )
-  2cyrs >= IF XC@+ ( addr' xc )
-    DUP [CHAR] ы = SWAP [CHAR] і = OR IF ( addr' )
-      XC@ [CHAR] п = EXIT
-    THEN
-  THEN DROP FALSE ;
+0 [IF]
+  2DUP S" аа" string-prefix? IF 2DROP TRUE EXIT THEN
+  S" ее" string-prefix? IF TRUE EXIT THEN
+  FALSE ;
+[ENDIF]
 
 : s/(.*).$/г\1/  { str len -- }
   str  str cyr+  len cyr -  MOVE
@@ -314,8 +246,8 @@ VARIABLE transform-flags
 \ суғ+-ға > суғ-а ‘воде’, кöг+-ге > кöг-е ‘песне’.
 
 : transform-confluence  { cs  D: affix -- cs  D: affix' }
-  affix /[гғ]/ IF
-    cs COUNT /[ғгң]$/ IF
+  affix ~/ [гғ]/ IF
+    cs COUNT ~/ [ғгң]$/ IF
       tr-confluence transform-flag-set
       cs  affix +X/STRING  EXIT         ( cs  D: affix' )
   THEN THEN cs affix ;
@@ -433,24 +365,6 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 0 VALUE ofs-into-affix
 0 VALUE list
 
-: g/gh+vowel?  ( addr u -- f )
-  2cyrs >= IF                                          ( addr )
-    DUP XC@  DUP [CHAR] г =  SWAP [CHAR] ғ = OR  ( addr g/gh? )
-    SWAP cyr+ XC@ vowel? AND                              ( f )
-  ELSE DROP FALSE THEN ;
-
-: check-G-affix-possible  ( D: s  D: affix -- f )
-  { _ s-len affix-ptr affix-len }
-  s-len affix-len >= IF
-    affix-ptr affix-len g/gh+vowel?
-  ELSE FALSE THEN ;
-
-: check-V-affix-possible  ( D: s  D: affix -- f )
-  { _ s-len affix-ptr affix-len }
-  s-len affix-len > IF
-    affix-ptr XC@ vowel?
-  ELSE FALSE THEN ;
-
 : untransform-check-fallout-start  { fallout-start D: s D: affix -- }
   fallout-start  s string-addr < IF
     ." NEGATIVE fallout-ofs " fallout-start s string-addr - . ."  s:" s TYPE ."  affix:" affix TYPE CR BYE
@@ -460,14 +374,18 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
 : untransform-get-fallout-coord  { D: s  D: affix -- 0 | fallout-start ofs-into-affix TRUE }
   \ if u >= affix.len and affix ~= /[гғ]V/, e.g. суу = су+ға
-  s affix check-G-affix-possible IF
-    \ (end of form - affix.len (c|уу), 1cyr)
-    s string-end  affix string-length  -  cyr TRUE EXIT
+  s string-length  affix string-length  >= IF
+    affix ~/ [гғ][V]/ IF
+      \ (end of form - affix.len (c|уу), 1cyr)
+      s string-end  affix string-length  -  cyr TRUE EXIT
+    THEN
   THEN
   \ if u > affix.len and affix ~= /V/, e.g. суғ+ы > суу
-  s affix check-V-affix-possible IF
-    \ (end of form - affix.len - 1 (c|уу), 2)
-    s string-end  affix string-length  -  cyr -  2cyrs TRUE EXIT
+  s string-length  affix string-length > IF
+    affix ~/ [V]/ IF
+      \ (end of form - affix.len - 1 (c|уу), 2)
+      s string-end  affix string-length  -  cyr -  2cyrs TRUE EXIT
+    THEN
   THEN  FALSE ;
 
 ( wid ) SET-CURRENT  \ public words follow
