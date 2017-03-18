@@ -114,7 +114,7 @@ slot: <Distr>  \ 1
                     12 slot-empty?  13 22 slot-range-full?  OR
                     13 slot-empty?  14 22 slot-range-full?  OR
                     19 slot-empty?  20 22 slot-range-full?  OR
-                    OR OR OR OR OR )
+                    AND AND AND AND AND )
         1 slot-empty!
         form" -nodistr "
 
