@@ -59,16 +59,27 @@ END-STRUCT strlist%
   strlist% %ALLOC strlist-prepend-common
   ;
 
+: strlist-parse-alloc  { list addr u -- list' }
+  BEGIN u DUP 0> WHILE  ( u )
+    addr SWAP BEGIN OVER C@ BL <> WHILE
+      1 /STRING
+    REPEAT  ( addr' u' )
+    u OVER - list SWAP addr SWAP strlist-prepend-alloc TO list
+    1 /STRING
+    TO u  TO addr
+  REPEAT
+  list ;
+
+: strlist-in?  ( addr u list -- f )
+  BEGIN DUP WHILE  { list' }                          ( addr u )
+    list' strlist-get  2OVER STR= IF  2DROP TRUE EXIT  THEN
+    list' list-next @                           ( addr u list' )
+  REPEAT DROP 2DROP FALSE ;
+
 : strlists-intersect?  ( list1 list2 -- f )
   { list2 }                       ( list1 )
   BEGIN DUP WHILE
-    DUP strlist-get       ( list1' addr u )
-    list2 BEGIN DUP WHILE  { list2' }
-      list2' strlist-get  2OVER STR= IF
-        2DROP DROP TRUE EXIT
-      THEN
-      list2' list-next @         ( list2' )
-    REPEAT DROP 2DROP            ( list1' )
+    DUP strlist-get  list2  strlist-in? IF  DROP TRUE EXIT  THEN
     list-next @
   REPEAT                              ( 0 )
   ;
@@ -79,6 +90,7 @@ list%
   CELL% 32 * FIELD pair-1-buf
   CELL%      FIELD pair-2-len
   CELL% 5  * FIELD pair-2-buf
+  CELL%      FIELD pair-flags
 END-STRUCT pairlist%
 
 : pairlist-prepend  ( list addr1 len1 addr2 len2 -- list' )
@@ -87,6 +99,7 @@ END-STRUCT pairlist%
   R@ pair-2-buf  R@ pair-2-len @ CMOVE
   R@ pair-1-len !
   R@ pair-1-buf  R@ pair-1-len @ CMOVE
+  0 R@ pair-flags !
   R@ list-next !
   \ \." allocated " r@ . ."  with next " r@ list-next @ . cr
   R> ;
@@ -97,3 +110,9 @@ END-STRUCT pairlist%
 
 : pair-2  ( list -- addr u )
   DUP pair-2-buf SWAP pair-2-len @ ;
+
+: .pairlist-node  ( pairlist -- )
+  DUP pair-1 TYPE ." +" DUP pair-2 TYPE [CHAR] . EMIT pair-flags @ bin. ;
+
+: .pairlist  ( pairlist -- )
+  ['] .pairlist-node list-map ;

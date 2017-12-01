@@ -92,6 +92,8 @@ REQUIRE strings.fs
   2DUP rule-fb rule-cv-vu-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
   2DUP rule-fb rule-cv-nvu D= IF 2DROP rule-cv-nvu-fb EXIT THEN
   2DUP rule-nvu rule-cv D= IF 2DROP rule-cv-nvu EXIT THEN
+  2DUP rule-cv-vu-fb rule-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
+  2DUP rule-cv-vu-fb rule-vu-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
   ." Could not combine rules " >NAME .ID ." and " >NAME .ID
   ABORT ;
 
@@ -164,9 +166,25 @@ REQUIRE strings.fs
 VARIABLE paradigm-p-o-s
 VARIABLE paradigm-stems
 2VARIABLE paradigm-stem
+VARIABLE paradigm-dict-flags
 REQUIRE p-o-s.fs
 : verb?  ( -- f )
   paradigm-p-o-s @  pos-v = ;
 
+: nomen?  ( -- f )
+  paradigm-p-o-s @  pos-n = ;
+
 : indecl?  ( -- f )
   paradigm-p-o-s @  pos-i = ;
+
+: invar1?  ( -- f )
+  paradigm-p-o-s @  pos-i1 = ;
+
+: dictflag-empty?  ( dictflag -- f )
+  paradigm-dict-flags @ AND 0= ;
+
+: dictflag-is?  ( dictflag -- f )
+  paradigm-dict-flags @ AND ;
+
+: guessed-stem  ( -- addr u )
+  paradigm-stem 2@ ;

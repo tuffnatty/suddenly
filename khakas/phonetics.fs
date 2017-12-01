@@ -4,8 +4,8 @@ REQUIRE sounds.fs
 
 sound-class vowel
   sound и
-  sound а sound о sound ы sound у
-  sound е sound і sound ӧ sound ӱ
+  sound а sound о sound ы sound у sound ю
+  sound е sound і sound ӧ sound ӱ sound э
 sound-class;
 
 sound-class short-back-vowel
@@ -13,7 +13,7 @@ sound-class short-back-vowel
 sound-class;
 
 sound-class short-front-vowel
-  sound е sound і sound ӱ
+  sound е sound і sound ӱ sound э
 sound-class;
 
 sound-class short-narrow-back-vowel
@@ -29,12 +29,22 @@ sound-class short-unrounded-back-vowel
 sound-class;
 
 sound-class short-unrounded-front-vowel
-  sound е sound і
+  sound е sound і sound э
 sound-class;
 
 sound-class short-vowel
   sound а sound ы sound у
-  sound е sound і sound ӱ
+  sound е sound і sound ӱ sound э
+sound-class;
+
+sound-class long-back-vowel
+  sound и
+  sound о
+sound-class;
+
+sound-class long-front-vowel
+  sound и
+  sound ӧ
 sound-class;
 
 sound-class unchar-vowel
@@ -42,11 +52,11 @@ sound-class unchar-vowel
 sound-class;
 
 sound-class back-vowel
-  sound а sound о sound ы sound у
+  sound а sound о sound ы sound у sound я sound ю
 sound-class;
 
 sound-class front-vowel
-  sound е sound і sound ӧ sound ӱ
+  sound е sound і sound ӧ sound ӱ sound э
 sound-class;
 
 sound-class narrow-vowel

@@ -2,6 +2,9 @@ REQUIRE util.fs
 
 CREATE slot-stack 0 , 32 CELLS ALLOT
 
+: slot-stack@  ( -- xt | 0 )
+  slot-stack DUP @ 1+ CELLS + @ ;
+
 : slot-stack-pop  ( -- xt|0 )
   slot-stack 1 OVER +!  ( stk )
   DUP @ CELLS + @ ;

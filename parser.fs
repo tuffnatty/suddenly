@@ -1,8 +1,7 @@
-REQUIRE slot-stack.fs
 REQUIRE dictionary.fs
+REQUIRE slot-stack.fs
 REQUIRE grammar.fs
 REQUIRE strings.fs
-REQUIRE filters.fs
 
 :noname
   ; IS (slot-prolog)
@@ -12,6 +11,7 @@ REQUIRE filters.fs
 \ Buffers for delimited form names and affixes
 CREATE formname bstr% %ALLOT bstr-init
 CREATE formform bstr% %ALLOT bstr-init
+CREATE formflag bstr% %ALLOT bstr-init
 : form-prepend  ( addr u bstr | 0 bstr -- )
   >R ?DUP-IF R@ bstr-prepend THEN  ( R: bstr )
   S" -" R> bstr-prepend
@@ -22,25 +22,75 @@ CREATE formform bstr% %ALLOT bstr-init
   cstr-get BOUNDS BEGIN  ( end ptr )
     2DUP > WHILE
       DUP C@ [CHAR] - = IF R> 1- >R THEN  ( end ptr R: n' )
+      1+                                  ( end ptr' )
     R@ WHILE
-    1+                                    ( end ptr' )
   REPEAT THEN
   RDROP DUP -ROT -  ( addr u  R: )
   ;
 
+: form-first-full-slot  ( bstr -- n )
+  cstr-get OVER >R  BOUNDS BEGIN  ( end ptr  R: start )
+    2DUP > WHILE
+    DUP C@ [CHAR] - = WHILE
+    1+
+  REPEAT THEN
+  2DUP > IF NIP R> - ELSE RDROP 2DROP 0 THEN ;
+
+: stem-polysyllabic?  ( -- f )
+  guessed-stem polysyllabic? ;
+
+: stem-prev-sound  ( -- xc )
+  guessed-stem prev-sound ;
+
+: stem-last-sound  ( -- xc )
+  guessed-stem last-sound ;
+
 : form-slot-xc-at-left  ( n -- xc )
-  formform form-get-slot DROP XCHAR- BEGIN  ( addr' )
-    DUP formform cstr-ptr @ > WHILE
+  formform cstr-ptr @ { form-start }
+  formform form-get-slot string-addr XCHAR- BEGIN  ( addr' )
+    DUP form-start > WHILE
     DUP C@ [CHAR] - = WHILE
       XCHAR-
   REPEAT THEN
-  DUP formform cstr-ptr @ <= IF
-    DROP paradigm-stem 2@ last-sound           ( xc )
+  DUP form-start <= IF
+    DROP stem-last-sound                       ( xc )
   ELSE XC@ THEN                                ( xc )
   ;
 
+: first-affix  ( -- addr u )
+  formform form-first-full-slot ?DUP-IF  ( n )
+    formform form-get-slot
+  ELSE $0. THEN ;
+  
+: first-affix-starts-with?  ( xc -- f )
+  first-affix first-sound = ;
+
+: form-get-flags  ( addr u -- flags )
+  OVER C@ [CHAR] - = IF
+    2DROP 0  ( flags )
+  ELSE $0. 2SWAP >NUMBER 2DROP D>S THEN ;
+
+: form-slot-flags  ( n -- flags )
+  formflag form-get-slot form-get-flags ;
+
+: first-form-flag  ( -- f )
+  formflag form-first-full-slot form-slot-flags ;
+
+: form-flag-is?  ( n flag -- f )
+  >R form-slot-flags R> AND ;
+
+: any-form-flag-is?  { flag -- f }
+  formflag cstr-get BOUNDS BEGIN 2DUP > WHILE  ( end ptr )
+    2DUP form-get-flags flag AND IF 2DROP TRUE EXIT THEN
+  1+ REPEAT 2DROP FALSE ;
+
+: form-slot-vowel-at-left?  ( n_slot -- f )
+  form-slot-xc-at-left vowel? ;
+
 : current-form-is-poss?  ( -- f )
   formname cstr-get  2 /STRING  S" pos" STRING-PREFIX? ;
+
+REQUIRE filters.fs
 
 REQUIRE transforms.fs
 
@@ -54,7 +104,7 @@ REQUIRE debugging.fs
   OVER C@  [CHAR] -  = IF  2DROP 0  THEN ;
 
 :noname  ( [addr u] affix-name len -- [addr u] )
-  \." " indent ." form-prolog: " 2>R over HEX. dup . 2dup type ." +" 2R> 2dup type .s cr
+  \." " indent ." form-prolog: " 2over type ." +" 2dup type \.s cr
   affix-name-clean formname form-prepend  ( )
   ; IS (form-prolog)
 
@@ -70,6 +120,7 @@ DEFER yield-stem  ( stem -- )
   >R 2DUP paradigm-stem 2! R>
   DUP stem-p-o-s paradigm-p-o-s !
   DUP stem-dict @ dict-stems @  paradigm-stems !
+  DUP stem-dict @ dict-flags @  paradigm-dict-flags !
   \." " CR
   indecl? IF
     slot-all-empty? IF
@@ -107,58 +158,44 @@ DEFER yield-stem  ( stem -- )
   ;
 
 : rule-check  ( i xt | 0 -- f )
-  DUP IF SWAP >R EXECUTE R> =
+  DUP IF SWAP >R EXECUTE ( rule-result ) R> =
   ELSE 2DROP TRUE THEN ;
 
 0 0 2VALUE for-after-fallout
-: after-fallout  { D: left-part  rule  n-rule  D: affix  unchanged? -- }
-  \ for-after-fallout 0
-  unchanged? IF
-    \\." " indent ." untransform-envoice: " left-part type .s cr
-    left-part affix untransform-envoice  ( ... pairlist )
-  ELSE
-    \." " indent ." After fallout check with affix " affix TYPE ." : " left-part TYPE CR
-    0  left-part  affix string-length  string-strip  affix pairlist-prepend  ( ... pairlist )
-    flag-fallout-occured flag-set
-  THEN
-  \." " indent ." Pairlist: " dup if dup pair-1 type ." +" dup pair-2 type then
-  \."  while processing " formname cstr-get type ."  " formform cstr-get type cr
-  BEGIN DUP WHILE
-    DUP pair-1  ( ... pairlist addr' u' )
-    \." " indent rule if rule execute . ." expected, " n-rule . ." actual" cr then
+: after-fallout  { pairlist rule n-rule -- }
+  \." " pairlist ?DUP-IF indent ." Pairlist: " .pairlist
+  \."  while processing " formname cstr-get type ."  " formform cstr-get type cr THEN
+  BEGIN pairlist WHILE
+    pairlist pair-1  ( ... addr' u' )
+    \." " indent rule if ." Pair " pairlist .pairlist-node ." harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
     n-rule rule rule-check IF
-      \." " indent ." Trying " 2DUP TYPE ." +" affix TYPE CR
-      parse-try  ( ... pairlist )
+      pairlist pair-flags @ 0 <<# #s #> formflag form-prepend #>>
+      \." " indent ." Trying " 2DUP TYPE ." +" pairlist pair-2 TYPE ."  formflags " formflag cstr-get type CR
+      parse-try  ( ... )
       \." " indent ." out of parse-try" cr
-    ELSE 2DROP THEN  ( ... pairlist )
-    list-swallow  ( ... pairlist' )
-  REPEAT DROP  ( ... )
-  unchanged? 0= IF
-    flag-fallout-occured flag-clear
-  THEN
-  \ 2DROP DROP
+      formflag bstr-pop
+    ELSE 2DROP THEN  ( ... )
+    pairlist list-swallow  TO pairlist
+  REPEAT
   ;
+
 : process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
-  { D: affix rule n-rule }  ( addr u )
+  { D: affix rule n-rule }                 ( addr u )
   \ 2DUP TO for-after-fallout
   \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule HEX. n-rule . .s CR
   affix formform form-prepend
-  0 { strlist }
+  0 { pairlist }
   affix string-length IF
     \ \." BEFORE:" .s CR
-    2DUP affix untransform-fallout2 TO strlist
+    2DUP affix untransform-fallout2 TO pairlist
     \ \." AFTER:" .s BL EMIT DUP .strlist CR
   THEN
-  strlist BEGIN DUP WHILE
-    \ DUP list-next @ 0=  { unchanged? }
-    \\." " indent ." Remaining list: " DUP .strlist CR
-    DUP strlist-get  { D: left-part }
-    \ rule n-rule left-part affix unchanged?  after-fallout
-    left-part rule n-rule affix FALSE  after-fallout
-    list-swallow  ( addr u strlist' )
-  REPEAT DROP  ( addr u )
-  \\." " indent ." Unchanged guess: " 2DUP TYPE CR
-  2DUP rule n-rule affix TRUE  after-fallout
+  \\." " pairlist IF indent ." Remaining list: " pairlist .pairlist .s CR THEN
+  pairlist rule n-rule after-fallout
+  \\." " indent ." Unchanged guess: " 2DUP TYPE .s CR
+  2DUP affix untransform-envoice  ( addr u pairlist )
+  rule n-rule after-fallout                ( addr u )
+  \\." " indent ." After after-fallout: " .s CR
   formform bstr-pop
   ;
 
@@ -177,19 +214,21 @@ DEFER yield-stem  ( stem -- )
 \ an awful big word
 :noname  ( addr u rule sstr -- addr u )
   \." " parse-depth 1+ TO parse-depth
-  \." " indent ." form-epilog " 2>r 2dup type ." +" 2r> 2dup .sstr .rule .s cr
+  \." " indent ." form-epilog " 2>r 2dup type ." +" 2r> 2dup .sstr .rule \.s cr
   { rule sstr }  ( addr u )
   sstr IF  \ Non-empty affix
     rule sstr process-representations
   ELSE
     \." " indent ." Trying 0 " 2dup type ." +0" CR
     0 formform form-prepend
+    0 formflag form-prepend
     2DUP parse-try
     formform bstr-pop
+    formflag bstr-pop
     \\." " indent ." out of parse-try" CR
   THEN
   \." " parse-depth 1- TO parse-depth
-  \." " indent ." form-epilog ending:" over HEX. dup . 2dup type .s cr
+  \." " indent ." form-epilog ending:" over HEX. dup . 2dup type \.s cr
   formname bstr-pop
   ; IS (form-epilog)
 

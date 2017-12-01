@@ -33,18 +33,47 @@ VARIABLE paradigm-slot-bitmap
 : slot-full?  ( n -- f )
   1 SWAP LSHIFT paradigm-slot-bitmap @ AND ;
 
-VARIABLE paradigm-flags
-: flag-set  ( n -- )
-  \." setting flag "  DUP bin.  BL EMIT
-  paradigm-flags @ OR paradigm-flags !
-  \." flags are " paradigm-flags @ bin. CR
+
+CELL 4 = [IF]
+  %0. 2VALUE paradigm-flags
+  : flag-DUP  ( ud -- ud ud )
+    POSTPONE 2DUP ; IMMEDIATE
+  : flag-OR  ( ud1 ud2 -- ud' )
+    >R ROT OR SWAP R> OR ;
+  : flag-AND  ( ud1 ud2 -- ud' )
+    >R ROT AND SWAP R> AND ;
+  : flag-invert  ( ud -- ud' )
+    INVERT SWAP INVERT SWAP ;
+  : flag-empty?  ( ud -- f )
+    paradigm-flags flag-AND D0= ;
+  : flag-is?  ( ud -- f )
+    paradigm-flags flag-AND D0<> ;
+  : flags.  ( ud -- )
+    POSTPONE 2bin. ; IMMEDIATE
+[ELSE]
+  0 VALUE paradigm-flags
+  : flag-DUP  ( u -- u u )
+    POSTPONE DUP ; IMMEDIATE
+  : flag-OR  ( u1 u2 -- u' )
+    POSTPONE OR ; IMMEDIATE
+  : flag-AND  ( u1 u2 -- u' )
+    POSTPONE AND ; IMMEDIATE
+  : flag-invert  ( u -- u')
+    POSTPONE INVERT ; IMMEDIATE
+  : flag-empty?  ( u -- f )
+    paradigm-flags flag-AND 0= ;
+  : flag-is?  ( u -- f )
+    paradigm-flags flag-AND 0<> ;
+  : flags.  ( u -- )
+    POSTPONE bin. ; IMMEDIATE
+[THEN]
+: flag-set  ( flag -- )
+  \\." setting flag "  flag-DUP flags.  BL EMIT
+  paradigm-flags flag-OR  TO paradigm-flags
+  \\." flags are " paradigm-flags flags.  CR
   ;
-: flag-clear  ( n -- )
-  \." clearing flag "  DUP bin.  BL EMIT
-  INVERT paradigm-flags @ AND paradigm-flags !
-  \." flags are " paradigm-flags @ bin. CR
+: flag-clear  ( flag -- )
+  \\." clearing flag "  flag-DUP flags.  BL EMIT
+  flag-invert paradigm-flags flag-AND  TO paradigm-flags
+  \\." flags are " paradigm-flags flags. CR
   ;
-: flag-is?  ( n -- f )
-  paradigm-flags @ AND ;
-: flag-empty?  ( n -- f )
-  paradigm-flags @ AND 0= ;

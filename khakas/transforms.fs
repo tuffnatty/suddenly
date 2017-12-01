@@ -16,6 +16,15 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
+%000000001 CONSTANT untransformed-left-envoice
+%000000010 CONSTANT untransformed-fallout
+%000000100 CONSTANT untransformed-fallout-CCC
+%000001000 CONSTANT untransformed-fallout-VГV
+%000010000 CONSTANT untransformed-fallout-VVГV
+%000100000 CONSTANT untransformed-fallout-V[кх]V
+%001000000 CONSTANT untransformed-fallout-VңV
+%010000000 CONSTANT untransformed-fallout-confluence
+%100000000 CONSTANT untransformed-fallout-(СА|ТІ)ңАр
 
 
 : /[ае]($|[бдркх])/  ( D: s -- f )
@@ -26,9 +35,9 @@ VARIABLE transform-flags
   ELSE 2DROP FALSE THEN
   ;
 
-: /(аа|ее)/  ( D: s -- f )
+: /([ая]а|ее)/  ( D: s -- f )
   cyr > IF
-    XC@+ >R XC@ R@ = IF  ( R: xc )
+    XC@+ DUP [CHAR] я = IF DROP [CHAR] а THEN >R XC@ R@ = IF  ( R: xc )
       R> DUP [CHAR] а = IF DROP TRUE ELSE [CHAR] е = THEN EXIT
     THEN RDROP
   THEN FALSE ;
@@ -55,6 +64,15 @@ VARIABLE transform-flags
     $2 str XCHAR+ XC!
   THEN ;
 
+: s/(.*)$/$1$2\1/  { str len $1 $2 -- }
+  str  str 2cyrs +  len 2cyrs -  MOVE
+  $1 str XC!
+  $2 str XCHAR+ XC! ;
+
+: s/(.*)$/$1\1/  { str len $1 -- }
+  str  str cyr+  len cyr -  MOVE
+  $1 str XC! ;
+
 : s/..(.*).$/$1$2$3\1/  { str len $1 $2 $3 -- }
   str  str cyr+  len cyr -  MOVE
   $1 str XC!
@@ -67,32 +85,39 @@ VARIABLE transform-flags
 \ «гласный + глухой согласный» (п, ф, т, ш, с, к, х), то при
 \ прибавлении аффикса на гласный звук согласный в интервокальной
 \ позиции озвончается и переходит в парный звонкий (б, в, д, ж,
-\ з, г, ғ).
+\ з, г, ғ). На фонему ч озвончение в интервокале не действует.
+\ 2) Корневая конечная т у некоторых основ (в основном
+\ глагольных) в литературном языке не озвончается: атар (ат)
+\ ‘он будет стрелять’, хатым (хат) ‘моя баба’. У подобных основ
+\ допустимы также и диалектные варианты с озвончением.
+
 
 : transform-envoice-for-vowel-affix  ( cs addr len -- cs addr len )
   \ OVER XC@ vowel? IF  \ moved vowel test to caller
-    ROT                             ( addr len cs )
+    ROT                               ( addr len cs )
     DUP C@ cyr > IF
       DUP last-sound unvoiced? IF
-	DUP prev-sound vowel? IF
-	  DUP last-sound envoice  ( addr len cs u )
-	  OVER last-sound-change    ( addr len cs )
-          tr-envoice transform-flag-set
-    THEN THEN THEN
-    -ROT                            ( cs addr len )
+        DUP last-sound [CHAR] ч <> IF
+          DUP prev-sound vowel? IF
+            DUP last-sound envoice  ( addr len cs u )
+            OVER last-sound-change    ( addr len cs )
+            tr-envoice transform-flag-set
+    THEN THEN THEN THEN
+    -ROT                              ( cs addr len )
   \ THEN
   ;
 
 : transform-envoice-for-consonant-affix  ( cs addr len -- cs addr len )
   DUP 2cyrs >= IF
     OVER XC@ unvoiced? IF
-      OVER cyr+ XC@ vowel? IF
-        2 PICK last-sound vowel? IF
-          OVER XC@ envoice     ( cs addr len u )
-          3 PICK last-sound-add  ( cs addr len )
-          +X/STRING            ( cs addr' len' )
-          tr-envoice transform-flag-set
-  THEN THEN THEN THEN ;
+      OVER XC@ [CHAR] ч <> IF
+        OVER cyr+ XC@ vowel? IF
+          2 PICK last-sound vowel? IF
+            OVER XC@ envoice     ( cs addr len u )
+            3 PICK last-sound-add  ( cs addr len )
+            +X/STRING            ( cs addr' len' )
+            tr-envoice transform-flag-set
+  THEN THEN THEN THEN THEN ;
 
 : possibly-fugitive?  ( addr u -- f)
   2DUP last-sound [CHAR] н = IF
@@ -104,9 +129,8 @@ VARIABLE transform-flags
   2DUP { affix-ptr len  D: affix }               ( addr u )
   \\."  from " 2dup type ." ..."
   0 { list }
-  affix-ptr XC@                             ( addr u aff1 )
-  DUP vowel? IF
-    DROP                                         ( addr u )
+  affix-ptr XC@ { aff1 }
+  aff1 vowel? IF
     \ \." checking if " 2dup type ."  ends in " affix type cr
     2DUP affix string-ends IF
       \ \." yes it does\n"
@@ -115,14 +139,15 @@ VARIABLE transform-flags
       2DUP prev-sound vowel? IF
         \ \." yes" cr
         2DUP last-sound { xc }
-        xc unvoiced? IF
-          2DROP                                         ( )
-        ELSE
+        [CHAR] т xc =  xc unvoiced? NOT  OR  IF
           2DUP list -ROT affix pairlist-prepend TO list
-          xc voiced? IF
+          xc voiced?  xc [CHAR] ӌ <>  AND IF
             list -ROT affix pairlist-prepend TO list    ( )
             xc unvoice  list pair-1 last-sound-ptr  XC!
+            untransformed-left-envoice  list pair-flags !
           ELSE 2DROP THEN                               ( )
+        ELSE
+          2DROP                                         ( )
         THEN                                            ( )
       ELSE
         \ \." no" cr
@@ -146,9 +171,9 @@ VARIABLE transform-flags
       \ \." no it does not" cr
       2DROP
     THEN                                                ( )
-  ELSE                                      ( addr u aff1 )
-    { xc }                                       ( addr u )
-    xc unvoiced? IF
+  ELSE                                           ( addr u )
+    aff1 { xc }
+    xc unvoiced?  xc [CHAR] ч <>  AND IF
       2DUP affix string-ends IF
         len -
         2DUP last-sound vowel?  len cyr > AND IF
@@ -364,6 +389,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
 0 VALUE ofs-into-affix
 0 VALUE list
+0 VALUE fallout-flags
 
 : untransform-check-fallout-start  { fallout-start D: s D: affix -- }
   fallout-start  s string-addr < IF
@@ -380,13 +406,20 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       s string-end  affix string-length  -  cyr TRUE EXIT
     THEN
   THEN
-  \ if u > affix.len and affix ~= /V/, e.g. суғ+ы > суу
+  \ if u > affix.len
   s string-length  affix string-length > IF
-    affix ~/ [V]/ IF
+    affix ~/ [V]/ IF  \ e.g. суғ+ы > суу
       \ (end of form - affix.len - 1 (c|уу), 2)
       s string-end  affix string-length  -  cyr -  2cyrs TRUE EXIT
     THEN
-  THEN  FALSE ;
+    affix ~/ ң[ае]р/ IF  \ e.g. пас+са+ңар > пассар
+      s string-end  2cyrs -  cyr TRUE EXIT
+    THEN
+    affix ~/ [C]/ IF  \ e.g. финн+нең > финнең
+      s string-end  affix string-length -  cyr -  cyr TRUE EXIT
+    THEN
+  THEN
+  FALSE ;
 
 0 VALUE guess-size
 
@@ -395,12 +428,17 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   s  cyr+ TO guess-size  PAD guess-size MOVE
   PAD guess-size fallout-ofs /STRING ;
 
-: guess-yield  ( -- )
-  list PAD guess-size strlist-prepend-alloc TO list ;
+: guess-yield  { D: affix -- }
+  list  PAD guess-size  affix  pairlist-prepend  TO list
+  fallout-flags list pair-flags ! ;
 
 : guess-check  { D: guess-fallout  D: affix -- }
+  \\." check:" guess-fallout type ."  affix:" affix type ."  ofs-into:" ofs-into-affix . cr
   guess-fallout ofs-into-affix /STRING  affix STR= IF
-    guess-yield
+    \ unjoin affix
+    guess-size  affix string-length - TO guess-size
+    \\." YIELD" CR
+    affix guess-yield
   THEN ;
 
 
@@ -410,17 +448,20 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   \ начальной морфонемой Г первая согласная аффикса (то есть
   \ Г) выпадает, согласная основы остается: суғ + -ға > суғ-а
   \ ‘воде’, эг + -гей > эгей ‘пусть гнет’, тоң + -ған > тоңан
-  \ ‘замерз’.
+  \ ‘замерз’. На месте стыка аффиксов правило не действует!
+  untransformed-fallout-confluence TO fallout-flags
   s fallout-ofs /STRING { D: fallout }
   fallout ~/ [ғгң]/ IF
     affix ~/ [гғ]/ IF
-      fallout string-addr XC@ { c1 }
-      fallout ~/ г/ IF [CHAR] г ELSE [CHAR] ғ THEN { c2 }
+      fallout first-sound { c1 }
+      s string-addr fallout-ofs last-char-vowel front-vowel? IF [CHAR] г ELSE [CHAR] ғ THEN { c2 }
       s fallout-ofs guess-make { D: guess-fallout }
       guess-fallout c1 c2 s/.(.*).$/$1$2\1/
       guess-fallout affix guess-check
     THEN
-  THEN ;
+  THEN
+  untransformed-fallout TO fallout-flags
+  ;
 
 : untransform-fallout-add-vcv  { D: s  D: affix  fallout-ofs v1 c v2 -- }
   s fallout-ofs guess-make { D: guess-fallout }
@@ -465,16 +506,30 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   s string-addr  fallout-ofs cyr+  polysyllabic? IF
     s fallout-ofs /STRING { D: fallout }
     [CHAR] г { c }
-    fallout /(аа|ее)/ IF
-      fallout string-addr XC@ { v1 }
+    fallout /([ая]а|ее)/ IF
+      fallout first-sound { v1 }
       s string-addr fallout-ofs + { fallout-start }
       short-front-vowels { vowels }
-      v1 [CHAR] а = IF
+      long-front-vowels { long-vowels }
+      v1 back-vowel? IF
         [CHAR] ғ TO c
         short-back-vowels TO vowels
+        long-back-vowels TO long-vowels
       THEN
+      untransformed-fallout-VГV TO fallout-flags
       s affix fallout-ofs v1 c        vowels untransform-fallout2-aa/ee
+
+      untransformed-fallout-VңV TO fallout-flags
       s affix fallout-ofs v1 [CHAR] ң vowels untransform-fallout2-aa/ee
+
+      untransformed-fallout-VVГV TO fallout-flags
+      s affix fallout-ofs v1 c        long-vowels untransform-fallout2-aa/ee
+
+      untransformed-fallout-V[кх]V TO fallout-flags
+      v1 back-vowel? IF  [CHAR] х  ELSE  [CHAR] к  THEN  TO c
+      s affix fallout-ofs v1 c        vowels untransform-fallout2-aa/ee
+
+      untransformed-fallout TO fallout-flags
     ELSE fallout ~/ ии/ IF
       0 0 { v1 v2 }
       s string-addr  fallout-ofs  { D: left-part }
@@ -484,20 +539,33 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       ELSE
         [CHAR] і TO v1  [CHAR] ӱ TO v2
       THEN
+      untransformed-fallout-VГV TO fallout-flags
       s affix fallout-ofs v1 c        v1 untransform-fallout-add-vcv
       s affix fallout-ofs v1 c        v2 untransform-fallout-add-vcv
       s affix fallout-ofs v2 c        v1 untransform-fallout-add-vcv
       s affix fallout-ofs v2 c        v2 untransform-fallout-add-vcv
+
+      untransformed-fallout-VңV TO fallout-flags
       s affix fallout-ofs v1 [CHAR] ң v1 untransform-fallout-add-vcv
       s affix fallout-ofs v1 [CHAR] ң v2 untransform-fallout-add-vcv
       s affix fallout-ofs v2 [CHAR] ң v1 untransform-fallout-add-vcv
       s affix fallout-ofs v2 [CHAR] ң v2 untransform-fallout-add-vcv
+
+      untransformed-fallout-V[кх]V TO fallout-flags
+      left-part last-char-vowel back-vowel? IF  [CHAR] х  ELSE  [CHAR] к  THEN TO c
+      s affix fallout-ofs v1 c        v1 untransform-fallout-add-vcv
+      s affix fallout-ofs v1 c        v2 untransform-fallout-add-vcv
+      s affix fallout-ofs v2 c        v1 untransform-fallout-add-vcv
+      s affix fallout-ofs v2 c        v2 untransform-fallout-add-vcv
+
+      untransformed-fallout TO fallout-flags
     THEN THEN
   THEN ;
 
 : untransform-fallout2-vgv-first  { D: s  D: affix  fallout-ofs -- }
   \ В односложных основах правило действует и на долгие, и на
-  \ краткие гласные.
+  \ краткие гласные основы (в аффиксе во всех случаях действует
+  \ только для кратких гласных).
   s string-addr  fallout-ofs cyr+  polysyllabic? 0= IF
     s string-addr fallout-ofs + { fallout-start }
     fallout-start vowel-long? IF
@@ -515,7 +583,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
       \ В прочих случаях на месте стяжения образуется длинная
       \ гласная, идентичная корневой.
-      back? IF back-vowels ELSE front-vowels THEN sound-each { v2 }
+      back? IF short-back-vowels ELSE short-front-vowels THEN sound-each { v2 }
         s affix fallout-ofs v1 c        v2 untransform-fallout-add-vcv
         s affix fallout-ofs v1 [CHAR] ң v2 untransform-fallout-add-vcv
 
@@ -545,8 +613,8 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 : untransform-fallout2-vv-Imp.1.Incl  { D: s  D: affix  fallout-ofs -- }
   affix ~/ [ае][лң]/ IF
     s fallout-ofs /STRING { D: fallout }
-    fallout /(аа|ее)/ IF
-      fallout string-addr XC@ { v2 }
+    fallout /([ая]а|ее)/ IF
+      fallout second-sound { v2 }
       v2 back-vowel? IF back-vowels ELSE front-vowels THEN sound-each { v1 }
         s affix fallout-ofs v1 0 untransform-fallout-add-vv
       sound-next
@@ -575,7 +643,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     s[:fallout+1] polysyllabic? IF
       s string-addr fallout-ofs + cyr - XC@ consonant? IF
         short-unrounded-front-vowels { vowels }
-        fallout string-addr XC@ { v2 }
+        fallout first-sound { v2 }
         v2 back-vowel? IF short-unrounded-back-vowels TO vowels THEN
         vowels sound-each { v1 }
           s affix fallout-ofs v1 v2 untransform-fallout-add-vv
@@ -585,21 +653,68 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   THEN
   ;
 
+: untransform-fallout-add-vc  { D: s  D: affix  fallout-ofs v c -- }
+  s fallout-ofs guess-make cyr+ { D: guess-fallout }
+  guess-size cyr+ TO guess-size
+  guess-fallout v c s/(.*)$/$1$2\1/
+  guess-fallout affix guess-check
+  ;
+
+: untransform-fallout-add-c  { D: s  D: affix  fallout-ofs c -- }
+  s fallout-ofs guess-make cyr /STRING { D: guess-fallout }
+  guess-fallout c s/(.*)$/$1\1/
+  guess-fallout affix guess-check
+  ;
+
+: untransform-fallout-(СА|ТІ)ңАр  { D: s  D: affix  fallout-ofs -- }
+  affix ~/ ң[ае]р/ IF
+    affix cyr /STRING  { D: affix[1:] }
+    s fallout-ofs /STRING  { D: fallout }
+    fallout affix[1:] STR= IF
+      fallout first-sound { v }
+      s string-addr fallout-ofs { D: left-part }
+      left-part last-sound { c }
+      c v = { long? }
+      long? IF
+        fallout-ofs cyr - TO fallout-ofs
+        left-part prev-sound TO c
+      THEN
+      c [CHAR] т = IF
+        v front-vowel? IF [CHAR] і ELSE [CHAR] ы THEN
+      ELSE v THEN { v1 }
+      c [CHAR] с =  c [CHAR] з =  c [CHAR] т =  OR OR IF
+        s affix fallout-ofs v1 [CHAR] ң
+        long? IF
+          v untransform-fallout-add-vcv
+        ELSE untransform-fallout-add-vc THEN
+      THEN
+    THEN
+  THEN
+  ;
+
+: untransform-fallout-CCC  { D: s  D: affix  fallout-ofs -- }
+  affix first-sound { c }
+  s fallout-ofs /STRING  { D: fallout }
+  fallout first-sound  c = IF
+    s affix fallout-ofs c untransform-fallout-add-c
+  THEN
+  ;
+
 
 ( wid ) SET-CURRENT  \ public words follow
 
 
-: untransform-fallout2  { D: s  D: affix -- strlist }
+: untransform-fallout2  { D: s  D: affix -- pairlist }
   \stack-mark
-  \\." here? " s TYPE ." +" affix TYPE .s CR
-  \ 0 s strlist-prepend-alloc TO list  \ add original
+  \\." untransform-fallout2: " s TYPE ." +" affix TYPE \.s CR
   0 TO list
-  \\." coords? " s TYPE ." +" affix TYPE .s CR
+  untransformed-fallout TO fallout-flags
+  \\." coords? " s TYPE ." +" affix TYPE \.s CR
   s affix untransform-get-fallout-coord IF TO ofs-into-affix { fallout-start }
     fallout-start s affix untransform-check-fallout-start
     fallout-start  s string-addr  -  { fallout-ofs }
 
-    \\." confluence? " s TYPE ." +" affix TYPE ."  fallout-ofs:" fallout-ofs . ."  ofs-into:" ofs-into-affix . .s CR
+    \\." confluence? " s TYPE ." +" affix TYPE ."  fallout-ofs:" fallout-ofs . ."  ofs-into:" ofs-into-affix . \.s CR
     s affix fallout-ofs untransform-fallout2-confluence
 
     \ 3. Выпадения со стяжением гласных в интервокале
@@ -609,9 +724,14 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     \ морфонемы Г. В аффиксах бывает конечная ң, которая может
     \ попасть в интервокал: Hab ЧАң и 2pos.sg (I)ӊ. Правило
     \ действует на Hab и не действует на посессив
-    \\." vgv-non-first? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
+    \ 3.4. Выпадение конечных заднеязычных глухих в основах на
+    \ -х, -к. Это происходит в многосложных (!) основах в
+    \ интервокальной позиции и сопровождается последующим
+    \ стяжением двух обрамлявших его гласных в одну долгую (см.
+    \ правило 2.2) [не всегда].
+    \\." vgv-non-first? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
     s affix fallout-ofs untransform-fallout2-vgv-non-first
-    \\." vgv-first? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
+    \\." vgv-first? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
     s affix fallout-ofs untransform-fallout2-vgv-first
 
     ofs-into-affix 2cyrs = IF  \ that is, affix starts with a vowel
@@ -621,7 +741,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ императива Imp.1.Incl Аң, Imp.1.Incl.Pl АңАр/Алар при
       \ присодинении к основам на гласную поглощают гласную
       \ основы, на месте стяжения образуется долгая аа/ее
-      \\." vv-Imp.1.Incl? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
+      \\." vv-Imp.1.Incl? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
       s affix fallout-ofs untransform-fallout2-vv-Imp.1.Incl
 
       fallout-ofs cyr+ TO fallout-ofs
@@ -631,7 +751,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ основы (другими словами: выпадение любой последней гласной
       \ основы при присоединении личных афф. императива 1 лица
       \ Imp.1 на -и (-им, -ибыс, -ибiс)) [всегда]:
-      \\." vv-Imp.1? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
+      \\." vv-Imp.1? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
       s affix fallout-ofs untransform-fallout2-vv-Imp.1
 
       \ II.3. А с аллофоном и: В глаголах правила слияния с
@@ -641,7 +761,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ При присоединении их к основе на гласную происходит
       \ стяжение двух кратких гласных в нейтральную и без
       \ долготы [всегда]
-      \\." VА>и? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
+      \\." VА>и? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
       s affix fallout-ofs untransform-fallout2-VА>и
 
       \ II.5. поглощение гласных перед -ох: Выпадение конечной
@@ -654,11 +774,33 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ этого не происходит: мағаа ‘Dat от мин’ + ох > мағааох.
       \ В первом слоге гласная любой длины не стягивается: пу
       \ ‘этот’ +ох > пуох 'этот же'.
-      \\." OK? " s TYPE ." +" affix TYPE ." |" list .strlist .s CR
+      \\." OK? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
       s affix fallout-ofs untransform-fallout2-OK
+    ELSE  \ that is, affix starts with a consonant
+      \ II.4. стяжение 2pl: Выпадение сонанта ң из личного афф. 2pl
+      \ ңАр в интервокальной позиции после Cond СА и RPast ТI
+      \ [не всегда]. При выпадении ң гласная аффикса также
+      \ выпадает: пас-са-ңар > пас-сар ‘если будем писать’,
+      \ пас-па-за-ңар > пас-па-зар ‘если не будем писать’,
+      \ пас-ты-ңар > пастар 'вы недавно написали'. В лит. языке
+      \ допускаются как стяженный, так и полный (без выпадений)
+      \ варианты данных форм. У Чебодаевой есть отражение
+      \ долготы на письме: пассаар, пастаар.
+      \\." (СА|ТІ)ңАр? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
+      untransformed-fallout-(СА|ТІ)ңАр TO fallout-flags
+      s affix fallout-ofs untransform-fallout-(СА|ТІ)ңАр
+
+      \ I.4. Упрощение группы из трех согласных.
+      \ Если русское заимствование заканчивается на двойную
+      \ согласную (финн, класс, ватт) и после нее идет аффикс,
+      \ начинающийся с той же согласной, на стыке пишется не
+      \ три согласных, а две: финнең, классар, ватты.
+      \\." CCC? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s CR
+      untransformed-fallout-CCC TO fallout-flags
+      s affix fallout-ofs untransform-fallout-CCC
     THEN
 
-    \\." final list: " list .strlist .s CR
+    \\." " list IF ." final list: " list .pairlist \.s CR THEN
   THEN
   \stack-check
   list

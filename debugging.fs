@@ -6,6 +6,11 @@
 
 : bin.  ( u -- )
   BASE @  2 BASE !  SWAP .  BASE ! ;
+: 2bin.  ( ud -- )
+  BASE @ >R  2 BASE !  D.  R> BASE ! ;
+
+: .xt  ( xt -- )
+   DUP >NAME ?DUP-IF .ID DROP ELSE xt-see THEN ;
 
 VARIABLE n-forms
 2VARIABLE timer
@@ -37,6 +42,9 @@ DEFER debug-bye
   ELSE
     POSTPONE \
   THEN ; IMMEDIATE
+
+: \.s
+  debug-mode? IF  ]] [CHAR] < EMIT DEPTH . [CHAR] > EMIT DUP . $2026 XEMIT CR [[ THEN ;
 
 : \\." debug-mode? 1 > IF POSTPONE ." ELSE POSTPONE \ THEN ; IMMEDIATE
 : .as  ( -- )

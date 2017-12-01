@@ -239,17 +239,27 @@ INTERPRET/COMPILE: cyrs
 : str-trim-last-cyr  ( addr len -- addr len' )
   DUP cyr > IF cyr - THEN ;
 
+: first-sound-ptr  ( addr u -- ptr )
+  POSTPONE string-addr ; IMMEDIATE
+
+: second-sound-ptr  ( addr u -- ptr )
+  ]] string-addr cyr+ [[ ; IMMEDIATE
+
 : last-sound-ptr  ( addr u -- ptr )
   string-end XCHAR- ;
 
 : prev-sound-ptr  ( addr u -- ptr )
   string-end XCHAR- XCHAR- ;
 
-: last-sound ( addr u -- u )
+: first-sound  ( addr u -- xc )
+  first-sound-ptr ?DUP-IF XC@ ELSE 0 THEN ;
+: second-sound  ( addr u -- xc )
+  ]] second-sound-ptr XC@ [[ ; IMMEDIATE
+: last-sound ( addr u -- xc )
   last-sound-ptr XC@ ;
-: prev-sound ( addr u -- u )
+: prev-sound ( addr u -- xc )
   prev-sound-ptr XC@ ;
-: third-sound ( addr u -- u )
+: third-sound ( addr u -- xc )
   prev-sound-ptr XCHAR- XC@ ;
 : last-sound-change  ( xc addr u -- )
   last-sound-ptr XC! ;

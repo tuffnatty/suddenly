@@ -22,11 +22,14 @@ CREATE filters 0 , 64 CELLS ALLOT
 : filters>  ( -- xt f )
   filters-top-ptr 2@ filters-drop ;
 
-: filter-start(
-  POSTPONE :[ ; IMMEDIATE
+: filter-start(:  ( <name> -- )
+  POSTPONE :[: ; IMMEDIATE
 
-: )
+: ;)
   POSTPONE ]; FALSE POSTPONE LITERAL POSTPONE >filters ; IMMEDIATE
+
+: filter-start  ( <name> -- )
+  POSTPONE [']  FALSE POSTPONE LITERAL  POSTPONE >filters ; IMMEDIATE
 
 : filter-else  ( -- )
   filters> NOT >filters ;
@@ -35,15 +38,24 @@ CREATE filters 0 , 64 CELLS ALLOT
   POSTPONE filters-drop ; IMMEDIATE
 
 : filters-check  ( stem -- stem f )
-  \." flags: " paradigm-flags @ 2 base ! . ."  slots:" paradigm-slot-bitmap @ . decimal cr
+  \." flags: " paradigm-flags flags. ."  slots:" paradigm-slot-bitmap @ bin. ." transform-flags:" formflag cstr-get type cr
+  \." checking "
   filters-top-ptr BEGIN DUP filters > WHILE
+    \stack-mark
     DUP 2@ >R
-    \." checking filter: " dup >name ?dup-if .id else dup xt-see then r@ if ."  negated" then cr
+    \." " dup .xt r@ if ."  [negated]" then
     EXECUTE
     R> NOT IF NOT THEN
     IF
-      \." filter check failed" cr
+      \."  FAIL" cr
+      \stack-check
       DROP FALSE EXIT
+    ELSE
+      \." , "
+      \stack-check
     THEN
     2 CELLS -
-  REPEAT DROP TRUE ;
+    \\." stem is now " over .stem-single cr
+  REPEAT DROP TRUE
+  \." " cr
+  ;

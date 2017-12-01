@@ -10,7 +10,9 @@
 \ semi-lambda words
 : :[  ( -- )
   POSTPONE AHEAD :noname ; IMMEDIATE
+: :[: ( <name> -- )
+  POSTPONE AHEAD : ; IMMEDIATE
 : ];  ( -- xt )
-  POSTPONE ; ] >R POSTPONE THEN R> POSTPONE LITERAL ; IMMEDIATE
+  POSTPONE ; ] POSTPONE THEN LATESTXT POSTPONE LITERAL ; IMMEDIATE
 
 : rdepth rp@ rp0 - ;  

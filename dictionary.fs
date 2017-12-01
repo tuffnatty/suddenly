@@ -2,19 +2,25 @@ REQUIRE lists.fs
 REQUIRE p-o-s.fs
 REQUIRE strings.fs
 
-32 CELLS CONSTANT max-headword
-32 CELLS CONSTANT max-semgloss
+32 CELLS  CONSTANT max-headword
+32 CELLS  CONSTANT max-semgloss
 
 STRUCT
   CELL%      FIELD dict-p-o-s
   CELL% 32 * FIELD dict-headword
+  CELL%      FIELD dict-headnum
   CELL% 32 * FIELD dict-semgloss
   CELL%      FIELD dict-stems        \ pointer to strlist%
+  CELL%      FIELD dict-flags
 END-STRUCT dict%
+
+DEFER .dictflags  ( dictflags -- )
 
 : .dict  ( dict -- )
   DUP dict-p-o-s @ .p-o-s BL EMIT
   DUP dict-headword COUNT TYPE BL EMIT
+  DUP dict-headnum @ ?DUP-IF . BL EMIT THEN
+  DUP dict-flags @ ?DUP-IF .dictflags BL EMIT THEN
   DUP dict-semgloss $201B XEMIT COUNT TYPE $2019 XEMIT BL EMIT
   dict-stems @ .strlist ;
 
@@ -91,7 +97,9 @@ VARIABLE dictionary-ptr
   dict% %ALLOT { pos dict }       ( "word" )
   pos  dict dict-p-o-s  !
   BL PARSE  (dict-check-headword)  dict dict-headword  s-to-cs  ( )
-  0  dict dict-stems  !
+  0  dict dict-stems    !
+  0  dict dict-headnum  !
+  0  dict dict-flags    !
 
   \ Add stem for search
   dict dict-headword COUNT      ( head len )
@@ -100,11 +108,18 @@ VARIABLE dictionary-ptr
   dict fuzzy-stem-table stem-table-add-key ;
 
 TABLE CONSTANT dictionary-wordlist
+
+REQUIRE dictext.fs
+
 GET-CURRENT dictionary-wordlist SET-CURRENT
 
 : i  ( "word" -- ; -- pos-i )
   HERE dictionary-ptr !
   pos-i dict-add ;
+
+: i1  ( "word" -- ; -- pos-i1 )
+  HERE dictionary-ptr !
+  pos-i1 dict-add ;
 
 : n  ( "word" -- ; -- pos-n )
   HERE dictionary-ptr !
@@ -118,7 +133,15 @@ GET-CURRENT dictionary-wordlist SET-CURRENT
   BL PARSE dictionary-ptr @  { D: stem dict }
   dict dict-stems @  stem strlist-prepend  dict dict-stems !
   stem dict stem-table stem-table-add-key
-  stem str-trim-last-cyr str-trim-last-cyr  dict  fuzzy-stem-table stem-table-add-key ;
+  stem str-trim-last-cyr str-trim-last-cyr  dict  fuzzy-stem-table stem-table-add-key
+  stem dict stem-postprocess ;
+
+: #  ( "number" -- )
+  BL PARSE S>NUMBER? IF
+    DROP dictionary-ptr @ dict-headnum !
+  ELSE
+    ABORT"  cannot parse headnum"
+  THEN ;
 
 : semgloss"  ( "text" -- )
   [CHAR] " PARSE  (dict-check-semgloss)  dictionary-ptr @ dict-semgloss s-to-cs ;

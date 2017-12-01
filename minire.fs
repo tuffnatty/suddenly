@@ -58,22 +58,27 @@ populate-vowels
     state CASE
       state-0 OF
         xc CASE
+          [CHAR] [ OF  checkif ]] DUP IF +x/string@ [[
 [ wide-charclass [IF] ]
-          [CHAR] [ OF  checkif ]] DUP IF +x/string@ [[ rest startclass  level 1+ TO level  state-class TO state  ENDOF
+                       rest startclass
 [ [ELSE] ]
-          [CHAR] [ OF  checkif ]] DUP IF +x/string@ CASE [[  level 1+ TO level  state-class TO state  ENDOF
+                       ]] CASE [[
 [ [THEN] ]
-          [CHAR] $ OF  checkif ]] DUP 0= [[                                                           ENDOF
-          ( xc )  DROP checkif ]] +x/string@ [[ xc ]]L = [[                                           xc
+                       level 1+ TO level  state-class TO state  ENDOF
+          [CHAR] $ OF  checkif ]] DUP 0= [[                     ENDOF
+          ( xc )  DROP checkif ]] +x/string@ [[ xc ]]L = [[     xc
         ENDCASE
         TRUE TO state-needif
       ENDOF
       state-class OF
         xc CASE
 [ wide-charclass [IF] ]
+          [CHAR] C OF  consonants-str consonants-str-len startclass  consonants-str consonants-str-len + 1+ 0 endclass  rest 1 /STRING TO rest  state-0 TO state  ENDOF
           [CHAR] V OF  vowels-str vowels-str-len startclass  vowels-str vowels-str-len + 1+ 0 endclass  rest 1 /STRING TO rest  state-0 TO state  ENDOF
           [CHAR] ] OF  rest endclass  state-0 TO state  ENDOF
 [ [ELSE] ]
+          [CHAR] C OF  consonants sound-each SWAP >R
+                         ]]L OF TRUE ENDOF [[    R> sound-next     ENDOF
           [CHAR] V OF  vowels sound-each SWAP >R
                          ]]L OF TRUE ENDOF [[    R> sound-next     ENDOF
           [CHAR] ] OF  ]] FALSE SWAP ENDCASE [[  state-0 TO state  ENDOF

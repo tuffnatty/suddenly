@@ -76,10 +76,18 @@ CREATE wordform-buffer 0 , 255 ALLOT
 REQUIRE khakas/phonetics.fs
 REQUIRE phonetics-common.fs
 
+FALSE [IF]
+S" ар" rule-cv-vu-fb EXECUTE . 0
+S" ер" rule-cv-vu-fb EXECUTE . 1
+S" а" rule-cv-vu-fb EXECUTE . 2
+S" е" rule-cv-vu-fb EXECUTE . 3 
+S" ах" rule-cv-vu-fb EXECUTE . 4 
+S" ех" rule-cv-vu-fb EXECUTE . 5
 T{ CHAR ң class-nvu -> cl-nasal }T
-
+T{ S" пас+са+ңар" S" пассар" parse-test -> TRUE }T
+T{ S" пас+ты+ңар" S" пастар" parse-test -> TRUE }T
+[THEN]
 \ T{ S" ті+ген" S" теен" parse-test -> TRUE }T
-\ BYE
 
 utime 2VALUE timer
 REQUIRE khakas/gentest.fs

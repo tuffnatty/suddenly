@@ -1,4 +1,4 @@
-#! /usr/bin/gforth-fast -m22M
+#! /usr/local/bin/gforth-fast -m22M
 
 REQUIRE servecommon.fs
 
