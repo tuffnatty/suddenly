@@ -1,11 +1,6 @@
 language: generic
-sudo: false
-apt:
-  sources:
-  - deb http://archive.ubuntu.com/ubuntu/ trusty universe
-  packages:
-  - gforth
-#before_script:
-#  - git clone https://git.savannah.gnu.org/git/gforth.git
-#  - cd gforth && ./autogen.sh && ./configure && make
-script: gforth -m22M khakas/test.fs
+sudo: true
+before_script:
+  - git clone https://git.savannah.gnu.org/git/gforth.git
+  - cd gforth && ./install-deps.sh && ./autogen.sh && ./configure --enable-lib && make
+script: gforth/gforth -m22M khakas/test.fs
