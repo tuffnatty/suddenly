@@ -1,5 +1,4 @@
 language: generic
-before_install: sudo apt-get install -y gforth
 before_script:
   - git clone https://git.savannah.gnu.org/git/gforth.git
   - cd gforth && ./configure && make
