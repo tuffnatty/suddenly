@@ -1,5 +1,6 @@
 language: generic
+sudo: false
 before_script:
   - git clone https://git.savannah.gnu.org/git/gforth.git
-  - cd gforth && ./configure && make
+  - cd gforth && ./autogen.sh && ./configure && make
 script: ~/gforth/gforth -m22M khakas/test.fs
