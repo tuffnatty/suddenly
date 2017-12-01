@@ -2,5 +2,5 @@ language: generic
 sudo: true
 before_script:
   - git clone https://git.savannah.gnu.org/git/gforth.git
-  - (cd gforth && ./install-deps.sh && ./autogen.sh && ./configure --enable-lib && make)
-script: cd suddenly && ../gforth/gforth -m22M khakas/test.fs
+  - (cd gforth && ./install-deps.sh && ./autogen.sh && ./configure --enable-lib && make && sudo make install)
+script: khakas/test.fs
