@@ -37,10 +37,28 @@ CREATE filters 0 , 64 CELLS ALLOT
 : filter-end  ( -- )
   POSTPONE filters-drop ; IMMEDIATE
 
+: filters(  ( <name>... -- | compile: filters-sys )
+  0 { count }
+  BEGIN
+    PARSE-NAME { D: s }
+  s S" )" COMPARE WHILE
+    s string-length IF
+      s FIND-NAME ?DUP-IF NAME>INT POSTPONE LITERAL ELSE 1 ABORT"  word not found!" THEN
+      FALSE POSTPONE LITERAL
+      POSTPONE >filters
+      count 1+ TO count
+    ELSE
+      REFILL 0= ABORT"  no closing parenthesis"
+    THEN
+  REPEAT count ; IMMEDIATE
+
+: filters-end  ( compile: filters-sys -- )
+  NEGATE ]]L filters +! [[ ; IMMEDIATE
+
 : filters-check  ( stem -- stem f )
   \." flags: " paradigm-flags flags. ."  slots:" paradigm-slot-bitmap @ bin. ." transform-flags:" formflag cstr-get type cr
   \." checking "
-  filters-top-ptr BEGIN DUP filters > WHILE
+  filters-top-ptr BEGIN DUP filters > WHILE  ( stem filter-ptr )
     \stack-mark
     DUP 2@ >R
     \." " dup .xt r@ if ."  [negated]" then
