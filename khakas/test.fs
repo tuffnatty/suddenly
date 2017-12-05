@@ -5,6 +5,7 @@ REQUIRE test/ttester.fs
 
 S" khakas"  FPATH  ALSO-PATH
 REQUIRE debugging.fs
+\ 1 TO debug-mode?
 \ 2 TO debug-mode?
 REQUIRE parser.fs
 CREATE wordform-buffer 0 , 255 ALLOT
@@ -97,10 +98,10 @@ T{ S" пас+ты+ңар" S" пастар" parse-test -> TRUE }T
 [THEN]
 \ T{ S" ті+ген" S" теен" parse-test -> TRUE }T
 
-utime 2VALUE timer
+2VARIABLE timer  utime timer 2!
 REQUIRE khakas/gentest.fs
-utime timer D- D. ." µs" CR
-.TIMES CR
+utime timer 2@ D- D. ." µs" CR
+\ .TIMES CR
 
 : check-failures
   n_failures . ." / " n_tests . ." tests FAILED ( " n_failures 100 * n_tests / . ." % )" CR

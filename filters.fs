@@ -57,12 +57,13 @@ CREATE filters filter% 64 * %ALLOT
   NEGATE ]]L n-filters +! [[ ; IMMEDIATE
 
 : filters-check  ( stem -- stem f )
-  \." about to check filters for: " DUP .stem-single
-  \."  affixes:    " formname .bstr cr
+  \." hypothesis:  " DUP .stem-single
+  \."  affixes:    " formform .bstr cr
+  \."  affix names:" formname .bstr cr
   \."  slot flags: " formflag .bstr cr
   \."  slots:      " .slots cr
   \."  flags:      " paradigm-flags flags. cr
-  \." checking "
+  \."  filters:    "
   filters-top-ptr BEGIN DUP filters >= WHILE  { filter }
     \stack-mark
     \." " filter filter-nt @ .ID  filter filter-negated @ if ."  [negated]" then
@@ -72,10 +73,9 @@ CREATE filters filter% 64 * %ALLOT
       \." FAILED" cr
       \stack-check
       FALSE EXIT
-    ELSE                                             ( )
-      \." OK, "
-      \stack-check
-    THEN
+    THEN                                             ( )
+    \." OK, "
+    \stack-check
     filter filter% %size -
     \\." stem is now " over .stem-single cr
   REPEAT DROP TRUE

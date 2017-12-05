@@ -18,5 +18,8 @@
 : rdepth rp@ rp0 - ;
 
 [IFUNDEF] ]]L
-: ]]L ]] postpone-literal ]]  [[ ; immediate
+: postpone-literal  postpone  literal ;
+: ]]L ( postponing: x -- ; compiling: -- x )
+    \ Shortcut for @code{]] literal}.
+    ]] postpone-literal ]] [[ ; immediate
 [THEN]

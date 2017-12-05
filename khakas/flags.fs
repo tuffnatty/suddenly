@@ -1,9 +1,17 @@
 : flag  ( u "name" -- )
-  debug-mode? IF
-    CELL 4 = IF 2VALUE ELSE DROP VALUE THEN
-  ELSE
-    CELL 4 = IF 2CONSTANT ELSE DROP CONSTANT THEN
-  THEN
+  \ debug-mode? IF
+  \   CELL 4 = IF 2VALUE ELSE DROP VALUE THEN
+  \ ELSE
+    CELL 4 = IF 2CONSTANT ELSE D>S CONSTANT THEN
+  \ THEN
+  ; IMMEDIATE
+
+: flag-mask  ( u "name" -- )
+  \ debug-mode? IF
+  \   CELL 4 = IF 2VALUE ELSE DROP VALUE THEN
+  \ ELSE
+    CELL 4 = IF 2CONSTANT ELSE CONSTANT THEN
+  \ THEN
   ; IMMEDIATE
 
 \ flags in different slots must be distinct!
@@ -43,13 +51,15 @@
 %001000000000000000000000000000000000. flag flag-2pl.br
 %010000000000000000000000000000000000. flag flag-2pos.pl
 %100000000000000000000000000000000000. flag flag-3pos1
-flag-Dur flag-Pres flag-OR                            flag flag-Dur-or-Pres
-flag-Hab.ca flag-Hab.cang flag-OR                     flag flag-Hab
-flag-RPast flag-Cond flag-OR                          flag flag-RPast-or-Cond
-flag-RPast-or-Cond flag-Pres flag-OR flag-Conv2 flag-OR    flag flag-RPast-or-Cond-or-Pres-or-Conv2
-flag-Past flag-Hab flag-OR                            flag flag-Past-or-Hab
-flag-Iter flag-Dur.Iter flag-OR flag-Opt-or-Assum flag-OR flag-Cunc flag-OR
-flag-Dur1.ir flag-OR flag-Hab.cang flag-OR flag-Fut.ar flag-OR
-flag-Neg.Fut flag-OR                                  flag flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1.ir-or-Hab.cang-or-Fut.ar
+
+flag-Dur flag-Pres flag-OR                            flag-mask flag-Dur-or-Pres
+flag-Hab.ca flag-Hab.cang flag-OR                     flag-mask flag-Hab
+flag-RPast flag-Cond flag-OR                          flag-mask flag-RPast-or-Cond
+flag-RPast-or-Cond flag-Pres flag-OR flag-Conv2 flag-OR    flag-mask flag-RPast-or-Cond-or-Pres-or-Conv2
+flag-Past flag-Hab flag-OR                            flag-mask flag-Past-or-Hab
+flag-Iter flag-Dur.Iter flag-OR
+flag-Opt-or-Assum flag-OR flag-Cunc flag-OR
+flag-Dur1.ir flag-OR flag-Hab.cang flag-OR
+flag-Fut.ar flag-OR flag-Neg.Fut flag-OR              flag-mask flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1.ir-or-Hab.cang-or-Fut.ar
 flag-Pres flag-Dur1.i flag-OR flag-Past flag-OR
-flag-Hab.ca flag-OR flag-Fut.a flag-OR                     flag flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a
+flag-Hab.ca flag-OR flag-Fut.a flag-OR                flag-mask flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a

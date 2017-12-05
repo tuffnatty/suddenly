@@ -164,7 +164,6 @@ DEFER yield-stem  ( stem -- )
   DUP IF SWAP >R EXECUTE ( rule-result ) R> =
   ELSE 2DROP TRUE THEN ;
 
-0 0 2VALUE for-after-fallout
 : after-fallout  { pairlist rule n-rule -- }
   \." " pairlist ?DUP-IF indent ." Pairlist: " .pairlist
   \."  while processing " formname cstr-get type ."  " formform cstr-get type cr THEN
@@ -201,7 +200,6 @@ DEFER yield-stem  ( stem -- )
 
 : process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }                 ( addr u )
-  \ 2DUP TO for-after-fallout
   \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule HEX. n-rule . .s CR
   affix formform form-prepend
   0 { pairlist }

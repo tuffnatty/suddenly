@@ -1,3 +1,5 @@
+REQUIRE util.fs
+
 : .ss
   .\" <" depth 0 .r .\" > " depth 0 max maxdepth-.s @ min dup 0 
   ?DO    dup i - pick dup . count type
@@ -16,11 +18,13 @@ VARIABLE n-forms
 2VARIABLE timer
 
 0 VALUE debug-mode?
-CREATE depth-stack 1024 CELLS ALLOT
+128 1024 * CONSTANT depth-stack-limit
+CREATE depth-stack depth-stack-limit CELLS ALLOT
 0 VALUE depth-stack-depth
 : depth-stack@ ( -- u )
   depth-stack depth-stack-depth CELLS + @ ;
 : depth-stack-push  ( -- )
+  depth-stack-depth depth-stack-limit = ABORT" DEPTH STACK OVERFLOW!"
   DEPTH depth-stack depth-stack-depth CELLS + !
   depth-stack-depth 1+ TO depth-stack-depth ;
 : depth-stack-check ( -- )

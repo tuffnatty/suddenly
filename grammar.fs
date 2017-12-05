@@ -41,7 +41,9 @@ VARIABLE paradigm-slot-bitmap
 
 
 CELL 4 = [IF]
-  %0. 2VALUE paradigm-flags
+  2VARIABLE paradigm-flags-ptr
+  : paradigm-flags  ]] paradigm-flags-ptr 2@ [[ ; IMMEDIATE
+  : paradigm-flags! ]] paradigm-flags-ptr 2! [[ ; IMMEDIATE
   : flag-DUP  ( ud -- ud ud )
     POSTPONE 2DUP ; IMMEDIATE
   : flag-OR  ( ud1 ud2 -- ud' )
@@ -57,11 +59,13 @@ CELL 4 = [IF]
   : flags.  ( ud -- )
     POSTPONE 2bin. ; IMMEDIATE
 [ELSE]
-  0 VALUE paradigm-flags
+  VARIABLE paradigm-flags-ptr
+  : paradigm-flags  ]] paradigm-flags-ptr @ [[ ; IMMEDIATE
+  : paradigm-flags! ]] paradigm-flags-ptr ! [[ ; IMMEDIATE
   : flag-DUP  ( u -- u u )
     POSTPONE DUP ; IMMEDIATE
   : flag-OR  ( u1 u2 -- u' )
-    POSTPONE OR ; IMMEDIATE
+    OR ;
   : flag-AND  ( u1 u2 -- u' )
     POSTPONE AND ; IMMEDIATE
   : flag-invert  ( u -- u')
@@ -75,11 +79,11 @@ CELL 4 = [IF]
 [THEN]
 : flag-set  ( flag -- )
   \\." setting flag "  flag-DUP flags.  BL EMIT
-  paradigm-flags flag-OR  TO paradigm-flags
+  paradigm-flags flag-OR  paradigm-flags!
   \\." flags are " paradigm-flags flags.  CR
   ;
 : flag-clear  ( flag -- )
   \\." clearing flag "  flag-DUP flags.  BL EMIT
-  flag-invert paradigm-flags flag-AND  TO paradigm-flags
+  flag-invert paradigm-flags flag-AND  paradigm-flags!
   \\." flags are " paradigm-flags flags. CR
   ;

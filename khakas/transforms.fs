@@ -131,13 +131,12 @@ VARIABLE transform-flags
   left-part last-sound { xc }
   xc unvoiced? IF
     untransformed-left-envoice-missing  list pair-flags !
-  ELSE
+  ELSE xc voiced? IF
     xc  [CHAR] ӌ <> IF
       list left-part affix pairlist-prepend TO list
       xc unvoice  list pair-1 last-sound-ptr  XC!
       untransformed-left-envoice  list pair-flags !
-    THEN
-  THEN
+  THEN THEN THEN
   list ;
 
 : untransform-fugitive  { list  D: left-part  D: affix -- list }
@@ -443,6 +442,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   \ Г) выпадает, согласная основы остается: суғ + -ға > суғ-а
   \ ‘воде’, эг + -гей > эгей ‘пусть гнет’, тоң + -ған > тоңан
   \ ‘замерз’. На месте стыка аффиксов правило не действует!
+  \stack-mark
   untransformed-fallout-confluence TO fallout-flags
   s fallout-ofs /STRING { D: fallout }
   fallout ~/ [ғгң]/ IF
@@ -455,6 +455,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     THEN
   THEN
   untransformed-fallout TO fallout-flags
+  \stack-check
   ;
 
 : untransform-fallout-add-vcv  { D: s  D: affix  fallout-ofs v1 c v2 -- }
@@ -497,6 +498,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   \ Начальная Г у аффиксов (Past ГАн, Cunc ГАлАх, Assum
   \ ГАдАГ, Opt ГАй, Dat ГА) выпадает в интервокальной
   \ позиции всегда.
+  \stack-mark
   s string-addr  fallout-ofs cyr+  polysyllabic? IF
     s fallout-ofs /STRING { D: fallout }
     [CHAR] г { c }
@@ -554,12 +556,15 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
       untransformed-fallout TO fallout-flags
     THEN THEN
-  THEN ;
+  THEN
+  \stack-check
+  ;
 
 : untransform-fallout2-vgv-first  { D: s  D: affix  fallout-ofs -- }
   \ В односложных основах правило действует и на долгие, и на
   \ краткие гласные основы (в аффиксе во всех случаях действует
   \ только для кратких гласных).
+  \stack-mark
   s string-addr  fallout-ofs cyr+  polysyllabic? 0= IF
     s string-addr fallout-ofs + { fallout-start }
     fallout-start vowel-long? IF
@@ -591,9 +596,12 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
         THEN
       sound-next
     THEN
-  THEN ;
+  THEN
+  \stack-check
+  ;
 
 : untransform-fallout2-vv-Imp.1  { D: s  D: affix  fallout-ofs -- }
+  \stack-mark
   affix ~/ и[мб]/ IF
     s fallout-ofs /STRING { D: fallout }
     fallout ~/ и/ IF
@@ -602,9 +610,11 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       sound-next
     THEN
   THEN
+  \stack-check
   ;
 
 : untransform-fallout2-vv-Imp.1.Incl  { D: s  D: affix  fallout-ofs -- }
+  \stack-mark
   affix ~/ [ае][лң]/ IF
     s fallout-ofs /STRING { D: fallout }
     fallout /([ая]а|ее)/ IF
@@ -613,9 +623,12 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
         s affix fallout-ofs v1 0 untransform-fallout-add-vv
       sound-next
     THEN
-  THEN ;
+  THEN
+  \stack-check
+  ;
 
 : untransform-fallout2-VА>и  { D: s  D: affix  fallout-ofs -- }
+  \stack-mark
   affix /[ае]($|[бдркх])/ IF
     s fallout-ofs /STRING { D: fallout }
     fallout ~/ и/ IF
@@ -628,9 +641,11 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       sound-next
     THEN
   THEN
+  \stack-check
   ;
 
 : untransform-fallout2-OK  { D: s  D: affix  fallout-ofs -- }
+  \stack-mark
   affix ~/ [оӧ][хк]/ IF
     s fallout-ofs /STRING { D: fallout }
     s string-addr  fallout-ofs cyr+  { D: s[:fallout+1] }
@@ -645,6 +660,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       THEN
     THEN
   THEN
+  \stack-check
   ;
 
 : untransform-fallout-add-vc  { D: s  D: affix  fallout-ofs v c -- }
@@ -661,6 +677,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   ;
 
 : untransform-fallout-(СА|ТІ)ңАр  { D: s  D: affix  fallout-ofs -- }
+  \stack-mark
   affix ~/ ң[ае]р/ IF
     affix cyr /STRING  { D: affix[1:] }
     s fallout-ofs /STRING  { D: fallout }
@@ -684,14 +701,17 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       THEN
     THEN
   THEN
+  \stack-check
   ;
 
 : untransform-fallout-CCC  { D: s  D: affix  fallout-ofs -- }
+  \stack-mark
   affix first-sound { c }
   s fallout-ofs /STRING  { D: fallout }
   fallout first-sound  c = IF
     s affix fallout-ofs c untransform-fallout-add-c
   THEN
+  \stack-check
   ;
 
 
