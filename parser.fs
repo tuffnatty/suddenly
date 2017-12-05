@@ -107,7 +107,7 @@ REQUIRE debugging.fs
   OVER C@  [CHAR] -  = IF  2DROP 0  THEN ;
 
 :noname  ( [addr u] affix-name len -- [addr u] )
-  \." " indent ." form-prolog: " 2over type ." +" 2dup type \.s cr
+  \\." " indent ." form-prolog: " 2over type ." +" 2dup type \.s
   affix-name-clean formname form-prepend  ( )
   ; IS (form-prolog)
 
@@ -133,7 +133,6 @@ DEFER yield-stem  ( stem -- )
       DROP  ( addr u )
     THEN
   ELSE
-    \." about to check filters for: " formname .bstr CR DUP .stem-single
     filters-check IF
       \." yielding" CR
       yield-stem  ( addr u )
@@ -154,7 +153,7 @@ DEFER yield-stem  ( stem -- )
       ['] check-stem  list-map  ( addr u )
       \." ~~~~~~~~~" cr
     ELSE
-      \." STEM " 2dup type ."  not in dictionary! was trying " formname .bstr cr
+      \." STEM " 2dup type ."  not in dictionary! was trying " 2dup type formform .bstr bl emit formname .bstr cr
     THEN
     2DROP
   THEN
@@ -189,9 +188,9 @@ DEFER yield-stem  ( stem -- )
     THEN
     harmony-ok? IF
       slot-flag S>D <<# #s #> formflag form-prepend #>>
-      \." " indent ." Trying " 2DUP TYPE ." +" pairlist pair-2 TYPE ."  formflags " formflag cstr-get type CR
+      \\." " indent ." Trying " 2DUP TYPE ." +" pairlist pair-2 TYPE ."  formflags " formflag cstr-get type CR
       parse-try  ( ... )
-      \." " indent ." out of parse-try" cr
+      \\." " indent ." out of parse-try" cr
       formflag bstr-pop
     ELSE
       2DROP  ( ... )
@@ -235,12 +234,12 @@ DEFER yield-stem  ( stem -- )
 \ an awful big word
 :noname  ( addr u rule sstr -- addr u )
   \." " parse-depth 1+ TO parse-depth
-  \." " indent ." form-epilog " 2>r 2dup type ." +" 2r> 2dup .sstr .rule \.s cr
+  \\." " indent ." form-epilog " 2>r 2dup type ." +" 2r> 2dup .sstr .rule \.s cr
   { rule sstr }  ( addr u )
   sstr IF  \ Non-empty affix
     rule sstr process-representations
   ELSE
-    \." " indent ." Trying 0 " 2dup type ." +0" CR
+    \\." " indent ." Trying 0 " 2dup type ." +0" CR
     0 formform form-prepend
     0 formflag form-prepend
     2DUP parse-try
@@ -249,7 +248,7 @@ DEFER yield-stem  ( stem -- )
     \\." " indent ." out of parse-try" CR
   THEN
   \." " parse-depth 1- TO parse-depth
-  \." " indent ." form-epilog ending:" over HEX. dup . 2dup type \.s cr
+  \\." " indent ." form-epilog ending:" over HEX. dup . 2dup type \.s
   formname bstr-pop
   ; IS (form-epilog)
 

@@ -49,12 +49,12 @@ slot: <Ptcl1>  \ 3
   3 slot-empty!
   form" -noptcl1 "
 
-  filter-start constraint-5
+  filters( constraint-5 )
     3 slot-full!
     form" Add ТАА"
     form" Cont LА"
     form" Ass1 ОQ"
-  filter-end
+  filters-end
   ;
 
 slot: <Perf/Prosp>  \ 4
@@ -63,15 +63,15 @@ slot: <Perf/Prosp>  \ 4
 
   4 slot-full!
 
-  filter-start constraint-3
+  filters( constraint-3 )
     flag-Perf flag-set
       form" Perf (І)бІс"
     flag-Perf flag-clear
-  filter-end
+  filters-end
 
-  filter-start constraint-6
+  filters( constraint-6 )
     form" Prosp АК"
-  filter-end
+  filters-end
   ;
 
 slot: <Dur>  \ 5
@@ -80,50 +80,50 @@ slot: <Dur>  \ 5
 
   5 slot-full!
   filters( constraint-7 constraint-8 )
-    filter-start constraint-8.1ᵢ
+    filters( constraint-8.1ᵢ )
       flag-Dur1.i flag-set
         form" Dur1₁ и"
       flag-Dur1.i flag-clear
-    filter-end
-    filter-start constraint-8.1ᵢᵣ
+    filters-end
+    filters( constraint-8.1ᵢᵣ )
       flag-Dur1.ir flag-set
         form" Dur1₂ ир"
       flag-Dur1.ir flag-clear
-    filter-end
+    filters-end
   filters-end
 
-  filter-start constraint-26₅
+  filters( constraint-26₅ )
     flag-Dur flag-set
       form" Dur чАт"
     flag-Dur flag-clear
-  filter-end
+  filters-end
   ;
 
 slot: <Neg/Iter>  \ 6
   6 slot-empty!
   form" -noneg/iter "
 
-  filter-start constraint-11
+  filters( constraint-11 )
     6 slot-full!
 
-    filter-start constraint-11.1
+    filters( constraint-11.1 )
       flag-Neg6 flag-set
         form" Neg ПА"
       flag-Neg6 flag-clear
-    filter-end
+    filters-end
 
     flag-Iter flag-set
-      filter-start constraint-14
+      filters( constraint-14 )
         form" Iter АдІр"
-      filter-end
+      filters-end
     flag-Iter flag-clear
 
-    filter-start constraint-26₆
+    filters( constraint-26₆ )
       flag-Dur.Iter flag-set
         form" Dur.Iter чАдІр"
       flag-Dur.Iter flag-clear
-    filter-end
-  filter-end
+    filters-end
+  filters-end
   ;
 
 slot: <Tense/Mood/Conv2>  \ 7
@@ -132,11 +132,11 @@ slot: <Tense/Mood/Conv2>  \ 7
 
   7 slot-full!
 
-  filter-start constraint-26₇
+  filters( constraint-26₇ )
     flag-Pres flag-set
       form" Pres чА"
     flag-Pres flag-clear
-  filter-end
+  filters-end
 
   flag-Neg7 flag-set
     flag-Neg.Fut flag-set
@@ -145,56 +145,56 @@ slot: <Tense/Mood/Conv2>  \ 7
   flag-Neg7 flag-clear
 
   flag-Past flag-set
-    filter-start constraint-9.1
+    filters( constraint-9.1 )
       form" Past₁ ГА"
     filter-else
       form" Past₂ ГАн"
-    filter-end
+    filters-end
   flag-Past flag-clear
 
-  filter-start constraint-10.1
-    filter-start constraint-9.3
+  filters( constraint-10.1 )
+    filters( constraint-9.3 )
       flag-Fut.a flag-set
         form" Fut₁ А"
       flag-Fut.a flag-clear
-    filter-end
+    filters-end
     flag-Fut.ar flag-set
       form" Fut₂ Ар"
     flag-Fut.ar flag-clear
-  filter-end
+  filters-end
 
-  filter-start constraint-9.2
+  filters( constraint-9.2 )
     flag-Hab.ca flag-set
       form" Hab₁ ЧА"
     flag-Hab.ca flag-clear
-  filter-end
+  filters-end
   flag-Hab.cang flag-set
     form" Hab₂ ЧАң"
   flag-Hab.cang flag-clear
 
   flag-RPast flag-set
-    filter-start constraint-12
+    filters( constraint-12 )
       form" RPast ТІ"
-    filter-end
+    filters-end
   flag-RPast flag-clear
 
-  filter-start constraint-10
+  filters( constraint-10 )
     flag-Cunc flag-set
       form" Cunc ГАлАQ"
     flag-Cunc flag-clear
-  filter-end
+  filters-end
 
   flag-Cond flag-set
-    filter-start constraint-13
+    filters( constraint-13 )
       form" Cond СА"
-    filter-end
+    filters-end
   flag-Cond flag-clear
   flag-Opt-or-Assum flag-set
     form" Opt ГАй"
     form" Assum ГАдАG"
   flag-Opt-or-Assum flag-clear
 
-  filter-start constraint-25
+  filters( constraint-25 )
     form" Lim ГАли"
 
     flag-Neg7 flag-set
@@ -211,7 +211,7 @@ slot: <Tense/Mood/Conv2>  \ 7
       form" Conv.pas АбАс"
       form" Conv.a А"
     flag-Conv2 flag-clear
-  filter-end
+  filters-end
   ;
 
 slot: <Indir>  \ 8
@@ -220,11 +220,11 @@ slot: <Indir>  \ 8
 
   filters( constraint-15 constraint-26₈ )
     8 slot-full!
-    filter-start constraint-voicedstem+Indir
+    filters( constraint-voicedstem+Indir )
       form" Indir тІр"
     filter-else
       form" Indir ТІр"
-    filter-end
+    filters-end
   filters-end
   ;
 
@@ -249,17 +249,17 @@ slot: <Pl₁>  \ 11
   11 slot-empty!
   form" -nopl1 "
 
-  filter-start constraint-16₁₁
+  filters( constraint-16₁₁ )
     11 slot-full!
     form" Pl₁ ЛАр"
-  filter-end
+  filters-end
   ;
 
 slot: <Poss₁>  \ 12
   12 slot-empty!
   form" -noposs1 "
 
-  filter-start constraint-16₁₂
+  filters( constraint-16₁₂ )
     12 slot-full!
 
     flag-Poss1.nonpl flag-set
@@ -273,50 +273,50 @@ slot: <Poss₁>  \ 12
     flag-2pos.pl flag-set
       form" 2pos.pl (І)ңАр"
     flag-2pos.pl flag-clear
-  filter-end
+  filters-end
   ;
 
 slot: <Case₁>  \ 13
   13 slot-empty!
   form" -nocase1 "
 
-  filter-start constraint-16_2а
+  filters( constraint-16_2а )
     13 slot-full!
 
     form" Gen НІң"
-  filter-end
+  filters-end
 
-  filter-start constraint-16_2б
+  filters( constraint-16_2б )
     13 slot-full!
 
-    filter-start constraint-17₁₃
+    filters( constraint-17₁₃ )
       form" Loc ТА"
     filter-else
       form" Loc (н)ТА"
-    filter-end
-  filter-end
+    filters-end
+  filters-end
 
-  filter-start constraint-16_2е
+  filters( constraint-16_2е )
     13 slot-full!
 
     flag-All1 flag-set
-      filter-start constraint-17₁₃
+      filters( constraint-17₁₃ )
         form" All САр"
       filter-else
         form" All (н)САр"
-      filter-end
+      filters-end
     flag-All1 flag-clear
-  filter-end
+  filters-end
   ;
 
 slot: <Attr>  \ 14
   14 slot-empty!
   form" -noattr "
 
-  filter-start constraint-16_1б
+  filters( constraint-16_1б )
     14 slot-full!
     form" Attr КІ"
-  filter-end
+  filters-end
   ;
 
 slot: <Pl₂>  \ 15
@@ -353,43 +353,43 @@ slot: <Case₂>  \ 17
 
   17 slot-full!
 
-  filter-start constraint-29
+  filters( constraint-29 )
     form" Gen НІң"
     form" Instr нАң"
-  filter-end
+  filters-end
 
-  filter-start constraint-17₁₇
+  filters( constraint-17₁₇ )
     form" Dat ГА"
-    filter-start constraint-29
+    filters( constraint-29 )
       form" Acc НІ"
-    filter-end
+    filters-end
     form" Loc ТА"
     form" Abl₁ ДАң"
     form" All САр"
     form" Prol ЧА"
     form" Delib ДАңАр"
     form" Comp ТАG"
-    filter-start constraint-30
+    filters( constraint-30 )
       flag-Abl2 flag-set
         form" Abl₂ тІн"
       flag-Abl2 flag-clear
-    filter-end
+    filters-end
   filter-else
     form" Dat (н)А"
-    filter-start constraint-29
-      filter-start constraint-V+Acc
+    filters( constraint-29 )
+      filters( constraint-V+Acc )
         form" Acc₂ Н"
       filter-else
         form" Acc₁ НІ"
-      filter-end
-    filter-end
+      filters-end
+    filters-end
     form" Loc (н)ТА"
     form" Abl нАң"
     form" All (н)САр"
     form" Prol (н)ЧА"
     form" Delib нАңАр"
     form" Comp (н)ТАG"
-  filter-end
+  filters-end
   ;
 
 slot: <Ptcl₂>  \ 18
@@ -400,9 +400,9 @@ slot: <Ptcl₂>  \ 18
 
   form" Ass ОQ"
 
-  filter-start constraint-18
+  filters( constraint-18 )
     form" Adv Ли"
-  filter-end
+  filters-end
   ;
 
 slot: <Person>  \ 19
@@ -411,7 +411,7 @@ slot: <Person>  \ 19
 
   19 slot-full!
 
-  filter-start constraint-20-full-person
+  filters( constraint-20-full-person )
     form" 1sg ПІн"
     form" 1sg.dial СІм"
     form" 2sg СІң"
@@ -422,9 +422,9 @@ slot: <Person>  \ 19
     flag-1.pl flag-clear
     form" 2pl САр"
     form" 2pl.dial СІңАр"
-  filter-end
+  filters-end
 
-  filter-start constraint-20-mix-person
+  filters( constraint-20-mix-person )
     flag-1sg.br flag-set
       form" 1sg.mix м"
     flag-1sg.br flag-clear
@@ -434,9 +434,9 @@ slot: <Person>  \ 19
       form" 1pl.mix ПІс"
     flag-1.pl flag-clear
     form" 2pl.mix САр"
-  filter-end
+  filters-end
 
-  filter-start constraint-20-short-person
+  filters( constraint-20-short-person )
     flag-Person.br flag-set
       flag-1sg.br flag-set
         form" 1sg.br м"
@@ -449,9 +449,9 @@ slot: <Person>  \ 19
         form" 2pl.br (І)ңАр"
       flag-2pl.br flag-clear
     flag-Person.br flag-clear
-  filter-end
+  filters-end
 
-  filter-start constraint-19
+  filters( constraint-19 )
     flag-Imp flag-set
       form" Imp.1sg им"
       form" Imp.1pl ибІс"
@@ -463,7 +463,7 @@ slot: <Person>  \ 19
         form" Imp.3 СІн"
       flag-Imp.3 flag-clear
     flag-Imp flag-clear
-  filter-end
+  filters-end
   ;
 
 slot: <PredPl>  \ 20
@@ -471,9 +471,9 @@ slot: <PredPl>  \ 20
   form" -nopredpl "
 
   20 slot-full!
-  filter-start constraint-21
+  filters( constraint-21 )
     form" PredPl ЛАр"
-  filter-end
+  filters-end
   ;
 
 slot: <Ptcl₃>  \ 21
@@ -486,13 +486,13 @@ slot: <Ptcl₃>  \ 21
     form" Ass ОQ"
   flag-Ass3 flag-clear
 
-  filter-start constraint-23
+  filters( constraint-23 )
     form" Foc ТІр"
-  filter-end
+  filters-end
 
-  filter-start constraint-22
+  filters( constraint-22 )
     form" Perm ТАQ"
-  filter-end
+  filters-end
   ;
 
 CREATE slot-stack

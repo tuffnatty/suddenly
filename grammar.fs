@@ -15,6 +15,12 @@ DEFER (form-epilog)  ( n addr u -- )
   ; IMMEDIATE
 
 VARIABLE paradigm-slot-bitmap
+: .slots
+  paradigm-slot-bitmap @  ( mask )
+  CELL 8 * 0 DO
+    1 I LSHIFT OVER AND IF I . THEN
+  LOOP DROP ;
+  
 : slot-empty!  ( n -- )
   1 SWAP LSHIFT INVERT paradigm-slot-bitmap @ AND paradigm-slot-bitmap ! ;
 : slot-full!  ( n -- )
