@@ -11,6 +11,12 @@ REQUIRE strings.fs
   2DUP last-sound class-cv ;
 : rule-cv ['] rule-cv ;
 
+: last-sound-except-ь-ptr  ( addr u -- addr' )
+  2DUP last-sound [CHAR] ь = IF prev-sound-ptr ELSE last-sound-ptr THEN ;
+
+: last-sound-except-ь  ( addr u -- xc )
+  last-sound-except-ь-ptr XC@ ;
+
 : rule-cv-fb   ( addr u -- addr u table-index )
   2DUP last-sound class-cv >R 2DUP last-char-vowel class-fb 2* R> + ;
 : rule-cv-fb ['] rule-cv-fb ;
@@ -20,31 +26,31 @@ REQUIRE strings.fs
 : rule-fb ['] rule-fb ;
 
 : rule-nvu  ( addr u -- addr u table-index )
-  2DUP last-sound class-nvu ;
+  2DUP last-sound-except-ь class-nvu ;
 : rule-nvu ['] rule-nvu ;
 
 : rule-nvu-fb  ( addr u -- addr u table-index )
-  2DUP last-sound class-nvu >R 2DUP last-char-vowel class-fb 3 * R> + ;
+  2DUP last-sound-except-ь class-nvu >R 2DUP last-char-vowel class-fb 3 * R> + ;
 : rule-nvu-fb ['] rule-nvu-fb ;
 
 : rule-vu  ( addr u -- addr u table-index )
-  2DUP last-sound class-vu ;
+  2DUP last-sound-except-ь class-vu ;
 : rule-vu ['] rule-vu ;
 
 : rule-vu-fb   ( addr u -- addr u table-index )
-  2DUP last-sound class-vu >R 2DUP last-char-vowel class-fb 2* R> + ;
+  2DUP last-sound-except-ь class-vu >R 2DUP last-char-vowel class-fb 2* R> + ;
 : rule-vu-fb ['] rule-vu-fb ;
 
 \ : rule-cv-nvu-fb  ( addr u -- addr u table-index )
 \   2DUP last-sound class-cv >R  ( addr u R: class-cv )
 \   R@ cl-vowel = IF cl-voiced ELSE R@ class-nvu THEN 2* 2*
 : rule-cv-vu  ( addr u -- addr u table-index )
-  2DUP last-sound >R R@ class-cv  ( addr u class-cv  R: xc )
+  2DUP last-sound-except-ь >R R@ class-cv  ( addr u class-cv  R: xc )
   DUP cl-vowel = IF cl-voiced RDROP ELSE R> class-vu THEN 2* + ;
 : rule-cv-vu ['] rule-cv-vu ;
 
 : rule-cv-nvu  ( addr u -- addr u table-index )
-  2DUP last-sound >R R@ class-cv  ( addr u class-cv  R: xc )
+  2DUP last-sound-except-ь >R R@ class-cv  ( addr u class-cv  R: xc )
   DUP cl-vowel = IF cl-voiced RDROP ELSE R> class-nvu THEN 2* + ;
 : rule-cv-nvu ['] rule-cv-nvu ;
 

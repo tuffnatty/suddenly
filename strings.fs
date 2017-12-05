@@ -175,6 +175,10 @@ END-STRUCT bstr%  \ a string for fast prepending
 : string-end  ( addr u -- addr+u )
   POSTPONE + ; IMMEDIATE
 
+: string-append-char  { xc addr u -- addr u' }
+  addr u  string-end { ptr }
+  xc ptr XC!  addr  ptr XCHAR+ addr - ;
+
 : string-length  ( addr u -- u )
   POSTPONE NIP ; IMMEDIATE
 

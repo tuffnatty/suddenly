@@ -209,25 +209,27 @@
 \ 16. Показатели позиций 11, 12, 13 могут присутствовать в
 \ словоформе: 1) вместе с пок. поз. 14 Attr КI – и
 \ наоборот, для вычленения Attr в словоформе нужно
-\ присутствие одного или нескольких из этих полей.
+\ присутствие одного или нескольких из этих полей. Сочетание
+\ Poss1+Attr KI возможно только при наличии Case1.
 \ 2) Также возможны следующие сочетания:
 \ а) Gen1+Pl2 для личных местоимений (мин, син, ол, пiс, сiрер, олар)
 \ б) (Pl1+) (pos1+) Loc1+pos2 для Nomen
-\ в) выраженный 3pos1(+Pl2)+pos2 для Nomen
-\ г) Pl1/Pos1+Gen.3pos для всех
-\ д) (Pl1+) (pos1+) All1+Abl2: столзартын ‘со стороны стола’
+\ в) выраженный 3pos1+pos2 для Nomen
+\ г) 3pos1+Pl2+pos2 для Nomen
+\ д) Pl1/Pos1+Gen.3pos для всех
+\ е) (Pl1+) (pos1+) All1+Abl2: столзартын ‘со стороны стола’
 : constraint-16₁₁  ( -- f )
   14 slot-full?  \ 16.1
   13 slot-full?  \ 16.2б
-  flag-Gen.3pos flag-is?  \ 16.2г
-  flag-All1 flag-is?  flag-Abl2 flag-is?  AND  \ 16.2д
+  flag-Gen.3pos flag-is?  \ 16.2д
+  flag-All1 flag-is?  flag-Abl2 flag-is?  AND  \ 16.2е
   OR OR OR ;
 : constraint-16₁₂  ( -- f )
-  14 slot-full?  \ 16.1
-  13 slot-full?  \ 16.2б
-  flag-3pos1 flag-is?  13 14 slot-range-empty?  16 slot-full? AND AND  \ 16.2в
-  flag-Gen.3pos flag-is? \ 16.2г
-  flag-All1 flag-is?  flag-Abl2 flag-is?  AND  \ 16.2д
+  13 slot-full?  \ 16.1, 16.2б
+  flag-3pos1 flag-is?  12 form-slot-flags 0=  13 14 slot-range-empty?  15 16 slot-range-full? AND AND AND \ 16.2в
+  flag-3pos1 flag-is?  13 14 slot-range-empty?  15 16 slot-range-full? AND AND  \ 16.2г
+  flag-Gen.3pos flag-is? \ 16.2д
+  flag-All1 flag-is?  flag-Abl2 flag-is?  AND  \ 16.2е
   OR OR OR OR ;
 : constraint-16_1б  ( -- f )
   11 13 slot-range-full? ;
@@ -239,7 +241,7 @@
   14 slot-full?  \ Attr
   nomen?  16 slot-full?  AND  \ Poss2
   OR ;
-: constraint-16_2д  ( -- f )
+: constraint-16_2е  ( -- f )
   14 slot-full?  \ Attr
   flag-Abl2 flag-is?
   OR ;
@@ -330,8 +332,9 @@
 \ основе слов категории Verbum (имеющей значение Imp.2sg).
 : constraint-22  ( -- f )
   20 slot-empty?  flag-Imp flag-is?  AND
+  7 20 slot-range-empty?  flag-Neg6 flag-is?  AND
   1 20 slot-range-empty?  verb?  AND
-  OR ;
+  OR OR ;
 
 \ 23. Пок-тель Foc может встретиться: а) в словоформах с
 \ пометой Nomen; б) в глаголах, у которых есть временные
@@ -390,19 +393,16 @@
 : constraint-30  ( -- f )
   flag-All1 flag-is? ;
 
-\ 31. Poss1 возможен только при наличии Case1 или Pl2 - FIXME:
-\ за исключением слов теер/теерiзi ‘шкура’, кöп - кöбiзi
-\ ‘множество’ (формы теерi и кöбi встречаются редко).
-: constraint-31  ( -- f )
-  13 slot-full?  \ Case1
-  15 slot-full?  \ Pl2
-  OR ;
-
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT
   dictflag-no-envoice dictflag-empty?
   OR ;
+: constraint-non-envoiced-rus  ( -- f )
+  first-form-flag untransformed-left-envoice-missing AND NOT
+  dictflag-no-envoice dictflag-is?
+  dictflag-rus dictflag-is?
+  OR OR ;
 
 \ Запрещенные контексты для выпадения VңV
 : constraint-VңV-fallout  ( -- f )
@@ -435,7 +435,7 @@
 : constraint-CCC-fallout  ( -- f )
   stem-last-sound stem-prev-sound <>
   stem-last-sound first-affix-starts-with? NOT
-  dictflag-rus dictflag-is?  first-form-flag untransformed-fallout-CCC  AND  AND
+  dictflag-rus dictflag-is?  first-form-flag untransformed-fallout-CCC  AND  0<> AND
   dictflag-rus dictflag-empty?  first-form-flag untransformed-fallout-CCC AND NOT  AND
   OR OR OR ;
 
@@ -447,13 +447,14 @@
 
 \ Разрешенные контексты для невыпадения VГV
 : constraint-VГV-fallout  ( -- f )
+  nomen? verb? OR NOT
   first-form-flag untransformed-fallout-VГV untransformed-fallout-VңV OR AND
   1 21 slot-range-empty?
   stem-polysyllabic? NOT
   stem-last-sound gh-g-ng? NOT
   stem-prev-sound vowel? NOT
   first-affix first-sound vowel? NOT
-  OR OR OR OR OR ;
+  OR OR OR OR OR OR ;
 
 \ Запрещенные контексты для выпадения конечного к, х
 : constraint-V[кх]V-fallout  ( -- f )
@@ -470,3 +471,8 @@
 
 : constraint-V+Acc  ( -- f )
   17 form-slot-vowel-at-left? ;
+
+: constraint-broken-harmony  ( -- f )
+  harmony-vu-broken any-form-flag-is? NOT
+  dictflag-rus dictflag-is?  first-form-flag harmony-vu-broken AND 0<>  AND
+  OR ;

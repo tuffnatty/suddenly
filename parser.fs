@@ -4,9 +4,12 @@ REQUIRE grammar.fs
 REQUIRE strings.fs
 
 :noname
+  \stack-mark
   ; IS (slot-prolog)
 
-:noname ; IS (slot-epilog)
+:noname
+  \stack-check
+  ; IS (slot-epilog)
 
 \ Buffers for delimited form names and affixes
 CREATE formname bstr% %ALLOT bstr-init
@@ -117,7 +120,7 @@ DEFER yield-stem  ( stem -- )
   1 n-forms +! ; IS yield-stem
 
 : check-stem  ( addr u stem -- addr u )
-  >R 2DUP paradigm-stem 2! R>
+  >R \stack-mark 2DUP paradigm-stem 2! R>
   DUP stem-p-o-s paradigm-p-o-s !
   DUP stem-dict @ dict-stems @  paradigm-stems !
   DUP stem-dict @ dict-flags @  paradigm-dict-flags !
@@ -136,6 +139,7 @@ DEFER yield-stem  ( stem -- )
       yield-stem  ( addr u )
     ELSE DROP THEN  ( addr u )
   THEN
+  \stack-check
   ;
 
 : parse-try  ( addr u -- )
@@ -168,13 +172,30 @@ DEFER yield-stem  ( stem -- )
   BEGIN pairlist WHILE
     pairlist pair-1  ( ... addr' u' )
     \." " indent rule if ." Pair " pairlist .pairlist-node ." harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
-    n-rule rule rule-check IF
-      pairlist pair-flags @ 0 <<# #s #> formflag form-prepend #>>
+    pairlist pair-flags @ { slot-flag }
+    n-rule rule rule-check { harmony-ok? }
+    harmony-ok? NOT IF
+      slot-flag 0= IF
+        2DUP last-sound-except-ь voiced? IF
+          PAD OVER { D: buffer }
+          OVER buffer MOVE
+          buffer last-sound-except-ь unvoice  buffer last-sound-except-ь-ptr XC!
+          buffer n-rule rule rule-check TO harmony-ok? 2DROP
+          harmony-ok? IF
+            harmony-vu-broken TO slot-flag
+          THEN
+        THEN
+      THEN
+    THEN
+    harmony-ok? IF
+      slot-flag S>D <<# #s #> formflag form-prepend #>>
       \." " indent ." Trying " 2DUP TYPE ." +" pairlist pair-2 TYPE ."  formflags " formflag cstr-get type CR
       parse-try  ( ... )
       \." " indent ." out of parse-try" cr
       formflag bstr-pop
-    ELSE 2DROP THEN  ( ... )
+    ELSE
+      2DROP  ( ... )
+    THEN
     pairlist list-swallow  TO pairlist
   REPEAT
   ;

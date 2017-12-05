@@ -4,9 +4,10 @@ T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
 T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
 T{ S" анда+ох"			S" андох"		parse-test -> TRUE }T
+T{ S" аннаң+ох"			S" аннаңох"		parse-test -> TRUE }T
 T{ S" аннаңар+ох"		S" аннаңарох"		parse-test -> TRUE }T
 T{ S" аң+ы"			S" аңы"			parse-test -> TRUE }T
-T{ S" аң+ы"			S" аа"			parse-test -> FALSE }T  \ #92
+T{ S" аң+ы"			S" аа"			parse-test -> TRUE }T  \ #92
 T{ S" ат+ар"			S" атар"		parse-test -> TRUE }T
 T{ S" ат+ың+а"			S" адаа"		parse-test -> FALSE }T
 T{ S" ватт+ты"			S" ватты"		parse-test -> TRUE }T
@@ -15,6 +16,12 @@ T{ S" заочно+ға"		S" заочнаа"	parse-test -> TRUE }T
 T{ S" заочно+ға"		S" заочноға"	parse-test -> TRUE }T
 T{ S" завод+тар"		S" заводтар"		parse-test -> TRUE }T
 T{ S" ирін+і"			S" ирні"		parse-test -> TRUE }T
+T{ S" изерге"	headword?	S" искен"		parse-test -> TRUE }T
+T{ S" истерге"	headword?	S" искен"		parse-test -> TRUE }T
+T{ S" ис+кен"			S" искен"		parse-test -> TRUE }T
+T{ S" изерге"	headword?	S" исткен"		parse-test -> FALSE }T
+T{ S" истерге"	headword?	S" исткен"		parse-test -> TRUE }T
+T{ S" ист+кен"			S" исткен"		parse-test -> TRUE }T
 T{ S" ізі+гелек"		S" ізеелек"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізиим"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізігім"		parse-test -> TRUE }T
@@ -62,6 +69,7 @@ T{ S" пас+ты+ңар"		S" пастаар"		parse-test -> TRUE }T
 T{ S" пасты+ңар"		S" пастар"		parse-test -> FALSE }T
 T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T
 T{ S" піс+тің+нер"		S" пістіңнер"		parse-test -> TRUE }T
+T{ S" пир+бе+дек"		S" пирбедек"		parse-test -> TRUE }T
 T{ S" пир+дек"			S" пирдек"		parse-test -> TRUE }T
 T{ S" поғ+ып"			S" пооп"		parse-test -> TRUE }T
 T{ S" пол+ар+ӌығ"		S" поларӌығ"		parse-test -> FALSE }T
@@ -122,6 +130,7 @@ T{ S" тариф+ы"			S" тарифы"		parse-test -> TRUE }T
 T{ S" таста+ар+ға"		S" тастирға"		parse-test -> TRUE }T
 T{ S" тег+іп"			S" тееп"		parse-test -> TRUE }T
 T{ S" теп+іп"			S" тееп"		parse-test -> TRUE }T
+T{ S" тетрадь+таң"		S" тетрадьтаң"		parse-test -> TRUE }T
 T{ S" ті+ген"			S" теен"		parse-test -> TRUE }T
 T{ S" ті+ер"			S" тир"			parse-test -> TRUE }T
 T{ S" тік+ер"			S" тігер"		parse-test -> TRUE }T
@@ -181,7 +190,7 @@ T{ S" чығ+а"			S" чыға"		parse-test -> TRUE }T
 T{ S" чығ+адыр"			S" чығадыр"		parse-test -> TRUE }T
 T{ S" чығ+ар"			S" чыыр"		parse-test -> TRUE }T
 T{ S" чығ+ып"			S" чыып"		parse-test -> TRUE }T
-T{ S" шаш+ы"			S" шашы"		parse-test -> TRUE }T
+\ lost from document T{ S" шаш+ы"			S" шашы"		parse-test -> TRUE }T
 T{ S" ырла+ибыс"		S" ырлибыс"		parse-test -> TRUE }T
 T{ S" ырла+им"			S" ырлим"		parse-test -> TRUE }T
 T{ S" эг+гей"			S" эгей"		parse-test -> TRUE }T

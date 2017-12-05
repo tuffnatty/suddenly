@@ -8,53 +8,41 @@ require khakas/constraints.fs
 slot: <Distr>  \ 1
   \ Навесим глобальные фильтры на 1-ю позицию с любым
   \ (в том числе нулевым!) аффиксом
+  filters( constraint-0
+           constraint-1
+           constraint-2
+           constraint-27
+           constraint-non-envoiceable-stem
+           constraint-non-envoiced-rus
+           constraint-(СА|ТІ)ңАр-fallout
+           constraint-[Гң]Г-fallout
+           constraint-V[кх]V-fallout
+           constraint-VГV-fallout
+           constraint-VVГV-fallout
+           constraint-VңV-fallout
+           constraint-CCC-fallout
+           constraint-broken-harmony )
+    1 slot-empty!
+    form" -nodistr "
 
-  filter-start constraint-0
-    filter-start constraint-1
-      filter-start constraint-2
-        filter-start constraint-27
-          filter-start constraint-non-envoiceable-stem
-            filter-start constraint-(СА|ТІ)ңАр-fallout
-              filter-start constraint-[Гң]Г-fallout
-                filter-start constraint-V[кх]V-fallout
-                  filter-start constraint-VГV-fallout
-                    filter-start constraint-VVГV-fallout
-                      filter-start constraint-VңV-fallout
-                        filter-start constraint-CCC-fallout
-                          1 slot-empty!
-                          form" -nodistr "
-
-                          1 slot-full!
-                          form" Distr КлА"
-                        filter-end
-                      filter-end
-                    filter-end
-                  filter-end
-                filter-end
-              filter-end
-            filter-end
-          filter-end
-        filter-end
-      filter-end
-    filter-end
-  filter-end
+    1 slot-full!
+    form" Distr КлА"
+  filters-end
   ;
 
 slot: <Conv1>  \ 2
   2 slot-empty!
   form" -noconv1 "
 
-  filter-start constraint-4
-    filter-start constraint-11
-      2 slot-full!
+  filters( constraint-4 constraint-11 )
+    2 slot-full!
 
-      form" Conv.p (І)п"
+    form" Conv.p (І)п"
 
-      flag-Conv.Neg flag-set
-        form" Conv.Neg Пин"
-      flag-Conv.Neg flag-clear
-    filter-end
-  filter-end
+    flag-Conv.Neg flag-set
+      form" Conv.Neg Пин"
+    flag-Conv.Neg flag-clear
+  filters-end
   ;
 
 slot: <Ptcl1>  \ 3
@@ -91,20 +79,18 @@ slot: <Dur>  \ 5
   form" -nodur "
 
   5 slot-full!
-  filter-start constraint-7
-    filter-start constraint-8
-      filter-start constraint-8.1ᵢ
-        flag-Dur1.i flag-set
-          form" Dur1₁ и"
-        flag-Dur1.i flag-clear
-      filter-end
-      filter-start constraint-8.1ᵢᵣ
-        flag-Dur1.ir flag-set
-          form" Dur1₂ ир"
-        flag-Dur1.ir flag-clear
-      filter-end
+  filters( constraint-7 constraint-8 )
+    filter-start constraint-8.1ᵢ
+      flag-Dur1.i flag-set
+        form" Dur1₁ и"
+      flag-Dur1.i flag-clear
     filter-end
-  filter-end
+    filter-start constraint-8.1ᵢᵣ
+      flag-Dur1.ir flag-set
+        form" Dur1₂ ир"
+      flag-Dur1.ir flag-clear
+    filter-end
+  filters-end
 
   filter-start constraint-26₅
     flag-Dur flag-set
@@ -122,7 +108,7 @@ slot: <Neg/Iter>  \ 6
 
     filter-start constraint-11.1
       flag-Neg6 flag-set
-      form" Neg ПА"
+        form" Neg ПА"
       flag-Neg6 flag-clear
     filter-end
 
@@ -232,16 +218,14 @@ slot: <Indir>  \ 8
   8 slot-empty!
   form" -noindir "
 
-  filter-start constraint-15
-    filter-start constraint-26₈
-      8 slot-full!
-      filter-start constraint-voicedstem+Indir
-        form" Indir тІр"
-      filter-else
-        form" Indir ТІр"
-      filter-end
+  filters( constraint-15 constraint-26₈ )
+    8 slot-full!
+    filter-start constraint-voicedstem+Indir
+      form" Indir тІр"
+    filter-else
+      form" Indir ТІр"
     filter-end
-  filter-end
+  filters-end
   ;
 
 slot: <Comit>  \ 9
@@ -276,23 +260,19 @@ slot: <Poss₁>  \ 12
   form" -noposs1 "
 
   filter-start constraint-16₁₂
-    filter-start constraint-31
-      12 slot-full!
+    12 slot-full!
 
-      flag-Poss1.nonpl flag-set
-        form" 1pos.sg (І)м"
-        \ filter-start( 12 form-slot-flags untransformed-fallout AND NOT )
-          form" 2pos.sg (І)ң"
-        \ filter-end
-        flag-3pos1 flag-set
-          form" 3pos (з)І"
-        flag-3pos1 flag-clear
-      flag-Poss1.nonpl flag-clear
-      form" 1pos.pl (І)бІс"
-      flag-2pos.pl flag-set
-        form" 2pos.pl (І)ңАр"
-      flag-2pos.pl flag-clear
-    filter-end
+    flag-Poss1.nonpl flag-set
+      form" 1pos.sg (І)м"
+      form" 2pos.sg (І)ң"
+      flag-3pos1 flag-set
+        form" 3pos (з)І"
+      flag-3pos1 flag-clear
+    flag-Poss1.nonpl flag-clear
+    form" 1pos.pl (І)бІс"
+    flag-2pos.pl flag-set
+      form" 2pos.pl (І)ңАр"
+    flag-2pos.pl flag-clear
   filter-end
   ;
 
@@ -316,7 +296,7 @@ slot: <Case₁>  \ 13
     filter-end
   filter-end
 
-  filter-start constraint-16_2д
+  filter-start constraint-16_2е
     13 slot-full!
 
     flag-All1 flag-set
@@ -355,9 +335,7 @@ slot: <Poss₂>  \ 16
 
   flag-Poss2.nonpl flag-set
     form" 1pos.sg (І)м"
-    \ filter-start( 16 form-slot-flags untransformed-fallout AND NOT )
-      form" 2pos.sg (І)ң"
-    \ filter-end
+    form" 2pos.sg (І)ң"
     form" 3pos (з)І"
     flag-Gen.3pos flag-set
       form" Gen.3pos Ни"

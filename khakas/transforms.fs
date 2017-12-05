@@ -16,15 +16,17 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
-%000000001 CONSTANT untransformed-left-envoice
-%000000010 CONSTANT untransformed-fallout
-%000000100 CONSTANT untransformed-fallout-CCC
-%000001000 CONSTANT untransformed-fallout-VГV
-%000010000 CONSTANT untransformed-fallout-VVГV
-%000100000 CONSTANT untransformed-fallout-V[кх]V
-%001000000 CONSTANT untransformed-fallout-VңV
-%010000000 CONSTANT untransformed-fallout-confluence
-%100000000 CONSTANT untransformed-fallout-(СА|ТІ)ңАр
+%00000000001 CONSTANT untransformed-left-envoice
+%00000000010 CONSTANT untransformed-left-envoice-missing
+%00000000100 CONSTANT untransformed-fallout
+%00000001000 CONSTANT untransformed-fallout-CCC
+%00000010000 CONSTANT untransformed-fallout-VГV
+%00000100000 CONSTANT untransformed-fallout-VVГV
+%00001000000 CONSTANT untransformed-fallout-V[кх]V
+%00010000000 CONSTANT untransformed-fallout-VңV
+%00100000000 CONSTANT untransformed-fallout-confluence
+%01000000000 CONSTANT untransformed-fallout-(СА|ТІ)ңАр
+%10000000000 CONSTANT harmony-vu-broken
 
 
 : /[ае]($|[бдркх])/  ( D: s -- f )
@@ -124,78 +126,70 @@ VARIABLE transform-flags
     prev-sound glide?
   ELSE 2DROP 0 THEN ;
 
-: untransform-envoice  ( addr u affix len -- pairlist )
-  \\." unjoining " 2dup type
-  2DUP { affix-ptr len  D: affix }               ( addr u )
-  \\."  from " 2dup type ." ..."
+: untransform-left-envoice  { list  D: left-part  D: affix -- list' }
+  list left-part affix pairlist-prepend TO list
+  left-part last-sound { xc }
+  xc unvoiced? IF
+    untransformed-left-envoice-missing  list pair-flags !
+  ELSE
+    xc  [CHAR] ӌ <> IF
+      list left-part affix pairlist-prepend TO list
+      xc unvoice  list pair-1 last-sound-ptr  XC!
+      untransformed-left-envoice  list pair-flags !
+    THEN
+  THEN
+  list ;
+
+: untransform-fugitive  { list  D: left-part  D: affix -- list }
+  list left-part affix pairlist-prepend TO list
+  list pair-1  last-sound  list pair-1  string-append-char NIP  list pair-1-len !
+  [CHAR] у  list pair-1  prev-sound-ptr  XC!
+
+  list  list pair-1  affix  pairlist-prepend TO list
+  [CHAR] ы  list pair-1  prev-sound-ptr  XC!
+
+  list  list pair-1  affix  pairlist-prepend TO list
+  [CHAR] і  list pair-1  prev-sound-ptr  XC!
+
+  list ;
+
+: untransform-envoice  { D: s D: affix -- pairlist }
+  \\." unjoining " affix type ."  from " s type ." ..."
   0 { list }
-  affix-ptr XC@ { aff1 }
-  aff1 vowel? IF
-    \ \." checking if " 2dup type ."  ends in " affix type cr
-    2DUP affix string-ends IF
-      \ \." yes it does\n"
-      len -                                     ( addr u' )
-      \ \." checking if " 2dup type ." [-2] is vowel" cr
-      2DUP prev-sound vowel? IF
-        \ \." yes" cr
-        2DUP last-sound { xc }
-        [CHAR] т xc =  xc unvoiced? NOT  OR  IF
-          2DUP list -ROT affix pairlist-prepend TO list
-          xc voiced?  xc [CHAR] ӌ <>  AND IF
-            list -ROT affix pairlist-prepend TO list    ( )
-            xc unvoice  list pair-1 last-sound-ptr  XC!
-            untransformed-left-envoice  list pair-flags !
-          ELSE 2DROP THEN                               ( )
-        ELSE
-          2DROP                                         ( )
-        THEN                                            ( )
+  s  affix string-length  - { D: left-part }
+  affix first-sound { c }
+  c vowel? IF
+    s affix string-ends IF
+      left-part prev-sound vowel? IF
+        list left-part affix untransform-left-envoice TO list
       ELSE
-        \ \." no" cr
         \ check for fugitive
         current-form-is-poss? IF
-          affix-ptr XC@  very-narrow-vowel? IF
-            2DUP possibly-fugitive? IF
-              2DUP list -ROT affix pairlist-prepend TO list
-              list pair-1 last-sound-ptr >R  ( addr u'  R: endptr )
-              R@ XC@  R@ cyr+  XC!
-              cyr  list pair-1-len +!
-              [CHAR] у  R> XC!                  ( addr u' )
-              list list pair-1 affix pairlist-prepend TO list
-              [CHAR] ы  list pair-1 prev-sound-ptr  XC!
-              list list pair-1 affix pairlist-prepend TO list
-              [CHAR] і  list pair-1 prev-sound-ptr  XC!
+          affix first-sound  very-narrow-vowel? IF
+            left-part possibly-fugitive? IF
+              list left-part affix untransform-fugitive TO list
         THEN THEN THEN
-        list -ROT affix pairlist-prepend TO list        ( )
-      THEN                                              ( )
-    ELSE
-      \ \." no it does not" cr
-      2DROP
-    THEN                                                ( )
-  ELSE                                           ( addr u )
-    aff1 { xc }
-    xc unvoiced?  xc [CHAR] ч <>  AND IF
-      2DUP affix string-ends IF
-        len -
-        2DUP last-sound vowel?  len cyr > AND IF
-          2DROP                                         ( )
-        ELSE
-          list -ROT affix pairlist-prepend TO list      ( )
+        list left-part affix pairlist-prepend TO list
+      THEN
+    THEN
+  ELSE
+    c unvoiced?  c [CHAR] ч <>  AND IF
+      s affix string-ends IF
+        left-part last-sound vowel?  affix string-length cyr >  AND NOT IF
+          list left-part affix pairlist-prepend TO list
         THEN
       ELSE
-        xc envoice affix-ptr XC!
-        2DUP affix string-ends IF
-          len -
-          2DUP last-sound vowel? IF
-            list -ROT affix pairlist-prepend TO list     ( )
-          ELSE 2DROP THEN                                ( )
-        ELSE 2DROP THEN                                  ( )
-        xc affix-ptr XC!
+        c envoice  affix string-addr  XC!
+        s affix string-ends IF
+          left-part last-sound vowel? IF
+            list left-part affix pairlist-prepend TO list
+        THEN THEN
+        c  affix string-addr  XC!
       THEN
     ELSE
-      2DUP affix string-ends IF
-        len -
-        list -ROT affix pairlist-prepend TO list         ( )
-      ELSE 2DROP THEN                                    ( )
+      s affix string-ends IF
+        list left-part affix pairlist-prepend TO list
+      THEN
     THEN
   THEN
   \\." " list IF ." SUCCESS" ELSE ." NO SUCCESS" THEN CR

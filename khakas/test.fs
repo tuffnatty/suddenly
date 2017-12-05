@@ -11,12 +11,18 @@ CREATE wordform-buffer 0 , 255 ALLOT
 0 VALUE expected-str
 0 VALUE expected-len
 0 VALUE expected-found
+FALSE VALUE expect-headword?
 0 VALUE n_failures
 0 VALUE n_tests
+: check-result-headword  ( stem -- )
+  stem-dict @ dict-headword COUNT expected-str expected-len STR= IF
+    expected-found 1+ TO expected-found
+  THEN
+  ;
 : check-result  { stem -- }
-  \ ~~ stem .stem-single CR formform .bstr CR  paradigm-stem 2@ TYPE CR
+  \ ~~ stem .stem-single CR formform .bstr CR  guessed-stem TYPE CR
   \ ." <found" expected-found . CR
-  paradigm-stem 2@ { dict-str dict-len }
+  guessed-stem { dict-str dict-len }
   dict-len expected-len <= IF
     \ ~~ ." len is enough" CR
     dict-str dict-len expected-str dict-len STR= IF
@@ -56,15 +62,17 @@ CREATE wordform-buffer 0 , 255 ALLOT
     THEN
   THEN
   ;
+: headword?  ( -- )
+  TRUE TO expect-headword? ;
 : parse-test  { D: expected D: wordform }
   n_tests 1+ TO n_tests
-  wordform wordform-buffer 1+ SWAP MOVE
-  wordform NIP wordform-buffer C!
+  wordform wordform-buffer s-to-cs
   expected TO expected-len TO expected-str
   0 TO expected-found
-  ['] check-result IS yield-stem
+  expect-headword? IF ['] check-result-headword ELSE ['] check-result THEN IS yield-stem
   ['] noop IS debug-bye
-  wordform-buffer parse-khak expected-found 0> ;
+  wordform-buffer parse-khak expected-found 0>
+  FALSE TO expect-headword? ;
 
 : test-error
    ERROR1
