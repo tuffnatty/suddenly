@@ -15,4 +15,8 @@
 : ];  ( -- xt )
   POSTPONE ; ] POSTPONE THEN LATESTXT POSTPONE LITERAL ; IMMEDIATE
 
-: rdepth rp@ rp0 - ;  
+: rdepth rp@ rp0 - ;
+
+[IFUNDEF] ]]L
+: ]]L ]] postpone-literal ]]  [[ ; immediate
+[THEN]
