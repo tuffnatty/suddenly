@@ -1,6 +1,7 @@
 language: generic
 sudo: true
 before_script:
+  - sudo apt-get install texinfo
   - git clone https://git.savannah.gnu.org/git/gforth.git
   - (cd gforth && ./install-deps.sh && ./autogen.sh && ./configure --enable-lib && make && sudo make install)
 script: khakas/test.fs
