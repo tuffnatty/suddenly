@@ -16,15 +16,18 @@ VARIABLE n-forms
 2VARIABLE timer
 
 0 VALUE debug-mode?
-CREATE depth-stack 256 CELLS ALLOT
+CREATE depth-stack 1024 CELLS ALLOT
 0 VALUE depth-stack-depth
+: depth-stack@ ( -- u )
+  depth-stack depth-stack-depth CELLS + @ ;
 : depth-stack-push  ( -- )
   DEPTH depth-stack depth-stack-depth CELLS + !
   depth-stack-depth 1+ TO depth-stack-depth ;
 : depth-stack-check ( -- )
   depth-stack-depth 1- TO depth-stack-depth
-  DEPTH depth-stack depth-stack-depth CELLS + @ <> IF
-    ABORT" UNEXPECTED STACK DEPTH CHANGE!"
+  DEPTH depth-stack@ <> IF
+    ." UNEXPECTED STACK DEPTH CHANGE! (" DEPTH . ." instead of " depth-stack@ . ." )" CR
+    -1 THROW
   THEN ;
 
 : debug-init
@@ -44,7 +47,7 @@ DEFER debug-bye
   THEN ; IMMEDIATE
 
 : \.s
-  debug-mode? IF  ]] [CHAR] < EMIT DEPTH . [CHAR] > EMIT DUP . $2026 XEMIT CR [[ THEN ;
+  debug-mode? IF  [CHAR] < ]]L EMIT DEPTH . [[ [CHAR] > ]]L EMIT DUP . [[ $2026 ]]L XEMIT CR [[ THEN ; IMMEDIATE
 
 : \\." debug-mode? 1 > IF POSTPONE ." ELSE POSTPONE \ THEN ; IMMEDIATE
 : .as  ( -- )
