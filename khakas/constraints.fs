@@ -11,7 +11,7 @@
 \ присоединяют Ptcl3 ОК.
 : constraint-0  ( -- f )
   invar1? NOT
-  1 20 slot-range-empty?  flag-Ass3 flag-is? AND
+  1 20 slot-range-empty?  flag-Ass₃ flag-is? AND
   1 21 slot-range-empty?
   OR OR ;
 
@@ -100,7 +100,7 @@
   6 21 slot-range-empty?
   6 18 slot-range-empty?  19 slot-full?  AND
   6 19 slot-range-empty?  20 slot-full?  AND
-  flag-Past flag-is?  flag-Cond flag-is?  flag-Conv.p flag-is?  OR OR  6 slot-empty?  AND
+  flag-Past flag-is?  flag-Cond flag-is?  flag-Convₚ flag-is?  OR OR  6 slot-empty?  AND
   OR OR OR ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
@@ -110,7 +110,7 @@
 \ концом словоформы) варианты и и ир находятся в
 \ свободном (точнее, диалектном) варьировании.
 : constraint-8.1ᵢ  ( -- f )
-  flag-Conv.p flag-empty? ;
+  flag-Convₚ flag-empty? ;
 : constraint-8.1ᵢᵣ
   flag-Past flag-empty?
   flag-Cond flag-empty?
@@ -152,7 +152,7 @@
 : constraint-10  ( -- f )
   flag-Perf flag-empty?
   flag-Conv.Neg flag-empty?
-  flag-Neg6 flag-empty?
+  flag-Neg flag-empty?
   flag-Neg7 flag-empty?
   AND AND AND ;
 
@@ -160,7 +160,7 @@
 \ отрицательными показателями (Neg, Conv.Neg[, Neg.Conv,
 \ Neg.Сonv.Abl - в этом же слоте]).
 : constraint-10.1  ( -- f )
-  flag-Neg6 flag-empty?
+  flag-Neg flag-empty?
   flag-Conv.Neg flag-empty?
   AND ;
 
@@ -203,7 +203,7 @@
 \ заполнении позиций 6 и 7 показателями Neg (ПА) и Past (ГАн).
 : constraint-15  ( -- f )
   6 7 slot-range-empty?
-  flag-Neg6 flag-is?  flag-Past flag-is?  AND
+  flag-Neg flag-is?  flag-Past flag-is?  AND
   OR ;
 
 \ 16. Показатели позиций 11, 12, 13 могут присутствовать в
@@ -222,14 +222,14 @@
   14 slot-full?  \ 16.1
   13 slot-full?  \ 16.2б
   flag-Gen.3pos flag-is?  \ 16.2д
-  flag-All1 flag-is?  flag-Abl2 flag-is?  AND  \ 16.2е
+  flag-All1 flag-is?  flag-Abl₂ flag-is?  AND  \ 16.2е
   OR OR OR ;
 : constraint-16₁₂  ( -- f )
   13 slot-full?  \ 16.1, 16.2б
-  flag-3pos1 flag-is?  12 form-slot-flags 0=  13 14 slot-range-empty?  15 16 slot-range-full? AND AND AND \ 16.2в
-  flag-3pos1 flag-is?  13 14 slot-range-empty?  15 16 slot-range-full? AND AND  \ 16.2г
+  flag-3pos₁ flag-is?  12 form-slot-flags 0=  13 14 slot-range-empty?  15 16 slot-range-full? AND AND AND \ 16.2в
+  flag-3pos₁ flag-is?  13 14 slot-range-empty?  15 16 slot-range-full? AND AND  \ 16.2г
   flag-Gen.3pos flag-is? \ 16.2д
-  flag-All1 flag-is?  flag-Abl2 flag-is?  AND  \ 16.2е
+  flag-All1 flag-is?  flag-Abl₂ flag-is?  AND  \ 16.2е
   OR OR OR OR ;
 : constraint-16_1б  ( -- f )
   11 13 slot-range-full? ;
@@ -243,7 +243,7 @@
   OR ;
 : constraint-16_2е  ( -- f )
   14 slot-full?  \ Attr
-  flag-Abl2 flag-is?
+  flag-Abl₂ flag-is?
   OR ;
 
 \ 17. В поз. 13/17 Case набор аффиксов посессивного
@@ -294,13 +294,13 @@
   verb? IF
     11 17 slot-range-empty? IF
       8 slot-full?  10 slot-full?  OR
-      flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1.ir-or-Hab.cang-or-Fut.ar flag-is?  OR
+      flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1ᵢᵣ-or-Hab₂-or-Futₐᵣ flag-is?  OR
     ELSE FALSE THEN
   ELSE nomen? THEN ;
 : constraint-20-mix-person  ( -- f )
   verb?
   15 17 slot-range-empty?  AND
-  flag-Pres-or-Dur1.i-or-Past-or-Hab.ca-or-Fut.a flag-is? AND ;
+  flag-Pres-or-Dur1ᵢ-or-Past-or-Hab₁-or-Futₐ flag-is? AND ;
 : constraint-20-short-person  ( -- f )
   verb?
   15 17 slot-range-empty?  AND
@@ -315,14 +315,14 @@
 \ (поз.18): Хай пірее одыртхан ағастар парохтар мында - Здесь
 \ имеется и несколько посаженных деревьев (ГХЯ).
 : constraint-21  ( -- f )
-  6 slot-full?  7 19 slot-range-empty?  AND  flag-Neg6 flag-empty? AND  \ Iter
+  6 slot-full?  7 19 slot-range-empty?  AND  flag-Neg flag-empty? AND  \ Iter
   7 slot-full?  8 19 slot-range-empty?  AND  \ Tense
   8 slot-full?  9 19 slot-range-empty?  AND  \ Indir
   10 slot-full?  11 19 slot-range-empty?  AND  \ Affirm
   16 slot-full?  17 19 slot-range-empty?  AND  \ Poss
   17 slot-full?  18 19 slot-range-empty?  AND  \ Case
   18 slot-full?  19 slot-empty?  AND  \ Ptcl2
-  flag-Dur1.ir flag-Dur1.i flag-OR  flag-is?
+  flag-Dur1ᵢᵣ flag-Dur1ᵢ flag-OR  flag-is?
   flag-1.pl flag-Imp.3 flag-OR  flag-is?
   1 19 slot-range-empty?  nomen?  AND
   OR OR OR OR OR OR OR OR OR ;
@@ -332,7 +332,7 @@
 \ основе слов категории Verbum (имеющей значение Imp.2sg).
 : constraint-22  ( -- f )
   20 slot-empty?  flag-Imp flag-is?  AND
-  7 20 slot-range-empty?  flag-Neg6 flag-is?  AND
+  7 20 slot-range-empty?  flag-Neg flag-is?  AND
   1 20 slot-range-empty?  verb?  AND
   OR OR ;
 
@@ -349,7 +349,7 @@
 \ может стоять только показатель Ass ОК из позиции Ptcl3.
 : constraint-25  ( -- f )
   8 21 slot-range-empty?
-  flag-Ass3 flag-is?
+  flag-Ass₃ flag-is?
   OR ;
 
 \ 26. Для каждого из следующих показателей: Dur чАТ, Dur.Iter

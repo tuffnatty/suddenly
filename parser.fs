@@ -100,10 +100,10 @@ REQUIRE transforms.fs
 \ Trace output
 REQUIRE debugging.fs
 0 VALUE parse-depth
-: indent
+: indent  ( -- )
   parse-depth spaces ;
 
-: affix-name-clean ( affix-name len -- affix-name len | 0 )
+: affix-name-clean  ( affix-name len -- affix-name len | 0 )
   OVER C@  [CHAR] -  = IF  2DROP 0  THEN ;
 
 :noname  ( [addr u] affix-name len -- [addr u] )
