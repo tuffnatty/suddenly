@@ -23,13 +23,13 @@ VARIABLE paradigm-slot-bitmap
   0 { mask }
   BEGIN 2DUP <= WHILE
     1 OVER LSHIFT mask OR TO mask
-  1- REPEAT 2DROP paradigm-slot-bitmap @ mask AND ;
+  1- REPEAT 2DROP paradigm-slot-bitmap @ mask AND 0<> ;
 : slot-range-empty?  ( n1 n2 -- f )
   slot-range-full? NOT ;
 : slot-all-empty?  ( -- f )
   paradigm-slot-bitmap @ 0= ;
 : slot-full?  ( n -- f )
-  1 SWAP LSHIFT paradigm-slot-bitmap @ AND ;
+  1 SWAP LSHIFT paradigm-slot-bitmap @ AND 0<> ;
 
 
 CELL 4 = [IF]

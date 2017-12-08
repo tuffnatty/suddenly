@@ -35,7 +35,7 @@ sound-buf 2 + CONSTANT sound-buf-name
   size 0 ?DO
     S"  DUP " s+/
     buf I CELLS + @ S>D <<# #s #> s+/ #>>
-    S"  = IF EXIT THEN" S+/
+    S"  = IF DROP TRUE EXIT THEN" S+/
   LOOP
   S"  DROP 0 ;" s+/
   sound-buf - sound-buf SWAP EVALUATE
