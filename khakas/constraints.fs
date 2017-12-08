@@ -249,17 +249,18 @@
 \ 17. В поз. 13/17 Case набор аффиксов посессивного
 \ склонения выбирается: а) в случае заполнения позиций
 \ 12/16 (Poss) соответственно аффиксами не-множественного
-\ числа (т.е. 1pos.sg, 2pos.sg и 3pos); в) после
-\ Nomen-основ, у которых заполнено в словарных статьях поле
-\ FORM [там приведены стяженные формы 3pos].
+\ числа (т.е. 1pos.sg, 2pos.sg и 3pos); в) непосредственно после
+\ Nomen-основ, у которых в поле FORM есть помета poss
+\ (неотделяемая принадлежность)
 : constraint-17₁₃  ( -- f )
   flag-Poss1.nonpl flag-empty?
-  dictflag-poss dictflag-empty?
-  AND ;
+  1 12 slot-range-full?  dictflag-poss dictflag-is?  AND
+  OR
+  ;
 : constraint-17₁₇
   flag-Poss2.nonpl flag-empty?
-  dictflag-poss dictflag-empty?
-  AND ;
+  1 16 slot-range-full?  dictflag-poss dictflag-is?  AND
+  OR ;
 
 \ 18. Аффиксу Adv из поз. 18 непосредственно предшествует Attr
 \ КI из поз. 14, Case2 (один из показателей поз. 17) или один из

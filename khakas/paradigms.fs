@@ -4,6 +4,9 @@
 require khakas/flags.fs
 require khakas/constraints.fs
 
+CREATE slot-stack 32 CELLS ALLOT
+VARIABLE slot-stack-here  slot-stack slot-stack-here !
+: slot-add  LATESTXT slot-stack-here @ !  CELL slot-stack-here +!  0 slot-stack-here @ ! ;
 
 slot: <Distr>  \ 1
   \ Навесим глобальные фильтры на 1-ю позицию с любым
@@ -28,7 +31,7 @@ slot: <Distr>  \ 1
     1 slot-full!
     form" Distr КлА"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Conv1>  \ 2
   2 slot-empty!
@@ -40,7 +43,7 @@ slot: <Conv1>  \ 2
     form" Conv.p (І)п"
     form" Conv.Neg Пин"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Ptcl1>  \ 3
   3 slot-empty!
@@ -52,7 +55,7 @@ slot: <Ptcl1>  \ 3
     form" Cont LА"
     form" Ass1 ОQ"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Perf/Prosp>  \ 4
   4 slot-empty!
@@ -67,7 +70,7 @@ slot: <Perf/Prosp>  \ 4
   filters( constraint-6 )
     form" Prosp АК"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Dur>  \ 5
   5 slot-empty!
@@ -86,7 +89,7 @@ slot: <Dur>  \ 5
   filters( constraint-26₅ )
     form" Dur чАт"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Neg/Iter>  \ 6
   6 slot-empty!
@@ -107,7 +110,7 @@ slot: <Neg/Iter>  \ 6
       form" Dur.Iter чАдІр"
     filters-end
   filters-end
-  ;
+  ; slot-add
 
 slot: <Tense/Mood/Conv2>  \ 7
   7 slot-empty!
@@ -175,7 +178,7 @@ slot: <Tense/Mood/Conv2>  \ 7
       form" Conv.a А"
     flag-Conv2 flag-clear
   filters-end
-  ;
+  ; slot-add
 
 slot: <Indir>  \ 8
   8 slot-empty!
@@ -189,7 +192,7 @@ slot: <Indir>  \ 8
       form" Indir ТІр"
     filters-end
   filters-end
-  ;
+  ; slot-add
 
 slot: <Comit>  \ 9
   9 slot-empty!
@@ -198,7 +201,7 @@ slot: <Comit>  \ 9
   9 slot-full!
 
   form" Comit ЛІG"
-  ;
+  ; slot-add
 
 slot: <Affirm>  \ 10
   10 slot-empty!
@@ -206,7 +209,7 @@ slot: <Affirm>  \ 10
 
   10 slot-full!
   form" Affirm ЧІQ"
-  ;
+  ; slot-add
 
 slot: <Pl₁>  \ 11
   11 slot-empty!
@@ -216,7 +219,7 @@ slot: <Pl₁>  \ 11
     11 slot-full!
     form" Pl₁ ЛАр"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Poss₁>  \ 12
   12 slot-empty!
@@ -233,7 +236,7 @@ slot: <Poss₁>  \ 12
     form" 1pos.pl (І)бІс"
     form" 2pos.pl (І)ңАр"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Case₁>  \ 13
   13 slot-empty!
@@ -266,7 +269,7 @@ slot: <Case₁>  \ 13
       filters-end
     flag-All1 flag-clear
   filters-end
-  ;
+  ; slot-add
 
 slot: <Attr>  \ 14
   14 slot-empty!
@@ -276,7 +279,7 @@ slot: <Attr>  \ 14
     14 slot-full!
     form" Attr КІ"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Pl₂>  \ 15
   15 slot-empty!
@@ -284,7 +287,7 @@ slot: <Pl₂>  \ 15
 
   15 slot-full!
   form" Pl₂ ЛАр"
-  ;
+  ; slot-add
 
 slot: <Poss₂>  \ 16
   16 slot-empty!
@@ -300,7 +303,7 @@ slot: <Poss₂>  \ 16
   flag-Poss2.nonpl flag-clear
   form" 1pos.pl (І)бІс"
   form" 2pos.pl (І)ңАр"
-  ;
+  ; slot-add
 
 slot: <Case₂>  \ 17
   17 slot-empty!
@@ -343,7 +346,7 @@ slot: <Case₂>  \ 17
     form" Delib нАңАр"
     form" Comp (н)ТАG"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Ptcl₂>  \ 18
   18 slot-empty!
@@ -356,7 +359,7 @@ slot: <Ptcl₂>  \ 18
   filters( constraint-18 )
     form" Adv Ли"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Person>  \ 19
   19 slot-empty!
@@ -413,7 +416,7 @@ slot: <Person>  \ 19
       form" Imp.3 СІн"
     flag-Imp flag-clear
   filters-end
-  ;
+  ; slot-add
 
 slot: <PredPl>  \ 20
   20 slot-empty!
@@ -423,7 +426,7 @@ slot: <PredPl>  \ 20
   filters( constraint-21 )
     form" PredPl ЛАр"
   filters-end
-  ;
+  ; slot-add
 
 slot: <Ptcl₃>  \ 21
   21 slot-empty!
@@ -440,20 +443,6 @@ slot: <Ptcl₃>  \ 21
   filters( constraint-22 )
     form" Perm ТАQ"
   filters-end
-  ;
+  ; slot-add
 
-CREATE slot-stack
- ' <Distr> , ' <Conv1> , ' <Ptcl1> , ' <Perf/Prosp> ,
- ' <Dur> , ' <Neg/Iter> , ' <Tense/Mood/Conv2> ,
- ' <Indir> , ' <Comit> , ' <Affirm> , ' <Pl₁> ,
- ' <Poss₁> ,
- ' <Case₁> ,
- ' <Attr> ,
- ' <Pl₂> ,
- ' <Poss₂> ,
- ' <Case₂> ,
- ' <Ptcl₂> ,
- ' <Person> ,
- ' <PredPl> ,
- ' <Ptcl₃> , 0 ,
-HERE slot-stack - 1- CELL / CONSTANT /slot-stack
+slot-stack-here @ slot-stack - CELL / CONSTANT /slot-stack

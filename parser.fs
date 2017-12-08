@@ -134,7 +134,7 @@ DEFER yield-stem  ( stem -- )
     THEN
   ELSE
     filters-check IF
-      \." yielding" CR
+      \\." yielding" CR
       yield-stem  ( addr u )
     ELSE DROP THEN  ( addr u )
   THEN

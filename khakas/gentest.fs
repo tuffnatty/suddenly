@@ -184,6 +184,7 @@ T{ S" чӧр+ӌең+і"		S" чӧрӌее"		parse-test -> TRUE }T
 T{ S" чӱг+і"			S" чӱгі"		parse-test -> TRUE }T
 T{ S" чӱзӱг+і"			S" чӱзии"		parse-test -> TRUE }T
 T{ S" чӱк+і"			S" чӱгі"		parse-test -> TRUE }T
+T{ S" чӱрек+і+біс+ке"		S" чӱреебіске"		parse-test -> TRUE }T
 T{ S" чурта+п+чадыр"		S" чуртапчадыр"		parse-test -> TRUE }T
 T{ S" чух+ы"			S" чуғы"		parse-test -> TRUE }T
 T{ S" чығ+а"			S" чыға"		parse-test -> TRUE }T
