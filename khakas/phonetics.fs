@@ -94,6 +94,10 @@ sound-class fallout
   sound г sound ғ sound к sound ң sound п sound х
 sound-class;
 
+sound-class fallout-short
+  sound г sound ғ sound ң sound п
+sound-class;
+
 sound-class gh-g-ng
   sound ғ sound г sound ң
 sound-class;

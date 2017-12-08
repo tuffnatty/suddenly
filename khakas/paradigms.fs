@@ -33,15 +33,20 @@ slot: <Distr>  \ 1
   filters-end
   ; slot-add
 
-slot: <Conv1>  \ 2
+slot: <NF>  \ 2
   2 slot-empty!
   form" -noconv1 "
 
   filters( constraint-4 constraint-11 )
     2 slot-full!
 
-    form" Conv.p (І)п"
-    form" Conv.Neg Пин"
+    filters( constraint-4.1ₚ )
+      form" NF (І)п"
+    filters-end
+    filters( constraint-4.1₀ )
+      form" NF₀ "
+    filters-end
+    form" NF.Neg Пин"
   filters-end
   ; slot-add
 
@@ -53,7 +58,7 @@ slot: <Ptcl1>  \ 3
     3 slot-full!
     form" Add ТАА"
     form" Cont LА"
-    form" Ass1 ОQ"
+    form" Ass₁ ОQ"
   filters-end
   ; slot-add
 
@@ -354,7 +359,7 @@ slot: <Ptcl₂>  \ 18
 
   18 slot-full!
 
-  form" Ass ОQ"
+  form" Ass₂ ОQ"
 
   filters( constraint-18 )
     form" Adv Ли"

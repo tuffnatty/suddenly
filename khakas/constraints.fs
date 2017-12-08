@@ -42,28 +42,49 @@
   9 10 slot-range-full?                       \ Comit, Affirm
   OR OR OR ;
 
-\ 3. Показатели позиции 2 (Conv1) и показатель Perf (I)бIС
+\ 3. Показатели позиции 2 (NF) и показатель Perf (I)бIС
 \ (4) в пределах одной словоформы встречаются только в
 \ случае заполнения позиции 2 кумулятивным показателем
-\ Conv.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
-\ – (кончить-Convп-Add-Perf-RPast-Pl) ‘почти закончили’].
+\ NF.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
+\ – (кончить-NF-Add-Perf-RPast-Pl) ‘почти закончили’].
 : constraint-3  ( -- f )
   2 slot-empty?
-  flag-Conv.Neg flag-is?
+  flag-NF.Neg flag-is?
   3 slot-full?
   OR OR ;
 
-\ 4. Показатели позиции 2 (Conv1) могут встретиться только в
-\ словоформе, где есть один или несколько из показателей: 1)
-\ позиции 3 (Ptcl1), 2) Dur чАТ, 3) Perf  (I)бIС, 4) Pres чА,
-\ 5) Indir ТIр, 6) Dur.Iter чАдIр.
+\ 4 После показателй позиции 2 (NF) возможны показатели: 1)
+\ позиции 3 (Ptcl1), 2) Dur чАТ, 3) Perf (I)бIС, 4) Dur.Iter
+\ чАдIр, 5) Pres чА, 6) Indir ТIр.
 : constraint-4  ( -- f )
   3 slot-full?
   flag-Dur-or-Pres flag-is?
   flag-Perf flag-is?
   8 slot-full?               \ Indir
   flag-Dur.Iter flag-is?
+  3 21 slot-range-empty?
+  OR OR OR OR OR ;
+
+\ 4.1. NF выбирает алломорф (I)П, если:
+\ 1) он непосредственно следует за основой, которая оканчивается
+\    на (выпадающие, см. ниже) п, г, ғ или ӊ;
+\ 2) он непосредственно следует за основой или аффиксом,
+\    оканчивающимися на гласную;
+\ 3) непосредственно за ним следует Ass ОК.
+\ NF выбирает алломорф 0 после основы или аффикса на согласную,
+\ если после него также стоит аффикс (все аффиксы, которые
+\ возможны после него, кроме Ass ОК, начинаются на согласную).
+\ После основы на невыпадающую согласную в конце словоформы для
+\ NF возможны оба алломорфа.
+: constraint-4.1ₚ  ( -- f )
+  1 slot-empty?  1 form-slot-xc-at-left fallout-short?  AND
+  2 form-slot-vowel-at-left?
+  flag-Ass₁ flag-is?
+  3 17 slot-range-empty?  flag-Ass₂ flag-is?  AND
+  3 21 slot-range-empty?  flag-Ass₃ flag-is?  AND
   OR OR OR OR ;
+: constraint-4.1₀  ( -- f )
+  2 form-slot-xc-at-left consonant?  3 21 slot-range-full?  AND ;
 
 \ 5. Показатели поз. 3 (внутренние частицы) допускаются
 \ только при заполненной позиции 7 (время) или 8 (Indir) или
@@ -151,17 +172,17 @@
 \ (всеми, в названия которых входит элемент Neg);
 : constraint-10  ( -- f )
   flag-Perf flag-empty?
-  flag-Conv.Neg flag-empty?
+  flag-NF.Neg flag-empty?
   flag-Neg flag-empty?
   flag-Neg7 flag-empty?
   AND AND AND ;
 
 \ 10.1. Показатель Fut А(р) не встречается в одной словоформе с
-\ отрицательными показателями (Neg, Conv.Neg[, Neg.Conv,
+\ отрицательными показателями (Neg, NF.Neg[, Neg.Conv,
 \ Neg.Сonv.Abl - в этом же слоте]).
 : constraint-10.1  ( -- f )
   flag-Neg flag-empty?
-  flag-Conv.Neg flag-empty?
+  flag-NF.Neg flag-empty?
   AND ;
 
 \ 11. Показатели Neg.Fut ПАС, Neg.Conv Пин, Neg.Сonv.Abl
@@ -169,9 +190,9 @@
 : constraint-11  ( -- f )
   flag-Neg7 flag-empty? ;
 
-\ 11.1. Показатель Conv.Neg исключает заполнение Neg в поз. 6.
+\ 11.1. Показатель NF.Neg исключает заполнение Neg в поз. 6.
 : constraint-11.1  ( -- f )
-  flag-Conv.Neg flag-empty? ;
+  flag-NF.Neg flag-empty? ;
 
 \ 12. Непосредственно после показателя недавно прошедшего
 \ времени (RPast) может следовать только краткий
@@ -353,27 +374,19 @@
   flag-Ass₃ flag-is?
   OR ;
 
-\ 26. Для каждого из следующих показателей: Dur чАТ, Dur.Iter
-\ чАдIр, Pres чА, Indir тIр верно следующее: они не могут быть
-\ заполнены, если при этом непосредственно перед ними
-\ обнаруживается морфема, оканчивающаяся на гласную - кроме
-\ морфем из позиции Ptcl1.
+\ 26. Перед показателями Dur чАТ, Dur.Iter чАдIр, Indir тIр
+\ должен стоять показатель позиции 2: NF или NF.Neg. Перед Pres
+\ чА должен быть NF или NF.Neg или Prosp АК.
 : constraint-26₅  ( -- f )
-  3 slot-full?  4 slot-empty?  AND
-  5 form-slot-vowel-at-left?  NOT
-  OR ;
+  2 slot-full? ;
 : constraint-26₆  ( -- f )
-  3 slot-full?  4 5 slot-range-empty?  AND
-  6 form-slot-vowel-at-left?  NOT
-  OR ;
+  2 slot-full? ;
 : constraint-26₇  ( -- f )
-  3 slot-full?  4 6 slot-range-empty?  AND
-  7 form-slot-vowel-at-left?  NOT
+  2 slot-full?
+  flag-Prosp flag-is?
   OR ;
 : constraint-26₈  ( -- f )
-  3 slot-full?  4 7 slot-range-empty?  AND
-  8 form-slot-vowel-at-left?  NOT
-  OR ;
+  2 slot-full? ;
 
 \ 27. Позиции Conv1, Ptcl1, Pl1, Poss1, Case1 не могут быть
 \ последними заполненными позициями в словоформe
@@ -463,12 +476,14 @@
   dictflag-rus dictflag-empty?
   OR ;
 
-\ После звонких в основе глухое: пар-тыр, сом-тыр
+\ После NF глухое: пар-тыр, сом-тыр
 : constraint-voicedstem+Indir  ( -- f )
-  1 7 slot-range-empty?
-  stem-last-sound consonant?
-  stem-last-sound unvoiced? NOT
-  AND AND ;
+  flag-NF₀ flag-is?  3 7 slot-range-empty?  AND
+  \ 1 7 slot-range-empty?
+  \ stem-last-sound consonant?
+  \ stem-last-sound unvoiced? NOT
+  \ AND AND
+  ;
 
 : constraint-V+Acc  ( -- f )
   17 form-slot-vowel-at-left? ;
