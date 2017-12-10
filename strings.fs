@@ -172,7 +172,7 @@ END-STRUCT bstr%  \ a string for fast prepending
 : string-addr  ( addr u -- addr )
   POSTPONE DROP ; IMMEDIATE
 
-: string-end  ( addr u -- addr+u )
+: string-end  ( addr u -- addr' )
   POSTPONE + ; IMMEDIATE
 
 : string-append-char  { xc addr u -- addr u' }
@@ -185,6 +185,18 @@ END-STRUCT bstr%  \ a string for fast prepending
 : string-strip  ( addr u count -- addr u' )
   POSTPONE - ; IMMEDIATE
 
+: string-copy  ( addr u -- addr1 u )
+  >R PAD 42 + R@ CMOVE PAD 42 + R> ;
+
+: left-slice  ( addr u1 u2 -- addr u2 )
+  POSTPONE NIP ; IMMEDIATE
+
+: right-slice  ( addr u1 u2 -- addr' u1' )
+  POSTPONE /STRING ; IMMEDIATE
+
+: left-slice+xc  ( addr u1 u2 -- addr u3 )
+  left-slice  2DUP string-end  XC@ XC-SIZE  + ;
+
 : u-search  ( u array size -- f )
   CELLS SWAP >R 0 SWAP R@ + R> ?DO  ( u f )
     DROP DUP I @ = DUP ?LEAVE
@@ -193,11 +205,6 @@ END-STRUCT bstr%  \ a string for fast prepending
 : cs-buf-size  ( cs -- cs u )
   ]] DUP C@ 1+ [[ ; IMMEDIATE
 
-:noname  ( addr -- u )
-  UW@ DUP 128 AND IF
-    DUP 31 AND 6 LSHIFT SWAP 8 RSHIFT 63 AND OR
-  ELSE 127 AND THEN ;
-IS XC@
 : xc+@  ( addr1 -- addr2 u )
   ]] XCHAR+ DUP XC@ [[ ; IMMEDIATE
 

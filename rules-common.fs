@@ -1,8 +1,8 @@
 REQUIRE phonetics.fs
 REQUIRE strings.fs
 
-: vowel-long?  ( ptr -- f )
-  DUP XC@ SWAP XCHAR+ XC@ = ;
+: vowel-long?  ( addr u -- f )
+  string-addr XC@+ SWAP XC@ = ;
 
 : vowel-long-middle?  ( ptr -- f )
   DUP XC@ SWAP XCHAR- XC@ = ;
@@ -149,6 +149,9 @@ REQUIRE strings.fs
       DROP voiceds I + @ LEAVE
     THEN
   CELL +LOOP ;
+
+: envoiced-copy  ( addr u -- addr1 u )
+  string-copy  OVER  DUP XC@ envoice  SWAP XC! ;
 
 : unvoice  ( u -- u )
   voiceds# CELLS 0 ?DO

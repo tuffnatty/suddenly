@@ -8,6 +8,7 @@ REQUIRE debugging.fs
 \ 1 TO debug-mode?
 \ 2 TO debug-mode?
 REQUIRE parser.fs
+
 CREATE wordform-buffer 0 , 255 ALLOT
 0 VALUE expected-str
 0 VALUE expected-len
@@ -21,47 +22,50 @@ FALSE VALUE expect-headword?
   THEN
   ;
 : check-result  { stem -- }
-  \ ~~ stem .stem-single CR formform .bstr CR  guessed-stem TYPE CR
-  \ ." <found" expected-found . CR
+  expected-str expected-len { D: pattern }
+  \ ." check-result:" stem .stem-single ." gloss:" guessed-stem TYPE  formform .bstr  ."  expected pattern:" pattern TYPE CR
   guessed-stem { dict-str dict-len }
   dict-len expected-len <= IF
-    \ ~~ ." len is enough" CR
+    \ ." len is enough" CR
     dict-str dict-len expected-str dict-len STR= IF
-      \ ~~ ." stem is equal" CR
+      \ ." stem is equal" CR
       FALSE { plusfound }
-      expected-str expected-len  dict-len /STRING { D: str }
+      pattern  dict-len right-slice { D: pattern-rest }
       formform cstr-get BEGIN DUP 0> WHILE  ( addr u )
-        \ ~~ ." checking " 2DUP TYPE ."  against " str TYPE CR
+        \ ." checking " 2DUP TYPE ."  against " pattern-rest TYPE CR
         OVER XC@ CASE
           [CHAR] - OF
             \ ." minus" CR
             plusfound 0= IF
-              str NIP 0 = IF
-                \ ." str is empty" CR
+              pattern-rest string-length 0 = IF
+                \ ." pattern-rest is empty" CR
                 TRUE TO plusfound
-              ELSE str DROP XC@  [CHAR] +  = IF
+              ELSE pattern-rest first-sound  [CHAR] +  = IF
                 TRUE TO plusfound
-                str 1 /STRING TO str
-                \ ." str is " str TYPE CR
+                pattern-rest 1 right-slice TO pattern-rest
+                \ ." pattern-rest is " pattern-rest TYPE CR
               ELSE
                 \ ." failed" ~~ CR
-                2DROP EXIT
+                2DROP EXIT                          ( )
               THEN THEN
             THEN
           ENDOF
-          str NIP 0= IF DROP 2DROP EXIT THEN
-          str DROP XC@ OF
+          pattern-rest string-length 0= IF DROP 2DROP EXIT THEN  ( )
+          pattern-rest first-sound OF
             FALSE TO plusfound
-            str  str DROP XC@ XC-SIZE  /STRING TO str
+            pattern-rest +X/STRING TO pattern-rest
           ENDOF
-          DROP 2DROP EXIT
+          DROP 2DROP EXIT                           ( )
         ENDCASE
-        OVER XC@ XC-SIZE /STRING           ( addr' u' )
+        +X/STRING                          ( addr' u' )
       REPEAT
       2DROP
-      expected-found 1+ TO expected-found
+      pattern-rest string-length 0= IF
+        expected-found 1+ TO expected-found
+      THEN
     THEN
   THEN
+  \ ." match count is " expected-found . CR
   ;
 : headword?  ( -- )
   TRUE TO expect-headword? ;

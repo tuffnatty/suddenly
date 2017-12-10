@@ -39,7 +39,7 @@ require rules.fs
   rule-sum rule-capacity  { capacity }
   capacity len morphonemic-sstr-prepare { sstr }
   BEGIN DUP 0> WHILE                              ( addr' u' )
-    \ ." at " 2dup type
+    \ ." at " 2dup type ." >"
     2DUP morphoneme-find IF { xt }
       \ ." FOUND " xt >NAME .ID CR
       xt morphoneme-rule { rule }
@@ -65,5 +65,5 @@ require rules.fs
     THEN
   REPEAT
   2DROP sstr rule-sum
-  \ ." morphonemic-to-sstr:out " over .sstr dup >name .id cr
+  \ ." morphonemic-to-sstr:out " over .sstr dup if dup >name .id else 0 . then cr
   ;

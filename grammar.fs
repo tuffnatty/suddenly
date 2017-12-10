@@ -107,17 +107,22 @@ CELL 4 = [IF]
 
 CREATE flagname-buffer CHAR f C, CHAR l C, CHAR a C, CHAR g C, CHAR - C, 32 ALLOT
 
-: form"  ( "name affix" -- )
-  BL PARSE [CHAR] " PARSE morphonemic-to-sstr-and-rule 2SWAP  ( sstr rule affix-name name-len )
-  2DUP flagname-buffer 5 + SWAP MOVE
+: (compile-flag-if-exists)  ( D: affix-name )
+  flagname-buffer 5 + SWAP MOVE
   flagname-buffer OVER 5 + FIND-NAME ?DUP-IF  ( ... nt )
     NAME>INT EXECUTE flag-DUP local-flag! flag-]]L flag-set [[  ( ... )
-  THEN
-  POSTPONE SLITERAL POSTPONE (form-prolog)                                        ( sstr rule )
-  POSTPONE LITERAL POSTPONE LITERAL POSTPONE (form-epilog)
+  THEN ;
+
+: (compile-pop-flag) ( -- )
   local-flag@ flag-any?  IF
     local-flag@ flag-]]L flag-clear [[
     flag-none local-flag!
-  THEN
-  ; IMMEDIATE
+  THEN ;
+
+: form"  ( "name affix" -- )
+  BL PARSE [CHAR] " PARSE morphonemic-to-sstr-and-rule 2SWAP  ( sstr rule affix-name name-len )
+  2DUP (compile-flag-if-exists)
+  POSTPONE SLITERAL POSTPONE (form-prolog)                                        ( sstr rule )
+  POSTPONE LITERAL POSTPONE LITERAL POSTPONE (form-epilog)
+  (compile-pop-flag) ; IMMEDIATE
 

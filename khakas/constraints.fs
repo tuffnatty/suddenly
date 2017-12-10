@@ -53,7 +53,7 @@
   3 slot-full?
   OR OR ;
 
-\ 4 После показателй позиции 2 (NF) возможны показатели: 1)
+\ 4. После показателй позиции 2 (NF) возможны показатели: 1)
 \ позиции 3 (Ptcl1), 2) Dur чАТ, 3) Perf (I)бIС, 4) Dur.Iter
 \ чАдIр, 5) Pres чА, 6) Indir ТIр.
 : constraint-4  ( -- f )
@@ -227,45 +227,52 @@
   flag-Neg flag-is?  flag-Past flag-is?  AND
   OR ;
 
-\ 16. Показатели позиций 11, 12, 13 могут присутствовать в
-\ словоформе: 1) вместе с пок. поз. 14 Attr КI – и
-\ наоборот, для вычленения Attr в словоформе нужно
-\ присутствие одного или нескольких из этих полей. Сочетание
-\ Poss1+Attr KI возможно только при наличии Case1.
-\ 2) Также возможны следующие сочетания:
-\ а) Gen1+Pl2 для личных местоимений (мин, син, ол, пiс, сiрер, олар)
-\ б) (Pl1+) (pos1+) Loc1+pos2 для Nomen
-\ в) выраженный 3pos1+pos2 для Nomen
-\ г) 3pos1+Pl2+pos2 для Nomen
-\ д) Pl1/Pos1+Gen.3pos для всех
-\ е) (Pl1+) (pos1+) All1+Abl2: столзартын ‘со стороны стола’
-: constraint-16₁₁  ( -- f )
-  14 slot-full?  \ 16.1
-  13 slot-full?  \ 16.2б
-  flag-Gen.3pos flag-is?  \ 16.2д
-  flag-All1 flag-is?  flag-Abl₂ flag-is?  AND  \ 16.2е
-  OR OR OR ;
-: constraint-16₁₂  ( -- f )
-  13 slot-full?  \ 16.1, 16.2б
-  flag-3pos₁ flag-is?  12 form-slot-flags 0=  13 14 slot-range-empty?  15 16 slot-range-full? AND AND AND \ 16.2в
-  flag-3pos₁ flag-is?  13 14 slot-range-empty?  15 16 slot-range-full? AND AND  \ 16.2г
-  flag-Gen.3pos flag-is? \ 16.2д
-  flag-All1 flag-is?  flag-Abl₂ flag-is?  AND  \ 16.2е
-  OR OR OR OR ;
-: constraint-16_1б  ( -- f )
-  11 13 slot-range-full? ;
-: constraint-16_2а  ( -- f )
-  14 slot-full?  \ Attr
-  is-personal-pronoun?  15 slot-full?  AND  \ Pl2
-  OR ;
-: constraint-16_2б  ( -- f )
-  14 slot-full?  \ Attr
-  nomen?  16 slot-full?  AND  \ Poss2
-  OR ;
-: constraint-16_2е  ( -- f )
-  14 slot-full?  \ Attr
-  flag-Abl₂ flag-is?
-  OR ;
+\ 16.1. Показатели позиций 11-13 (Pl1, Poss1, Case1) возможны
+\ только при наличии в словоформе одного или нескольких аффиксов
+\ из позиций 14-17.
+: constraint-16.1  ( -- f )
+  14 17 slot-range-full? ;
+
+\ 16.2. Показатель позиции 14 Attr КI может присутствовать в
+\ словоформе только при наличии Case1. В такой словоформе могут
+\ также присутствовать морфемы из позиций Pl1 и Poss1.
+\ Морфонология у показателей поз. 11/15, 12/16, 13/17 одинаковая.
+: constraint-16.2₁₁  ( -- f )
+  14 slot-full? ;
+: constraint-16.2₁₂  ( -- f )
+  14 slot-full? ;
+: constraint-16.2₁₄  ( -- f )
+  13 slot-full? ;
+
+\ 16.3. Pl2 может следовать непосредственно за Case1, только
+\ если Case1 выражен генитивом: пістіңнер ‘наши’ (см. также
+\ 1.25). В прочих случаях перед нами не Pl2, а PredPl: ибделер
+\ ‘они дома’.
+: constraint-16.3  ( -- f )
+  13 slot-empty?
+  14 slot-empty?
+  flag-Gen₁ flag-is?
+  OR OR ;
+
+\ 16.4. Pl2 может следовать непосредственно за Poss1 только при
+\ наличии Poss2: чӱс-паз-ы-лар-ы-ның ікізін ‘двоих из сотников’.
+\ В прочих случаях это не Pl2, а PredPl: олар хызыбыстар ‘они –
+\ наши дочери’.
+: constraint-16.4  ( -- f )
+  12 slot-empty?
+  13 14 slot-range-empty?
+  16 slot-full?
+  OR OR ;
+
+\ 16.5. Case2 не может следовать непосредственно за Pl1 или Poss1.
+\ Poss2 не может следовать непосредственно за Pl1.
+: constraint-16.5₁₆  ( -- f )
+  11 slot-empty?  12 15 slot-range-full?  OR
+  ;
+: constraint-16.5₁₇  ( -- f )
+  11 slot-empty?  12 16 slot-range-full?  OR
+  12 slot-empty?  13 16 slot-range-full?  OR
+  AND ;
 
 \ 17. В поз. 13/17 Case набор аффиксов посессивного
 \ склонения выбирается: а) в случае заполнения позиций
@@ -374,9 +381,9 @@
   flag-Ass₃ flag-is?
   OR ;
 
-\ 26. Перед показателями Dur чАТ, Dur.Iter чАдIр, Indir тIр
-\ должен стоять показатель позиции 2: NF или NF.Neg. Перед Pres
-\ чА должен быть NF или NF.Neg или Prosp АК.
+\ 26. Показатели Dur чАТ, Dur.Iter чАдIр, Indir тIр возможны
+\ только при наличии показателей позиции 2: NF или NF.Neg.
+\ Pres чА возможен только при наличии NF, NF.Neg или Prosp АК.
 : constraint-26₅  ( -- f )
   2 slot-full? ;
 : constraint-26₆  ( -- f )
@@ -388,15 +395,14 @@
 : constraint-26₈  ( -- f )
   2 slot-full? ;
 
-\ 27. Позиции Conv1, Ptcl1, Pl1, Poss1, Case1 не могут быть
+\ 27. Позиции Ptcl1, Pl1, Poss1, Case1 не могут быть
 \ последними заполненными позициями в словоформe
 : constraint-27  ( -- f )
-  2 slot-empty?  3 21 slot-range-full?  OR
   3 slot-empty?  4 21 slot-range-full?  OR
   11 slot-empty?  12 21 slot-range-full?  OR
   12 slot-empty?  13 21 slot-range-full?  OR
   13 slot-empty?  14 21 slot-range-full?  OR
-  AND AND AND AND ;
+  AND AND AND ;
 
 \ 29. Предикативные показатели (Person, PredPl) невозможны в
 \ сочетании с падежами: Gen2, Acc2, Instr2.

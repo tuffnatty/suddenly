@@ -9,7 +9,7 @@ VARIABLE n-filters
 CREATE filters filter% 64 * %ALLOT
 
 : filters-top-ptr  ( -- ptr )
-  n-filters @ 1- filter% %size * filters + ;
+  n-filters @ 1- [ filter% %size ]L * filters + ;
 
 : .filter  ( -- )
   filters-top-ptr DUP filter-negated @ IF ." negated: " THEN  ( top )
@@ -19,11 +19,11 @@ CREATE filters filter% 64 * %ALLOT
   1 n-filters +!
   filters-top-ptr { top }
   top filter-negated !  top filter-xt !  top filter-nt !  ( )
-  \\."  ADDED FILTER: " .filter cr
+  \ \."  ADDED FILTER: " .filter cr
   ;
 
 : filters-drop  ( -- )
-  \\."  DROPPING FILTER: " .filter cr
+  \ \."  DROPPING FILTER: " .filter cr
   ASSERT( n-filters @ 0> )  \ filter stack underflow
   -1 n-filters +! ;
 
