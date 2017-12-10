@@ -26,10 +26,12 @@ T{ S" ізі+гелек"		S" ізеелек"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізиим"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізігім"		parse-test -> TRUE }T
 T{ S" киле+гедег"		S" килеедег"		parse-test -> TRUE }T
+T{ S" кил"			S" кил"			parse-test -> TRUE }T
+T{ S" кил+0̸"			S" кил"			parse-test -> TRUE }T
 T{ S" килін+і"			S" килні"		parse-test -> TRUE }T
 T{ S" киме+ге"			S" кимее"		parse-test -> TRUE }T
-T{ S" кис+чет+кен"		S" кисчеткен"		parse-test -> TRUE }T
-T{ S" кис+чет+ер+ге"		S" кисчедерге"		parse-test -> TRUE }T
+T{ S" кис+0̸+чет+кен"		S" кисчеткен"		parse-test -> TRUE }T
+T{ S" кис+0̸+чет+ер+ге"		S" кисчедерге"		parse-test -> TRUE }T
 T{ S" кізі+ге"			S" кізее"		parse-test -> TRUE }T
 T{ S" кіріс+і+нзер+тін"		S" кірізінзертін"	parse-test -> TRUE }T
 T{ S" комиссия+ға"		S" комиссияа"           parse-test -> TRUE }T
@@ -55,11 +57,11 @@ T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
 T{ S" пар+и+ған"		S" париған"		parse-test -> TRUE }T
 T{ S" пар+и+лар"		S" парилар"		parse-test -> TRUE }T
-T{ S" пар+даа+ча"		S" пардаача"		parse-test -> TRUE }T
-T{ S" пар+ла+ча"		S" парлача"		parse-test -> TRUE }T
+T{ S" пар+0̸+даа+ча"		S" пардаача"		parse-test -> TRUE }T
+T{ S" пар+0̸+ла+ча"		S" парлача"		parse-test -> TRUE }T
 T{ S" пар+за+ох"		S" парзох"		parse-test -> TRUE }T
-T{ S" пар+тыр+лар"		S" партырлар"		parse-test -> TRUE }T
-T{ S" пар+чадыр"		S" парчадыр"		parse-test -> TRUE }T
+T{ S" пар+0̸+тыр+лар"		S" партырлар"		parse-test -> TRUE }T
+T{ S" пар+0̸+чадыр"		S" парчадыр"		parse-test -> TRUE }T
 T{ S" пар+ып+ох+чат+тыр"	S" парыбохчаттыр"	parse-test -> TRUE }T
 T{ S" пас+па+за+ңар"		S" паспазар"		parse-test -> TRUE }T
 T{ S" пас+са+ңар"		S" пассар"		parse-test -> TRUE }T
@@ -76,8 +78,8 @@ T{ S" пол+ар+ӌығ"		S" поларӌығ"		parse-test -> FALSE }T
 T{ S" пол+ар+ӌых"		S" поларӌых"		parse-test -> TRUE }T
 T{ S" пол+бас+пыс"		S" полбаспыс"		parse-test -> TRUE }T
 T{ S" пол+бин+ыбыс+хан"		S" полбиныбысхан"	parse-test -> TRUE }T
-T{ S" пол+даа+чат"		S" полдаачат"		parse-test -> TRUE }T
-T{ S" пол+даа+чат+са"		S" полдаачатса"		parse-test -> TRUE }T
+T{ S" пол+0̸+даа+чат"		S" полдаачат"		parse-test -> TRUE }T
+T{ S" пол+0̸+даа+чат+са"		S" полдаачатса"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧриим"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧрігім"		parse-test -> TRUE }T
 T{ S" пуғ+ы"			S" пуу"			parse-test -> TRUE }T
@@ -89,6 +91,8 @@ T{ S" сағ+им"			S" сағим"		parse-test -> TRUE }T
 T{ S" сағ+ы"			S" саа"			parse-test -> TRUE }T
 T{ S" сағ+ып"			S" саап"		parse-test -> TRUE }T
 T{ S" салаа+ға"			S" салааға"		parse-test -> TRUE }T
+T{ S" сана"			S" сана"		parse-test -> TRUE }T
+T{ S" сана+0̸"			S" сана"		parse-test -> FALSE }T
 T{ S" сана+а"			S" сани"		parse-test -> TRUE }T
 T{ S" сана+абас"		S" санибас"		parse-test -> TRUE }T
 T{ S" сана+ар"			S" санир"		parse-test -> TRUE }T
@@ -160,7 +164,7 @@ T{ S" финн+нең"			S" финннең"		parse-test -> FALSE }T
 T{ S" харах+ым"			S" хараам"		parse-test -> TRUE }T
 T{ S" харах+ым"			S" харағым"		parse-test -> TRUE }T
 T{ S" харын+ы"			S" харны"		parse-test -> TRUE }T
-T{ S" хатхыр+чадыр+бын"		S" хатхырчадырбын"	parse-test -> TRUE }T
+T{ S" хатхыр+0̸+чадыр+бын"	S" хатхырчадырбын"	parse-test -> TRUE }T
 T{ S" хат+ым"			S" хатым"		parse-test -> TRUE }T
 T{ S" хах+ы"			S" хағы"		parse-test -> TRUE }T
 T{ S" хомай+зыбыс"		S" хомайзыбыс"		parse-test -> TRUE }T

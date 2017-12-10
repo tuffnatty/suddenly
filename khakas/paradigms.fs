@@ -44,7 +44,7 @@ slot: <NF>  \ 2
       form" NF (І)п"
     filters-end
     filters( constraint-4.1₀ )
-      form" NF₀ "
+      form" NF₀ 0̸"
     filters-end
     form" NF.Neg Пин"
   filters-end
@@ -220,7 +220,7 @@ slot: <Pl₁>  \ 11
   11 slot-empty!
   form" -nopl1 "
 
-  filters( constraint-16₁₁ )
+  filters( constraint-16.1 )
     11 slot-full!
     form" Pl₁ ЛАр"
   filters-end
@@ -230,7 +230,7 @@ slot: <Poss₁>  \ 12
   12 slot-empty!
   form" -noposs1 "
 
-  filters( constraint-16₁₂ )
+  filters( constraint-16.1 )
     12 slot-full!
 
     flag-Poss1.nonpl flag-set
@@ -247,24 +247,16 @@ slot: <Case₁>  \ 13
   13 slot-empty!
   form" -nocase1 "
 
-  filters( constraint-16_2а )
+  filters( constraint-16.1 )
     13 slot-full!
 
-    form" Gen НІң"
-  filters-end
-
-  filters( constraint-16_2б )
-    13 slot-full!
+    form" Gen₁ НІң"
 
     filters( constraint-17₁₃ )
       form" Loc ТА"
     filter-else
       form" Loc (н)ТА"
     filters-end
-  filters-end
-
-  filters( constraint-16_2е )
-    13 slot-full!
 
     flag-All1 flag-set
       filters( constraint-17₁₃ )
@@ -280,7 +272,7 @@ slot: <Attr>  \ 14
   14 slot-empty!
   form" -noattr "
 
-  filters( constraint-16_1б )
+  filters( constraint-16.2₁₄ )
     14 slot-full!
     form" Attr КІ"
   filters-end
@@ -290,24 +282,28 @@ slot: <Pl₂>  \ 15
   15 slot-empty!
   form" -nopl2 "
 
-  15 slot-full!
-  form" Pl₂ ЛАр"
+  filters( constraint-16.3 constraint-16.4 )
+    15 slot-full!
+    form" Pl₂ ЛАр"
+  filters-end
   ; slot-add
 
 slot: <Poss₂>  \ 16
   16 slot-empty!
   form" -noposs2 "
 
-  16 slot-full!
+  filters( constraint-16.5₁₇ )
+    16 slot-full!
 
-  flag-Poss2.nonpl flag-set
-    form" 1pos.sg (І)м"
-    form" 2pos.sg (І)ң"
-    form" 3pos (з)І"
-    form" Gen.3pos Ни"
-  flag-Poss2.nonpl flag-clear
-  form" 1pos.pl (І)бІс"
-  form" 2pos.pl (І)ңАр"
+    flag-Poss2.nonpl flag-set
+      form" 1pos.sg (І)м"
+      form" 2pos.sg (І)ң"
+      form" 3pos (з)І"
+      form" Gen.3pos Ни"
+    flag-Poss2.nonpl flag-clear
+    form" 1pos.pl (І)бІс"
+    form" 2pos.pl (І)ңАр"
+  filters-end
   ; slot-add
 
 slot: <Case₂>  \ 17
@@ -316,40 +312,42 @@ slot: <Case₂>  \ 17
 
   17 slot-full!
 
-  filters( constraint-29 )
-    form" Gen НІң"
-    form" Instr нАң"
-  filters-end
+  filters( constraint-16.5₁₇ )
+    filters( constraint-29 )
+      form" Gen₂ НІң"
+      form" Instr нАң"
+    filters-end
 
-  filters( constraint-17₁₇ )
-    form" Dat ГА"
-    filters( constraint-29 )
-      form" Acc НІ"
-    filters-end
-    form" Loc ТА"
-    form" Abl₁ ДАң"
-    form" All САр"
-    form" Prol ЧА"
-    form" Delib ДАңАр"
-    form" Comp ТАG"
-    filters( constraint-30 )
-      form" Abl₂ тІн"
-    filters-end
-  filter-else
-    form" Dat (н)А"
-    filters( constraint-29 )
-      filters( constraint-V+Acc )
-        form" Acc₂ Н"
-      filter-else
-        form" Acc₁ НІ"
+    filters( constraint-17₁₇ )
+      form" Dat ГА"
+      filters( constraint-29 )
+        form" Acc НІ"
       filters-end
+      form" Loc ТА"
+      form" Abl₁ ДАң"
+      form" All САр"
+      form" Prol ЧА"
+      form" Delib ДАңАр"
+      form" Comp ТАG"
+      filters( constraint-30 )
+        form" Abl₂ тІн"
+      filters-end
+    filter-else
+      form" Dat (н)А"
+      filters( constraint-29 )
+        filters( constraint-V+Acc )
+          form" Acc₂ Н"
+        filter-else
+          form" Acc₁ НІ"
+        filters-end
+      filters-end
+      form" Loc (н)ТА"
+      form" Abl нАң"
+      form" All (н)САр"
+      form" Prol (н)ЧА"
+      form" Delib нАңАр"
+      form" Comp (н)ТАG"
     filters-end
-    form" Loc (н)ТА"
-    form" Abl нАң"
-    form" All (н)САр"
-    form" Prol (н)ЧА"
-    form" Delib нАңАр"
-    form" Comp (н)ТАG"
   filters-end
   ; slot-add
 
