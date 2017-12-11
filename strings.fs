@@ -1,3 +1,8 @@
+[IFUNDEF] XC!+
+: XC!+  ( u addr -- addr' )
+  5 XC!+? 2DROP ;
+[THEN]
+
 : XC!  ( u addr -- )
   5 XC!+? DROP 2DROP ;
 
