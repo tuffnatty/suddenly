@@ -203,6 +203,7 @@ T{ S" чығ+а"			S" чыға"		parse-test -> TRUE }T
 T{ S" чығ+адыр"			S" чығадыр"		parse-test -> TRUE }T
 T{ S" чығ+ар"			S" чыыр"		parse-test -> TRUE }T
 T{ S" чығ+ып"			S" чыып"		parse-test -> TRUE }T
+T{ S" чығ+ыбыс+хан"		S" чыыбысхан"		parse-test -> TRUE }T
 \ lost from document T{ S" шаш+ы"			S" шашы"		parse-test -> TRUE }T
 T{ S" ырла+ибыс"		S" ырлибыс"		parse-test -> TRUE }T
 T{ S" ырла+им"			S" ырлим"		parse-test -> TRUE }T
