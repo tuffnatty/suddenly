@@ -45,6 +45,7 @@ T{ S" марығ+ы"			S" марығы"		parse-test -> FALSE }T
 T{ S" меню+ға"			S" менюға"		parse-test -> TRUE }T
 T{ S" меню+ге"			S" менюге"		parse-test -> FALSE }T
 T{ S" мойын+ы"			S" мойны"		parse-test -> TRUE }T
+T{ S" мында+ох"			S" мындох"		parse-test DROP expected-found -> 1 }T
 T{ S" ниң+ӧк"			S" ниик"		parse-test -> FALSE }T
 T{ S" нуғ+ар"			S" нуур"		parse-test -> TRUE }T
 T{ S" ол+ох"			S" олох"		parse-test -> TRUE }T

@@ -391,14 +391,15 @@
 : constraint-26₈  ( -- f )
   2 slot-full? ;
 
-\ 27. Позиции Ptcl1, Pl1, Poss1, Case1 не могут быть
+\ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
 \ последними заполненными позициями в словоформe
 : constraint-27  ( -- f )
   3 slot-empty?  4 21 slot-range-full?  OR
   11 slot-empty?  12 21 slot-range-full?  OR
   12 slot-empty?  13 21 slot-range-full?  OR
   13 slot-empty?  14 21 slot-range-full?  OR
-  AND AND AND ;
+  18 slot-empty?  19 21 slot-range-full?  OR
+  AND AND AND AND ;
 
 \ 29. Предикативные показатели (Person, PredPl) невозможны в
 \ сочетании с падежами: Gen2, Acc2, Instr2.
