@@ -37,7 +37,7 @@ slot: <NF>  \ 2
   2 slot-empty!
   form" -noconv1 "
 
-  filters( constraint-4 constraint-11 )
+  filters( constraint-4 )
     2 slot-full!
 
     filters( constraint-4.1ₚ )
