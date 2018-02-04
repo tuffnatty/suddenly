@@ -292,7 +292,7 @@ slot: <Poss₂>  \ 16
   16 slot-empty!
   form" -noposs2 "
 
-  filters( constraint-16.5₁₇ )
+  filters( constraint-16.5₁₆ )
     16 slot-full!
 
     flag-Poss2.nonpl flag-set
