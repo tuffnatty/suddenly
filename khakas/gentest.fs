@@ -66,6 +66,7 @@ T{ S" пар+за+ох"		S" парзох"		parse-test -> TRUE }T
 T{ S" пар+0̸+тыр+лар"		S" партырлар"		parse-test -> TRUE }T
 T{ S" пар+0̸+чадыр"		S" парчадыр"		parse-test -> TRUE }T
 T{ S" пар+0̸+чат+пас"            S" парчатпас"		parse-test -> TRUE }T
+T{ S" пар+ыбыс+ча"		S" парыбысча"		parse-test -> TRUE }T
 T{ S" пар+ып+ох+чат+тыр"	S" парыбохчаттыр"	parse-test -> TRUE }T
 T{ S" пас+па+за+ңар"		S" паспазар"		parse-test -> TRUE }T
 T{ S" пас+са+ңар"		S" пассар"		parse-test -> TRUE }T
