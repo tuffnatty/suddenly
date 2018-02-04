@@ -1,11 +1,5 @@
 REQUIRE util.fs
 
-: .ss
-  .\" <" depth 0 .r .\" > " depth 0 max maxdepth-.s @ min dup 0 
-  ?DO    dup i - pick dup . count type
-  LOOP
-  drop ;
-
 : bin.  ( u -- )
   BASE @  2 BASE !  SWAP .  BASE ! ;
 : 2bin.  ( ud -- )
