@@ -182,8 +182,9 @@ VARIABLE transform-flags
         affix envoiced-copy { D: envoiced-affix }
         s envoiced-affix string-ends IF
           left-part last-sound vowel? IF
-            list left-part envoiced-affix pairlist-prepend TO list
-        THEN THEN
+            affix string-length cyr > IF
+              list left-part affix pairlist-prepend TO list
+        THEN THEN THEN
       THEN
     ELSE
       s affix string-ends IF
