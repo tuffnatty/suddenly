@@ -694,10 +694,10 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       left-part last-sound { C }
       C V = { long? }
       long? IF left-part prev-sound TO C THEN
-      C [CHAR] т = IF
+      C [CHAR] т =  C [CHAR] д =  OR IF
            V front-vowel? IF [CHAR] і ELSE [CHAR] ы THEN
       ELSE V                                        THEN { V1 }
-      C [CHAR] с =  C [CHAR] з =  C [CHAR] т =  OR OR IF
+      C [CHAR] с =  C [CHAR] з =  C [CHAR] т =  C [CHAR] д =  OR OR OR IF
         long? IF
           s  affix  fallout-pos cyr -  V1  [CHAR] ң  V  untransform-fallout-add-vcv
         ELSE
