@@ -159,6 +159,8 @@ T{ S" узу+ах+ча"		S" узихча"		parse-test -> TRUE }T
 T{ S" узу+ғай"			S" узаай"		parse-test -> TRUE }T
 T{ S" уйғу+ға"			S" уйғаа"		parse-test -> TRUE }T
 T{ S" улуғ+ы"			S" улии"		parse-test -> TRUE }T
+T{ S" фамилия+зы"		S" фамилиязы"		parse-test -> TRUE }T
+T{ S" фамилия+ы"		S" фамилияы"		parse-test -> FALSE }T
 T{ S" финн+нең"			S" финнең"		parse-test -> TRUE }T
 T{ S" финн+нең"			S" финннең"		parse-test -> FALSE }T
 \ T{ S" хан-пиг+і"		S" хан-пигі"		parse-test -> TRUE }T

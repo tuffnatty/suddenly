@@ -4,12 +4,12 @@ REQUIRE sounds.fs
 
 sound-class vowel
   sound и
-  sound а sound о sound ы sound у sound ю
+  sound а sound о sound ы sound у sound ю sound я
   sound е sound і sound ӧ sound ӱ sound э
 sound-class;
 
 sound-class short-back-vowel
-  sound а sound ы sound у
+  sound а sound ы sound у sound я
 sound-class;
 
 sound-class short-front-vowel
@@ -25,7 +25,7 @@ sound-class short-narrow-front-vowel
 sound-class;
 
 sound-class short-unrounded-back-vowel
-  sound а sound ы
+  sound а sound ы sound я
 sound-class;
 
 sound-class short-unrounded-front-vowel
