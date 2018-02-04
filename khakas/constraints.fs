@@ -279,13 +279,12 @@
 \ (неотделяемая принадлежность)
 : constraint-17₁₃  ( -- f )
   flag-Poss1.nonpl flag-empty?
-  1 12 slot-range-full?  dictflag-poss dictflag-is?  AND
-  OR
-  ;
+  1 12 slot-range-empty?  dictflag-poss dictflag-is?  AND NOT
+  AND ;
 : constraint-17₁₇
   flag-Poss2.nonpl flag-empty?
-  1 16 slot-range-full?  dictflag-poss dictflag-is?  AND
-  OR ;
+  1 16 slot-range-empty?  dictflag-poss dictflag-is?  AND NOT
+  AND ;
 
 \ 18. Аффиксу Adv из поз. 18 непосредственно предшествует Attr
 \ КI из поз. 14, Case2 (один из показателей поз. 17) или один из
