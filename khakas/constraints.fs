@@ -384,19 +384,20 @@
   flag-Ass₃ flag-is?
   OR ;
 
-\ 26. Показатели Dur чАТ, Dur.Iter чАдIр, Indir тIр возможны
-\ только при наличии показателей позиции 2: NF или NF.Neg.
-\ Pres чА возможен только при наличии NF, NF.Neg или Prosp АК.
+\ 26. Показатели Pres чА, Dur чАТ, Dur.Iter чАдIр возможны
+\ только при наличии показателей позиции 2 (NF или NF.Neg) или
+\ 4. Indir тIр возможен при тех же условиях или при
+\ одновременном наличии показателей Neg ПА и Past ГАН
 : constraint-26₅  ( -- f )
-  2 slot-full? ;
+  2 slot-full?  4 slot-full?  OR ;
 : constraint-26₆  ( -- f )
-  2 slot-full? ;
+  2 slot-full?  4 slot-full?  OR ;
 : constraint-26₇  ( -- f )
-  2 slot-full?
-  flag-Prosp flag-is?
-  OR ;
+  2 slot-full?  4 slot-full?  OR ;
 : constraint-26₈  ( -- f )
-  2 slot-full? ;
+  2 slot-full?  4 slot-full?  OR
+  flag-Neg flag-is?  flag-Past flag-is?  AND
+  OR ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
 \ последними заполненными позициями в словоформe
