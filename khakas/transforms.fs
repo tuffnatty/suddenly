@@ -598,11 +598,13 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
         s affix fallout-pos V1 [CHAR] ң V2 untransform-fallout-add-vcv
 
         \ 3.3. Выпадение конечной губной -п односложной
-        \ глагольной основы при прибавлении афф. Convп -ып
-        \ [всегда]: тап ‘находить’ + -ып > таап ‘найдя’, сап
-        \ ‘ударять’ + -ып > саап ‘ударяя’, теп ‘толкать’ + -іп >
-        \ тееп ‘толкая’.
-        V2 [CHAR] ы =  V2 [CHAR] і =  OR  affix ~/ [ыі]п/  AND IF
+        \ глагольной основы при прибавлении афф. NF, Convп (I)П
+        \ и Perf IбIС Convп -ып [всегда]: тап ‘находить’ + -ып >
+        \ таап ‘найдя’, сап ‘ударять’ + -ып > саап ‘ударяя’, теп
+        \ ‘толкать’ + -іп > тееп ‘толкая’, сап ‘косить’ + -ыбыс
+        \ > саабыс ‘скоси!’, теп ‘толкать’ + -ібіс > теебіс
+        \ ‘толкни!’.
+        V2 [CHAR] ы =  V2 [CHAR] і =  OR  affix ~/ 0̸/  affix ~/ [ыі][бп]/ OR  AND IF
           s affix fallout-pos V1 [CHAR] п V2 untransform-fallout-add-vcv
         THEN
       sound-next

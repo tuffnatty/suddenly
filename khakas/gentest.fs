@@ -93,6 +93,8 @@ T{ S" пызо+ға"			S" пызаа"		parse-test -> FALSE }T
 T{ S" пызо+ға"			S" пызоға"		parse-test -> TRUE }T
 T{ S" сағ+им"			S" сағим"		parse-test -> TRUE }T
 T{ S" сағ+ы"			S" саа"			parse-test -> TRUE }T
+T{ S" сап+ыбыс"			S" саабыс"		parse-test -> TRUE }T
+T{ S" сап+ыбыс+хан"		S" саабысхан"		parse-test -> TRUE }T
 T{ S" сағ+ып"			S" саап"		parse-test -> TRUE }T
 T{ S" салаа+ға"			S" салааға"		parse-test -> TRUE }T
 T{ S" сана"			S" сана"		parse-test -> TRUE }T
@@ -140,6 +142,7 @@ T{ S" таста+ар+ға"		S" тастирға"		parse-test -> TRUE }T
 T{ S" тег+іп"			S" тееп"		parse-test -> TRUE }T
 T{ S" теп+іп"			S" тееп"		parse-test -> TRUE }T
 T{ S" тетрадь+таң"		S" тетрадьтаң"		parse-test -> TRUE }T
+T{ S" теп+ібіс"			S" теебіс"		parse-test -> TRUE }T
 T{ S" ті+ген"			S" теен"		parse-test -> TRUE }T
 T{ S" ті+ер"			S" тир"			parse-test -> TRUE }T
 T{ S" тік+ер"			S" тігер"		parse-test -> TRUE }T
