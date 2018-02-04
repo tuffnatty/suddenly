@@ -338,19 +338,21 @@
 \ (п. 17) или посессивности (п. 16), в) некоторых полей Person
 \ (1pl, Imp.3), г) чистой именной основы, д) пок-ля Ptcl2
 \ (поз.18): Хай пірее одыртхан ағастар парохтар мында - Здесь
-\ имеется и несколько посаженных деревьев (ГХЯ).
+\ имеется и несколько посаженных деревьев (ГХЯ), е) показателя
+\ Attr КI: аалдағылар ‘сельчане’.
 : constraint-21  ( -- f )
   6 slot-full?  7 19 slot-range-empty?  AND  flag-Neg flag-empty? AND  \ Iter
   7 slot-full?  8 19 slot-range-empty?  AND  \ Tense
   8 slot-full?  9 19 slot-range-empty?  AND  \ Indir
   10 slot-full?  11 19 slot-range-empty?  AND  \ Affirm
+  14 slot-full?  15 19 slot-range-empty?  AND  \ Attr
   16 slot-full?  17 19 slot-range-empty?  AND  \ Poss
   17 slot-full?  18 19 slot-range-empty?  AND  \ Case
   18 slot-full?  19 slot-empty?  AND  \ Ptcl2
   flag-Dur1ᵢᵣ flag-Dur1ᵢ flag-OR  flag-is?
   flag-1.pl flag-Imp.3 flag-OR  flag-is?
   1 19 slot-range-empty?  nomen?  AND
-  OR OR OR OR OR OR OR OR OR ;
+  OR OR OR OR OR OR OR OR OR OR ;
 
 \ 22. Показатель Perm присоединяется только к императивным
 \ показателям из поз. 19 Person, к отрицанию ПА или к чистой

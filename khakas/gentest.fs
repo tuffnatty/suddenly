@@ -1,3 +1,4 @@
+T{ S" аал+да+хы+лар"		S" аалдағылар"		parse-test -> TRUE }T
 T{ S" абылағ+ы"			S" абылаа"		parse-test -> TRUE }T
 \ искл? T{ S" ағ+ы"		S" аа"			parse-test -> FALSE }T
 T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
@@ -172,6 +173,7 @@ T{ S" харын+ы"			S" харны"		parse-test -> TRUE }T
 T{ S" хатхыр+0̸+чадыр+бын"	S" хатхырчадырбын"	parse-test -> TRUE }T
 T{ S" хат+ым"			S" хатым"		parse-test -> TRUE }T
 T{ S" хах+ы"			S" хағы"		parse-test -> TRUE }T
+T{ S" хол+да+хы+лар"		S" холдағылар"		parse-test -> TRUE }T
 T{ S" хомай+зыбыс"		S" хомайзыбыс"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузиим"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузуғым"		parse-test -> TRUE }T
