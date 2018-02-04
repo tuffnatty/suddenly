@@ -80,6 +80,7 @@ T{ S" пир+дек"			S" пирдек"		parse-test -> TRUE }T
 T{ S" поғ+ып"			S" пооп"		parse-test -> TRUE }T
 T{ S" пол+ар+ӌығ"		S" поларӌығ"		parse-test -> FALSE }T
 T{ S" пол+ар+ӌых"		S" поларӌых"		parse-test -> TRUE }T
+T{ S" пол+ах+ча"		S" полахча"		parse-test -> TRUE }T
 T{ S" пол+бас+пыс"		S" полбаспыс"		parse-test -> TRUE }T
 T{ S" пол+бин+ыбыс+хан"		S" полбиныбысхан"	parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат"		S" полдаачат"		parse-test -> TRUE }T

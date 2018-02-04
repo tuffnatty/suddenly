@@ -73,7 +73,7 @@ slot: <Perf/Prosp>  \ 4
   filters-end
 
   filters( constraint-6 )
-    form" Prosp АК"
+    form" Prosp АQ"
   filters-end
   ; slot-add
 
