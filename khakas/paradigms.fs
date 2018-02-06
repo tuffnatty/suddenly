@@ -73,7 +73,7 @@ slot: <Perf/Prosp>  \ 4
   filters-end
 
   filters( constraint-6 )
-    form" Prosp АQ"
+    form" Prosp.dial АQ"
   filters-end
   ; slot-add
 
@@ -179,9 +179,13 @@ slot: <Tense/Mood/Conv2>  \ 7
 
     flag-Conv2 flag-set
       form" Convₚ (І)п"
-      form" Conv.pas АбАс"
+      form" Conv.pas.dial АбАс"
       form" Conv.a А"
     flag-Conv2 flag-clear
+
+    filters( constraint-26₇ )
+      form" PresPt.dial чАн"
+    filters-end
   filters-end
   ; slot-add
 
@@ -304,6 +308,7 @@ slot: <Poss₂>  \ 16
         form" 3pos (з)І"
       filters-end
       form" Gen.3pos Ни"
+      form" Gen.3pos.dial Ди"
     flag-Poss2.nonpl flag-clear
     form" 1pos.pl (І)бІс"
     form" 2pos.pl (І)ңАр"
@@ -319,7 +324,11 @@ slot: <Case₂>  \ 17
   filters( constraint-16.5₁₇ )
     filters( constraint-29 )
       form" Gen₂ НІң"
+      form" Gen.dial ДІң"
       form" Instr нАң"
+      form" Instr.dial ПАң"
+      form" Instr.dial мАң"
+      form" Instr.dial ПлАң"
     filters-end
 
     filters( constraint-17₁₇ )
@@ -328,10 +337,13 @@ slot: <Case₂>  \ 17
       filters-end
       filters( constraint-29 )
         form" Acc НІ"
+        form" Acc.dial ДІ"
       filters-end
       form" Loc ТА"
       form" Abl₁ ДАң"
       form" All САр"
+      form" All.dial САрІ"
+      form" All.dial СА"
       form" Prol ЧА"
       form" Delib ДАңАр"
       form" Comp ТАG"

@@ -31,6 +31,7 @@ T{ S" киле+гедег"		S" килеедег"		parse-test -> TRUE }T
 T{ S" кил"			S" кил"			parse-test -> TRUE }T
 T{ S" кил+0̸"			S" кил"			parse-test -> TRUE }T
 T{ S" килін+і"			S" килні"		parse-test -> TRUE }T
+T{ S" кил+0̸+чен"		S" килчен"		parse-test -> TRUE }T
 T{ S" киме+ге"			S" кимее"		parse-test -> TRUE }T
 T{ S" кис+0̸+чет+кен"		S" кисчеткен"		parse-test -> TRUE }T
 T{ S" кис+0̸+чет+ер+ге"		S" кисчедерге"		parse-test -> TRUE }T
@@ -45,18 +46,23 @@ T{ S" мағаа+ох"			S" мағааох"		parse-test -> TRUE }T
 T{ S" маң+ы"			S" маа"			parse-test -> TRUE }T
 T{ S" марығ+ы"			S" марии"		parse-test -> TRUE }T
 T{ S" марығ+ы"			S" марығы"		parse-test -> FALSE }T
+T{ S" марығ+ды"			S" марығды"		parse-test -> TRUE }T
 T{ S" меню+ға"			S" менюға"		parse-test -> TRUE }T
 T{ S" меню+ге"			S" менюге"		parse-test -> FALSE }T
 T{ S" мойын+ы"			S" мойны"		parse-test -> TRUE }T
 T{ S" мында+ох"			S" мындох"		parse-test DROP expected-found -> 1 }T
 T{ S" ниң+ӧк"			S" ниик"		parse-test -> FALSE }T
 T{ S" нуғ+ар"			S" нуур"		parse-test -> TRUE }T
+T{ S" олар+дың"			S" олардың"		parse-test -> TRUE }T
 T{ S" ол+ох"			S" олох"		parse-test -> TRUE }T
 T{ S" ӧң+і"			S" ӧӧ"			parse-test -> TRUE }T
 T{ S" орын+ы"			S" орны"		parse-test -> TRUE }T
 T{ S" орын+ы+лар+ы"		S" орнылары"		parse-test -> TRUE }T
 T{ S" паба+м+ни"		S" пабамни"		parse-test -> TRUE }T
 T{ S" пағ+ы"			S" паа"			parse-test -> TRUE }T
+T{ S" пала+баң"			S" палабаң"		parse-test -> TRUE }T
+T{ S" пала+блаң"		S" палаблаң"		parse-test -> TRUE }T
+T{ S" пала+маң"			S" паламаң"		parse-test -> TRUE }T
 T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
@@ -126,6 +132,7 @@ T{ S" сине+елер"		S" синеелер"		parse-test -> TRUE }T
 T{ S" сине+ибіс"		S" синибіс"		parse-test -> TRUE }T
 T{ S" сине+им"			S" синим"		parse-test -> TRUE }T
 T{ S" сіліг+і"			S" сілии"		parse-test -> TRUE }T
+T{ S" сірер+ди"			S" сірерди"		parse-test -> TRUE }T
 T{ S" скандинав+тар"		S" скандинавтар"	parse-test -> TRUE }T
 T{ S" соғ+ар"			S" соор"		parse-test -> TRUE }T
 T{ S" соғ+ы"			S" соғы"		parse-test -> TRUE }T
@@ -140,6 +147,8 @@ T{ S" сурығ+ы"			S" сурии"		parse-test -> TRUE }T
 T{ S" сыда+ӌаң+ы"		S" сыдаӌаа"		parse-test -> TRUE }T
 T{ S" сых+ар+ға"	        S" сығарға"		parse-test -> TRUE }T
 T{ S" тағ+ы"			S" таа"			parse-test -> TRUE }T
+T{ S" тайға+за"			S" тайғаза"		parse-test -> TRUE }T
+T{ S" тайға+зары"		S" тайғазары"		parse-test -> TRUE }T
 T{ S" таны+ған"			S" танаан"		parse-test -> TRUE }T
 T{ S" тап+ып"			S" таап"		parse-test -> TRUE }T
 T{ S" тариф+ы"			S" тарифы"		parse-test -> TRUE }T
@@ -151,6 +160,7 @@ T{ S" теп+ібіс"			S" теебіс"		parse-test -> TRUE }T
 T{ S" ті+ген"			S" теен"		parse-test -> TRUE }T
 T{ S" ті+ер"			S" тир"			parse-test -> TRUE }T
 T{ S" тік+ер"			S" тігер"		parse-test -> TRUE }T
+\ not in dictionary T{ S" тіп+чен"			S" тіпчен"		parse-test -> TRUE }T
 T{ S" тоғыс+ы+наңар"		S" тоғызынаңар"		parse-test -> TRUE }T
 T{ S" тӧзе+е"			S" тӧзи"		parse-test -> TRUE }T
 T{ S" тӧзе+едір"		S" тӧзидір"		parse-test -> TRUE }T

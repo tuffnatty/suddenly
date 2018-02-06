@@ -56,10 +56,11 @@
 \ 4. Показатели позиции 2 (NF) могут встретиться только в
 \ словоформе, где есть один или несколько из показателей: 1)
 \ позиции 3 (Ptcl1), 2) Dur чАТ, 3) Perf (I)бIС, 4) Dur.Iter
-\ чАдIр, 5) Pres чА, 6) Indir ТIр - или на конце словоформы.
+\ чАдIр, 5) Pres чА, 6) Indir ТIр, 7) PresPt чАн - или на конце
+\ словоформы.
 : constraint-4  ( -- f )
   3 slot-full?               \ Ptcl1
-  flag-Dur-or-Pres flag-is?
+  flag-Dur-or-Pres-or-PresPt flag-is?
   flag-Perf flag-is?
   8 slot-full?               \ Indir
   flag-Dur.Iter flag-is?
@@ -100,7 +101,7 @@
 \ 6. Показатель позиции 4 Prosp АК встречается только перед
 \ морфемами Pres чА и Dur чАТ.
 : constraint-6  ( -- f )
-  flag-Dur-or-Pres flag-is? ;
+  flag-Dur-or-Pres-or-PresPt flag-is? ;
 
 \ 7. Показатель Dur1 и(р) заполняется только, если позиции
 \ 1, 3, 4 не заполнены, а в позиции 0 стоит пар- или кил-
@@ -336,15 +337,16 @@
   15 17 slot-range-empty?  AND
   flag-RPast-or-Cond flag-is?  AND ;
 
-\ 21. Показатель поз. 20 PredPl может стоять после: а) пок-ля
-\ времени (позиция 7 (за исключением ConvA, ConvP, Neg.Conv
-\ (.Abl), Lim, согласно правилу 25) + Indir TIр + Affirm ЧIК +
-\ Iter AдIр + Dur.Iter чАдIр + Dur1 и(р)), б) пок-ля падежа
-\ (п. 17) или посессивности (п. 16), в) некоторых полей Person
-\ (1pl, Imp.3), г) чистой именной основы, д) пок-ля Ptcl2
-\ (поз.18): Хай пірее одыртхан ағастар парохтар мында - Здесь
-\ имеется и несколько посаженных деревьев (ГХЯ), е) показателя
-\ Attr КI: аалдағылар ‘сельчане’.
+\ 21. Показатель поз. 20 PredPl может стоять после:
+\ а) пок-ля времени (позиция 7 [за исключением ConvA, ConvP,
+\    Neg.Conv (.Abl), Lim и PresPt чАн, согласно пр.25] + Indir
+\    TIр + Affirm ЧIК + Iter AдIр + Dur.Iter чАдIр + Dur1 и(р)),
+\ б) пок-ля падежа (п. 17) или посессивности (п. 16),
+\ в) некоторых полей Person (1pl, Imp.3),
+\ г) чистой именной основы,
+\ д) пок-ля Ptcl2 (поз.18): Хай пірее одыртхан ағастар парохтар
+\    мында - Здесь имеется и несколько посаженных деревьев (ГХЯ)
+\ е) показателя Attr КI: аалдағылар ‘сельчане’.
 : constraint-21  ( -- f )
   6 slot-full?  7 19 slot-range-empty?  AND  flag-Neg flag-empty? AND  \ Iter
   7 slot-full?  8 19 slot-range-empty?  AND  \ Tense
@@ -377,16 +379,17 @@
   OR ;
 
 \ 25. После деепричастных показателей позиции 7 (Lim ГАли,
-\ Convп (I)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl)
-\ может стоять только показатель Ass ОК из позиции Ptcl3.
+\ Convп (I)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl), а также
+\ PresPt чАн может стоять только показатель Ass ОК из позиции
+\ Ptcl3.
 : constraint-25  ( -- f )
   8 21 slot-range-empty?
   flag-Ass₃ flag-is?
   OR ;
 
-\ 26. Показатели Pres чА, Dur чАТ, Dur.Iter чАдIр возможны
-\ только при наличии показателей позиции 2 (NF или NF.Neg) или
-\ 4. Indir тIр возможен при тех же условиях или при
+\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Dur.Iter чАдIр
+\ возможны только при наличии показателей позиции 2 (NF или
+\ NF.Neg) или 4. Indir тIр возможен при тех же условиях или при
 \ одновременном наличии показателей Neg ПА и Past ГАН
 : constraint-26₅  ( -- f )
   2 slot-full?  4 slot-full?  OR ;
