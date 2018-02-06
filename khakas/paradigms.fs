@@ -323,7 +323,9 @@ slot: <Case₂>  \ 17
     filters-end
 
     filters( constraint-17₁₇ )
-      form" Dat ГА"
+      filters( constraint-OK-fallout₁₇ )
+        form" Dat ГА"
+      filters-end
       filters( constraint-29 )
         form" Acc НІ"
       filters-end
@@ -337,7 +339,9 @@ slot: <Case₂>  \ 17
         form" Abl₂ тІн"
       filters-end
     filter-else
-      form" Dat (н)А"
+      filters( constraint-OK-fallout₁₇ )
+        form" Dat (н)А"
+      filters-end
       filters( constraint-29 )
         filters( constraint-V+Acc )
           form" Acc₂ Н"

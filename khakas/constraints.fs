@@ -497,7 +497,8 @@
   ;
 
 \ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не
-\ стягивается: хызох < хыс+ох, но не < хыс-ы-ох.
+\ стягивается: хызох < хыс+ох, но не < хыс-ы-ох. Dat во всех
+\ видах также не стягивается
 : constraint-OK-fallout₁₂  ( -- f )
   13 17 slot-range-full?
   18 form-slot-flags untransformed-fallout-OK AND NOT
@@ -519,6 +520,13 @@
   AND
   16 form-slot first-sound consonant?
   OR
+  ;
+: constraint-OK-fallout₁₇  ( -- f )
+  18 form-slot-flags untransformed-fallout-OK AND NOT
+  18 20 slot-range-full?
+  21 form-slot-flags untransformed-fallout-OK AND NOT
+  OR
+  AND
   ;
 
 : constraint-V+Acc  ( -- f )
