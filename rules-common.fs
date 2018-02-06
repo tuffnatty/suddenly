@@ -2,7 +2,8 @@ REQUIRE phonetics.fs
 REQUIRE strings.fs
 
 : vowel-long?  ( addr u -- f )
-  string-addr XC@+ SWAP XC@ = ;
+  2 cyrs < IF DROP FALSE EXIT THEN  ( addr )
+  XC@+ SWAP XC@ = ;
 
 : vowel-long-middle?  ( ptr -- f )
   DUP XC@ SWAP XCHAR- XC@ = ;

@@ -481,8 +481,12 @@
   stem-polysyllabic? NOT
   stem-last-sound gh-g-ng? NOT
   stem-prev-sound vowel? NOT
-  first-affix first-sound vowel? NOT
-  OR OR OR OR OR OR ;
+  stem-prev-sound short-vowel? NOT
+  stem-prev-sound-ptr vowel-long-middle?
+  first-affix vowel-long?
+  first-affix first-sound short-vowel? NOT
+  OR OR OR OR OR OR OR OR OR
+  ;
 
 \ Запрещенные контексты для выпадения конечного к, х
 : constraint-V[кх]V-fallout  ( -- f )

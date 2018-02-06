@@ -38,6 +38,7 @@ T{ S" кис+0̸+чет+ер+ге"		S" кисчедерге"		parse-test -> TRUE
 T{ S" кізі+ге"			S" кізее"		parse-test -> TRUE }T
 T{ S" кіріс+і+нзер+тін"		S" кірізінзертін"	parse-test -> TRUE }T
 T{ S" кіртӧң+ге+ӧк"		S" кіртӧңеӧк"		parse-test -> TRUE }T
+T{ S" кіртӧң+ӧк"		S" кіртӧңӧк"		parse-test -> TRUE }T
 T{ S" кіртӧң+ге+ӧк"		S" кіртӧңӧк"		parse-test -> FALSE }T
 T{ S" комиссия+ға"		S" комиссияа"           parse-test -> TRUE }T
 T{ S" кӧг+і"			S" кӧӧ"			parse-test -> TRUE }T

@@ -45,6 +45,9 @@ CREATE formflag bstr% %ALLOT bstr-init
 : stem-prev-sound  ( -- xc )
   guessed-stem prev-sound ;
 
+: stem-prev-sound-ptr  ( -- addr u )
+  guessed-stem prev-sound-ptr ;
+
 : stem-last-sound  ( -- xc )
   guessed-stem last-sound ;
 
