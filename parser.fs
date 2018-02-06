@@ -48,6 +48,9 @@ CREATE formflag bstr% %ALLOT bstr-init
 : stem-last-sound  ( -- xc )
   guessed-stem last-sound ;
 
+: form-slot  ( n -- addr u )
+  formform form-get-slot ;
+
 : form-slot-xc-at-left  ( n -- xc )
   formform cstr-ptr @ { form-start }
   formform form-get-slot string-addr XCHAR- BEGIN  ( addr' )

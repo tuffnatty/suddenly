@@ -496,6 +496,31 @@
   \ AND AND
   ;
 
+\ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не
+\ стягивается: хызох < хыс+ох, но не < хыс-ы-ох.
+: constraint-OK-fallout₁₂  ( -- f )
+  13 17 slot-range-full?
+  18 form-slot-flags untransformed-fallout-OK AND NOT
+  OR
+  13 20 slot-range-full?
+  21 form-slot-flags untransformed-fallout-OK AND NOT
+  OR
+  AND
+  12 form-slot first-sound consonant?
+  OR
+  ;
+: constraint-OK-fallout₁₆  ( -- f )
+  17 slot-full?
+  18 form-slot-flags untransformed-fallout-OK AND NOT
+  OR
+  17 20 slot-range-full?
+  21 form-slot-flags untransformed-fallout-OK AND NOT
+  OR
+  AND
+  16 form-slot first-sound consonant?
+  OR
+  ;
+
 : constraint-V+Acc  ( -- f )
   17 form-slot-vowel-at-left? ;
 

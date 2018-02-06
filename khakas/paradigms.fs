@@ -236,7 +236,9 @@ slot: <Poss₁>  \ 12
     flag-Poss1.nonpl flag-set
       form" 1pos.sg (І)м"
       form" 2pos.sg (І)ң"
-      form" 3pos₁ (з)І"
+      filters( constraint-OK-fallout₁₂ )
+        form" 3pos₁ (з)І"
+      filters-end
     flag-Poss1.nonpl flag-clear
     form" 1pos.pl (І)бІс"
     form" 2pos.pl (І)ңАр"
@@ -298,7 +300,9 @@ slot: <Poss₂>  \ 16
     flag-Poss2.nonpl flag-set
       form" 1pos.sg (І)м"
       form" 2pos.sg (І)ң"
-      form" 3pos (з)І"
+      filters( constraint-OK-fallout₁₆ )
+        form" 3pos (з)І"
+      filters-end
       form" Gen.3pos Ни"
     flag-Poss2.nonpl flag-clear
     form" 1pos.pl (І)бІс"
