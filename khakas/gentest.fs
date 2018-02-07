@@ -161,7 +161,7 @@ T{ S" теп+ібіс"			S" теебіс"		parse-test -> TRUE }T
 T{ S" ті+ген"			S" теен"		parse-test -> TRUE }T
 T{ S" ті+ер"			S" тир"			parse-test -> TRUE }T
 T{ S" тік+ер"			S" тігер"		parse-test -> TRUE }T
-\ not in dictionary T{ S" тіп+чен"			S" тіпчен"		parse-test -> TRUE }T
+T{ S" ті+п+чен"			S" тіпчен"		parse-test -> TRUE }T
 T{ S" тоғыс+ы+наңар"		S" тоғызынаңар"		parse-test -> TRUE }T
 T{ S" тӧзе+е"			S" тӧзи"		parse-test -> TRUE }T
 T{ S" тӧзе+едір"		S" тӧзидір"		parse-test -> TRUE }T
