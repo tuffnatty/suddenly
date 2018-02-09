@@ -6,6 +6,7 @@ REQUIRE strings.fs
 32 CELLS  CONSTANT max-semgloss
 
 STRUCT
+  CELL%      FIELD dict-id
   CELL%      FIELD dict-p-o-s
   CELL% 32 * FIELD dict-headword
   CELL%      FIELD dict-headnum
@@ -22,7 +23,8 @@ DEFER .dictflags  ( dictflags -- )
   DUP dict-headnum @ ?DUP-IF . BL EMIT THEN
   DUP dict-flags @ ?DUP-IF .dictflags BL EMIT THEN
   DUP dict-semgloss $201B XEMIT COUNT TYPE $2019 XEMIT BL EMIT
-  dict-stems @ .strlist ;
+  DUP dict-stems @ .strlist BL EMIT
+  dict-id @ . ;
 
 list%
   CELL%      FIELD stem-dict
@@ -92,10 +94,11 @@ VARIABLE dictionary-ptr
 : (dict-check-semgloss)  ( head len -- head len )
   DUP max-semgloss > IF ( TYPE ABORT"  semgloss too long" ) DROP max-semgloss 1- THEN ;
 
-: dict-add  ( "word" pos -- )
+: dict-add  ( "word" id pos -- )
   \ Allocate article
-  dict% %ALLOT { pos dict }       ( "word" )
+  dict% %ALLOT { id pos dict }       ( "word" )
   pos  dict dict-p-o-s  !
+  id   dict dict-id     !
   BL PARSE  (dict-check-headword)  dict dict-headword  s-to-cs  ( )
   0  dict dict-stems    !
   0  dict dict-headnum  !
