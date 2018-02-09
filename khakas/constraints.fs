@@ -10,10 +10,10 @@
 \ показателей не присоединяют! Слова с пометой Invar1
 \ присоединяют Ptcl3 ОК.
 : constraint-0  ( -- f )
-  invar1? NOT
-  1 20 slot-range-empty?  flag-Ass₃ flag-is? AND
+  invar1? NOT                                     ||
+  1 20 slot-range-empty?  flag-Ass₃ flag-is? AND  ||
   1 21 slot-range-empty?
-  OR OR ;
+  ;
 
 \ 1. Позиции 1–8 могут заполняться только у слов с пометой
 \ Verbum; позиция 9 - только у слов с пометой Nomen.
@@ -36,11 +36,11 @@
   ELSE FALSE THEN
   ;
 : constraint-2  ( -- f )
-  9 slot-empty?  11 17 slot-range-empty?  AND
-  nomen?
-  verb-with-Tense-non-RPast-Cond-Pres-Conv2?  \ причастия
-  9 10 slot-range-full?                       \ Comit, Affirm
-  OR OR OR ;
+  9 slot-empty?  11 17 slot-range-empty?  AND  ||
+  nomen?                                       ||
+  verb-with-Tense-non-RPast-Cond-Pres-Conv2?   ||  \ причастия
+  9 10 slot-range-full?                            \ Comit, Affirm
+  ;
 
 \ 3. Показатели позиции 2 (NF) и показатель Perf (I)бIС
 \ (4) в пределах одной словоформы встречаются только в
@@ -48,10 +48,10 @@
 \ NF.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
 \ – (кончить-NF-Add-Perf-RPast-Pl) ‘почти закончили’].
 : constraint-3  ( -- f )
-  2 slot-empty?
-  flag-NF.Neg flag-is?
+  2 slot-empty?         ||
+  flag-NF.Neg flag-is?  ||
   3 slot-full?
-  OR OR ;
+  ;
 
 \ 4. Показатели позиции 2 (NF) могут встретиться только в
 \ словоформе, где есть один или несколько из показателей: 1)
@@ -59,13 +59,13 @@
 \ чАдIр, 5) Pres чА, 6) Indir ТIр, 7) PresPt чАн - или на конце
 \ словоформы.
 : constraint-4  ( -- f )
-  3 slot-full?               \ Ptcl1
-  flag-Dur-or-Pres-or-PresPt flag-is?
-  flag-Perf flag-is?
-  8 slot-full?               \ Indir
-  flag-Dur.Iter flag-is?
+  3 slot-full?                         ||  \ Ptcl1
+  flag-Dur-or-Pres-or-PresPt flag-is?  ||
+  flag-Perf flag-is?                   ||
+  8 slot-full?                         ||  \ Indir
+  flag-Dur.Iter flag-is?               ||
   3 21 slot-range-empty?
-  OR OR OR OR OR ;
+  ;
 
 \ 4.1. NF выбирает алломорф (I)П, если:
 \ 1) он непосредственно следует за основой, которая оканчивается
@@ -79,10 +79,10 @@
 \ основы на невыпадающую согласную в конце словоформы для NF
 \ возможны оба алломорфа.]
 : constraint-4.1ₚ  ( -- f )
-  1 slot-empty?  1 form-slot-xc-at-left fallout-short?  AND
-  2 form-slot-vowel-at-left?
+  1 slot-empty?  1 form-slot-xc-at-left fallout-short?  AND  ||
+  2 form-slot-vowel-at-left?  ||
   flag-Ass₁ flag-is?
-  OR OR ;
+  ;
 : constraint-4.1₀  ( -- f )
   2 form-slot-vowel-at-left? NOT
   2 form-slot-xc-at-left fallout-short? NOT
@@ -93,10 +93,10 @@
 \ только при заполненной позиции 7 (время) или 8 (Indir) или
 \ при дуративе (Dur чАт, Dur.Iter чАдIр.).
 : constraint-5  ( -- f )
-  7 8 slot-range-full?
-  flag-Dur flag-is?
+  7 8 slot-range-full?  ||
+  flag-Dur flag-is?     ||
   flag-Dur.Iter flag-is?
-  OR OR ;
+  ;
 
 \ 6. Показатель позиции 4 Prosp АК встречается только перед
 \ морфемами Pres чА и Dur чАТ.
@@ -121,11 +121,11 @@
 \ непосредственно перед показателями Past ГА(н), Convп,
 \ Cond СА (позиция 7).
 : constraint-8  ( -- f )
-  6 21 slot-range-empty?
-  6 18 slot-range-empty?  19 slot-full?  AND
-  6 19 slot-range-empty?  20 slot-full?  AND
+  6 21 slot-range-empty?                      ||
+  6 18 slot-range-empty?  19 slot-full?  AND  ||
+  6 19 slot-range-empty?  20 slot-full?  AND  ||
   flag-Past flag-is?  flag-Cond flag-is?  flag-Convₚ flag-is?  OR OR  6 slot-empty?  AND
-  OR OR OR ;
+  ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
 \ распределен: перед Past ГА(н) и перед Cond СА может
@@ -202,33 +202,33 @@
 \ лично-числовой показатель (Person), число предиката
 \ (PredPl) или показатель аффирматива (Affirm) или Ptcl3
 : constraint-12  ( -- f )
-  8 19 slot-range-empty?  \ PredPl or Ptcl3 or end-of-wordform
-  8 18 slot-range-empty?  flag-Person.br flag-is?  AND  \ Person
-  8 9 slot-range-empty?  10 slot-full?  AND  \ Affirm
-  OR OR ;
+  8 19 slot-range-empty?                                ||  \ PredPl or Ptcl3 or end-of-wordform
+  8 18 slot-range-empty?  flag-Person.br flag-is?  AND  ||  \ Person
+  8 9 slot-range-empty?  10 slot-full?  AND                 \ Affirm
+  ;
 
 \ 13. Непосредственно после показателя условного наклонения
 \ (Cond) может следовать только краткий лично-числовой
 \ показатель (Person) или число предиката (PredPl) или Ptcl3
 : constraint-13  ( -- f )
-  8 19 slot-range-empty?  \ PredPl or Ptcl3 or end-of-wordform
-  8 18 slot-range-empty?  flag-Person.br flag-is?  AND  \ Person
-  OR ;
+  8 19 slot-range-empty?                                ||  \ PredPl or Ptcl3 or end-of-wordform
+  8 18 slot-range-empty?  flag-Person.br flag-is?  AND      \ Person
+  ;
 
 \ 14. Непосредственно после Iter возможны только: Past
 \ ГА(н), Person, PredPl, Ptcl3 или конец словоформы.
 : constraint-14  ( -- f )
-  flag-Past flag-is?
+  flag-Past flag-is?  ||
   7 18 slot-range-empty?
-  OR  ;
+  ;
 
 \ 15. Показатель поз. 8 Indir TIр бывает либо при
 \ незаполненных позициях 6, 7, либо при одновременном
 \ заполнении позиций 6 и 7 показателями Neg (ПА) и Past (ГАн).
 : constraint-15  ( -- f )
-  6 7 slot-range-empty?
+  6 7 slot-range-empty?  ||
   flag-Neg flag-is?  flag-Past flag-is?  AND
-  OR ;
+  ;
 
 \ 16.1. Показатели позиций 11-13 (Pl1, Poss1, Case1) возможны
 \ только при наличии в словоформе одного или нескольких аффиксов
@@ -252,25 +252,26 @@
 \ 1.25). В прочих случаях перед нами не Pl2, а PredPl: ибделер
 \ ‘они дома’.
 : constraint-16.3  ( -- f )
-  13 slot-empty?
-  14 slot-full?
+  13 slot-empty?  ||
+  14 slot-full?   ||
   flag-Gen₁ flag-is?
-  OR OR ;
+  ;
 
 \ 16.4. Pl2 может следовать непосредственно за Poss1 только при
 \ наличии Poss2: чӱс-паз-ы-лар-ы-ның ікізін ‘двоих из сотников’.
 \ В прочих случаях это не Pl2, а PredPl: олар хызыбыстар ‘они –
 \ наши дочери’.
 : constraint-16.4  ( -- f )
-  12 slot-empty?
-  13 14 slot-range-empty?
+  12 slot-empty?           ||
+  13 14 slot-range-empty?  ||
   16 slot-full?
-  OR OR ;
+  ;
 
 \ 16.5. Case2 не может следовать непосредственно за Pl1 или Poss1.
 \ Poss2 не может следовать непосредственно за Pl1.
 : constraint-16.5₁₆  ( -- f )
-  11 slot-empty?  12 15 slot-range-full?  OR
+  11 slot-empty?  ||
+  12 15 slot-range-full?
   ;
 : constraint-16.5₁₇  ( -- f )
   11 slot-empty?  12 16 slot-range-full?  OR
@@ -296,10 +297,10 @@
 \ КI из поз. 14, Case2 (один из показателей поз. 17) или один из
 \ причастных показателей поз. 7.
 : constraint-18  ( -- f )
-  14 slot-full?  15 17 slot-range-empty?  AND
-  17 slot-full?
+  14 slot-full?  15 17 slot-range-empty?  AND  ||
+  17 slot-full?                                ||
   7 slot-full?  8 17 slot-range-empty?  AND
-  OR OR ;
+  ;
 
 \ 19. Показатели поз. 19 (Person) с пометой Imp могут быть
 \ только у слов, имеющих помету Verbum; они следуют
@@ -324,8 +325,9 @@
 : constraint-20-full-person  ( -- f )
   verb? IF
     11 17 slot-range-empty? IF
-      8 slot-full?  10 slot-full?  OR
-      flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1ᵢᵣ-or-Hab₂-or-Futₐᵣ flag-is?  OR
+      8 slot-full?   ||
+      10 slot-full?  ||
+      flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1ᵢᵣ-or-Hab₂-or-Futₐᵣ flag-is?
     ELSE FALSE THEN
   ELSE nomen? THEN ;
 : constraint-20-mix-person  ( -- f )
@@ -348,59 +350,63 @@
 \    мында - Здесь имеется и несколько посаженных деревьев (ГХЯ)
 \ е) показателя Attr КI: аалдағылар ‘сельчане’.
 : constraint-21  ( -- f )
-  6 slot-full?  7 19 slot-range-empty?  AND  flag-Neg flag-empty? AND  \ Iter
-  7 slot-full?  8 19 slot-range-empty?  AND  \ Tense
-  8 slot-full?  9 19 slot-range-empty?  AND  \ Indir
-  10 slot-full?  11 19 slot-range-empty?  AND  \ Affirm
-  14 slot-full?  15 19 slot-range-empty?  AND  \ Attr
-  16 slot-full?  17 19 slot-range-empty?  AND  \ Poss
-  17 slot-full?  18 19 slot-range-empty?  AND  \ Case
-  18 slot-full?  19 slot-empty?  AND  \ Ptcl2
-  flag-Dur1ᵢᵣ flag-Dur1ᵢ flag-OR  flag-is?
-  flag-1.pl flag-Imp.3 flag-OR  flag-is?
+  6 slot-full?  7 19 slot-range-empty?  AND  flag-Neg flag-empty? AND  ||  \ Iter
+  7 slot-full?  8 19 slot-range-empty?  AND                            ||  \ Tense
+  8 slot-full?  9 19 slot-range-empty?  AND                            ||  \ Indir
+  10 slot-full?  11 19 slot-range-empty?  AND                          ||  \ Affirm
+  14 slot-full?  15 19 slot-range-empty?  AND                          ||  \ Attr
+  16 slot-full?  17 19 slot-range-empty?  AND                          ||  \ Poss
+  17 slot-full?  18 19 slot-range-empty?  AND                          ||  \ Case
+  18 slot-full?  19 slot-empty?  AND                                   ||  \ Ptcl2
+  flag-Dur1ᵢᵣ flag-Dur1ᵢ flag-OR  flag-is?                             ||
+  flag-1.pl flag-Imp.3 flag-OR  flag-is?                               ||
   1 19 slot-range-empty?  nomen?  AND
-  OR OR OR OR OR OR OR OR OR OR ;
+  ;
 
 \ 22. Показатель Perm присоединяется только к императивным
 \ показателям из поз. 19 Person, к отрицанию ПА или к чистой
 \ основе слов категории Verbum (имеющей значение Imp.2sg).
 : constraint-22  ( -- f )
-  20 slot-empty?  flag-Imp flag-is?  AND
-  7 20 slot-range-empty?  flag-Neg flag-is?  AND
+  20 slot-empty?  flag-Imp flag-is?  AND          ||
+  7 20 slot-range-empty?  flag-Neg flag-is?  AND  ||
   1 20 slot-range-empty?  verb?  AND
-  OR OR ;
+  ;
 
 \ 23. Пок-тель Foc может встретиться: а) в словоформах с
 \ пометой Nomen; б) в глаголах, у которых есть временные
 \ показатели Past ГАн и Hab ЧАӊ.
 : constraint-23  ( -- f )
-  nomen?
+  nomen?  ||
   flag-Past-or-Hab flag-is?
-  OR ;
+  ;
 
 \ 25. После деепричастных показателей позиции 7 (Lim ГАли,
 \ Convп (I)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl), а также
 \ PresPt чАн может стоять только показатель Ass ОК из позиции
 \ Ptcl3.
 : constraint-25  ( -- f )
-  8 21 slot-range-empty?
+  8 21 slot-range-empty?  ||
   flag-Ass₃ flag-is?
-  OR ;
+  ;
 
 \ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Dur.Iter чАдIр
 \ возможны только при наличии показателей позиции 2 (NF или
 \ NF.Neg) или 4. Indir тIр возможен при тех же условиях или при
 \ одновременном наличии показателей Neg ПА и Past ГАН
 : constraint-26₅  ( -- f )
-  2 slot-full?  4 slot-full?  OR ;
+  2 slot-full?  ||
+  4 slot-full? ;
 : constraint-26₆  ( -- f )
-  2 slot-full?  4 slot-full?  OR ;
+  2 slot-full?  ||
+  4 slot-full? ;
 : constraint-26₇  ( -- f )
-  2 slot-full?  4 slot-full?  OR ;
+  2 slot-full?  ||
+  4 slot-full? ;
 : constraint-26₈  ( -- f )
-  2 slot-full?  4 slot-full?  OR
+  2 slot-full?  ||
+  4 slot-full?  ||
   flag-Neg flag-is?  flag-Past flag-is?  AND
-  OR ;
+  ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
 \ последними заполненными позициями в словоформe
@@ -423,14 +429,14 @@
 
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
-  first-form-flag untransformed-left-envoice AND NOT
+  first-form-flag untransformed-left-envoice AND NOT  ||
   dictflag-no-envoice dictflag-empty?
-  OR ;
+  ;
 : constraint-non-envoiced-rus  ( -- f )
-  first-form-flag untransformed-left-envoice-missing AND NOT
-  dictflag-no-envoice dictflag-is?
+  first-form-flag untransformed-left-envoice-missing AND NOT  ||
+  dictflag-no-envoice dictflag-is?                            ||
   dictflag-rus dictflag-is?
-  OR OR ;
+  ;
 
 \ Запрещенные контексты для выпадения VңV
 : constraint-VңV-fallout  ( -- f )
@@ -455,44 +461,43 @@
 
 \ Запрещенные контексты для выпадения Г после Г, ң без стяжения
 : constraint-[Гң]Г-fallout  ( -- f )
-  first-form-flag untransformed-fallout-confluence AND
+  first-form-flag untransformed-fallout-confluence AND  ||
   untransformed-fallout-confluence any-form-flag-is? NOT
-  OR ;
+  ;
 
 \ Запрещенные контексты для выпадения одной из трех одинаковых согласных
 : constraint-CCC-fallout  ( -- f )
-  stem-last-sound stem-prev-sound <>
-  stem-last-sound first-affix-starts-with? NOT
-  dictflag-rus dictflag-is?  first-form-flag untransformed-fallout-CCC  AND  0<> AND
+  stem-last-sound stem-prev-sound <>                                                  ||
+  stem-last-sound first-affix-starts-with? NOT                                        ||
+  dictflag-rus dictflag-is?  first-form-flag untransformed-fallout-CCC  AND  0<> AND  ||
   dictflag-rus dictflag-empty?  first-form-flag untransformed-fallout-CCC AND NOT  AND
-  OR OR OR ;
+  ;
 
 \ Запрещенные контексты для выпадения после долгой гласной
 : constraint-VVГV-fallout  ( -- f )
-  first-form-flag untransformed-fallout-VVГV AND NOT
+  first-form-flag untransformed-fallout-VVГV AND NOT  ||
   dictflag-rus dictflag-is?
-  OR ;
+  ;
 
 \ Разрешенные контексты для невыпадения VГV
 : constraint-VГV-fallout  ( -- f )
-  nomen? verb? OR NOT
-  first-form-flag untransformed-fallout-VГV untransformed-fallout-VңV OR AND
-  1 21 slot-range-empty?
-  stem-polysyllabic? NOT
-  stem-last-sound gh-g-ng? NOT
-  stem-prev-sound vowel? NOT
-  stem-prev-sound short-vowel? NOT
-  stem-prev-sound-ptr vowel-long-middle?
-  first-affix vowel-long?
+  nomen? verb? OR NOT                                                         ||
+  first-form-flag untransformed-fallout-VГV untransformed-fallout-VңV OR AND  ||
+  1 21 slot-range-empty?                                                      ||
+  stem-polysyllabic? NOT                                                      ||
+  stem-last-sound gh-g-ng? NOT                                                ||
+  stem-prev-sound vowel? NOT                                                  ||
+  stem-prev-sound short-vowel? NOT                                            ||
+  stem-prev-sound-ptr vowel-long-middle?                                      ||
+  first-affix vowel-long?                                                     ||
   first-affix first-sound short-vowel? NOT
-  OR OR OR OR OR OR OR OR OR
   ;
 
 \ Запрещенные контексты для выпадения конечного к, х
 : constraint-V[кх]V-fallout  ( -- f )
-  first-form-flag untransformed-fallout-V[кх]V AND NOT
+  first-form-flag untransformed-fallout-V[кх]V AND NOT  ||
   dictflag-rus dictflag-empty?
-  OR ;
+  ;
 
 \ После NF глухое: пар-тыр, сом-тыр
 : constraint-voicedstem+Indir  ( -- f )
@@ -514,9 +519,8 @@
   13 20 slot-range-full?
   21 form-slot-flags untransformed-fallout-OK AND NOT
   OR
-  AND
+  AND                                                  ||
   12 form-slot first-sound consonant?
-  OR
   ;
 : constraint-OK-fallout₁₆  ( -- f )
   17 slot-full?
@@ -525,9 +529,8 @@
   17 20 slot-range-full?
   21 form-slot-flags untransformed-fallout-OK AND NOT
   OR
-  AND
+  AND                                                  ||
   16 form-slot first-sound consonant?
-  OR
   ;
 : constraint-OK-fallout₁₇  ( -- f )
   18 form-slot-flags untransformed-fallout-OK AND NOT
@@ -541,6 +544,6 @@
   17 form-slot-vowel-at-left? ;
 
 : constraint-broken-harmony  ( -- f )
-  harmony-vu-broken any-form-flag-is? NOT
+  harmony-vu-broken any-form-flag-is? NOT  ||
   dictflag-rus dictflag-is?  first-form-flag harmony-vu-broken AND 0<>  AND
-  OR ;
+  ;
