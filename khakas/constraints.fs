@@ -253,7 +253,7 @@
 \ ‘они дома’.
 : constraint-16.3  ( -- f )
   13 slot-empty?
-  14 slot-empty?
+  14 slot-full?
   flag-Gen₁ flag-is?
   OR OR ;
 

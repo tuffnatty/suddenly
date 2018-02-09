@@ -171,6 +171,7 @@ T{ S" тоң+ып"			S" тооп"		parse-test -> TRUE }T
 T{ S" тӱк+і"			S" тӱгі"		parse-test -> TRUE }T
 T{ S" тӱлгӱ+ге"			S" тӱлгее"		parse-test -> TRUE }T
 T{ S" тура+ға"			S" тураа"		parse-test -> TRUE }T
+T{ S" тура+да+хы+лар+ы"		S" турадағылары"	parse-test -> TRUE }T
 T{ S" тура+ох"			S" турох"		parse-test -> TRUE }T
 T{ S" тус+ы"			S" тузы"		parse-test -> TRUE }T
 T{ S" тут+ар+ға"		S" тударға"		parse-test -> TRUE }T
