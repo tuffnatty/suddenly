@@ -2,7 +2,7 @@
   POSTPONE 0= ; IMMEDIATE
 
 : ||  ( f  R: x r -- true R: x PC: r | R: x r )  \ OR with boolean shortcircuiting
-  ]] IF TRUE EXIT THEN [[ ; IMMEDIATE
+  ]] ?DUP-IF EXIT THEN [[ ; IMMEDIATE
 
 : array-reverse  ( arr len -- )
   1- CELLS OVER + BEGIN 2DUP < WHILE  ( a1 a2 )

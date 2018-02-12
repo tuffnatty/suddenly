@@ -52,14 +52,14 @@ VARIABLE dictionary-ptr
 
 : find-headwords  { D: s -- dicts|0 }
   0 >R                                              ( R: dicts )
-  s fuzzy-stem-find DUP IF                              ( stem )
+  s fuzzy-stem-find ?DUP-IF                             ( stem )
     BEGIN
       DUP stem-dict @                              ( stem dict )
       DUP dict-headword COUNT  s STR= IF
         R> SWAP ptrlist-prepend >R           ( stem  R: dicts' )
       THEN
-    list-next @ DUP WHILE REPEAT
-  THEN DROP R> ;
+    list-next @ DUP WHILE REPEAT DROP
+  THEN R> ;
 
 : stem-create-for-dict  ( dict -- stem )
   stem% %ALLOT >R      ( dict  R: stem )
@@ -70,17 +70,17 @@ VARIABLE dictionary-ptr
 : stem-get-for-dict  ( dict stem -- stem )
   >R                                 ( dict  R: stem )
   BEGIN DUP R@ stem-dict @ <> WHILE
-    R@ list-next @ DUP IF RDROP >R  ( dict  R: stem' )
-    ELSE DROP                        ( dict  R: stem )
+    R@ list-next @ ?DUP-IF RDROP >R  ( dict  R: stem' )
+    ELSE
       DUP stem-create-for-dict          ( dict stem' )
       DUP R> list-next ! >R         ( dict  R: stem' )
     THEN
   REPEAT DROP R> ;
 
 : stem-table-add-key  { D: key dict table -- }
-  key table stem-find-in-table DUP IF      ( stem )
+  key table stem-find-in-table ?DUP-IF     ( stem )
     dict SWAP stem-get-for-dict DROP            ( )
-  ELSE DROP
+  ELSE
     \ ." add key " 2DUP TYPE cr
     GET-CURRENT table SET-CURRENT      ( wordlist )
     key NEXTNAME

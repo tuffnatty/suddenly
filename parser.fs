@@ -167,8 +167,8 @@ DEFER yield-stem  ( stem -- )
   ;
 
 : rule-check  ( i xt | 0 -- f )
-  DUP IF SWAP >R EXECUTE ( rule-result ) R> =
-  ELSE 2DROP TRUE THEN ;
+  ?DUP-IF SWAP >R EXECUTE ( rule-result ) R> =
+  ELSE DROP TRUE THEN ;
 
 : after-fallout  { pairlist rule n-rule -- }
   \." " pairlist ?DUP-IF indent ." Pairlist: " .pairlist
