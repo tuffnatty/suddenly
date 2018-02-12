@@ -80,7 +80,7 @@
 \ возможны оба алломорфа.]
 : constraint-4.1ₚ  ( -- f )
   1 slot-empty?  1 form-slot-xc-at-left fallout-short?  AND  ||
-  2 form-slot-vowel-at-left?  ||
+  2 form-slot-vowel-at-left?                                 ||
   flag-Ass₁ flag-is?
   ;
 : constraint-4.1₀  ( -- f )
@@ -435,6 +435,12 @@
 : constraint-non-envoiced-rus  ( -- f )
   first-form-flag untransformed-left-envoice-missing AND NOT  ||
   dictflag-no-envoice dictflag-is?                            ||
+  dictflag-rus dictflag-is?
+  ;
+
+\ Озвончение кластера
+: constraint-cluster-envoice  ( -- f )
+  first-form-flag untransformed-cluster-envoice AND NOT  ||
   dictflag-rus dictflag-is?
   ;
 

@@ -16,24 +16,25 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
-%000000000001 CONSTANT untransformed-left-envoice
-%000000000010 CONSTANT untransformed-left-envoice-missing
-%000000000100 CONSTANT untransformed-fallout
-%000000001000 CONSTANT untransformed-fallout-CCC
-%000000010000 CONSTANT untransformed-fallout-VГV
-%000000100000 CONSTANT untransformed-fallout-VVГV
-%000001000000 CONSTANT untransformed-fallout-V[кх]V
-%000010000000 CONSTANT untransformed-fallout-VңV
-%000100000000 CONSTANT untransformed-fallout-confluence
-%001000000000 CONSTANT untransformed-fallout-(СА|ТІ)ңАр
-%010000000000 CONSTANT untransformed-fallout-OK
-%100000000000 CONSTANT harmony-vu-broken
+%0000000000001 CONSTANT untransformed-cluster-envoice
+%0000000000010 CONSTANT untransformed-left-envoice
+%0000000000100 CONSTANT untransformed-left-envoice-missing
+%0000000001000 CONSTANT untransformed-fallout
+%0000000010000 CONSTANT untransformed-fallout-CCC
+%0000000100000 CONSTANT untransformed-fallout-VГV
+%0000001000000 CONSTANT untransformed-fallout-VVГV
+%0000010000000 CONSTANT untransformed-fallout-V[кх]V
+%0000100000000 CONSTANT untransformed-fallout-VңV
+%0001000000000 CONSTANT untransformed-fallout-confluence
+%0010000000000 CONSTANT untransformed-fallout-(СА|ТІ)ңАр
+%0100000000000 CONSTANT untransformed-fallout-OK
+%1000000000000 CONSTANT harmony-vu-broken
 
 
 : /[ае]($|[бдркх])/  ( D: s -- f )
   2DUP ~/ [ае]/ IF
     cyr /STRING
-    DUP 0= IF 2DROP TRUE EXIT THEN
+    ?DUP-0=-IF DROP TRUE EXIT THEN
     ~/ [бдркх]/ EXIT
   ELSE 2DROP FALSE THEN
   ;
@@ -161,15 +162,27 @@ VARIABLE transform-flags
   affix first-sound { c }
   c vowel? IF
     s affix string-ends IF
-      left-part prev-sound vowel? IF
+      left-part prev-sound { x }
+      x vowel? IF
         list left-part affix untransform-left-envoice TO list
       ELSE
         \ check for fugitive
         current-form-is-poss? IF
-          affix first-sound  very-narrow-vowel? IF
+          c very-narrow-vowel? IF
             left-part possibly-fugitive? IF
               list left-part affix untransform-fugitive TO list
         THEN THEN THEN
+
+        \ 4) В заимствованиях возможен переход с>з не только в
+        \ интервокале, но и в кластерах с сонорными: курс -
+        \ курзы, но баланс - балансы (по словарю).
+        x sonorant? IF
+          left-part last-sound [CHAR] з = IF
+            list left-part affix pairlist-prepend TO list
+            [CHAR] с  list pair-1  last-sound-ptr  XC!
+            untransformed-cluster-envoice  list pair-flags !
+        THEN THEN
+
         list left-part affix pairlist-prepend TO list
       THEN
     THEN

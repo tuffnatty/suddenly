@@ -15,6 +15,7 @@ slot: <Distr>  \ 1
            constraint-1
            constraint-2
            constraint-27
+           constraint-cluster-envoice
            constraint-non-envoiceable-stem
            constraint-non-envoiced-rus
            constraint-(СА|ТІ)ңАр-fallout

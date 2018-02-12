@@ -83,6 +83,11 @@ sound-class glide
   sound й sound л sound р
 sound-class;
 
+sound-class sonorant
+  sound й sound л sound р
+  sound м sound н sound ң
+sound-class;
+
 sound-class consonant
   sound м sound н sound ң
   sound п sound ф sound к sound х sound т sound ш sound с sound ц sound ч sound щ

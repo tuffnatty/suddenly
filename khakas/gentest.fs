@@ -43,6 +43,8 @@ T{ S" кіртӧң+ге+ӧк"		S" кіртӧңӧк"		parse-test -> FALSE }T
 T{ S" комиссия+ға"		S" комиссияа"           parse-test -> TRUE }T
 T{ S" кӧг+і"			S" кӧӧ"			parse-test -> TRUE }T
 T{ S" кӧзӧ+ге"			S" кӧзӧге"		parse-test -> TRUE }T
+T{ S" курс+ы"			S" курзы"		parse-test -> TRUE }T
+T{ S" курс+ы"			S" курсы"		parse-test -> TRUE }T
 T{ S" мағаа+ох"			S" мағааох"		parse-test -> TRUE }T
 T{ S" маң+ы"			S" маа"			parse-test -> TRUE }T
 T{ S" марығ+ы"			S" марии"		parse-test -> TRUE }T
