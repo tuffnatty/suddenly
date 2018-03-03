@@ -2,21 +2,29 @@ REQUIRE lists.fs
 REQUIRE p-o-s.fs
 REQUIRE strings.fs
 
-32 CELLS CONSTANT max-headword
-32 CELLS CONSTANT max-semgloss
+32 CELLS  CONSTANT max-headword
+32 CELLS  CONSTANT max-semgloss
 
 STRUCT
+  CELL%      FIELD dict-id
   CELL%      FIELD dict-p-o-s
   CELL% 32 * FIELD dict-headword
+  CELL%      FIELD dict-headnum
   CELL% 32 * FIELD dict-semgloss
   CELL%      FIELD dict-stems        \ pointer to strlist%
+  CELL%      FIELD dict-flags
 END-STRUCT dict%
+
+DEFER .dictflags  ( dictflags -- )
 
 : .dict  ( dict -- )
   DUP dict-p-o-s @ .p-o-s BL EMIT
   DUP dict-headword COUNT TYPE BL EMIT
+  DUP dict-headnum @ ?DUP-IF . BL EMIT THEN
+  DUP dict-flags @ ?DUP-IF .dictflags BL EMIT THEN
   DUP dict-semgloss $201B XEMIT COUNT TYPE $2019 XEMIT BL EMIT
-  dict-stems @ .strlist ;
+  DUP dict-stems @ .strlist BL EMIT
+  dict-id @ . ;
 
 list%
   CELL%      FIELD stem-dict
@@ -44,14 +52,14 @@ VARIABLE dictionary-ptr
 
 : find-headwords  { D: s -- dicts|0 }
   0 >R                                              ( R: dicts )
-  s fuzzy-stem-find DUP IF                              ( stem )
+  s fuzzy-stem-find ?DUP-IF                             ( stem )
     BEGIN
       DUP stem-dict @                              ( stem dict )
       DUP dict-headword COUNT  s STR= IF
         R> SWAP ptrlist-prepend >R           ( stem  R: dicts' )
       THEN
-    list-next @ DUP WHILE REPEAT
-  THEN DROP R> ;
+    list-next @ DUP WHILE REPEAT DROP
+  THEN R> ;
 
 : stem-create-for-dict  ( dict -- stem )
   stem% %ALLOT >R      ( dict  R: stem )
@@ -62,17 +70,17 @@ VARIABLE dictionary-ptr
 : stem-get-for-dict  ( dict stem -- stem )
   >R                                 ( dict  R: stem )
   BEGIN DUP R@ stem-dict @ <> WHILE
-    R@ list-next @ DUP IF RDROP >R  ( dict  R: stem' )
-    ELSE DROP                        ( dict  R: stem )
+    R@ list-next @ ?DUP-IF RDROP >R  ( dict  R: stem' )
+    ELSE
       DUP stem-create-for-dict          ( dict stem' )
       DUP R> list-next ! >R         ( dict  R: stem' )
     THEN
   REPEAT DROP R> ;
 
 : stem-table-add-key  { D: key dict table -- }
-  key table stem-find-in-table DUP IF      ( stem )
+  key table stem-find-in-table ?DUP-IF     ( stem )
     dict SWAP stem-get-for-dict DROP            ( )
-  ELSE DROP
+  ELSE
     \ ." add key " 2DUP TYPE cr
     GET-CURRENT table SET-CURRENT      ( wordlist )
     key NEXTNAME
@@ -86,12 +94,15 @@ VARIABLE dictionary-ptr
 : (dict-check-semgloss)  ( head len -- head len )
   DUP max-semgloss > IF ( TYPE ABORT"  semgloss too long" ) DROP max-semgloss 1- THEN ;
 
-: dict-add  ( "word" pos -- )
+: dict-add  ( "word" id pos -- )
   \ Allocate article
-  dict% %ALLOT { pos dict }       ( "word" )
+  dict% %ALLOT { id pos dict }       ( "word" )
   pos  dict dict-p-o-s  !
+  id   dict dict-id     !
   BL PARSE  (dict-check-headword)  dict dict-headword  s-to-cs  ( )
-  0  dict dict-stems  !
+  0  dict dict-stems    !
+  0  dict dict-headnum  !
+  0  dict dict-flags    !
 
   \ Add stem for search
   dict dict-headword COUNT      ( head len )
@@ -100,11 +111,18 @@ VARIABLE dictionary-ptr
   dict fuzzy-stem-table stem-table-add-key ;
 
 TABLE CONSTANT dictionary-wordlist
+
+REQUIRE dictext.fs
+
 GET-CURRENT dictionary-wordlist SET-CURRENT
 
 : i  ( "word" -- ; -- pos-i )
   HERE dictionary-ptr !
   pos-i dict-add ;
+
+: i1  ( "word" -- ; -- pos-i1 )
+  HERE dictionary-ptr !
+  pos-i1 dict-add ;
 
 : n  ( "word" -- ; -- pos-n )
   HERE dictionary-ptr !
@@ -118,7 +136,15 @@ GET-CURRENT dictionary-wordlist SET-CURRENT
   BL PARSE dictionary-ptr @  { D: stem dict }
   dict dict-stems @  stem strlist-prepend  dict dict-stems !
   stem dict stem-table stem-table-add-key
-  stem str-trim-last-cyr str-trim-last-cyr  dict  fuzzy-stem-table stem-table-add-key ;
+  stem str-trim-last-cyr str-trim-last-cyr  dict  fuzzy-stem-table stem-table-add-key
+  stem dict stem-postprocess ;
+
+: #  ( "number" -- )
+  BL PARSE S>NUMBER? IF
+    DROP dictionary-ptr @ dict-headnum !
+  ELSE
+    ABORT"  cannot parse headnum"
+  THEN ;
 
 : semgloss"  ( "text" -- )
   [CHAR] " PARSE  (dict-check-semgloss)  dictionary-ptr @ dict-semgloss s-to-cs ;

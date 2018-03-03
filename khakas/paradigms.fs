@@ -1,449 +1,472 @@
 \ after entering new data, repeat this command until no matches:
 \ :3,$s/"\(.*\)\([aceiopxyöÿ]\)/\="\"" . submatch(1) . tr(submatch(2),"aceiopxyöÿ", "асеіорхуӧӱ")/gI
 
-   1 CONSTANT flag-Perf
-   2 CONSTANT flag-Dur
-   4 CONSTANT flag-Cond
-   8 CONSTANT flag-RPast
-  16 CONSTANT flag-1/2pos.sg
-  32 CONSTANT flag-3pos
-  64 CONSTANT flag-Hab
- 128 CONSTANT flag-Past
- 256 CONSTANT flag-Pres/Indir
- 512 CONSTANT flag-Form1
-1024 CONSTANT flag-Iter
-2048 CONSTANT flag-Neg.cumul
-flag-RPast flag-Cond OR   CONSTANT flag-RPast-or-Cond
-flag-Past flag-Hab OR     CONSTANT flag-Past-or-Hab
-flag-1/2pos.sg flag-3pos OR CONSTANT flag-1/2pos.sg-or-3pos
+require khakas/flags.fs
+require khakas/constraints.fs
 
-: is-пар/кел? 0 ;
-: nomen-or-verb-with-Tense-without-Evid?  ( -- f )
-  verb? IF
-    7 slot-empty? IF
-      flag-Neg.cumul flag-empty? IF FALSE EXIT THEN
-    THEN
-    flag-Pres/Indir flag-is? IF FALSE EXIT THEN
-    8 slot-full? IF FALSE EXIT THEN
-  THEN
-  TRUE ;
-: full-person-allowed? ( -- f )
-  flag-RPast-or-Cond flag-is?
-  8 15 slot-range-empty? AND NOT ;
+CREATE slot-stack 32 CELLS ALLOT
+VARIABLE slot-stack-here  slot-stack slot-stack-here !
+: slot-add  LATESTXT slot-stack-here @ !  CELL slot-stack-here +!  0 slot-stack-here @ ! ;
 
 slot: <Distr>  \ 1
-  1 slot-empty!
-  [form] -nodistr 0 0 |
+  \ Навесим глобальные фильтры на 1-ю позицию с любым
+  \ (в том числе нулевым!) аффиксом
+  filters( constraint-0
+           constraint-1
+           constraint-2
+           constraint-27
+           constraint-cluster-envoice
+           constraint-non-envoiceable-stem
+           constraint-non-envoiced-rus
+           constraint-(СА|ТІ)ңАр-fallout
+           constraint-[Гң]Г-fallout
+           constraint-V[кх]V-fallout
+           constraint-VГV-fallout
+           constraint-VVГV-fallout
+           constraint-VңV-fallout
+           constraint-CCC-fallout
+           constraint-broken-harmony )
+    1 slot-empty!
+    form" -nodistr "
 
-  filter-start( verb? )
     1 slot-full!
-    [form] Distr rule-vu-fb " ғла хла "
-                           +" гле кле" |
-  filter-end
-  ;
+    form" Distr КлА"
+  filters-end
+  ; slot-add
 
-slot: <Form>  \ 2
+slot: <NF>  \ 2
   2 slot-empty!
-  [form] -noform 0 0 |
+  form" -noconv1 "
 
-  filter-start( verb? )
+  filters( constraint-4 )
     2 slot-full!
-    [form] Form     rule-cv-fb " ып п "
-                              +" іп п" | \ м диал.
-    flag-Form1 flag-set
-      [form] Form1  rule-fb    " а е" |
-    flag-Form1 flag-clear
-    [form] Form.Neg rule-nvu   " бин пин мин" |
-  filter-end
-  ;
+
+    filters( constraint-4.1ₚ )
+      form" NF (І)п"
+    filters-end
+    filters( constraint-4.1₀ )
+      form" NF₀ 0̸"
+    filters-end
+    form" NF.Neg Пин"
+  filters-end
+  ; slot-add
 
 slot: <Ptcl1>  \ 3
   3 slot-empty!
-  [form] -noemph1 0 0 |
+  form" -noptcl1 "
 
-  filter-start( verb? )
-    filter-start( flag-Form1 flag-empty? )
-      3 slot-full!
-      [form] Emph  rule-cv-fb  " даа таа дее тее" |
-      [form] Delim rule-nvu-fb " ла ла на "
-                              +" ле ле не" |
-      [form] Ass1  rule-fb     " ох ӧк" |
-  filter-end filter-end
-  ;
+  filters( constraint-5 )
+    3 slot-full!
+    form" Add ТАА"
+    form" Cont LА"
+    form" Ass₁ ОQ"
+  filters-end
+  ; slot-add
 
 slot: <Perf/Prosp>  \ 4
   4 slot-empty!
-  [form] -noperf 0 0 |
+  form" -noperf "
 
-  filter-start( verb? )
-    filter-start( 2 slot-empty? )
-      4 slot-full!
-      flag-Perf flag-set
-      [form] Perf  rule-cv-fb " ыбыс быс "
-                             +" ібіс біс" |
-      flag-Perf flag-clear
-      [form] Prosp rule-cv-fb " ах х "
-                             +" ек к" |
-  filter-end filter-end
-  ;
+  4 slot-full!
 
-slot: <Dur/Iter>  \ 5
+  filters( constraint-3 )
+    form" Perf (І)бІс"
+  filters-end
+
+  filters( constraint-6 )
+    form" Prosp.dial АQ"
+  filters-end
+  ; slot-add
+
+slot: <Dur>  \ 5
   5 slot-empty!
-  [form] -nodur 0 0 |
+  form" -nodur "
 
-  filter-start( verb? )
-    5 slot-full!
+  5 slot-full!
+  filters( constraint-7 constraint-8 )
+    filters( constraint-8.1ᵢ )
+      form" Dur1ᵢ и"
+    filters-end
+    filters( constraint-8.1ᵢᵣ )
+      form" Dur1ᵢᵣ ир"
+    filters-end
+  filters-end
 
-    filter-start( flag-Form1 flag-empty? )
-      flag-Dur flag-set
-        filter-start( is-пар/кел? ) \ только с глаголами пар и кел!
-          [form] Dur  0       " ир" |
-          [form] Dur1 0       " и" |
-        filter-else
-          [form] Dur  rule-fb " чат чет" |
-          [form] Dur1 rule-fb " ча че" |
-        filter-end
-      flag-Dur flag-clear
-    filter-end
-    flag-Iter flag-set
-      [form] Iter  rule-vu-fb " дыр тыр "
-                             +" дір тір" |
-    flag-Iter flag-clear
-  filter-end
-  ;
+  filters( constraint-26₅ )
+    form" Dur чАт"
+  filters-end
+  ; slot-add
 
-slot: <Neg>  \ 6
+slot: <Neg/Iter>  \ 6
   6 slot-empty!
-  [form] -noneg 0 0 |
+  form" -noneg/iter "
 
-  filter-start( verb? )
-    filter-start( 2 slot-empty? )
-      6 slot-full!
-      [form] Neg          rule-nvu-fb " ба па ма "
-                                     +" бе пе ме" |
-      flag-Neg.cumul flag-set
-        [form] Neg.Fut      rule-nvu-fb " бас пас мас "
-                                       +" бес пес мес" |
-        [form] Neg.Conv     rule-nvu    " бин пин мин" |
-        [form] Neg.Conv.Abl rule-vu-fb  " бинаң пинаң "
-                                       +" бинең пинең" |
-      flag-Neg.cumul flag-clear
-  filter-end filter-end
-  ;
+  filters( constraint-11 )
+    6 slot-full!
 
-slot: <Tense/Mood>  \ 7
+    filters( constraint-11.1 )
+      form" Neg ПА"
+    filters-end
+
+    filters( constraint-14 )
+      form" Iter АдІр"
+    filters-end
+
+    filters( constraint-26₆ )
+      form" Dur.Iter чАдІр"
+    filters-end
+  filters-end
+  ; slot-add
+
+slot: <Tense/Mood/Conv2>  \ 7
   7 slot-empty!
-  [form] -notense 0 0 |
+  form" -notense "
 
-  filter-start( verb? )
-    7 slot-full!
-    filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-      flag-Pres/Indir flag-set
-        filter-start( flag-Dur flag-empty? )
-          [form] Pres  rule-fb    " чадыр чедір" |
-          [form] Pres1 rule-fb    " чададыр чедедір" |
-        filter-end
-        [form] Indir   rule-vu-fb " дыр тыр "
-                                 +" дір тір" |
-      flag-Pres/Indir flag-clear
-      flag-Hab flag-set
-        [form] Hab     rule-vu-fb " ӌаң чаң "
-                                 +" ӌең чең" |
-      flag-Hab flag-clear
+  7 slot-full!
 
-      filter-start( 2 slot-empty?  4 6 slot-range-full?  OR  )
-        [form] Fut     rule-fb    " ар ер" |
-        flag-RPast flag-set
-          [form] RPast rule-vu-fb " ды ты "
-                                 +" ді ті" |
-        flag-RPast flag-clear
-        flag-Past flag-set
-          [form] Past  rule-vu-fb " ған хан "
-                                 +" ген кен" |
-        flag-Past flag-clear
-        filter-start( 1 5 slot-range-empty? )
-          flag-Cond flag-set
-            [form] Cond  rule-vu-fb " за са "
-                                   +" зе се" |
-          flag-Cond flag-clear
-        filter-end
-      filter-end
-      filter-start( flag-Perf flag-empty? )
-        [form] Cunc    rule-vu-fb " ғалах халах "
-                                 +" гелек келек" |
-      filter-end
-      [form] Conv1     rule-cv-fb " ып п "
-                                 +" іп п" |
-      [form] Conv1dial rule-cv-fb " абас м "
-                                 +" ебес м" |
-      [form] Conv2     rule-fb    " а е" |
-      [form] Lim       rule-vu-fb " ғали хали "
-                                 +" гели кели" |
-      [form] Opt       rule-vu-fb " ғай хай "
-                                 +" гей кей" |
-      [form] Debit     rule-vu-fb " ғадағ хадағ "
-                                 +" гедег кедег" |
-  filter-end filter-end
-  ;
+  filters( constraint-26₇ )
+    form" Pres чА"
+  filters-end
 
-slot: <Irr/Evid>  \ 8
+  flag-Neg7 flag-set
+    form" Neg.Fut ПАс"
+  flag-Neg7 flag-clear
+
+  flag-Past flag-set
+    filters( constraint-9.1 )
+      form" Past₁ ГА"
+    filter-else
+      form" Past₂ ГАн"
+    filters-end
+  flag-Past flag-clear
+
+  filters( constraint-10.1 )
+    filters( constraint-9.3 )
+      form" Futₐ А"
+    filters-end
+    form" Futₐᵣ Ар"
+  filters-end
+
+  filters( constraint-9.2 )
+    form" Hab₁ ЧА"
+  filters-end
+  form" Hab₂ ЧАң"
+
+  filters( constraint-12 )
+    form" RPast ТІ"
+  filters-end
+
+  filters( constraint-10 )
+    form" Cunc ГАлАQ"
+  filters-end
+
+  filters( constraint-13 )
+    form" Cond СА"
+  filters-end
+  flag-Opt-or-Assum flag-set
+    form" Opt ГАй"
+    form" Assum ГАдАG"
+  flag-Opt-or-Assum flag-clear
+
+  filters( constraint-25 )
+    form" Lim ГАли"
+
+    flag-Neg7 flag-set
+      flag-Conv2 flag-set
+        form" Neg.Conv Пин"
+        form" Neg.Conv.Abl ПинАң"
+      flag-Conv2 flag-clear
+    flag-Neg7 flag-clear
+
+    flag-Conv2 flag-set
+      form" Convₚ (І)п"
+      form" Conv.pas.dial АбАс"
+      form" Conv.a А"
+    flag-Conv2 flag-clear
+
+    filters( constraint-26₇ )
+      form" PresPt.dial чАн"
+    filters-end
+  filters-end
+  ; slot-add
+
+slot: <Indir>  \ 8
   8 slot-empty!
-  [form] -noirr 0 0 |
+  form" -noindir "
 
-  filter-start( flag-Cond flag-empty? )
-    filter-start( verb? )
-      filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-        8 slot-full!
-        [form] Irr/Evid rule-vu-fb " ӌых чых "
-                                  +" ӌіх чіх" |
-  filter-end filter-end filter-end
-  ;
+  filters( constraint-15 constraint-26₈ )
+    8 slot-full!
+    filters( constraint-voicedstem+Indir )
+      form" Indir тІр"
+    filter-else
+      form" Indir ТІр"
+    filters-end
+  filters-end
+  ; slot-add
 
 slot: <Comit>  \ 9
   9 slot-empty!
-  [form] -nocomit 0 0 |
+  form" -nocomit "
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
-    filter-start( flag-RPast-or-Cond flag-empty? )
-      filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-        9 slot-full!
+  9 slot-full!
 
-        [form] Comit rule-nvu-fb " лығ тығ нығ "
-                                +" ліг тіг ніг" |
-  filter-end filter-end filter-end
-  ;
+  form" Comit ЛІG"
+  ; slot-add
 
-slot: <Num>  \ 10
+slot: <Affirm>  \ 10
   10 slot-empty!
-  [form] -nonum 0 0 |
+  form" -noaffirm "
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
-    filter-start( flag-RPast-or-Cond flag-empty? )
-      filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-        10 slot-full!
+  10 slot-full!
+  form" Affirm ЧІQ"
+  ; slot-add
 
-        [form] Pl rule-nvu-fb " лар тар нар "
-                             +" лер тер нер" |
-  filter-end filter-end filter-end
-  ;
-
-slot: <Poss>  \ 11
+slot: <Pl₁>  \ 11
   11 slot-empty!
-  [form] -noposs 0 0 |
+  form" -nopl1 "
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
-    filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-      filter-start( flag-RPast-or-Cond flag-empty? )
-        11 slot-full!
+  filters( constraint-16.1 )
+    11 slot-full!
+    form" Pl₁ ЛАр"
+  filters-end
+  ; slot-add
 
-        flag-1/2pos.sg flag-set
-          [form] 1pos.sg rule-cv-fb " ым м "
-                                   +" ім м" |
-          [form] 2pos.sg rule-cv-fb " ың ң "
-                                   +" ің ң" |
-        flag-1/2pos.sg flag-clear
-        flag-3pos flag-set
-          [form] 3pos    rule-cv-fb " ы зы "
-                                   +" і зі" |
-        flag-3pos flag-clear
-        [form] 1pos.pl   rule-cv-fb " ыбыс быс "
-                                   +" ібіс біс" |
-        [form] 2pos.pl   rule-cv-fb " ыңар ңар "
-                                   +" іңер ңер" |
-  filter-end filter-end filter-end
-  ;
-
-slot: <Apos>  \ 12
+slot: <Poss₁>  \ 12
   12 slot-empty!
-  [form] -noapos 0 0 |
+  form" -noposs1 "
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
-    filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-      filter-start( flag-RPast-or-Cond flag-empty? )
-        12 slot-full!
+  filters( constraint-16.1 )
+    12 slot-full!
 
-        [form] Apos  rule-vu  " ни ти" |
-  filter-end filter-end filter-end
-;
+    flag-Poss1.nonpl flag-set
+      form" 1pos.sg (І)м"
+      form" 2pos.sg (І)ң"
+      filters( constraint-OK-fallout₁₂ )
+        form" 3pos₁ (з)І"
+      filters-end
+    flag-Poss1.nonpl flag-clear
+    form" 1pos.pl (І)бІс"
+    form" 2pos.pl (І)ңАр"
+  filters-end
+  ; slot-add
 
-slot: <Case>  \ 13
+slot: <Case₁>  \ 13
   13 slot-empty!
-  [form] -nocase 0 0 |
+  form" -nocase1 "
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
-    filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-      filter-start( flag-RPast-or-Cond flag-empty? )
-        13 slot-full!
+  filters( constraint-16.1 )
+    13 slot-full!
 
-        [form] Gen    rule-vu-fb  " ның тың "
-                                 +" нің тің" |
+    form" Gen₁ НІң"
 
-        filter-start( flag-1/2pos.sg-or-3pos flag-is? )
-          [form] Dat  rule-cv-fb  " а на "
-                                 +" е не" |
-        filter-else
-          [form] Dat  rule-vu-fb  " ға ха "
-                                 +" ге ке" |
-        filter-end
+    filters( constraint-17₁₃ )
+      form" Loc ТА"
+    filter-else
+      form" Loc (н)ТА"
+    filters-end
 
-        filter-start( flag-3pos flag-is? )
-          [form] Acc  0           " н" |
-          [form] Loc  rule-fb     " нда нде" |
-        filter-else
-          [form] Acc  rule-vu-fb  " ны ты "
-                                 +" ні ті" |
-          [form] Loc  rule-vu-fb  " да та "
-                                 +" де те" |
-        filter-end
-
-        [form] Abl    rule-nvu-fb " даң таң наң "
-                                 +" дең тең нең" |
-
-        filter-start( flag-3pos flag-is? )
-          [form] All  rule-fb     " нзар нзер" |
-        filter-else
-          [form] All  rule-vu-fb  " зар сар "
-                                 +" зер сер" |
-        filter-end
-
-        [form] Instr  rule-fb     " наң нең" |
-        [form] Prol   rule-vu-fb  " ӌа ча "
-                                 +" ӌе че" |
-        [form] Delib  rule-nvu-fb " даңар таңар наңар "
-                                 +" деңер теңер неңер" |
-
-        filter-start( flag-3pos flag-is? )
-          [form] Comp rule-fb     " ндағ ндег" |
-        filter-else
-          [form] Comp rule-vu-fb  " дағ тағ "
-                                 +" дег тег" |
-        filter-end
-
-        filter-start( 12 slot-full? )
-          [form] Temp rule-cv-fb  " ын н "
-                                 +" ін н" |
-        filter-end
-  filter-end filter-end filter-end
-  ;
+    flag-All1 flag-set
+      filters( constraint-17₁₃ )
+        form" All САр"
+      filter-else
+        form" All (н)САр"
+      filters-end
+    flag-All1 flag-clear
+  filters-end
+  ; slot-add
 
 slot: <Attr>  \ 14
   14 slot-empty!
-  [form] -noattr 0 0 |
+  form" -noattr "
 
-  filter-start( nomen-or-verb-with-Tense-without-Evid? )
-    filter-start( flag-Form1 flag-empty?  flag-Iter flag-is? OR )
-      filter-start( flag-RPast-or-Cond flag-empty? )
-        14 slot-full!
+  filters( constraint-16.2₁₄ )
+    14 slot-full!
+    form" Attr КІ"
+  filters-end
+  ; slot-add
 
-        [form] Attr  rule-vu-fb " ғы хы "
-                               +" гі кі" |
-  filter-end filter-end filter-end
-  ;
-
-slot: <Ptcl2>  \ 15
+slot: <Pl₂>  \ 15
   15 slot-empty!
-  [form] -noemph 0 0 |
+  form" -nopl2 "
 
-  filter-start( flag-RPast-or-Cond flag-empty? )
+  filters( constraint-16.3 constraint-16.4 )
     15 slot-full!
+    form" Pl₂ ЛАр"
+  filters-end
+  ; slot-add
 
-    [form] Ass2  rule-fb  " ох ӧк" |
-  filter-end
-  ;
-
-slot: <Person>  \ 16
+slot: <Poss₂>  \ 16
   16 slot-empty!
-  [form] -3prs.sg 0 0 |
+  form" -noposs2 "
 
-  16 slot-full!
+  filters( constraint-16.5₁₆ )
+    16 slot-full!
 
-  filter-start( full-person-allowed? )
-    [form] 1prs.sg         rule-nvu-fb " бын пын мын "
-                                      +" бін пін мін" |
-  filter-end
+    flag-Poss2.nonpl flag-set
+      form" 1pos.sg (І)м"
+      form" 2pos.sg (І)ң"
+      filters( constraint-OK-fallout₁₆ )
+        form" 3pos (з)І"
+      filters-end
+      form" Gen.3pos Ни"
+      form" Gen.3pos.dial Ди"
+    flag-Poss2.nonpl flag-clear
+    form" 1pos.pl (І)бІс"
+    form" 2pos.pl (І)ңАр"
+  filters-end
+  ; slot-add
 
-  filter-start( 9 15 slot-range-empty? )
-    [form] 1prs.sg.br      rule-cv-fb  " ым м "
-                                      +" ім м" |
-  filter-end
-
-  filter-start( full-person-allowed? )
-    [form] 2prs.sg         rule-vu-fb  " зың сың "
-                                      +" зің сің" |
-  filter-end
-
-  filter-start( 9 15 slot-range-empty? )
-    [form] 2prs.sg.br      rule-cv-fb  " ың ң "
-                                      +" ің ң" |
-  filter-end
-
-  filter-start( flag-Past-or-Hab flag-is? )
-    [form] 3prs            rule-fb     " дыр дір" |
-  filter-end
-
-  [form] 1prs.pl           rule-nvu-fb " быс пыс мыс "
-                                      +" біс піс міс" |
-  filter-start( full-person-allowed? )
-    [form] 2prs.pl         rule-vu-fb  " зар сар "
-                                      +" зер сер" |
-  filter-end
-
-  filter-start( 9 15 slot-range-empty? )
-    [form] 2prs.pl.br      rule-cv-fb  " ыңар ңар "
-                                      +" іңер ңер" |
-  filter-end
-
-  [form] 3prs.pl           rule-nvu-fb " лар тар нар "
-                                      +" лер тер нер" |
-
-  filter-start( 7 15 slot-range-empty?  flag-Neg.cumul flag-empty? AND )
-    filter-start( verb? )
-      [form] Imp1prs.sg      0           " им" |
-      [form] Imp3prs.sg      rule-vu-fb  " зын сын "
-                                        +" зін сін" |
-      [form] Imp1prs.dual    rule-fb     " аң ең" |
-      [form] Imp1prs.pl      rule-fb     " ибыс ибіс" |
-      [form] Imp1prs.plIncl  rule-fb     " аңар еңер" |
-      [form] Imp2prs.pl      rule-cv-fb  " ыңар ңар "
-                                        +" іңер ңер" |
-      [form] Imp3prs.pl      rule-vu-fb  " зыннар сыннар "
-                                        +" зіннер сіннер" |
-      [form] Prec1prs.sg     rule-fb     " имдах имдек" |
-      [form] Prec2prs.sg     rule-vu-fb  " дах тах "
-                                        +" дек тек" |
-      [form] Prec3prs.sg     rule-vu-fb  " зындах сындах "
-                                        +" зіндек сіндек" |
-      [form] Prec1prs.dual   rule-fb     " аңдах еңдек" |
-      [form] Prec1prs.pl     rule-fb     " ибыстах ибістек" |
-      [form] Prec1prs.plIncl rule-fb     " аңардах еңердек" |
-      [form] Prec2prs.pl     rule-cv-fb  " ыңардах ңардах "
-                                        +" іңердек ңердек" |
-      [form] Prec3prs.pl     rule-vu-fb  " зыннардах сыннардах "
-                                        +" зіннердек сіннердек" |
-    filter-end
-    [form] Past1prs.sg     rule-vu-fb  " ғам хам "
-                                      +" гем кем" |
-    [form] Past2prs.sg     rule-vu-fb  " ғаӊ хаӊ "
-                                      +" геӊ кеӊ" |
-    [form] Past1prs.pl     rule-vu-fb  " ғабыс хабыс "
-                                      +" гебіс кебіс" |
-    [form] Past2prs.pl     rule-vu-fb  " ғазар хазар "
-                                      +" гезер кезер" |
-  filter-end
-  ;
-
-slot: <Manner>  \ 17
+slot: <Case₂>  \ 17
   17 slot-empty!
-  [form] -noadv 0 0 |
+  form" -nocase2 "
 
   17 slot-full!
 
-  [form] Manner rule-nvu " ли ти ни" |
-;
+  filters( constraint-16.5₁₇ )
+    filters( constraint-29 )
+      form" Gen₂ НІң"
+      form" Gen.dial ДІң"
+      form" Instr нАң"
+      form" Instr.dial ПАң"
+      form" Instr.dial мАң"
+      form" Instr.dial ПлАң"
+    filters-end
 
-CREATE slot-stack
- ' <Distr> , ' <Form> , ' <Ptcl1> , ' <Perf/Prosp> ,
- ' <Dur/Iter> , ' <Neg> , ' <Tense/Mood> , ' <Irr/Evid> ,
- ' <Comit> , ' <Num> , ' <Poss> , ' <Apos> ,
- ' <Case> , ' <Attr> , ' <Ptcl2> , ' <Person> , ' <Manner> , 0 ,
-17 CONSTANT /slot-stack
+    filters( constraint-17₁₇ )
+      filters( constraint-OK-fallout₁₇ )
+        form" Dat ГА"
+      filters-end
+      filters( constraint-29 )
+        form" Acc НІ"
+        form" Acc.dial ДІ"
+      filters-end
+      form" Loc ТА"
+      form" Abl₁ ДАң"
+      form" All САр"
+      form" All.dial САрІ"
+      form" All.dial СА"
+      form" Prol ЧА"
+      form" Delib ДАңАр"
+      form" Comp ТАG"
+      filters( constraint-30 )
+        form" Abl₂ тІн"
+      filters-end
+    filter-else
+      filters( constraint-OK-fallout₁₇ )
+        form" Dat (н)А"
+      filters-end
+      filters( constraint-29 )
+        filters( constraint-V+Acc )
+          form" Acc₂ Н"
+        filter-else
+          form" Acc₁ НІ"
+        filters-end
+      filters-end
+      form" Loc (н)ТА"
+      form" Abl нАң"
+      form" All (н)САр"
+      form" Prol (н)ЧА"
+      form" Delib нАңАр"
+      form" Comp (н)ТАG"
+    filters-end
+  filters-end
+  ; slot-add
+
+slot: <Ptcl₂>  \ 18
+  18 slot-empty!
+  form" -noptcl2 "
+
+  18 slot-full!
+
+  form" Ass₂ ОQ"
+
+  filters( constraint-18 )
+    form" Adv Ли"
+  filters-end
+  ; slot-add
+
+slot: <Person>  \ 19
+  19 slot-empty!
+  form" -3prs.sg "
+
+  19 slot-full!
+
+  filters( constraint-20-full-person )
+    form" 1sg ПІн"
+    form" 1sg.dial СІм"
+    form" 2sg СІң"
+
+    flag-1.pl flag-set
+      form" 1pl ПІс"
+      form" 1pl.dial СІПІс"
+    flag-1.pl flag-clear
+    form" 2pl САр"
+    form" 2pl.dial СІңАр"
+  filters-end
+
+  filters( constraint-20-mix-person )
+    flag-1sg.br flag-set
+      form" 1sg.mix м"
+    flag-1sg.br flag-clear
+    form" 2sg.mix СІң"
+
+    flag-1.pl flag-set
+      form" 1pl.mix ПІс"
+    flag-1.pl flag-clear
+    form" 2pl.mix САр"
+  filters-end
+
+  filters( constraint-20-short-person )
+    flag-Person.br flag-set
+      flag-1sg.br flag-set
+        form" 1sg.br м"
+      flag-1sg.br flag-clear
+      form" 2sg.br ң"
+      flag-1.pl flag-set
+        form" 1pl.br ПІс"
+      flag-1.pl flag-clear
+      form" 2pl.br (І)ңАр"
+    flag-Person.br flag-clear
+  filters-end
+
+  filters( constraint-19 )
+    flag-Imp flag-set
+      form" Imp.1sg им"
+      form" Imp.1pl ибІс"
+      form" Imp.1.Incl Аң"
+      form" Imp.1pl.Incl АңАр"
+      form" Imp.1pl.Incl.dial АлАр"
+      form" Imp.2pl (І)ңАр"
+      form" Imp.3 СІн"
+    flag-Imp flag-clear
+  filters-end
+  ; slot-add
+
+slot: <PredPl>  \ 20
+  20 slot-empty!
+  form" -nopredpl "
+
+  20 slot-full!
+  filters( constraint-21 )
+    form" PredPl ЛАр"
+  filters-end
+  ; slot-add
+
+slot: <Ptcl₃>  \ 21
+  21 slot-empty!
+  form" -noptcl3 "
+
+  21 slot-full!
+
+  form" Ass₃ ОQ"
+
+  filters( constraint-23 )
+    form" Foc ТІр"
+  filters-end
+
+  filters( constraint-22 )
+    form" Perm ТАQ"
+  filters-end
+  ; slot-add
+
+slot-stack-here @ slot-stack - CELL / CONSTANT /slot-stack

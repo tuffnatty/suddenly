@@ -1,5 +1,5 @@
 REQUIRE slot-stack.fs
-REQUIRE debug.fs
+REQUIRE debugging.fs
 REQUIRE dictionary.fs
 REQUIRE formname.fs
 REQUIRE grammar.fs
@@ -52,7 +52,8 @@ IS (form-prolog)
   THEN
   slot-stack-push ;
 
-:noname  ( n addr u -- )
+:noname  ( rule addr u -- )
+  2>R EXECUTE 2R>  ( n addr u )
   add-slot (more) DUP warp-prev-form-len @ form-name C! ;
 IS (form-epilog)
 

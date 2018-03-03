@@ -13,11 +13,11 @@ CREATE input-word 0 C, 255 ALLOT
 ;
 
 VARIABLE parse-mode
-REQUIRE debug.fs
+REQUIRE debugging.fs
 
 : parse-args  ( ptr len -- )
   2DUP S" debug=" SEARCH IF  ( ptr len value n-rest )
-    6 /STRING 2>R 0. 2R> >NUMBER 2DROP D>S TO debug-mode? ( ptr len )
+    6 /STRING 2>R $0. 2R> >NUMBER 2DROP D>S TO debug-mode? ( ptr len )
   ELSE 2DROP THEN ( ptr len )
   \ 2DUP S" language=" SEARCH IF
   \   9 /STRING 2DUP S" &" SEARCH IF ( ptr len lang-start n-rest lang-end n-rest )

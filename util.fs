@@ -1,6 +1,9 @@
 : NOT  ( f -- !f )
   POSTPONE 0= ; IMMEDIATE
 
+: ||  ( f  R: x r -- true R: x PC: r | R: x r )  \ OR with boolean shortcircuiting
+  ]] ?DUP-IF EXIT THEN [[ ; IMMEDIATE
+
 : array-reverse  ( arr len -- )
   1- CELLS OVER + BEGIN 2DUP < WHILE  ( a1 a2 )
     2DUP 2DUP @ SWAP @ ROT ! SWAP !
@@ -10,7 +13,16 @@
 \ semi-lambda words
 : :[  ( -- )
   POSTPONE AHEAD :noname ; IMMEDIATE
+: :[: ( <name> -- )
+  POSTPONE AHEAD : ; IMMEDIATE
 : ];  ( -- xt )
-  POSTPONE ; ] >R POSTPONE THEN R> POSTPONE LITERAL ; IMMEDIATE
+  POSTPONE ; ] POSTPONE THEN LATESTXT POSTPONE LITERAL ; IMMEDIATE
 
-: rdepth rp@ rp0 - ;  
+: rdepth rp@ rp0 - ;
+
+[IFUNDEF] ]]L
+: postpone-literal  postpone  literal ;
+: ]]L ( postponing: x -- ; compiling: -- x )
+    \ Shortcut for @code{]] literal}.
+    ]] postpone-literal ]] [[ ; immediate
+[THEN]

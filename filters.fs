@@ -1,46 +1,83 @@
 \ filters stack. Each element is 2 cells: xt negation
-CREATE filters 0 , 32 CELLS ALLOT
+STRUCT
+  CELL% FIELD filter-xt
+  CELL% FIELD filter-negated
+  CELL% FIELD filter-nt
+END-STRUCT filter%
+
+VARIABLE n-filters
+CREATE filters filter% 64 * %ALLOT
 
 : filters-top-ptr  ( -- ptr )
-  filters @ 2* CELLS filters + ;
+  n-filters @ 1- [ filter% %size ]L * filters + ;
 
-: .filter  filters-top-ptr 2@ DROP XT-SEE ;
+: .filter  ( -- )
+  filters-top-ptr DUP filter-negated @ IF ." negated: " THEN  ( top )
+  filter-xt @ >BODY SEE-THREADED ;
 
-: >filters  ( xt f -- )
-  filters @ 1+ filters !
-  filters-top-ptr 2!
-  \\."  ADDED FILTER: " .filter cr
+: >filters  ( nt xt f -- )
+  1 n-filters +!
+  filters-top-ptr { top }
+  top filter-negated !  top filter-xt !  top filter-nt !  ( )
+  \ \."  ADDED FILTER: " .filter cr
   ;
 
 : filters-drop  ( -- )
-  \\."  DROPPING FILTER: " .filter cr
-  filters @ 1- filters ! ;
+  \ \."  DROPPING FILTER: " .filter cr
+  ASSERT( n-filters @ 0> )  \ filter stack underflow
+  -1 n-filters +! ;
 
-: filters>  ( -- xt f )
-  filters-top-ptr 2@ filters-drop ;
-
-: filter-start(
-  POSTPONE :[ ; IMMEDIATE
-
-: )
-  POSTPONE ]; FALSE POSTPONE LITERAL POSTPONE >filters ; IMMEDIATE
+: filters>  ( -- nt xt f )
+  filters-top-ptr { top }
+  top filter-nt @  top filter-xt @  top filter-negated @  ( nt xt f )
+  filters-drop ;
 
 : filter-else  ( -- )
   filters> NOT >filters ;
 
-: filter-end  ( -- )
-  POSTPONE filters-drop ; IMMEDIATE
-
-: filters-check  ( -- f )
-  \." flags: " paradigm-flags @ 2 base ! . ."  bmp:" paradigm-slot-bitmap @ . decimal cr
-  filters-top-ptr BEGIN DUP filters > WHILE
-    DUP 2@ >R
-    \." checking filter: " dup >name ?dup-if .id else dup xt-see then r@ if ."  negated" then cr
-    EXECUTE
-    R> NOT IF NOT THEN
-    IF
-      \." filter check failed" cr
-      DROP FALSE EXIT
+: filters(  ( <name>... -- | compile: filters-sys )
+  0 { count }
+  BEGIN
+    PARSE-NAME { D: s }
+  s S" )" COMPARE WHILE
+    s string-length IF
+      s FIND-NAME ?DUP-IF       ( nt )
+        DUP POSTPONE LITERAL
+        NAME>INT POSTPONE LITERAL  ( )
+      ELSE 1 ABORT"  word not found!" THEN
+      FALSE POSTPONE LITERAL
+      POSTPONE >filters
+      count 1+ TO count
+    ELSE
+      REFILL 0= ABORT"  no closing parenthesis"
     THEN
-    2 CELLS -
-  REPEAT DROP TRUE ;
+  REPEAT count ; IMMEDIATE
+
+: filters-end  ( compile: filters-sys -- )
+  NEGATE ]]L n-filters +! [[ ; IMMEDIATE
+
+: filters-check  ( stem -- stem f )
+  \." hypothesis:  " DUP .stem-single
+  \."  affixes:    " formform .bstr cr
+  \."  affix names:" formname .bstr cr
+  \."  slot flags: " formflag .bstr cr
+  \."  slots:      " .slots cr
+  \."  flags:      " paradigm-flags flags. cr
+  \."  filters:    "
+  filters-top-ptr BEGIN DUP filters >= WHILE  { filter }
+    \stack-mark
+    \." " filter filter-nt @ .ID  filter filter-negated @ if ."  [negated]" then
+    filter filter-xt @ EXECUTE                ( stem f )
+    filter filter-negated @ NOT IF NOT THEN       ( f' )
+    IF                                               ( )
+      \." FAILED" cr
+      \stack-check
+      FALSE EXIT
+    THEN                                             ( )
+    \." OK, "
+    \stack-check
+    filter filter% %size -
+    \\." stem is now " over .stem-single cr
+  REPEAT DROP TRUE
+  \." " cr
+  ;
