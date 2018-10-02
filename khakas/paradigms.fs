@@ -398,7 +398,7 @@ slot: <Person>  \ 19
 
     flag-1.pl flag-set
       form" 1pl ПІс"
-      form" 1pl.dial СІПІс"
+      form" 1pl.dial СІбІс"
     flag-1.pl flag-clear
     form" 2pl САр"
     form" 2pl.dial СІңАр"
