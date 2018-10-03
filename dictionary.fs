@@ -95,6 +95,7 @@ VARIABLE dictionary-ptr
   DUP max-semgloss > IF ( TYPE ABORT"  semgloss too long" ) DROP max-semgloss 1- THEN ;
 
 : dict-add  ( "word" id pos -- )
+  unused 1000000 <= if bl parse 2drop 2drop ." out of dictionary space" cr exit then
   \ Allocate article
   dict% %ALLOT { id pos dict }       ( "word" )
   pos  dict dict-p-o-s  !
@@ -112,7 +113,7 @@ VARIABLE dictionary-ptr
 
 TABLE CONSTANT dictionary-wordlist
 
-REQUIRE dictext.fs
+language-require dictext.fs
 
 GET-CURRENT dictionary-wordlist SET-CURRENT
 
@@ -149,8 +150,8 @@ GET-CURRENT dictionary-wordlist SET-CURRENT
 : semgloss"  ( "text" -- )
   [CHAR] " PARSE  (dict-check-semgloss)  dictionary-ptr @ dict-semgloss s-to-cs ;
 
-dictionary-wordlist >ORDER
-REQUIRE dict.fs
+ALSO dictionary-wordlist CONTEXT !
+language-require dict.fs
 PREVIOUS
 
 SET-CURRENT
