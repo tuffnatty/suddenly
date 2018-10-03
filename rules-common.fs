@@ -1,5 +1,5 @@
-REQUIRE phonetics.fs
 REQUIRE strings.fs
+language-require phonetics.fs
 
 : vowel-long?  ( addr u -- f )
   2 cyrs < IF DROP FALSE EXIT THEN  ( addr )
@@ -89,6 +89,7 @@ REQUIRE strings.fs
   2DUP rule-nvu rule-vu-fb D= IF 2DROP rule-nvu-fb EXIT THEN
   2DUP rule-cv-fb rule-vu D= IF 2DROP rule-cv-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-fb D= IF 2DROP rule-vu-fb EXIT THEN
+  2DUP rule-vu-fb rule-cv D= IF 2DROP rule-cv-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-cv-vu-fb D= IF 2DROP rule-cv-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-vu D= IF 2DROP rule-vu-fb EXIT THEN
   2DUP rule-vu-fb rule-nvu D= IF 2DROP rule-nvu-fb EXIT THEN
