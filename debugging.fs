@@ -1,4 +1,4 @@
-REQUIRE util.fs
+INCLUDE util.fs
 
 : bin.  ( u -- )
   BASE @  2 BASE !  SWAP .  BASE ! ;
@@ -58,8 +58,12 @@ DEFER debug-bye
 : \stack-check  ( -- )
   debug-mode? IF POSTPONE depth-stack-check THEN ; immediate
 
-[IFUNDEF] SEE-THREADED
+[undefined] SEE-THREADED [IF]
+[undefined] see-voc [if]
+: see-threaded see ;
+[else]
 ALSO see-voc
 : see-threaded SEE-THREADED ;
 PREVIOUS
+[then]
 [THEN]

@@ -1,4 +1,4 @@
-require rules.fs
+language-require rules.fs
 
 : morphonemic-get-rules  ( addr u -- rule )
   0 { rule-sum }
@@ -31,9 +31,10 @@ require rules.fs
   LOOP 2DROP sstr ;
 
 : morphonemic-to-sstr-and-rule  ( addr u -- sstr rule )
-  \ ." morphonemic-to-sstr-and-rule:in " 2dup type cr
+  \ ." morphonemic-to-sstr-and-rule:" 2dup type cr
   DUP { len }
   len 0= IF 2DROP 0 0 EXIT THEN
+  \ OVER XC@  [CHAR] ∅  =  IF 2DROP 0 0 EXIT THEN
   2DUP morphonemic-get-rules { rule-sum }
   \ ." rule-sum: " rule-sum >NAME ?DUP-IF .NAME THEN
   rule-sum rule-capacity  { capacity }

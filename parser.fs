@@ -101,7 +101,7 @@ CREATE formflag bstr% %ALLOT bstr-init
 
 REQUIRE filters.fs
 
-REQUIRE transforms.fs
+language-require transforms.fs
 
 \ Trace output
 REQUIRE debugging.fs
@@ -117,7 +117,7 @@ REQUIRE debugging.fs
   affix-name-clean formname form-prepend  ( )
   ; IS (form-prolog)
 
-REQUIRE rules.fs
+language-require rules.fs
 REQUIRE loaddefs.fs
 
 DEFER yield-stem  ( stem -- )

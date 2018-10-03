@@ -1,4 +1,57 @@
-[IFUNDEF] XC!+
+[UNDEFINED] XC!+? [IF]
+-77 Constant UTF-8-err
+128 CONSTANT max-single-byte
+: u8len ( u8 -- n )
+    dup      max-single-byte u< IF  drop 1  EXIT  THEN \ special case ASCII
+    $800  2 >r
+    BEGIN  2dup u>=  WHILE  5 lshift r> 1+ >r  dup 0= UNTIL  THEN
+    2drop r> ;
+: x-size ( u8-addr u -- u1 )
+    \ length of UTF-8 char starting at u8-addr (accesses only u8-addr)
+    drop c@
+    dup $80 u< if drop 1 exit then
+    dup $c0 u< if UTF-8-err throw then
+    dup $e0 u< if drop 2 exit then
+    dup $f0 u< if drop 3 exit then
+    dup $f8 u< if drop 4 exit then
+    dup $fc u< if drop 5 exit then
+    dup $fe u< if drop 6 exit then
+    dup $ff u< if drop 7 exit then
+    drop 8 ;
+: XC@+ ( u8addr -- u8addr' u )
+    count  dup max-single-byte u< ?EXIT  \ special case ASCII
+    dup $C2 u< IF  UTF-8-err throw  THEN  \ malformed character
+    $7F and  $40 >r
+    BEGIN  dup r@ and  WHILE  r@ xor
+	    6 lshift r> 5 lshift >r >r count
+	    dup $C0 and $80 <> IF   UTF-8-err throw  THEN
+	    $3F and r> or
+    REPEAT  rdrop ;
+: XC@ ]] XC@+ nip [[ ; immediate
+: XCHAR+ ]] XC@+ DROP [[ ; immediate
+: XCHAR- ( u8addr -- u8addr' )
+    BEGIN  1- dup c@ $C0 and max-single-byte <>  UNTIL ;
+: +x/string ( xc-addr1 u1 -- xc-addr2 u2 )
+    over dup XCHAR+ swap - /string ;
+: u8!+ ( u u8addr -- u8addr' )
+    over max-single-byte u< IF  tuck c! 1+  EXIT  THEN \ special case ASCII
+    >r 0 swap  $3F
+    BEGIN  2dup u>  WHILE
+	    2/ >r  dup $3F and $80 or swap 6 rshift r>
+    REPEAT  $7F xor 2* or  r>
+    BEGIN   over $80 u>= WHILE  tuck c! 1+  REPEAT  nip ;
+: XC!+?  ( u addr len -- addr' len' f )
+    >r over u8len r@ over u< if ( xc xc-addr1 len r: u1 )
+	\ not enough space
+	drop nip r> false
+    else
+	>r u8!+ r> r> swap - true
+    then ;
+: XC-SIZE u8len ;
+[THEN]
+
+\ for older GForth versions
+[UNDEFINED] XC!+ [IF]
 : XC!+  ( u addr -- addr' )
   5 XC!+? 2DROP ;
 [THEN]
@@ -17,9 +70,9 @@ END-STRUCT cstr%
 : .cstr  ( cstr -- )
   cstr-get TYPE ;
 
-: cstr-append-xc  { xc cstr -- }
-  xc  cstr cstr-get +  XC!
-  xc XC-SIZE  cstr cstr-len  +! ;
+: cstr-append-xc  ( xc cstr -- )
+  2DUP cstr-get +  XC!
+  SWAP XC-SIZE  SWAP cstr-len  +! ;
 
 cstr%
   CELL% FIELD sstr-count
@@ -52,17 +105,18 @@ VARIABLE sstr-last
     THEN
   LOOP count ;
 
-: sstr-allocate-arr  { sstr -- }
-  sstr sstr-count @ cstr% %SIZE * ALLOCATE IF
+: sstr-allocate-arr  ( sstr -- )
+  DUP sstr-count @ cstr% %SIZE * ALLOCATE IF
     ABORT" Allocation error while preparsing"
-  THEN
-  sstr sstr-arr ! ;
+  THEN  ( addr )
+  SWAP sstr-arr ! ;
 
-: sstr-preparse  { sstr -- }
+: sstr-preparse  ( sstr -- )
+  0 0 0 0 { sstr start n in-word cur arr-ptr }
   sstr sstr-count @ IF sstr sstr-arr @ FREE IF ABORT" Free error while preparsing" THEN THEN
   sstr cstr-get  count-words  sstr sstr-count !
   sstr sstr-allocate-arr
-  sstr cstr-ptr @ 0 0 0 0 { start n in-word cur arr-ptr }
+  sstr cstr-ptr @
   sstr cstr-len @  0 DO
     sstr cstr-ptr @ I + DUP C@ BL = IF              ( ptr )
       in-word IF
@@ -93,8 +147,8 @@ VARIABLE sstr-last
   sstr cstr-ptr !  sstr cstr-len !  sstr ;
 
 : "  ( "string" -- sstr )
-  [CHAR] " PARSE { str len }
-  len sstr-create { sstr }
+  [CHAR] " PARSE 0 { str len sstr }
+  len sstr-create TO sstr
   str  sstr cstr-ptr @  len CMOVE
   0 sstr sstr-count !
   sstr sstr-preparse
@@ -150,14 +204,14 @@ END-STRUCT bstr%  \ a string for fast prepending
   COUNT ROT COUNT STR= ;
 
 : s-to-cs  ( addr u cs -- )
-  ]] 2DUP C!  1+ SWAP CMOVE [[ ; IMMEDIATE
+  2DUP C!  1+ SWAP CMOVE ;
 
 : cs-copy  ( src target -- )
   ]] OVER C@ 1+ CMOVE [[ ; IMMEDIATE
 
 : cs-copy-truncate  ( src target len -- )
-  ]] 2DUP SWAP C!
-  ROT 1+ ROT 1+ ROT CMOVE [[ ; IMMEDIATE
+  2DUP SWAP C!
+  ROT 1+ ROT 1+ ROT CMOVE ;
 
 : stuff  { cs ptr n-del addr u -- }
   cs COUNT +             ( cs-end )
@@ -181,8 +235,8 @@ END-STRUCT bstr%  \ a string for fast prepending
   POSTPONE + ; IMMEDIATE
 
 : string-append-char  { xc addr u -- addr u' }
-  addr u  string-end { ptr }
-  xc ptr XC!  addr  ptr XCHAR+ addr - ;
+  addr u  string-end  ( ptr )
+  xc OVER XC!  addr  SWAP XCHAR+ addr - ;
 
 : string-length  ( addr u -- u )
   POSTPONE NIP ; IMMEDIATE
@@ -202,11 +256,6 @@ END-STRUCT bstr%  \ a string for fast prepending
 : left-slice+xc  ( addr u1 u2 -- addr u3 )
   left-slice  2DUP string-end  XC@ XC-SIZE  + ;
 
-: u-search  ( u array size -- f )
-  CELLS SWAP >R 0 SWAP R@ + R> ?DO  ( u f )
-    DROP DUP I @ = DUP ?LEAVE
-  CELL +LOOP NIP ;
-
 : cs-buf-size  ( cs -- cs u )
   ]] DUP C@ 1+ [[ ; IMMEDIATE
 
@@ -217,16 +266,14 @@ END-STRUCT bstr%  \ a string for fast prepending
   ]] OVER XC@ -ROT +X/STRING ROT [[ ; IMMEDIATE
 
 
-:noname 2* ;
-:noname POSTPONE 2* ;
-INTERPRET/COMPILE: cyrs
+: cyrs ]] 2* [[ ; IMMEDIATE
 : cyr 2 POSTPONE LITERAL ; IMMEDIATE
 : 2cyrs 2 cyrs POSTPONE LITERAL ; IMMEDIATE
 : 3cyrs 3 cyrs POSTPONE LITERAL ; IMMEDIATE
 : cyr+ ]] cyr + [[ ; IMMEDIATE
 
 : cyr?  ( addr -- f )
-  ]] C@ 128 AND [[ ; IMMEDIATE
+  ]] C@ [[ 128 ]]L AND [[ ; IMMEDIATE
 
 : skip-cyrs  ( addr -- addr' )
   BEGIN DUP cyr? WHILE cyr+ REPEAT ;

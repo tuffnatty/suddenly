@@ -1,4 +1,4 @@
-REQUIRE rules.fs
+language-require rules.fs
 REQUIRE sounds.fs
 
 : stem-fugitive?  ( cs -- f )

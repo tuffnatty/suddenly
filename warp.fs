@@ -1,4 +1,4 @@
-REQUIRE morphonology.fs
+language-require morphonology.fs
 
 STRUCT
   CELL% 64 * FIELD warp-text

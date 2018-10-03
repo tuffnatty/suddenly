@@ -1,5 +1,5 @@
 REQUIRE minire.fs
-REQUIRE phonetics.fs
+language-require phonetics.fs
 REQUIRE warp.fs
 
 %000001 CONSTANT tr-envoice

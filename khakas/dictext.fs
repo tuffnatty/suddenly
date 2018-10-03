@@ -1,4 +1,4 @@
-REQUIRE khakas/phonetics.fs
+language-require phonetics.fs
 
 %001 CONSTANT dictflag-no-envoice
 %010 CONSTANT dictflag-poss

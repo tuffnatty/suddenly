@@ -1,5 +1,5 @@
 REQUIRE strings.fs
-REQUIRE phonetics.fs
+language-require phonetics.fs
 
 : last-char-vowel ( addr u -- u | 0 )
   OVER >R
