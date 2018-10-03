@@ -354,7 +354,7 @@ slot: <Case₂>  \ 17
     filter-else
       filters( constraint-OK-fallout₁₇ )
         form" Dat (н)А"
-        form" Dat.dial (н)ГА"
+        form" Dat.dial (н)GА"
       filters-end
       filters( constraint-29 )
         filters( constraint-V+Acc )
