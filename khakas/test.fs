@@ -1,13 +1,15 @@
 #! /usr/local/bin/gforth -m22M
 
-S" ~+"  FPATH  ALSO-PATH
-REQUIRE test/ttester.fs
+: language-path  ( -- addr u )
+  S" khakas" ;
 
-S" khakas"  FPATH  ALSO-PATH
-REQUIRE debugging.fs
+INCLUDE ../compat/ttester.fs
+
+\ S" khakas"  FPATH  ALSO-PATH
+INCLUDE ../debugging.fs
 \ 1 TO debug-mode?
 \ 2 TO debug-mode?
-REQUIRE parser.fs
+REQUIRE ../parser.fs
 
 CREATE wordform-buffer 0 , 255 ALLOT
 0 VALUE expected-str

@@ -1,5 +1,8 @@
 #! /usr/local/bin/gforth-fast -m22M
 
+: language-path  ( -- addr u )
+  1 ARG ;
+
 REQUIRE servecommon.fs
 
 REQUIRE unix/socket.fs
@@ -16,8 +19,7 @@ VARIABLE server
   THEN
   0 0  2 ARG  >NUMBER  2DROP D>S  ( port )
   CREATE-SERVER server !               ( )
-
-  1 ARG  FPATH  ALSO-PATH ;
+  ;
 
 parse-cmdline
 
@@ -33,7 +35,7 @@ CREATE req req-size ALLOT
 CREATE my-emit-buf 1 ALLOT
 : my-type socket WRITE-SOCKET ;
 : my-emit my-emit-buf C! my-emit-buf 1 my-type ;
-: my-xemit ( u -- )
+: my-xemit  ( u -- )
   dup max-single-byte u< IF  my-emit  EXIT  THEN \ special case ASCII
   0 swap  $3F
   BEGIN  2dup u>  WHILE
