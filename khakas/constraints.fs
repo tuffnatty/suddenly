@@ -381,9 +381,8 @@
   ;
 
 \ 25. После деепричастных показателей позиции 7 (Lim ГАли,
-\ Convп (I)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl), а также
-\ PresPt чАн может стоять только показатель Ass ОК из позиции
-\ Ptcl3.
+\ Convп (I)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl) может
+\ стоять только показатель Ass ОК из позиции Ptcl3.
 : constraint-25  ( -- f )
   8 21 slot-range-empty?  ||
   flag-Ass₃ flag-is?
