@@ -1,6 +1,6 @@
 \ :3,$s/\(sound \)\([aceiopxyöÿ]\)/\=submatch(1) . tr(submatch(2),"aceiopxyöÿ", "асеіорхуӧӱ")/gI
 
-REQUIRE sounds.fs
+REQUIRE ./../sounds.fs
 
 sound-class vowel
   sound и
@@ -116,4 +116,4 @@ sound-class o-yo
 sound-class;
 
 
-REQUIRE phonetics-common.fs
+REQUIRE ./../phonetics-common.fs

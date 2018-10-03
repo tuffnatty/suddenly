@@ -183,10 +183,10 @@ slot: <Tense/Mood/Conv2>  \ 7
       form" Conv.pas.dial АбАс"
       form" Conv.a А"
     flag-Conv2 flag-clear
+  filters-end
 
-    filters( constraint-26₇ )
-      form" PresPt.dial чАн"
-    filters-end
+  filters( constraint-26₇ )
+    form" PresPt.dial чАн"
   filters-end
   ; slot-add
 

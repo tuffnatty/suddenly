@@ -1,4 +1,4 @@
-language-require phonetics.fs
+REQUIRE ./phonetics.fs
 
 %001 CONSTANT dictflag-no-envoice
 %010 CONSTANT dictflag-poss
