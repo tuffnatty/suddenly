@@ -325,7 +325,7 @@ slot: <Case₂>  \ 17
   filters( constraint-16.5₁₇ )
     filters( constraint-29 )
       form" Gen₂ НІң"
-      form" Gen.dial ДІң"
+      form" Gen.dial ТІң"
       form" Instr нАң"
       form" Instr.dial ПАң"
       form" Instr.dial мАң"
@@ -338,7 +338,7 @@ slot: <Case₂>  \ 17
       filters-end
       filters( constraint-29 )
         form" Acc НІ"
-        form" Acc.dial ДІ"
+        form" Acc.dial ТІ"
       filters-end
       form" Loc ТА"
       form" Abl₁ ДАң"
@@ -354,20 +354,27 @@ slot: <Case₂>  \ 17
     filter-else
       filters( constraint-OK-fallout₁₇ )
         form" Dat (н)А"
+        form" Dat.dial (н)ГА"
       filters-end
       filters( constraint-29 )
         filters( constraint-V+Acc )
           form" Acc₂ Н"
+          form" Acc.dial₂ Т"
         filter-else
           form" Acc₁ НІ"
+          form" Acc.dial₁ ТІ"
         filters-end
       filters-end
       form" Loc (н)ТА"
       form" Abl нАң"
       form" All (н)САр"
+      form" All.dial₁ (н)САрІ"
+      form" All.dial₂ (н)СА"
       form" Prol (н)ЧА"
       form" Delib нАңАр"
       form" Comp (н)ТАG"
+      form" Instr.dial₁ (н)мАң"
+      form" Instr.dial₂ (н)млАң"
     filters-end
   filters-end
   ; slot-add
