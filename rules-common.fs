@@ -126,7 +126,7 @@ language-require phonetics.fs
   2DUP rule-cv-vu-fb rule-cv D= IF 2DROP 2/ 2 MOD EXIT THEN
   2DUP rule-cv-vu-fb rule-vu D= IF 2DROP 2/ 2/ EXIT THEN
   2DUP rule-cv-vu-fb rule-cv-fb D= IF 2DROP 4 MOD EXIT THEN
-  2DUP rule-cv-vu-fb rule-vu-fb D= IF 2DROP DUP 2 MOD 2* SWAP 2 MOD + EXIT THEN
+  2DUP rule-cv-vu-fb rule-vu-fb D= IF 2DROP DUP 2 MOD 2* SWAP 2/ 2/ + EXIT THEN
   ." Could not convert index to rule " >NAME .ID ."  from " >NAME .ID ."  index " .
   ABORT ;
 
