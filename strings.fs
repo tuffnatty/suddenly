@@ -113,7 +113,11 @@ VARIABLE sstr-last
 
 : sstr-preparse  ( sstr -- )
   0 0 0 0 { sstr start n in-word cur arr-ptr }
-  sstr sstr-count @ IF sstr sstr-arr @ FREE IF ABORT" Free error while preparsing" THEN THEN
+  sstr sstr-count @ IF
+    sstr sstr-arr @ FREE IF
+      ABORT" Free error while preparsing"
+    THEN
+  THEN
   sstr cstr-get  count-words  sstr sstr-count !
   sstr sstr-allocate-arr
   sstr cstr-ptr @
@@ -334,4 +338,3 @@ END-STRUCT bstr%  \ a string for fast prepending
 : prev-sound-cut  ( cs -- )
   DUP COUNT last-sound-ptr DUP XC@ SWAP XCHAR- XC!
   DUP C@ cyr - SWAP C! ;
-
