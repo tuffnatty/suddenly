@@ -46,6 +46,7 @@ T{ S" кӧзӧ+ге"			S" кӧзӧге"		parse-test -> TRUE }T
 T{ S" курс+ы"			S" курзы"		parse-test -> TRUE }T
 T{ S" курс+ы"			S" курсы"		parse-test -> TRUE }T
 T{ S" кӱн+і+нге"		S" кӱнінге"		parse-test -> TRUE }T
+T{ S" кӱн+і+нке"		S" кӱнінке"		parse-test -> FALSE }T
 T{ S" мағаа+ох"			S" мағааох"		parse-test -> TRUE }T
 T{ S" маң+ы"			S" маа"			parse-test -> TRUE }T
 T{ S" марығ+ы"			S" марии"		parse-test -> TRUE }T

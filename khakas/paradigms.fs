@@ -59,7 +59,7 @@ slot: <Ptcl1>  \ 3
     3 slot-full!
     form" Add ТАА"
     form" Cont LА"
-    form" Ass₁ ОQ"
+    form" Ass₁ ОК"
   filters-end
   ; slot-add
 
@@ -74,7 +74,7 @@ slot: <Perf/Prosp>  \ 4
   filters-end
 
   filters( constraint-6 )
-    form" Prosp.dial АQ"
+    form" Prosp.dial АК"
   filters-end
   ; slot-add
 
@@ -157,7 +157,7 @@ slot: <Tense/Mood/Conv2>  \ 7
   filters-end
 
   filters( constraint-10 )
-    form" Cunc ГАлАQ"
+    form" Cunc ГАлАК"
   filters-end
 
   filters( constraint-13 )
@@ -165,7 +165,7 @@ slot: <Tense/Mood/Conv2>  \ 7
   filters-end
   flag-Opt-or-Assum flag-set
     form" Opt ГАй"
-    form" Assum ГАдАG"
+    form" Assum ГАдАГ"
   flag-Opt-or-Assum flag-clear
 
   filters( constraint-25 )
@@ -210,7 +210,7 @@ slot: <Comit>  \ 9
 
   9 slot-full!
 
-  form" Comit ЛІG"
+  form" Comit ЛІГ"
   ; slot-add
 
 slot: <Affirm>  \ 10
@@ -218,7 +218,7 @@ slot: <Affirm>  \ 10
   form" -noaffirm "
 
   10 slot-full!
-  form" Affirm ЧІQ"
+  form" Affirm ЧІК"
   ; slot-add
 
 slot: <Pl₁>  \ 11
@@ -347,14 +347,14 @@ slot: <Case₂>  \ 17
       form" All.dial СА"
       form" Prol ЧА"
       form" Delib ДАңАр"
-      form" Comp ТАG"
+      form" Comp ТАГ"
       filters( constraint-30 )
         form" Abl₂ тІн"
       filters-end
     filter-else
       filters( constraint-OK-fallout₁₇ )
         form" Dat (н)А"
-        form" Dat.dial (н)GА"
+        form" Dat.dial (н)ГА"
       filters-end
       filters( constraint-29 )
         filters( constraint-V+Acc )
@@ -372,7 +372,7 @@ slot: <Case₂>  \ 17
       form" All.dial₂ (н)СА"
       form" Prol (н)ЧА"
       form" Delib нАңАр"
-      form" Comp (н)ТАG"
+      form" Comp (н)ТАГ"
       form" Instr.dial₁ (н)мАң"
       form" Instr.dial₂ (н)млАң"
     filters-end
@@ -385,7 +385,7 @@ slot: <Ptcl₂>  \ 18
 
   18 slot-full!
 
-  form" Ass₂ ОQ"
+  form" Ass₂ ОК"
 
   filters( constraint-18 )
     form" Adv Ли"
@@ -465,14 +465,14 @@ slot: <Ptcl₃>  \ 21
 
   21 slot-full!
 
-  form" Ass₃ ОQ"
+  form" Ass₃ ОК"
 
   filters( constraint-23 )
     form" Foc ТІр"
   filters-end
 
   filters( constraint-22 )
-    form" Perm ТАQ"
+    form" Perm ТАК"
   filters-end
   ; slot-add
 

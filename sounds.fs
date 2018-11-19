@@ -24,17 +24,16 @@ sound-buf 2 + CONSTANT sound-buf-name
 : sound-class;  { len size buf -- }
   size CELLS ALLOT  0 ,
   \ Create vowels# VARIABLE with class size
-  len 1+ { len' }
-  [CHAR] #  sound-buf-name len' +  C!
-  sound-buf-name len' 1+ NEXTNAME CREATE
+  [CHAR] #  sound-buf-name len 1+ +  C!
+  sound-buf-name len 1+ 1+ NEXTNAME CREATE
   size ,
   \ Create vowel? ( xc -- f ) word
   [CHAR] ?  sound-buf-name len + C!
   S" : " string-addr  sound-buf 2 MOVE
-  sound-buf 2 + len' + ( ptr )
+  sound-buf 3 + len + ( ptr )
   size 0 ?DO
     S"  DUP " s+/
-    buf I CELLS + @ S>D <<# #s #> s+/ #>>
+    buf I CELLS + @ S>D <# #s #> s+/
     S"  = IF DROP TRUE EXIT THEN" S+/
   LOOP
   S"  DROP 0 ;" s+/
@@ -52,6 +51,15 @@ TABLE CONSTANT morphonemes-table
   CREATE , DUP , BOUNDS BEGIN 2DUP > WHILE XC@+ , REPEAT 2DROP R> SET-CURRENT
 DOES>  ( cs buf -- xc )
   >R R@ @ EXECUTE R> SWAP morphoneme-choose-variant ;
+
+list%
+  CELL% FIELD msub-source
+  CELL% FIELD msub-rule
+  CELL% FIELD msub-class
+  CELL% FIELD msub-target
+END-STRUCT msublist%  \ Morphoneme substitutions list
+
+0 VALUE msubs
 
 : morphoneme-rule  ( xt -- rule )
   >BODY @ ;
@@ -71,3 +79,30 @@ DOES>  ( cs buf -- xc )
 
 : morphoneme-find  ( addr u -- xt true | false )
   2DUP morphoneme-width NIP morphonemes-table SEARCH-WORDLIST ;
+
+: morphoneme-get-internal  ( addr u -- xt )
+  morphoneme-find 0= IF ABORT" no such morphoneme" THEN ;
+
+: morphoneme-substitution  ( D: source  rule  cls  D: target -- )
+  msublist% %ALLOT >R
+  morphoneme-get-internal  R@ msub-target !  ( D: source rule cls )
+                           R@ msub-class !   ( D: source rule )
+                           R@ msub-rule !    ( D: source )
+  morphoneme-get-internal  R@ msub-source !  ( )
+  msubs                    R@ list-next !
+  R> TO msubs ;
+
+: rule-apply  ( addr u xt -- table-index )
+  EXECUTE NIP NIP ;
+
+: morphoneme-get  { D: morphoneme context-cstr -- xt }
+  morphoneme morphoneme-get-internal { xt }
+  msubs BEGIN ?DUP WHILE  { this-msub }
+    this-msub msub-source @  xt  = IF
+      context-cstr cstr-get  this-msub msub-rule @ rule-apply  this-msub msub-class @  = IF
+        this-msub msub-target @ EXIT
+      THEN
+    THEN
+    this-msub list-next @
+  REPEAT
+  xt ;

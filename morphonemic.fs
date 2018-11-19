@@ -30,39 +30,42 @@ language-require rules.fs
     start len + 1+                ( arr-ptr' start' )
   LOOP 2DROP sstr ;
 
-: morphonemic-to-sstr-and-rule  ( addr u -- sstr rule )
-  \ ." morphonemic-to-sstr-and-rule:" 2dup type cr
-  DUP { len }
-  len 0= IF 2DROP 0 0 EXIT THEN
-  \ OVER XC@  [CHAR] ∅  =  IF 2DROP 0 0 EXIT THEN
-  2DUP morphonemic-get-rules { rule-sum }
+: morphonemic-to-sstr-and-rule  { D: morphonemic -- sstr rule }
+  \ ." morphonemic-to-sstr-and-rule:" morphonemic type cr
+  morphonemic string-length 0= IF 0 0 EXIT THEN
+  \ OVER XC@  [CHAR] ∅  =  IF 0 0 EXIT THEN
+  morphonemic morphonemic-get-rules { rule-sum }
   \ ." rule-sum: " rule-sum >NAME ?DUP-IF .NAME THEN
   rule-sum rule-capacity  { capacity }
-  capacity len morphonemic-sstr-prepare { sstr }
-  BEGIN DUP 0> WHILE                              ( addr' u' )
+  capacity  morphonemic string-length  morphonemic-sstr-prepare { sstr }
+  morphonemic string-create  sstr sstr-morphonemic 2!
+  morphonemic BEGIN DUP 0> WHILE                    ( addr' u' )
     \ ." at " 2dup type ." >"
     2DUP morphoneme-find IF { xt }
       \ ." FOUND " xt >NAME .ID CR
-      xt morphoneme-rule { rule }
-      \ ." RULE " rule >NAME .ID CR
-      sstr sstr-arr @  ( addr' u' arr-ptr )
-      capacity 0 DO { arr-ptr }  ( addr' u' )
+      sstr sstr-arr @                       ( addr' u' arr-ptr )
+      capacity 0 DO { arr-ptr }                     ( addr' u' )
+        OVER  morphonemic string-addr  > IF
+          2DUP arr-ptr morphoneme-get TO xt
+        THEN
+        xt morphoneme-rule { rule }
+        \ ." RULE " rule >NAME .ID CR
         \ ." VARIANT " I . ." arr-ptr: " arr-ptr HEX. CR
         xt  I rule-sum rule rule-index-convert  morphoneme-choose-variant { xc }
         \ ." XC " xc HEX. xc xemit CR
         xc [CHAR] 0 <> IF xc arr-ptr cstr-append-xc THEN
         \ ." arr-ptr" arr-ptr .cstr cr
-        arr-ptr  cstr% %SIZE +  ( arr-ptr' )
-      LOOP DROP  ( addr' u' )
-      morphoneme-skip                     ( addr'' u'' )
+        arr-ptr  cstr% %SIZE +             ( addr' u' arr-ptr' )
+      LOOP DROP                                     ( addr' u' )
+      morphoneme-skip                             ( addr'' u'' )
     ELSE
       OVER XC@ { xc }
-      sstr sstr-arr @  ( addr' u' arr-ptr )
-      capacity 0 DO { arr-ptr }  ( addr' u' )
+      sstr sstr-arr @                       ( addr' u' arr-ptr )
+      capacity 0 DO { arr-ptr }                     ( addr' u' )
         xc arr-ptr cstr-append-xc
-        arr-ptr  cstr% %SIZE +  ( arr-ptr' )
-      LOOP DROP  ( addr' u' )
-      xc XC-SIZE /STRING                        ( addr'' u'' )
+        arr-ptr  cstr% %SIZE +                      ( arr-ptr' )
+      LOOP DROP                                     ( addr' u' )
+      xc XC-SIZE /STRING                          ( addr'' u'' )
     THEN
   REPEAT
   2DROP sstr rule-sum

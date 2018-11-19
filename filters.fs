@@ -59,6 +59,7 @@ CREATE filters filter% 64 * %ALLOT
 : filters-check  ( stem -- stem f )
   \." hypothesis:  " DUP .stem-single
   \."  affixes:    " formform .bstr cr
+  \."  affixes(MP):" formform-morphonemic .bstr cr
   \."  affix names:" formname .bstr cr
   \."  slot flags: " formflag .bstr cr
   \."  slots:      " .slots cr

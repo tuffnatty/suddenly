@@ -92,12 +92,12 @@ REQUIRE khakas/phonetics.fs
 REQUIRE phonetics-common.fs
 
 FALSE [IF]
-S" ар" rule-cv-vu-fb EXECUTE . 0
-S" ер" rule-cv-vu-fb EXECUTE . 1
-S" а" rule-cv-vu-fb EXECUTE . 2
-S" е" rule-cv-vu-fb EXECUTE . 3 
-S" ах" rule-cv-vu-fb EXECUTE . 4 
-S" ех" rule-cv-vu-fb EXECUTE . 5
+S" ар" rule-cv-vu-fb rule-apply . 0
+S" ер" rule-cv-vu-fb rule-apply . 1
+S" а" rule-cv-vu-fb rule-apply . 2
+S" е" rule-cv-vu-fb rule-apply . 3
+S" ах" rule-cv-vu-fb rule-apply . 4
+S" ех" rule-cv-vu-fb rule-apply . 5
 T{ CHAR ң class-nvu -> cl-nasal }T
 T{ S" пас+са+ңар" S" пассар" parse-test -> TRUE }T
 T{ S" пас+ты+ңар" S" пастар" parse-test -> TRUE }T

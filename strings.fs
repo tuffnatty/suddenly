@@ -77,14 +77,19 @@ END-STRUCT cstr%
 cstr%
   CELL% FIELD sstr-count
   CELL% FIELD sstr-arr
+  CELL% 2* FIELD sstr-morphonemic
 END-STRUCT sstr%
 
-: .sstr  ( sstr -- )
-  ." [" DUP .
-  ?DUP-IF
-    ." :" DUP .cstr ." /" DUP sstr-count @ . ." |"
-    DUP sstr-arr @ SWAP sstr-count @ 0 ?DO DUP I [ cstr% %SIZE ]L * + .cstr ." ," LOOP
-    DROP
+: .sstr  { sstr -- }
+  ." [" sstr .
+  sstr IF
+    ." :"  sstr .cstr  ." /"  sstr sstr-count @ .  ." |"
+    sstr sstr-arr @                              ( arr )
+    sstr sstr-count @  0 ?DO
+      DUP  I [ cstr% %SIZE ]L * +  .cstr  ." ,"
+    LOOP
+    DROP                                             ( )
+    ."  < " sstr sstr-morphonemic 2@ TYPE
   THEN
   ." ]" ;
 
@@ -105,11 +110,11 @@ VARIABLE sstr-last
     THEN
   LOOP count ;
 
-: sstr-allocate-arr  ( sstr -- )
-  DUP sstr-count @ cstr% %SIZE * ALLOCATE IF
+: sstr-allocate-arr  { sstr -- }
+  sstr sstr-count @  1+  [ cstr% %SIZE ]L *  ALLOCATE IF
     ABORT" Allocation error while preparsing"
   THEN  ( addr )
-  SWAP sstr-arr ! ;
+  sstr sstr-arr ! ;
 
 : sstr-preparse  ( sstr -- )
   0 0 0 0 { sstr start n in-word cur arr-ptr }
@@ -250,6 +255,13 @@ END-STRUCT bstr%  \ a string for fast prepending
 
 : string-copy  ( addr u -- addr1 u )
   >R PAD 42 + R@ CMOVE PAD 42 + R> ;
+
+: string-create  ( addr len -- addr' len )
+  >R                      ( addr  R: len )
+  R@ ALLOCATE IF
+    ABORT" Cannot allocate memory in string-create!"
+  THEN                      ( addr addr' )
+  SWAP OVER R@ CMOVE R> ;
 
 : left-slice  ( addr u1 u2 -- addr u2 )
   POSTPONE NIP ; IMMEDIATE

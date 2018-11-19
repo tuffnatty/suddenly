@@ -14,6 +14,7 @@ REQUIRE strings.fs
 \ Buffers for delimited form names and affixes
 CREATE formname bstr% %ALLOT bstr-init
 CREATE formform bstr% %ALLOT bstr-init
+CREATE formform-morphonemic bstr% %ALLOT bstr-init
 CREATE formflag bstr% %ALLOT bstr-init
 : form-prepend  ( addr u bstr | 0 bstr -- )
   >R ?DUP-IF R@ bstr-prepend THEN  ( R: bstr )
@@ -122,7 +123,7 @@ REQUIRE loaddefs.fs
 
 DEFER yield-stem  ( stem -- )
 :noname  ( stem -- )
-  ." FOUND STEM: " formname .bstr SPACE formform .bstr CR .stem-single CR  ( )
+  ." FOUND STEM: " formname .bstr SPACE formform-morphonemic .bstr CR .stem-single CR  ( )
   1 n-forms +! ; IS yield-stem
 
 : check-stem  ( addr u stem -- addr u )
@@ -155,24 +156,25 @@ DEFER yield-stem  ( stem -- )
     2DROP
   ELSE  ( addr u )
     \ ." stackdone!" .s 2dup type cr
+    OVER 0= IF ABORT" Corrupt stem?" THEN
     2DUP stem-find ?DUP-IF  ( addr u stem )
       ['] check-stem  list-map  ( addr u )
       \." ~~~~~~~~~" cr
     ELSE
-      \." STEM " 2dup type ."  not in dictionary! was trying " 2dup type formform .bstr bl emit formname .bstr cr
+      \." STEM " 2dup type ."  not in dictionary! was trying " 2dup type formform-morphonemic .bstr bl emit formname .bstr cr
     THEN
     2DROP
   THEN
   slot-stack-push
   ;
 
-: rule-check  ( i xt | 0 -- f )
+: rule-check  ( addr u i xt | 0 -- addr u f )
   ?DUP-IF SWAP >R EXECUTE ( rule-result ) R> =
   ELSE DROP TRUE THEN ;
 
 : after-fallout  { pairlist rule n-rule -- }
   \." " pairlist ?DUP-IF indent ." Pairlist: " .pairlist
-  \."  while processing " formname cstr-get type ."  " formform cstr-get type cr THEN
+  \."  while processing " formname .cstr ."  " formform .cstr cr THEN
   BEGIN pairlist WHILE
     pairlist pair-1  ( ... addr' u' )
     \." " indent rule if ." Pair " pairlist .pairlist-node ." harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
@@ -228,12 +230,14 @@ DEFER yield-stem  ( stem -- )
 : process-representations  ( addr u rule sstr -- )
   { rule sstr }                         ( addr u )
   \\." " indent ." <All-reps>" 2DUP TYPE ." +" sstr .sstr rule HEX. .s CR
+  sstr sstr-morphonemic 2@  formform-morphonemic form-prepend
   sstr sstr-count @ 0 DO
     I sstr sstr-select { D: affix }
     affix string-length IF
       affix rule I process-single-representation
     THEN
   LOOP
+  formform-morphonemic bstr-pop
   \\." " cr
   ;
 
@@ -243,13 +247,16 @@ DEFER yield-stem  ( stem -- )
   \\." " indent ." form-epilog " 2>r 2dup type ." +" 2r> 2dup .sstr .rule \.s cr
   { rule sstr }  ( addr u )
   sstr IF  \ Non-empty affix
+    \\." " indent ." non-empty" CR
     rule sstr process-representations
   ELSE
     \\." " indent ." Trying 0 " 2dup type ." +0" CR
     0 formform form-prepend
+    0 formform-morphonemic form-prepend
     0 formflag form-prepend
     2DUP parse-try
     formform bstr-pop
+    formform-morphonemic bstr-pop
     formflag bstr-pop
     \\." " indent ." out of parse-try" CR
   THEN
