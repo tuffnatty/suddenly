@@ -216,10 +216,12 @@ DEFER yield-stem  ( stem -- )
   THEN
   \\." " pairlist IF indent ." Remaining list: " pairlist .pairlist .s CR THEN
   pairlist rule n-rule after-fallout
-  \\." " indent ." Unchanged guess: " 2DUP TYPE .s CR
-  2DUP affix untransform-envoice  ( addr u pairlist )
-  rule n-rule after-fallout                ( addr u )
-  \\." " indent ." After after-fallout: " .s CR
+  DUP  affix string-length > IF
+    \\." " indent ." Unchanged guess: " 2DUP TYPE .s CR
+    2DUP affix untransform-envoice  ( addr u pairlist )
+    rule n-rule after-fallout                ( addr u )
+    \\." " indent ." After after-fallout: " .s CR
+  THEN
   formform bstr-pop
   ;
 
