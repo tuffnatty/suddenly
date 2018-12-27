@@ -159,6 +159,7 @@ T{ S" тайға+зары"		S" тайғазары"		parse-test -> TRUE }T
 T{ S" таны+ған"			S" танаан"		parse-test -> TRUE }T
 T{ S" тап+ып"			S" таап"		parse-test -> TRUE }T
 T{ S" тариф+ы"			S" тарифы"		parse-test -> TRUE }T
+T{ S" тарт+ып+ла+ча+лар"        S" тартыплачалар"       parse-test -> TRUE }T
 T{ S" таста+ар+ға"		S" тастирға"		parse-test -> TRUE }T
 T{ S" тег+іп"			S" тееп"		parse-test -> TRUE }T
 T{ S" теп+іп"			S" тееп"		parse-test -> TRUE }T
