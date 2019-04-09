@@ -423,9 +423,9 @@
 : constraint-29  ( -- f )
   19 20 slot-range-empty? ;
 
-\ 30. Алломорф Abl -тІн возможен в словоформе только при наличии All1.
+\ 30. Алломорф Abl -тІн возможен в словоформе только при наличии All₁.
 : constraint-30  ( -- f )
-  flag-All1 flag-is? ;
+  flag-All₁ flag-is? ;
 
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )

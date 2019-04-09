@@ -239,14 +239,14 @@ slot: <Poss₁>  \ 12
     12 slot-full!
 
     flag-Poss1.nonpl flag-set
-      form" 1pos.sg (І)м"
-      form" 2pos.sg (І)ң"
+      form" 1pos.sg₁ (І)м"
+      form" 2pos.sg₁ (І)ң"
       filters( constraint-OK-fallout₁₂ )
         form" 3pos₁ (з)І"
       filters-end
     flag-Poss1.nonpl flag-clear
-    form" 1pos.pl (І)бІс"
-    form" 2pos.pl (І)ңАр"
+    form" 1pos.pl₁ (І)бІс"
+    form" 2pos.pl₁ (І)ңАр"
   filters-end
   ; slot-add
 
@@ -260,18 +260,18 @@ slot: <Case₁>  \ 13
     form" Gen₁ НІң"
 
     filters( constraint-17₁₃ )
-      form" Loc ТА"
+      form" Loc₁ ТА"
     filter-else
-      form" Loc (н)ТА"
+      form" Loc₁ (н)ТА"
     filters-end
 
-    flag-All1 flag-set
+    flag-All₁ flag-set
       filters( constraint-17₁₃ )
-        form" All САр"
+        form" All₁ САр"
       filter-else
-        form" All (н)САр"
+        form" All₁ (н)САр"
       filters-end
-    flag-All1 flag-clear
+    flag-All₁ flag-clear
   filters-end
   ; slot-add
 
