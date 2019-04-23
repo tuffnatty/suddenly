@@ -88,7 +88,9 @@ SET-CURRENT  ( wordlist -- )
   ; IMMEDIATE
 
 : (flag:-check)  ( mask -- )
-  flag/DUP flag/2* flag/0= ABORT"  Flag storage overflow!" ;
+  CELL 4 > IF D>S THEN
+  flag/DUP flag/2* flag/0= ABORT"  Flag storage overflow!"
+  CELL 4 > IF S>D THEN ;
 
 : flag:  ( mask "name" -- mask' )
   (flag:-check)
