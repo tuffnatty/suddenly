@@ -1,4 +1,4 @@
-0  S" пар кил "  strlist-parse-alloc  CONSTANT пар|кил
+0  S" пар апар кил "  strlist-parse-alloc  CONSTANT пар|кил
 : is-пар/кил?  ( -- f )
   paradigm-stems @  пар|кил  strlists-intersect? ;
 
@@ -11,7 +11,7 @@
 \ присоединяют Ptcl3 ОК.
 : constraint-0  ( -- f )
   invar1? NOT                                     ||
-  1 20 slot-range-empty?  flag-Ass₃ flag-is? AND  ||
+  1 20 slot-range-empty?  flag Ass₃  flag-is? AND  ||
   1 21 slot-range-empty?
   ;
 
@@ -32,7 +32,7 @@
 \ 10 (Affirm).
 : verb-with-Tense-non-RPast-Cond-Pres-Conv2?  ( -- f )
   7 slot-full?   8 10 slot-range-empty?  AND IF
-    flag-RPast-or-Cond-or-Pres-or-Conv2 flag-is? NOT
+    flag participles  flag-is?
   ELSE FALSE THEN
   ;
 : constraint-2  ( -- f )
@@ -49,21 +49,23 @@
 \ – (кончить-NF-Add-Perf-RPast-Pl) ‘почти закончили’].
 : constraint-3  ( -- f )
   2 slot-empty?         ||
-  flag-NF.Neg flag-is?  ||
+  flag NF.Neg  flag-is?  ||
   3 slot-full?
   ;
 
 \ 4. Показатели позиции 2 (NF) могут встретиться только в
 \ словоформе, где есть один или несколько из показателей: 1)
-\ позиции 3 (Ptcl1), 2) Dur чАТ, 3) Perf (I)бIС, 4) Dur.Iter
-\ чАдIр, 5) Pres чА, 6) Indir ТIр, 7) PresPt чАн - или на конце
-\ словоформы.
+\ позиции 3 (Ptcl1), 2) Dur чАТ, 3) Perf (Ы)бЫс, Perf0 (Ы)c,
+\ 4) Pres2 чАдЫр, чады(р) 5) Pres (чА, ча, чАр(Ы), ту(р)),
+\ 6) Indir ТЫр, 7) PresPt чАн - или на конце словоформы.
 : constraint-4  ( -- f )
-  3 slot-full?                         ||  \ Ptcl1
-  flag-Dur-or-Pres-or-PresPt flag-is?  ||
-  flag-Perf flag-is?                   ||
-  8 slot-full?                         ||  \ Indir
-  flag-Dur.Iter flag-is?               ||
+  3 slot-full?              ||  \ Ptcl1
+  flags( Dur
+         Perf Perf0
+         Pres2 Pres2.dial.kac
+         Pres Pres.dial Pres.dial.kyz Pres.dial.sh
+         Indir
+         PresPt.dial ) flag-is?  ||
   3 21 slot-range-empty?
   ;
 
@@ -81,30 +83,34 @@
 : constraint-4.1ₚ  ( -- f )
   1 slot-empty?  1 form-slot-xc-at-left fallout-short?  AND  ||
   2 form-slot-vowel-at-left?                                 ||
-  flag-Ass₁ flag-is?                                         ||
-  flag-Cont flag-is?
+  flags( Ass₁ Cont ) flag-is?
   ;
 : constraint-4.1₀  ( -- f )
   2 form-slot-vowel-at-left? NOT
   2 form-slot-xc-at-left fallout-short? NOT
-  flag-Ass₁ flag-empty?
+  flag Ass₁  flag-empty?
   AND AND ;
 
 \ 5. Показатели поз. 3 (внутренние частицы) допускаются
 \ только при заполненной позиции 7 (время) или 8 (Indir) или
-\ при дуративе (Dur чАт, Dur.Iter чАдIр.).
+\ при дуративе (Dur чАт).
 : constraint-5  ( -- f )
   7 8 slot-range-full?  ||
-  flag-Dur flag-is?     ||
-  flag-Dur.Iter flag-is?
+  flag Dur  flag-is?
   ;
 
-\ 6. Показатель позиции 4 Prosp АК встречается только перед
-\ морфемами Pres чА и Dur чАТ.
-: constraint-6  ( -- f )
-  flag-Dur-or-Pres-or-PresPt flag-is? ;
+\ 5.1. Показатель Perf0 Ыс возможен [пока встретился] только
+\ при наличии Ptcl1.
+: constraint-5.1  ( -- f )
+  3 slot-full?
+  ;
 
-\ 7. Показатель Dur1 и(р) заполняется только, если позиции
+\ 6. Показатель позиции 5 Prosp АК встречается только перед
+\ морфемами Pres чА, PresPt чАн и Dur чАТ.
+: constraint-6  ( -- f )
+  flags( Dur Pres PresPt.dial ) flag-is? ;
+
+\ 7. Показатели Dur1 и(р) и Dur.dial.kac Ат заполняются только, если позиции
 \ 1, 3, 4 не заполнены, а в позиции 0 стоит пар- или кил-
 \ (но при этих основах может выбираться с тем же успехом и
 \ показатель Dur чАТ, свободное варьирование). [Кажется,
@@ -116,16 +122,17 @@
   is-пар/кил?
   AND AND ;
 
-\ 8. Показатель Dur1 может стоять: 1) либо непосредственно
-\ перед пробелом, 2) либо непосредственно перед Person
-\ (позиция 19) или PredPl (позиция 20), 3) либо
-\ непосредственно перед показателями Past ГА(н), Convп,
+\ 8. Показатели Dur1 и(р) и Dur.dial.kac Ат могут стоять:
+\ 1) либо непосредственно перед пробелом,
+\ 2) либо непосредственно перед Person (позиция 19) или PredPl
+\ (позиция 20),
+\ 3) либо непосредственно перед показателями Past ГА(н), Convп,
 \ Cond СА (позиция 7).
 : constraint-8  ( -- f )
   6 21 slot-range-empty?                      ||
   6 18 slot-range-empty?  19 slot-full?  AND  ||
   6 19 slot-range-empty?  20 slot-full?  AND  ||
-  flag-Past flag-is?  flag-Cond flag-is?  flag-Convₚ flag-is?  OR OR  6 slot-empty?  AND
+  flags( Past Cond Convₚ ) flag-is?  6 slot-empty?  AND
   ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
@@ -135,11 +142,9 @@
 \ концом словоформы) варианты и и ир находятся в
 \ свободном (точнее, диалектном) варьировании.
 : constraint-8.1ᵢ  ( -- f )
-  flag-Convₚ flag-empty? ;
+  flag Convₚ  flag-empty? ;
 : constraint-8.1ᵢᵣ
-  flag-Past flag-empty?
-  flag-Cond flag-empty?
-  AND ;
+  flags( Past Cond ) flag-empty? ;
 
 \ 9.1. Past ГА(н) всегда принимает форму ГА непосредственно
 \ перед всеми Person: пар-га-м 'я шел', тiк-ке-зер 'вы шили'.
@@ -168,44 +173,53 @@
 \ и форма Ар: пар-ар-бын ‘я пойду’, адир-быс ‘мы будем называть’.
 : constraint-9.3  ( -- f )
   8 18 slot-range-empty?
-  flag-1sg.br flag-is?  flag-1.pl flag-is?  OR
+  flags( 1sg.br 1.pl ) flag-is?
   AND ;
+
+\ 9.4 Pres.dial.kyz может принимать форму ту непосредственно
+\ перед Person или PredPl. Форма тур возможна в любых
+\ контекстах.
+: constraint-9.4  ( -- f )
+  8 18 slot-range-empty?  19 20 slot-range-full?  AND ;
+
+\ 9.5. Pres.dial.sh чАр(Ы) перед показателями 1sg и 2sg
+\ принимает форму чАрЫ. (Это нужно, чтобы не было омонимичных
+\ разборов чар-ым / чары-м). В остальных контекстах показатели
+\ не распределены.
+: constraint-9.5  ( -- f )
+  8 18 slot-range-full? ||
+  flags( 1sg.br 2sg.br ) flag-empty? ;
+
 
 \ 10. Показатель Cunc не встречается в одной
 \ словоформе с показателями Perf или отрицательными
 \ (всеми, в названия которых входит элемент Neg);
 : constraint-10  ( -- f )
-  flag-Perf flag-empty?
-  flag-NF.Neg flag-empty?
-  flag-Neg flag-empty?
-  flag-Neg7 flag-empty?
-  AND AND AND ;
+  flags( Perf NF.Neg Neg Neg7 ) flag-empty? ;
 
 \ 10.1. Показатель Fut А(р) не встречается в одной словоформе с
 \ отрицательными показателями (Neg, NF.Neg[, Neg.Conv,
 \ Neg.Сonv.Abl - в этом же слоте]).
 : constraint-10.1  ( -- f )
-  flag-Neg flag-empty?
-  flag-NF.Neg flag-empty?
-  AND ;
+  flags( Neg NF.Neg ) flag-empty? ;
 
 \ 11. Показатели Neg.Fut ПАС, Neg.Conv Пин, Neg.Сonv.Abl
 \ Пин.Аң исключают заполнение поз. 6.
 : constraint-11  ( -- f )
-  flag-Neg7 flag-empty? ;
+  flag Neg7  flag-empty? ;
 
 \ 11.1. Показатель NF.Neg исключает заполнение Neg в поз. 6.
 : constraint-11.1  ( -- f )
-  flag-NF.Neg flag-empty? ;
+  flag NF.Neg  flag-empty? ;
 
 \ 12. Непосредственно после показателя недавно прошедшего
 \ времени (RPast) может следовать только краткий
 \ лично-числовой показатель (Person), число предиката
 \ (PredPl) или показатель аффирматива (Affirm) или Ptcl3
 : constraint-12  ( -- f )
-  8 19 slot-range-empty?                                ||  \ PredPl or Ptcl3 or end-of-wordform
-  8 18 slot-range-empty?  flag-Person.br flag-is?  AND  ||  \ Person
-  8 9 slot-range-empty?  10 slot-full?  AND                 \ Affirm
+  8 19 slot-range-empty?                                    ||  \ PredPl or Ptcl3 or end-of-wordform
+  8 18 slot-range-empty?  flag Person.br  flag-is?  AND  ||  \ Person
+  8 9 slot-range-empty?  10 slot-full?  AND                     \ Affirm
   ;
 
 \ 13. Непосредственно после показателя условного наклонения
@@ -213,22 +227,28 @@
 \ показатель (Person) или число предиката (PredPl) или Ptcl3
 : constraint-13  ( -- f )
   8 19 slot-range-empty?                                ||  \ PredPl or Ptcl3 or end-of-wordform
-  8 18 slot-range-empty?  flag-Person.br flag-is?  AND      \ Person
+  8 18 slot-range-empty?  flag Person.br  flag-is?  AND  \ Person
   ;
 
 \ 14. Непосредственно после Iter возможны только: Past
 \ ГА(н), Person, PredPl, Ptcl3 или конец словоформы.
 : constraint-14  ( -- f )
-  flag-Past flag-is?  ||
+  flag Past  flag-is?  ||
   7 18 slot-range-empty?
   ;
+
+\ 14.1. Iter: Перед Past ГА(н) и Ptcl3 возможна только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
+: constraint-14.1  ( -- f )
+  flag Past  flag-empty?
+  7 20 slot-range-empty?  21 slot-full?  AND NOT
+  AND ;
 
 \ 15. Показатель поз. 8 Indir TIр бывает либо при
 \ незаполненных позициях 6, 7, либо при одновременном
 \ заполнении позиций 6 и 7 показателями Neg (ПА) и Past (ГАн).
 : constraint-15  ( -- f )
   6 7 slot-range-empty?  ||
-  flag-Neg flag-is?  flag-Past flag-is?  AND
+  flag Neg  flag-is?  flag Past  flag-is?  AND
   ;
 
 \ 16.1. Показатели позиций 11-13 (Pl1, Poss1, Case1) возможны
@@ -255,7 +275,7 @@
 : constraint-16.3  ( -- f )
   13 slot-empty?  ||
   14 slot-full?   ||
-  flag-Gen₁ flag-is?
+  flag Gen₁  flag-is?
   ;
 
 \ 16.4. Pl2 может следовать непосредственно за Poss1 только при
@@ -286,21 +306,30 @@
 \ Nomen-основ, у которых в поле FORM есть помета poss
 \ (неотделяемая принадлежность)
 : constraint-17₁₃  ( -- f )
-  flag-Poss1.nonpl flag-empty?
+  flag Poss1.nonpl  flag-empty?
   1 12 slot-range-empty?  dictflag-poss dictflag-is?  AND NOT
   AND ;
 : constraint-17₁₇
-  flag-Poss2.nonpl flag-empty?
+  flag Poss2.nonpl  flag-empty?
   1 16 slot-range-empty?  dictflag-poss dictflag-is?  AND NOT
   AND ;
 
 \ 18. Аффиксу Adv из поз. 18 непосредственно предшествует Attr
 \ КI из поз. 14, Case2 (один из показателей поз. 17) или один из
 \ причастных показателей поз. 7.
+\ 18. Аффикс Adv Ли может присоединяться к словам с пометой
+\ Verbum, у которых есть причастные показатели из поз. 7, и к
+\ словам с пометой Nomen. После него возможен только Ptcl3 OK.
+
+\ : constraint-18  ( -- f )
+\   14 slot-full?  15 17 slot-range-empty?  AND  ||
+\   17 slot-full?                                ||
+\   7 slot-full?  8 17 slot-range-empty?  AND
+\   ;
 : constraint-18  ( -- f )
-  14 slot-full?  15 17 slot-range-empty?  AND  ||
-  17 slot-full?                                ||
-  7 slot-full?  8 17 slot-range-empty?  AND
+  10 20 slot-range-full?  IF FALSE EXIT THEN
+  verb?  flag participles  flag-is?  AND  ||
+  nomen?
   ;
 
 \ 19. Показатели поз. 19 (Person) с пометой Imp могут быть
@@ -317,33 +346,43 @@
 \ могут следовать после любых морфем. У глаголов заполнение
 \ Person возможно только при незаполненных позициях с 11 по 17 и
 \ при наличии показателей:
-\ для полных форм: Iter A.дIр, Dur.Iter чАдIр, Affirm ЧIК, Opt
-\ ГАй, Assum ГАдАГ, Indir ТIр, Cunc ГАлАК, Neg.Fut ПАс, Dur1 в
-\ форме ир, Hab в форме ҶАң, Fut в форме Ар;
-\ для смешанных форм: Pres ЧА, Dur1 в форме и, Past ГА(н), Hab в
-\ форме ҶА, Fut в форме А;
+\ для полных форм: Irr ЧЫК, Opt ГАй, Assum ГАдАГ, Indir ТЫр,
+\ Cunc ГАлАК, Neg.Fut ПАс, полные формы аффиксов Iter А.дЫр,
+\ Pres2 чАдЫр, Pres2.dial.kac чадыр, Pres.dial.kyz тур, Dur1 ир,
+\ Dur.dial.kac Ат, Hab ҶАң, Fut Ар, в качинском также Past в
+\ форме ГА (парғабын ‘я шел’);
+\ для смешанных форм: Pres ЧА, Pres.dial ча, Pres.dial.sh
+\ чАр(Ы), Past ГА(н), краткие формы аффиксов Iter А.дI, Pres2
+\ чАдЫ, Pres2.dial.kac чады, Pres.dial.kyz ту, Dur1 и, Hab ҶА,
+\ Fut А (+ в диалектах также Ар: килерім ‘я приду’);
 \ для кратких форм: Cond СА, Rpast ТI.
 : constraint-20-full-person  ( -- f )
   verb? IF
     11 17 slot-range-empty? IF
-      8 slot-full?   ||
-      10 slot-full?  ||
-      flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1ᵢᵣ-or-Hab₂-or-Futₐᵣ flag-is?
+      flags( Affirm Opt Assum Indir Cunc Neg.Fut
+             Iter@full Pres2@full Pres2.dial.kac@full
+             Pres.dial.kyz@full Dur1@full Dur.dial.kac
+             Hab@full Fut@full
+             Past@short ) flag-is?
     ELSE FALSE THEN
   ELSE nomen? THEN ;
 : constraint-20-mix-person  ( -- f )
-  verb?
-  15 17 slot-range-empty?  AND
-  flag-Pres-or-Dur1ᵢ-or-Past-or-Hab₁-or-Futₐ flag-is? AND ;
+  verb?  15 17 slot-range-empty?  AND  IF
+    flags( Pres Pres.dial Pres.dial.sh Past
+           Iter@short
+           Pres2@short Pres2.dial.kac@short
+           Pres.dial.kyz@short
+           Dur1@short Hab@short Fut ) flag-is?
+  ELSE FALSE THEN ;
 : constraint-20-short-person  ( -- f )
   verb?
   15 17 slot-range-empty?  AND
-  flag-RPast-or-Cond flag-is?  AND ;
+  flags( RPast Cond ) flag-is?  AND ;
 
 \ 21. Показатель поз. 20 PredPl может стоять после:
 \ а) пок-ля времени (позиция 7 [за исключением ConvA, ConvP,
 \    Neg.Conv (.Abl), Lim и PresPt чАн, согласно пр.25] + Indir
-\    TIр + Affirm ЧIК + Iter AдIр + Dur.Iter чАдIр + Dur1 и(р)),
+\    TIр + Affirm ЧIК + Iter AдIр + Dur1 и(р) + Dur.dial.kac Ат),
 \ б) пок-ля падежа (п. 17) или посессивности (п. 16),
 \ в) некоторых полей Person (1pl, Imp.3),
 \ г) чистой именной основы,
@@ -351,7 +390,7 @@
 \    мында - Здесь имеется и несколько посаженных деревьев (ГХЯ)
 \ е) показателя Attr КI: аалдағылар ‘сельчане’.
 : constraint-21  ( -- f )
-  6 slot-full?  7 19 slot-range-empty?  AND  flag-Neg flag-empty? AND  ||  \ Iter
+  6 slot-full?  7 19 slot-range-empty?  AND  flag Neg  flag-empty? AND  ||  \ Iter
   7 slot-full?  8 19 slot-range-empty?  AND                            ||  \ Tense
   8 slot-full?  9 19 slot-range-empty?  AND                            ||  \ Indir
   10 slot-full?  11 19 slot-range-empty?  AND                          ||  \ Affirm
@@ -359,8 +398,7 @@
   16 slot-full?  17 19 slot-range-empty?  AND                          ||  \ Poss
   17 slot-full?  18 19 slot-range-empty?  AND                          ||  \ Case
   18 slot-full?  19 slot-empty?  AND                                   ||  \ Ptcl2
-  flag-Dur1ᵢᵣ flag-Dur1ᵢ flag-OR  flag-is?                             ||
-  flag-1.pl flag-Imp.3 flag-OR  flag-is?                               ||
+  flags( Dur1 Dur.dial.kac 1.pl Imp.3 ) flag-is?                       ||
   1 19 slot-range-empty?  nomen?  AND
   ;
 
@@ -368,8 +406,8 @@
 \ показателям из поз. 19 Person, к отрицанию ПА или к чистой
 \ основе слов категории Verbum (имеющей значение Imp.2sg).
 : constraint-22  ( -- f )
-  20 slot-empty?  flag-Imp flag-is?  AND          ||
-  7 20 slot-range-empty?  flag-Neg flag-is?  AND  ||
+  20 slot-empty?  flag Imp  flag-is?  AND          ||
+  7 20 slot-range-empty?  flag Neg  flag-is?  AND  ||
   1 20 slot-range-empty?  verb?  AND
   ;
 
@@ -378,7 +416,7 @@
 \ показатели Past ГАн и Hab ЧАӊ.
 : constraint-23  ( -- f )
   nomen?  ||
-  flag-Past-or-Hab flag-is?
+  flags( Past Hab ) flag-is?
   ;
 
 \ 25. После деепричастных показателей позиции 7 (Lim ГАли,
@@ -386,26 +424,31 @@
 \ стоять только показатель Ass ОК из позиции Ptcl3.
 : constraint-25  ( -- f )
   8 21 slot-range-empty?  ||
-  flag-Ass₃ flag-is?
+  flag Ass₃  flag-is?
   ;
 
-\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Dur.Iter чАдIр
-\ возможны только при наличии показателей позиции 2 (NF или
-\ NF.Neg) или 4. Indir тIр возможен при тех же условиях или при
-\ одновременном наличии показателей Neg ПА и Past ГАН
+\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Pres2 чАдIр,
+\ Pres2.dial.kac чадыр, Pres.dial.kyz тур, Pres.dial ча,
+\ Pres.dial.sh чАр(Ы) возможны только при наличии показателей
+\ позиции 2 (NF или NF.Neg) или 4 (Perf) или Prosp АК. Indir
+\ тIр возможен при тех же условиях или при одновременном
+\ наличии показателей Neg ПА и Past ГАН
 : constraint-26₅  ( -- f )
   2 slot-full?  ||
   4 slot-full? ;
 : constraint-26₆  ( -- f )
   2 slot-full?  ||
-  4 slot-full? ;
+  4 slot-full?  ||
+  flag Prosp.dial  flag-is? ;
 : constraint-26₇  ( -- f )
   2 slot-full?  ||
-  4 slot-full? ;
+  4 slot-full?  ||
+  flag Prosp.dial  flag-is? ;
 : constraint-26₈  ( -- f )
   2 slot-full?  ||
   4 slot-full?  ||
-  flag-Neg flag-is?  flag-Past flag-is?  AND
+  flag Prosp.dial  flag-is? ||
+  flag Neg  flag-is?  flag Past  flag-is?  AND
   ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
@@ -423,9 +466,9 @@
 : constraint-29  ( -- f )
   19 20 slot-range-empty? ;
 
-\ 30. Алломорф Abl -тІн возможен в словоформе только при наличии All₁.
+\ 30. Алломорф Abl -тЫн возможен в словоформе только при наличии All₁.
 : constraint-30  ( -- f )
-  flag-All₁ flag-is? ;
+  flag All₁  flag-is? ;
 
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
@@ -451,17 +494,17 @@
   17 form-slot-flags untransformed-fallout-VңV AND NOT
   AND ;
 
-\ Запрещенные контексты для выпадения (СА|ТІ)ңАр
-: constraint-(СА|ТІ)ңАр-fallout  ( -- f )
-  19 form-slot-flags untransformed-fallout-(СА|ТІ)ңАр AND
-  flag-2pl.br flag-is?
-  flag-RPast-or-Cond flag-empty?
+\ Запрещенные контексты для выпадения (СА|ТЫ)ңАр
+: constraint-(СА|ТЫ)ңАр-fallout  ( -- f )
+  19 form-slot-flags untransformed-fallout-(СА|ТЫ)ңАр AND
+  flag 2pl.br  flag-is?
+  flags( RPast Cond ) flag-empty?
   AND AND NOT
-  16 form-slot-flags untransformed-fallout-(СА|ТІ)ңАр AND
-  flag-2pos.pl flag-is?
+  16 form-slot-flags untransformed-fallout-(СА|ТЫ)ңАр AND
+  flag 2pos.pl  flag-is?
   AND NOT
-  12 form-slot-flags untransformed-fallout-(СА|ТІ)ңАр AND
-  flag-2pos.pl flag-is?
+  12 form-slot-flags untransformed-fallout-(СА|ТЫ)ңАр AND
+  flag 2pos.pl  flag-is?
   AND NOT
   AND AND ;
 
@@ -507,11 +550,16 @@
 
 \ После NF глухое: пар-тыр, сом-тыр
 : constraint-voicedstem+Indir  ( -- f )
-  flag-NF₀ flag-is?  3 7 slot-range-empty?  AND
+  flag NF₀  flag-is?  3 7 slot-range-empty?  AND
   \ 1 7 slot-range-empty?
   \ stem-last-sound consonant?
   \ stem-last-sound unvoiced? NOT
   \ AND AND
+  ;
+
+\ Pres.dial ча, Pres2.dial.kac чадыр только после переднерядных основ
+: constraint-frontstem  ( -- f )
+  stem-last-char-vowel back-vowel? NOT
   ;
 
 \ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не

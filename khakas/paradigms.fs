@@ -18,7 +18,7 @@ slot: <Distr>  \ 1
            constraint-cluster-envoice
            constraint-non-envoiceable-stem
            constraint-non-envoiced-rus
-           constraint-(СА|ТІ)ңАр-fallout
+           constraint-(СА|ТЫ)ңАр-fallout
            constraint-[Гң]Г-fallout
            constraint-V[кх]V-fallout
            constraint-VГV-fallout
@@ -30,7 +30,8 @@ slot: <Distr>  \ 1
     form" -nodistr "
 
     1 slot-full!
-    form" Distr КлА"
+    ( flag-with Distr@full )   form" Distr КлА"
+    ( flag-with Distr@short )  form" Distr лА"
   filters-end
   ; slot-add
 
@@ -42,7 +43,7 @@ slot: <NF>  \ 2
     2 slot-full!
 
     filters( constraint-4.1ₚ )
-      form" NF (І)п"
+      form" NF (Ы)п"
     filters-end
     filters( constraint-4.1₀ )
       form" NF₀ 0̸"
@@ -70,11 +71,11 @@ slot: <Perf/Prosp>  \ 4
   4 slot-full!
 
   filters( constraint-3 )
-    form" Perf (І)бІс"
+    form" Perf (Ы)бЫс"
   filters-end
 
-  filters( constraint-6 )
-    form" Prosp.dial АК"
+  filters( constraint-5.1 )
+    form" Perf0 (Ы)с"
   filters-end
   ; slot-add
 
@@ -85,15 +86,20 @@ slot: <Dur>  \ 5
   5 slot-full!
   filters( constraint-7 constraint-8 )
     filters( constraint-8.1ᵢ )
-      form" Dur1ᵢ и"
+      flag-with Dur1@short  form" Dur1ᵢ и"
     filters-end
     filters( constraint-8.1ᵢᵣ )
-      form" Dur1ᵢᵣ ир"
+      flag-with Dur1@full   form" Dur1ᵢᵣ ир"
     filters-end
+    form" Dur.dial.kac Ат"
   filters-end
 
   filters( constraint-26₅ )
     form" Dur чАт"
+  filters-end
+
+  filters( constraint-6 )
+    form" Prosp.dial АК"
   filters-end
   ; slot-add
 
@@ -109,11 +115,10 @@ slot: <Neg/Iter>  \ 6
     filters-end
 
     filters( constraint-14 )
-      form" Iter АдІр"
-    filters-end
-
-    filters( constraint-26₆ )
-      form" Dur.Iter чАдІр"
+      flag-with Iter@full     form" Iter₁ АдЫр"
+      filters( constraint-14.1 )
+        flag-with Iter@short  form" Iter₂ АдЫ"
+      filters-end
     filters-end
   filters-end
   ; slot-add
@@ -126,67 +131,91 @@ slot: <Tense/Mood/Conv2>  \ 7
 
   filters( constraint-26₇ )
     form" Pres чА"
+
+    filters( constraint-frontstem )
+      form" Pres.dial ча"
+    filters-end
+
+    flag-with Pres.dial.kyz@full     form" Pres.dial.kyz тур"
+    filters( constraint-9.4 )
+      flag-with Pres.dial.kyz@short  form" Pres.dial.kyz ту"
+    filters-end
+
+    filters( constraint-9.5 )
+      ( flag-with Pres.dial.sh@short )  form" Pres.dial.sh чАр"
+    filters-end
+    ( flag-with Pres.dial.sh@full )     form" Pres.dial.sh чАрЫ"
+
+    flag-with Pres2@full   form" Pres2 чАдЫр"
+    flag-with Pres2@short  form" Pres2 чАдЫ"
+
+    filters( constraint-frontstem )
+      flag-with Pres2.dial.kac@full  form" Pres2.dial.kac чадыр"
+    filters-end
+    flag-with Pres2.dial.kac@short   form" Pres2.dial.kac чады"
   filters-end
 
-  flag-Neg7 flag-set
-    form" Neg.Fut ПАс"
-  flag-Neg7 flag-clear
-
-  flag-Past flag-set
+  flag participles  flag-set  \ причастные показатели
     filters( constraint-9.1 )
-      form" Past₁ ГА"
+      flag-with Past@short     form" Past ГА"
     filter-else
-      form" Past₂ ГАн"
+      ( flag-with Past@full )  form" Past ГАн"
     filters-end
-  flag-Past flag-clear
 
-  filters( constraint-10.1 )
-    filters( constraint-9.3 )
-      form" Futₐ А"
+    filters( constraint-10.1 )
+      filters( constraint-9.3 )
+        flag-with Fut@short  form" Fut А"
+      filters-end
+      flag-with Fut@full     form" Fut Ар"
     filters-end
-    form" Futₐᵣ Ар"
-  filters-end
 
-  filters( constraint-9.2 )
-    form" Hab₁ ЧА"
-  filters-end
-  form" Hab₂ ЧАң"
+    flag Neg7  flag-set
+      form" Neg.Fut ПАс"
+    flag Neg7  flag-clear
+
+    filters( constraint-9.2 )
+      flag-with Hab@short  form" Hab ЧА"
+    filters-end
+    flag-with Hab@full     form" Hab ЧАң"
+
+    form" Assum ГАдАГ"
+
+    filters( constraint-10 )
+      form" Cunc ГАлАК"
+    filters-end
+
+    form" Simul ААчЫК"
+
+    filters( constraint-26₇ )
+      form" PresPt.dial чАн"
+    filters-end
+  flag participles  flag-clear
 
   filters( constraint-12 )
-    form" RPast ТІ"
-  filters-end
-
-  filters( constraint-10 )
-    form" Cunc ГАлАК"
+    form" RPast ТЫ"
   filters-end
 
   filters( constraint-13 )
     form" Cond СА"
   filters-end
-  flag-Opt-or-Assum flag-set
-    form" Opt ГАй"
-    form" Assum ГАдАГ"
-  flag-Opt-or-Assum flag-clear
+
+  form" Opt ГАй"
 
   filters( constraint-25 )
     form" Lim ГАли"
 
-    flag-Neg7 flag-set
-      flag-Conv2 flag-set
+    flag Neg7  flag-set
+      flag Conv2  flag-set
         form" Neg.Conv Пин"
         form" Neg.Conv.Abl ПинАң"
-      flag-Conv2 flag-clear
-    flag-Neg7 flag-clear
+      flag Conv2  flag-clear
+    flag Neg7  flag-clear
 
-    flag-Conv2 flag-set
-      form" Convₚ (І)п"
+    flag Conv2  flag-set
+      form" Convₚ (Ы)п"
       form" Conv.pas.dial АбАс"
       form" Conv.a А"
-    flag-Conv2 flag-clear
-  filters-end
-
-  filters( constraint-26₇ )
-    form" PresPt.dial чАн"
+    flag Conv2  flag-clear
   filters-end
   ; slot-add
 
@@ -197,20 +226,24 @@ slot: <Indir>  \ 8
   filters( constraint-15 constraint-26₈ )
     8 slot-full!
     filters( constraint-voicedstem+Indir )
-      form" Indir тІр"
+      form" Indir тЫр"
     filter-else
-      form" Indir ТІр"
+      form" Indir ТЫр"
     filters-end
   filters-end
   ; slot-add
 
-slot: <Comit>  \ 9
+slot: <Transp>  \ 9
   9 slot-empty!
   form" -nocomit "
 
   9 slot-full!
 
-  form" Comit ЛІГ"
+  form" Comit ЛЫГ"
+
+  filters( constraint-18 )
+    form" Adv Ли"
+  filters-end
   ; slot-add
 
 slot: <Affirm>  \ 10
@@ -218,7 +251,7 @@ slot: <Affirm>  \ 10
   form" -noaffirm "
 
   10 slot-full!
-  form" Affirm ЧІК"
+  form" Affirm ЧЫК"
   ; slot-add
 
 slot: <Pl₁>  \ 11
@@ -238,15 +271,15 @@ slot: <Poss₁>  \ 12
   filters( constraint-16.1 )
     12 slot-full!
 
-    flag-Poss1.nonpl flag-set
-      form" 1pos.sg₁ (І)м"
-      form" 2pos.sg₁ (І)ң"
+    flag Poss1.nonpl  flag-set
+      form" 1pos.sg₁ (Ы)м"
+      form" 2pos.sg₁ (Ы)ң"
       filters( constraint-OK-fallout₁₂ )
-        form" 3pos₁ (з)І"
+        form" 3pos₁ (з)Ы"
       filters-end
-    flag-Poss1.nonpl flag-clear
-    form" 1pos.pl₁ (І)бІс"
-    form" 2pos.pl₁ (І)ңАр"
+    flag Poss1.nonpl  flag-clear
+    form" 1pos.pl₁ (Ы)бЫс"
+    form" 2pos.pl₁ (Ы)ңАр"
   filters-end
   ; slot-add
 
@@ -257,7 +290,7 @@ slot: <Case₁>  \ 13
   filters( constraint-16.1 )
     13 slot-full!
 
-    form" Gen₁ НІң"
+    form" Gen₁ НЫң"
 
     filters( constraint-17₁₃ )
       form" Loc₁ ТА"
@@ -265,13 +298,13 @@ slot: <Case₁>  \ 13
       form" Loc₁ (н)ТА"
     filters-end
 
-    flag-All₁ flag-set
+    flag All₁  flag-set
       filters( constraint-17₁₃ )
         form" All₁ САр"
       filter-else
         form" All₁ (н)САр"
       filters-end
-    flag-All₁ flag-clear
+    flag All₁  flag-clear
   filters-end
   ; slot-add
 
@@ -281,7 +314,7 @@ slot: <Attr>  \ 14
 
   filters( constraint-16.2₁₄ )
     14 slot-full!
-    form" Attr КІ"
+    form" Attr КЫ"
   filters-end
   ; slot-add
 
@@ -302,17 +335,17 @@ slot: <Poss₂>  \ 16
   filters( constraint-16.5₁₆ )
     16 slot-full!
 
-    flag-Poss2.nonpl flag-set
-      form" 1pos.sg (І)м"
-      form" 2pos.sg (І)ң"
+    flag Poss2.nonpl  flag-set
+      form" 1pos.sg (Ы)м"
+      form" 2pos.sg (Ы)ң"
       filters( constraint-OK-fallout₁₆ )
-        form" 3pos (з)І"
+        form" 3pos (з)Ы"
       filters-end
       form" Gen.3pos Ни"
       form" Gen.3pos.dial Ди"
-    flag-Poss2.nonpl flag-clear
-    form" 1pos.pl (І)бІс"
-    form" 2pos.pl (І)ңАр"
+    flag Poss2.nonpl  flag-clear
+    form" 1pos.pl (Ы)бЫс"
+    form" 2pos.pl (Ы)ңАр"
   filters-end
   ; slot-add
 
@@ -324,8 +357,8 @@ slot: <Case₂>  \ 17
 
   filters( constraint-16.5₁₇ )
     filters( constraint-29 )
-      form" Gen₂ НІң"
-      form" Gen.dial ТІң"
+      form" Gen₂ НЫң"
+      form" Gen.dial ТЫң"
       form" Instr нАң"
       form" Instr.dial ПАң"
       form" Instr.dial мАң"
@@ -337,19 +370,19 @@ slot: <Case₂>  \ 17
         form" Dat ГА"
       filters-end
       filters( constraint-29 )
-        form" Acc НІ"
-        form" Acc.dial ТІ"
+        form" Acc НЫ"
+        form" Acc.dial ТЫ"
       filters-end
       form" Loc ТА"
       form" Abl₁ ДАң"
       form" All САр"
-      form" All.dial САрІ"
+      form" All.dial САрЫ"
       form" All.dial СА"
       form" Prol ЧА"
       form" Delib ДАңАр"
       form" Comp ТАГ"
       filters( constraint-30 )
-        form" Abl₂ тІн"
+        form" Abl₂ тЫн"
       filters-end
     filter-else
       filters( constraint-OK-fallout₁₇ )
@@ -361,14 +394,14 @@ slot: <Case₂>  \ 17
           form" Acc₂ Н"
           form" Acc.dial₂ Т"
         filter-else
-          form" Acc₁ НІ"
-          form" Acc.dial₁ ТІ"
+          form" Acc₁ НЫ"
+          form" Acc.dial₁ ТЫ"
         filters-end
       filters-end
       form" Loc (н)ТА"
       form" Abl нАң"
       form" All (н)САр"
-      form" All.dial₁ (н)САрІ"
+      form" All.dial₁ (н)САрЫ"
       form" All.dial₂ (н)СА"
       form" Prol (н)ЧА"
       form" Delib нАңАр"
@@ -386,10 +419,6 @@ slot: <Ptcl₂>  \ 18
   18 slot-full!
 
   form" Ass₂ ОК"
-
-  filters( constraint-18 )
-    form" Adv Ли"
-  filters-end
   ; slot-add
 
 slot: <Person>  \ 19
@@ -399,53 +428,48 @@ slot: <Person>  \ 19
   19 slot-full!
 
   filters( constraint-20-full-person )
-    form" 1sg ПІн"
-    form" 1sg.dial СІм"
-    form" 2sg СІң"
+    form" 1sg ПЫн"
+    form" 1sg.dial СЫм"
+    form" 2sg СЫң"
 
-    flag-1.pl flag-set
-      form" 1pl ПІс"
-      form" 1pl.dial СІбІс"
-    flag-1.pl flag-clear
+    flag-with 1.pl  form" 1pl ПЫс"
+    flag-with 1.pl  form" 1pl.dial СЫбЫс"
+
     form" 2pl САр"
-    form" 2pl.dial СІңАр"
+    form" 2pl.dial СЫңАр"
   filters-end
 
   filters( constraint-20-mix-person )
-    flag-1sg.br flag-set
-      form" 1sg.mix м"
-    flag-1sg.br flag-clear
-    form" 2sg.mix СІң"
+    flag-with 1sg.br  form" 1sg.mix м"
 
-    flag-1.pl flag-set
-      form" 1pl.mix ПІс"
-    flag-1.pl flag-clear
+    form" 2sg.mix СЫң"
+
+    flag-with 1.pl  form" 1pl.mix ПЫс"
+
     form" 2pl.mix САр"
   filters-end
 
   filters( constraint-20-short-person )
-    flag-Person.br flag-set
-      flag-1sg.br flag-set
-        form" 1sg.br м"
-      flag-1sg.br flag-clear
+    flag Person.br  flag-set
+      form" 1sg.br м"
       form" 2sg.br ң"
-      flag-1.pl flag-set
-        form" 1pl.br ПІс"
-      flag-1.pl flag-clear
-      form" 2pl.br (І)ңАр"
-    flag-Person.br flag-clear
+
+      flag-with 1.pl  form" 1pl.br ПЫс"
+
+      form" 2pl.br (Ы)ңАр"
+    flag Person.br  flag-clear
   filters-end
 
   filters( constraint-19 )
-    flag-Imp flag-set
+    flag Imp  flag-set
       form" Imp.1sg им"
-      form" Imp.1pl ибІс"
+      form" Imp.1pl ибЫс"
       form" Imp.1.Incl Аң"
       form" Imp.1pl.Incl АңАр"
       form" Imp.1pl.Incl.dial АлАр"
-      form" Imp.2pl (І)ңАр"
-      form" Imp.3 СІн"
-    flag-Imp flag-clear
+      form" Imp.2pl (Ы)ңАр"
+      form" Imp.3 СЫн"
+    flag Imp  flag-clear
   filters-end
   ; slot-add
 
@@ -468,7 +492,7 @@ slot: <Ptcl₃>  \ 21
   form" Ass₃ ОК"
 
   filters( constraint-23 )
-    form" Foc ТІр"
+    form" Foc ТЫр"
   filters-end
 
   filters( constraint-22 )

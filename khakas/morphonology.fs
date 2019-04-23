@@ -15,8 +15,8 @@ REQUIRE phonetics-common.fs
 
 S" ае" rule-fb morphoneme А
 S" а0е0" rule-cv-fb morphoneme (А)
-S" ыі" rule-fb morphoneme І
-S" ы0і0" rule-cv-fb morphoneme (І)
+S" ыі" rule-fb morphoneme Ы
+S" ы0і0" rule-cv-fb morphoneme (Ы)
 S" оӧ" rule-fb morphoneme О
 S" ғхгк" rule-vu-fb morphoneme Г
 S" бпм" rule-nvu morphoneme П

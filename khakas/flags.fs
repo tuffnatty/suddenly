@@ -1,72 +1,69 @@
-: flag  ( u "name" -- )
-  \ debug-mode? IF
-  \   CELL 4 = IF 2VALUE ELSE DROP VALUE THEN
-  \ ELSE
-    CELL 4 = IF 2CONSTANT ELSE D>S CONSTANT THEN
-  \ THEN
-  ; IMMEDIATE
-
-: flag-mask  ( u "name" -- )
-  \ debug-mode? IF
-  \   CELL 4 = IF 2VALUE ELSE DROP VALUE THEN
-  \ ELSE
-    CELL 4 = IF 2CONSTANT ELSE CONSTANT THEN
-  \ THEN
-  ; IMMEDIATE
-
 \ flags in different slots must be distinct!
-%0000000000000000000000000000000000000000001. flag flag-Abl₂
-%0000000000000000000000000000000000000000010. flag flag-All₁
-%0000000000000000000000000000000000000000100. flag flag-Ass₁
-%0000000000000000000000000000000000000001000. flag flag-Ass₂
-%0000000000000000000000000000000000000010000. flag flag-Ass₃
-%0000000000000000000000000000000000000100000. flag flag-Cond
-%0000000000000000000000000000000000001000000. flag flag-Cont
-%0000000000000000000000000000000000010000000. flag flag-Convₚ
-%0000000000000000000000000000000000100000000. flag flag-Conv2
-%0000000000000000000000000000000001000000000. flag flag-Cunc
-%0000000000000000000000000000000010000000000. flag flag-Dur
-%0000000000000000000000000000000100000000000. flag flag-Dur1ᵢ
-%0000000000000000000000000000001000000000000. flag flag-Dur1ᵢᵣ
-%0000000000000000000000000000010000000000000. flag flag-Dur.Iter
-%0000000000000000000000000000100000000000000. flag flag-Futₐ
-%0000000000000000000000000001000000000000000. flag flag-Futₐᵣ
-%0000000000000000000000000010000000000000000. flag flag-Gen₁
-%0000000000000000000000000100000000000000000. flag flag-Gen.3pos
-%0000000000000000000000001000000000000000000. flag flag-Hab₁
-%0000000000000000000000010000000000000000000. flag flag-Hab₂
-%0000000000000000000000100000000000000000000. flag flag-Imp
-%0000000000000000000001000000000000000000000. flag flag-Imp.3
-%0000000000000000000010000000000000000000000. flag flag-Iter
-%0000000000000000000100000000000000000000000. flag flag-Neg
-%0000000000000000001000000000000000000000000. flag flag-Neg7
-%0000000000000000010000000000000000000000000. flag flag-Neg.Fut
-%0000000000000000100000000000000000000000000. flag flag-NF₀
-%0000000000000001000000000000000000000000000. flag flag-NF.Neg
-%0000000000000010000000000000000000000000000. flag flag-Opt-or-Assum
-%0000000000000100000000000000000000000000000. flag flag-Past
-%0000000000001000000000000000000000000000000. flag flag-Perf
-%0000000000010000000000000000000000000000000. flag flag-Person.br
-%0000000000100000000000000000000000000000000. flag flag-Poss1.nonpl
-%0000000001000000000000000000000000000000000. flag flag-Poss2.nonpl
-%0000000010000000000000000000000000000000000. flag flag-Pres
-%0000000100000000000000000000000000000000000. flag flag-PresPt.dial
-%0000001000000000000000000000000000000000000. flag flag-Prosp
-%0000010000000000000000000000000000000000000. flag flag-RPast
-%0000100000000000000000000000000000000000000. flag flag-1sg.br
-%0001000000000000000000000000000000000000000. flag flag-1.pl
-%0010000000000000000000000000000000000000000. flag flag-2pl.br
-%0100000000000000000000000000000000000000000. flag flag-2pos.pl
-%1000000000000000000000000000000000000000000. flag flag-3pos₁
+flagenum:
+  flag: Abl₂
+  flag: All₁
+  flag: Affirm
+  flag: Ass₁
+  flag: Ass₂
+  flag: Ass₃
+  flag: Assum
+  flag: Cond
+  flag: Cont
+  flag: Convₚ
+  flag: Conv2
+  flag: Cunc
+  flag: Dur
+  flag: Dur.dial.kac
+  flag: Dur1@full
+  flag: Dur1@short
+  flag: Fut@full
+  flag: Fut@short
+  flag: Gen₁
+  flag: Gen.3pos
+  flag: Hab@full
+  flag: Hab@short
+  flag: Imp
+  flag: Imp.3
+  flag: Indir
+  flag: Iter@full
+  flag: Iter@short
+  flag: Neg
+  flag: Neg7
+  flag: Neg.Fut
+  flag: NF₀
+  flag: NF.Neg
+  flag: Opt
+  flag: Past
+  flag: Past@short
+  flag: Perf
+  flag: Perf0
+  flag: Person.br
+  flag: Poss1.nonpl
+  flag: Poss2.nonpl
+  flag: Pres
+  flag: Pres.dial
+  flag: Pres.dial.kyz@full
+  flag: Pres.dial.kyz@short
+  flag: Pres.dial.sh
+  flag: Pres2@full
+  flag: Pres2@short
+  flag: Pres2.dial.kac@full
+  flag: Pres2.dial.kac@short
+  flag: PresPt.dial
+  flag: Prosp.dial
+  flag: RPast
+  flag: 1sg.br
+  flag: 2sg.br
+  flag: 1.pl
+  flag: 2pl.br
+  flag: 2pos.pl
+  flag: 3pos₁
+  flag: participles
 
-flag-Dur flag-Pres flag-OR flag-PresPt.dial flag-OR   flag-mask flag-Dur-or-Pres-or-PresPt
-flag-Hab₁ flag-Hab₂ flag-OR                           flag-mask flag-Hab
-flag-RPast flag-Cond flag-OR                          flag-mask flag-RPast-or-Cond
-flag-RPast-or-Cond flag-Pres flag-OR flag-Conv2 flag-OR    flag-mask flag-RPast-or-Cond-or-Pres-or-Conv2
-flag-Past flag-Hab flag-OR                            flag-mask flag-Past-or-Hab
-flag-Iter flag-Dur.Iter flag-OR
-flag-Opt-or-Assum flag-OR flag-Cunc flag-OR
-flag-Dur1ᵢᵣ flag-OR flag-Hab₂ flag-OR
-flag-Futₐᵣ flag-OR flag-Neg.Fut flag-OR              flag-mask flag-Iter-or-Opt-or-Assum-or-Cunc-or-Neg.Fut-or-Dur1ᵢᵣ-or-Hab₂-or-Futₐᵣ
-flag-Pres flag-Dur1ᵢ flag-OR flag-Past flag-OR
-flag-Hab₁ flag-OR flag-Futₐ flag-OR                flag-mask flag-Pres-or-Dur1ᵢ-or-Past-or-Hab₁-or-Futₐ
+  Dur1@full Dur1@short                     flag/OR  flag-mask: Dur1
+  Fut@full Fut@short                       flag/OR  flag-mask: Fut
+  Hab@full Hab@short                       flag/OR  flag-mask: Hab
+  Pres.dial.kyz@full Pres.dial.kyz@short   flag/OR  flag-mask: Pres.dial.kyz
+  Pres2@full Pres2@short                   flag/OR  flag-mask: Pres2
+  Pres2.dial.kac@full Pres2.dial.kac@short flag/OR  flag-mask: Pres2.dial.kac
+flagenum;

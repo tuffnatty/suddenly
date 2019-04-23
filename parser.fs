@@ -52,6 +52,9 @@ CREATE formflag bstr% %ALLOT bstr-init
 : stem-last-sound  ( -- xc )
   guessed-stem last-sound ;
 
+: stem-last-char-vowel  ( -- xc )
+  guessed-stem last-char-vowel ;
+
 : form-slot  ( n -- addr u )
   formform form-get-slot ;
 

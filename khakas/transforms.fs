@@ -26,7 +26,7 @@ VARIABLE transform-flags
 %0000010000000 CONSTANT untransformed-fallout-V[кх]V
 %0000100000000 CONSTANT untransformed-fallout-VңV
 %0001000000000 CONSTANT untransformed-fallout-confluence
-%0010000000000 CONSTANT untransformed-fallout-(СА|ТІ)ңАр
+%0010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
 %0100000000000 CONSTANT untransformed-fallout-OK
 %1000000000000 CONSTANT harmony-vu-broken
 
@@ -425,6 +425,11 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
   \ if u > affix.len
   s-len affix-len > IF
+    affix ~/ [V][V]/ IF  \ e.g улуғ+ла+аачых > улуғлаачых
+      \ (end of form - affix.len (улуғл|аачых), 0)
+      s-end affix-len -          0       TRUE   EXIT
+    THEN
+
     affix ~/ [V]/ IF  \ e.g. суғ+ы > суу
       \ (end of form - affix.len - 1 (c|уу), 2)
       s-end affix-len - XCHAR-   2cyrs   TRUE   EXIT
@@ -506,6 +511,19 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     guess-size cyr - TO guess-size
     guess-fallout cyr - TO guess-fallout
   THEN
+  \\." got " guess-fallout TYPE CR
+  guess-fallout affix guess-check
+  ;
+
+: untransform-fallout-add-vvv  { D: s  D: affix  fallout-pos v1 v2 -- }
+  \\." trying " v1 XEMIT v2 XEMIT CR
+  s fallout-pos guess-make { D: guess-fallout }
+  guess-fallout v1 v2 s/.(.*).$/$1$2\1/
+  v2 0= IF
+    guess-size cyr - TO guess-size
+    guess-fallout cyr - TO guess-fallout
+  THEN
+  guess-fallout +X/STRING TO guess-fallout
   \\." got " guess-fallout TYPE CR
   guess-fallout affix guess-check
   ;
@@ -642,7 +660,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
 
 : untransform-fallout2-vv-Imp.1.Incl  { D: s  D: affix  fallout-pos -- }
   \stack-mark
-  affix ~/ [ае][лң]/ IF
+  affix ~/ [ае][лң]/  affix ~/ [ае][ае]ч[ыі][хк]/  OR IF
     s fallout-pos right-slice { D: fallout }
     fallout /([ая]а|ее)/ IF
       fallout second-sound { V2 }
@@ -654,6 +672,19 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   \stack-check
   ;
 
+: untransform-fallout2-vv-Simul  { D: s  D: affix  fallout-pos -- }
+  \stack-mark
+  affix ~/ [ае][ае]ч[ыі][хк]/ IF
+    s fallout-pos right-slice { D: fallout }
+    fallout /([ая]а|ее)/ IF
+      fallout second-sound { V2 }
+      V2 back-vowel? IF back-vowels ELSE front-vowels THEN sound-each { V1 }
+        s affix fallout-pos V1 V2 untransform-fallout-add-vvv
+      sound-next
+    THEN
+  THEN
+  \stack-check
+  ;
 : untransform-fallout2-VА>и  { D: s  D: affix  fallout-pos -- }
   \stack-mark
   affix /[ае]($|[бдркх])/ IF
@@ -702,7 +733,7 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
   guess-fallout affix guess-check
   ;
 
-: untransform-fallout-(СА|ТІ)ңАр  { D: s  D: affix  fallout-pos -- }
+: untransform-fallout-(СА|ТЫ)ңАр  { D: s  D: affix  fallout-pos -- }
   \stack-mark
   affix ~/ ң[ае]р/ IF
     affix +X/STRING  { D: affix[1:] }
@@ -771,15 +802,20 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
     \\." vgv-first? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s
     s affix fallout-pos untransform-fallout2-vgv-first
 
-    ofs-into-affix 2cyrs = IF  \ that is, affix starts with a vowel
-      ofs-into-affix cyr - TO ofs-into-affix
+    ofs-into-affix 2cyrs =  ofs-into-affix 0=  OR IF  \ that is, affix starts with a vowel
+      ofs-into-affix 0<> IF
+        ofs-into-affix cyr - TO ofs-into-affix
+      THEN
 
       \ II.2. императив инклюзивный. Аффиксы инклюзивного
       \ императива Imp.1.Incl Аң, Imp.1.Incl.Pl АңАр/Алар при
       \ присодинении к основам на гласную поглощают гласную
       \ основы, на месте стяжения образуется долгая аа/ее
+      \ Так же себя ведет симулятив ААчЫК.
       \\." vv-Imp.1.Incl? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s
       s affix fallout-pos untransform-fallout2-vv-Imp.1.Incl
+      \\." vv-Simul? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s
+      s affix fallout-pos untransform-fallout2-vv-Simul
 
       fallout-pos cyr+ TO fallout-pos
 
@@ -826,9 +862,9 @@ VOCABULARY fallout-untransformer ALSO fallout-untransformer DEFINITIONS
       \ допускаются как стяженный, так и полный (без выпадений)
       \ варианты данных форм. У Чебодаевой есть отражение
       \ долготы на письме: пассаар, пастаар.
-      \\." (СА|ТІ)ңАр? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s
-      untransformed-fallout-(СА|ТІ)ңАр TO fallout-flags
-      s affix fallout-pos untransform-fallout-(СА|ТІ)ңАр
+      \\." (СА|ТЫ)ңАр? " s TYPE ." +" affix TYPE ." |" list .pairlist \.s
+      untransformed-fallout-(СА|ТЫ)ңАр TO fallout-flags
+      s affix fallout-pos untransform-fallout-(СА|ТЫ)ңАр
 
       \ I.4. Упрощение группы из трех согласных.
       \ Если русское заимствование заканчивается на двойную

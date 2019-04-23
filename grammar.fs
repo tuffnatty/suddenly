@@ -1,3 +1,4 @@
+REQUIRE flagtype.fs
 REQUIRE morphonemic.fs
 
 DEFER (slot-prolog)  ( warp -- warp top-warp )
@@ -12,7 +13,7 @@ VARIABLE paradigm-slot-bitmap
   CELL 8 * 0 DO
     1 I LSHIFT OVER AND IF I . THEN
   LOOP DROP ;
-  
+
 : slot-empty!  ( n -- )
   1 SWAP LSHIFT INVERT paradigm-slot-bitmap @ AND paradigm-slot-bitmap ! ;
 : slot-full!  ( n -- )
@@ -31,98 +32,59 @@ VARIABLE paradigm-slot-bitmap
 : slot-full?  ( n -- f )
   1 SWAP LSHIFT paradigm-slot-bitmap @ AND 0<> ;
 
+flag/VARIABLE paradigm-flags-ptr
+: paradigm-flags  ]] paradigm-flags-ptr flag/@ [[ ; IMMEDIATE
+: paradigm-flags! ]] paradigm-flags-ptr flag/! [[ ; IMMEDIATE
 
-CELL 4 = [IF]
-  $0. 2CONSTANT flag-none
-  2VARIABLE paradigm-flags-ptr
-  : paradigm-flags  ]] paradigm-flags-ptr 2@ [[ ; IMMEDIATE
-  : paradigm-flags! ]] paradigm-flags-ptr 2! [[ ; IMMEDIATE
-  2VARIABLE local-flag
-  : local-flag@ ]] local-flag 2@ [[ ; IMMEDIATE
-  : local-flag! ]] local-flag 2! [[ ; IMMEDIATE
-  : flag-]]L POSTPONE ]]2L ; IMMEDIATE
-  : flag-DUP  ( ud -- ud ud )
-    POSTPONE 2DUP ; IMMEDIATE
-  : flag-OR  ( ud1 ud2 -- ud' )
-    >R ROT OR SWAP R> OR ;
-  : flag-AND  ( ud1 ud2 -- ud' )
-    >R ROT AND SWAP R> AND ;
-  : flag-invert  ( ud -- ud' )
-    INVERT SWAP INVERT SWAP ;
-  : flag-empty?  ( ud -- f )
-    paradigm-flags flag-AND D0= ;
-  : flag-is?  ( ud -- f )
-    paradigm-flags flag-AND D0<> ;
-  : flag-any?  ( ud -- f )
-    POSTPONE D0<> ; IMMEDIATE
-  : flags.  ( ud -- )
-    POSTPONE 2bin. ; IMMEDIATE
-[ELSE]
-  0 CONSTANT flag-none
-  VARIABLE paradigm-flags-ptr
-  : paradigm-flags  ]] paradigm-flags-ptr @ [[ ; IMMEDIATE
-  : paradigm-flags! ]] paradigm-flags-ptr ! [[ ; IMMEDIATE
-  VARIABLE local-flag
-  : local-flag@ ]] local-flag @ [[ ; IMMEDIATE
-  : local-flag! ]] local-flag ! [[ ; IMMEDIATE
+flag/VARIABLE local-flag
+: local-flag@ ]] local-flag flag/@ [[ ; IMMEDIATE
+: local-flag! ]] local-flag flag/! [[ ; IMMEDIATE
 
-  : flag-DUP  ( u -- u u )
-    POSTPONE DUP ; IMMEDIATE
-  : flag-]]L POSTPONE ]]L ; IMMEDIATE
-  : flag-OR  ( u1 u2 -- u' )
-    OR ;
-  : flag-AND  ( u1 u2 -- u' )
-    POSTPONE AND ; IMMEDIATE
-  : flag-invert  ( u -- u')
-    POSTPONE INVERT ; IMMEDIATE
-  : flag-empty?  ( u -- f )
-    paradigm-flags flag-AND 0= ;
-  : flag-is?  ( u -- f )
-    paradigm-flags flag-AND 0<> ;
-  : flag-any?  ( u -- f )
-    POSTPONE 0<> ; IMMEDIATE
-  : flags.  ( u -- )
-    POSTPONE bin. ; IMMEDIATE
-[THEN]
+: flag-empty?  ( ud -- f )
+  paradigm-flags flag/AND flag/0= ;
+: flag-is?  ( ud -- f )
+  paradigm-flags flag/AND flag/0<> ;
+: flag-any?  ( ud -- f )
+  POSTPONE flag/0<> ; IMMEDIATE
+
 : flag-set  ( flag -- )
-  \\." setting flag "  flag-DUP flags.  BL EMIT
-  paradigm-flags flag-OR  paradigm-flags!
+  \\." setting flag "  flag/DUP flags.  BL EMIT
+  paradigm-flags flag/OR  paradigm-flags!
   \\." flags are " paradigm-flags flags.  CR
   ;
 : flag-clear  ( flag -- )
-  \\." clearing flag "  flag-DUP flags.  BL EMIT
-  flag-invert paradigm-flags flag-AND  paradigm-flags!
+  \\." clearing flag "  flag/DUP flags.  BL EMIT
+  flag/INVERT paradigm-flags flag/AND  paradigm-flags!
   \\." flags are " paradigm-flags flags. CR
   ;
 : flag-with  ( "name" -- )
-  PARSE-NAME FIND-NAME ?DUP-IF  ( nt )
+  PARSE-NAME flagtype/FIND-NAME ?DUP-IF  ( nt )
     NAME>INT EXECUTE          ( flag )
-    flag-DUP flag-]]L flag-set [[
+    flag/DUP flag/]]L flag-set [[
     local-flag!
   ELSE 1 ABORT"  word not found!" THEN ; IMMEDIATE
-
 
 : slot:  ( "name" -- )
   : POSTPONE (slot-prolog) ;
 
-CREATE flagname-buffer CHAR f C, CHAR l C, CHAR a C, CHAR g C, CHAR - C, 32 ALLOT
-
-: (compile-flag-if-exists)  ( D: affix-name )
-  flagname-buffer 5 + SWAP MOVE
-  flagname-buffer OVER 5 + FIND-NAME ?DUP-IF  ( ... nt )
-    NAME>INT EXECUTE flag-DUP local-flag! flag-]]L flag-set [[  ( ... )
+: (compile-flag-if-exists)  ( D: affix-name -- )
+  flagtype/FIND-NAME ?DUP-IF  ( ... nt )
+    NAME>INT EXECUTE  ( mask )
+    flag/DUP local-flag@ flag/AND flag/0= IF
+      flag/DUP local-flag@ flag/OR  local-flag!  flag/]]L flag-set [[  ( ... )
+    ELSE flag/DROP THEN
   THEN ;
 
-: (compile-pop-flag) ( -- )
+: (compile-pop-flag)  ( -- )
   local-flag@ flag-any?  IF
-    local-flag@ flag-]]L flag-clear [[
+    local-flag@ flag/]]L flag-clear [[
     flag-none local-flag!
   THEN ;
 
 : form"  ( "name affix" -- )
   BL PARSE [CHAR] " PARSE morphonemic-to-sstr-and-rule 2SWAP  ( sstr rule affix-name name-len )
   2DUP (compile-flag-if-exists)
-  POSTPONE SLITERAL POSTPONE (form-prolog)                                        ( sstr rule )
-  POSTPONE LITERAL POSTPONE LITERAL POSTPONE (form-epilog)
+  POSTPONE SLITERAL  POSTPONE (form-prolog)                                       ( sstr rule )
+  POSTPONE LITERAL  POSTPONE LITERAL  POSTPONE (form-epilog)
   (compile-pop-flag) ; IMMEDIATE
 

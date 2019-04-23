@@ -88,6 +88,10 @@ FALSE VALUE expect-headword?
 
 ' test-error ERROR-XT !
 
+: check-failures
+  n_failures . ." / " n_tests . ." tests FAILED ( " n_failures 100 * n_tests / . ." % )" CR
+  n_failures ABORT"  test failures found!" ;
+
 REQUIRE khakas/phonetics.fs
 REQUIRE phonetics-common.fs
 
@@ -104,13 +108,11 @@ T{ S" пас+ты+ңар" S" пастар" parse-test -> TRUE }T
 [THEN]
 \ T{ S" ті+ген" S" теен" parse-test -> TRUE }T
 
+
 2VARIABLE timer  utime timer 2!
 REQUIRE khakas/gentest.fs
 utime timer 2@ D- D. ." µs" CR
 \ .TIMES CR
 
-: check-failures
-  n_failures . ." / " n_tests . ." tests FAILED ( " n_failures 100 * n_tests / . ." % )" CR
-  n_failures ABORT"  test failures found!" ;
 check-failures
 BYE
