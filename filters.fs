@@ -80,5 +80,5 @@ CREATE filters filter% 64 * %ALLOT
     filter filter% %size -
     \\." stem is now " over .stem-single cr
   REPEAT DROP TRUE
-  \." " cr
+  \." " cr ." Filters check complete." cr
   ;
