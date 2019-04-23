@@ -15,7 +15,6 @@ CELL 4 = [IF]
   : flag/OR  ( ud1 ud2 -- ud' )           >R ROT OR SWAP R> OR ;
   : flag/AND  ( ud1 ud2 -- ud' )          >R ROT AND SWAP R> AND ;
   : flag/INVERT  ( ud -- ud' )            INVERT SWAP INVERT SWAP ;
-  \ : flags.  ( ud -- )                     ]] 2bin. [[ ; IMMEDIATE
   : flag/CONSTANT  ( id "name" -- )       2CONSTANT ; IMMEDIATE
   : flag/]]L POSTPONE ]]2L ; IMMEDIATE
   : flag/LITERAL POSTPONE 2LITERAL ; IMMEDIATE
@@ -36,8 +35,7 @@ CELL 4 = [IF]
   : flag/OR  ( u1 u2 -- u' )              OR ;
   : flag/AND  ( u1 u2 -- u' )             AND ;
   : flag/INVERT  ( u -- u' )              INVERT ;
-  \ : flags.  ( u -- )                      ]] bin. [[ ; IMMEDIATE
-  : flag/CONSTANT  ( ud "name" )          D>S CONSTANT ; IMMEDIATE
+  : flag/CONSTANT  ( ud "name" )          CONSTANT ; IMMEDIATE
   : flag/]]L POSTPONE ]]L ; IMMEDIATE
   : flag/LITERAL POSTPONE LITERAL ; IMMEDIATE
 [THEN]
@@ -88,9 +86,7 @@ SET-CURRENT  ( wordlist -- )
   ; IMMEDIATE
 
 : (flag:-check)  ( mask -- )
-  CELL 4 > IF D>S THEN
-  flag/DUP flag/2* flag/0= ABORT"  Flag storage overflow!"
-  CELL 4 > IF S>D THEN ;
+  flag/DUP flag/2* flag/0= ABORT"  Flag storage overflow!" ;
 
 : flag:  ( mask "name" -- mask' )
   (flag:-check)
@@ -102,7 +98,7 @@ SET-CURRENT  ( wordlist -- )
 
 : flagenum:  ( -- enumsys-wordlist enumsys-mask )
   GET-CURRENT ALSO flagtype DEFINITIONS
-  $1. ; IMMEDIATE
+  CELL 4 = IF $1. ELSE $1 THEN ; IMMEDIATE
 
 : flagenum;  ( enumsys-wordlist enumsys-mask -- )
   flag/DROP PREVIOUS SET-CURRENT ; IMMEDIATE
