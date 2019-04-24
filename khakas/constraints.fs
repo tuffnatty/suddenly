@@ -105,9 +105,12 @@
   ;
 
 \ 6. Показатель позиции 5 Prosp АК встречается только перед
-\ морфемами Pres чА, PresPt чАн и Dur чАТ.
+\ морфемами Pres чА, PresPt чАн и Dur чАТ. Показатель NF в
+\ этом случае в словоформе отсутствует.
 : constraint-6  ( -- f )
-  flags( Dur Pres PresPt.dial ) flag-is? ;
+  flags( Dur Pres PresPt.dial ) flag-is?
+  2 slot-empty?
+  AND ;
 
 \ 7. Показатели Dur1 и(р) и Dur.dial.kac Ат заполняются только, если позиции
 \ 1, 3, 4 не заполнены, а в позиции 0 стоит пар- или кил-
