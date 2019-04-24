@@ -32,6 +32,7 @@ T{ S" киле+гедег"		S" килеедег"		parse-test -> TRUE }T
 T{ S" кил"			S" кил"			parse-test -> TRUE }T
 T{ S" кил+0̸"			S" кил"			parse-test -> TRUE }T
 T{ S" кил+ге+бін"		S" килгебін"		parse-test -> TRUE }T
+T{ S" кил+ген+ни"		S" килгенни"		parse-test -> TRUE }T
 T{ S" кил+ер+ім"		S" килерім"		parse-test -> TRUE }T
 T{ S" килін+і"			S" килні"		parse-test -> TRUE }T
 T{ S" кил+0̸+ча"			S" килча"		parse-test -> TRUE }T
