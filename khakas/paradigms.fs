@@ -3,12 +3,17 @@
 
 require khakas/flags.fs
 require khakas/constraints.fs
+require khakas/slotnames.fs
 
 CREATE slot-stack 32 CELLS ALLOT
 VARIABLE slot-stack-here  slot-stack slot-stack-here !
-: slot-add  LATESTXT slot-stack-here @ !  CELL slot-stack-here +!  0 slot-stack-here @ ! ;
+: slot-add  ( slot-position xt -- )
+  slot-stack-here @ !  ( slot-position )
+  CELL slot-stack-here +!
+  slot-stack-here @ slot-stack - CELL / <> ABORT" wrong slot order!"  ( )
+  0  slot-stack-here @ ! ;
 
-slot: <Distr>  \ 1
+<Distr> slot:  \ 1
   \ Навесим глобальные фильтры на 1-ю позицию с любым
   \ (в том числе нулевым!) аффиксом
   filters( constraint-0
@@ -26,21 +31,21 @@ slot: <Distr>  \ 1
            constraint-VңV-fallout
            constraint-CCC-fallout
            constraint-broken-harmony )
-    1 slot-empty!
+    <this> slot-empty!
     form" -nodistr "
 
-    1 slot-full!
+    <this> slot-full!
     ( flag-with Distr@full )   form" Distr КлА"
     ( flag-with Distr@short )  form" Distr лА"
   filters-end
   ; slot-add
 
-slot: <NF>  \ 2
-  2 slot-empty!
+<NF> slot:  \ 2
+  <this> slot-empty!
   form" -noconv1 "
 
   filters( constraint-4 )
-    2 slot-full!
+    <this> slot-full!
 
     filters( constraint-4.1ₚ )
       form" NF (Ы)п"
@@ -49,26 +54,27 @@ slot: <NF>  \ 2
       form" NF₀ 0̸"
     filters-end
     form" NF.Neg Пин"
+    form" NF.Neg.sh ПААн"
   filters-end
   ; slot-add
 
-slot: <Ptcl1>  \ 3
-  3 slot-empty!
+<Ptcl1> slot:  \ 3
+  <this> slot-empty!
   form" -noptcl1 "
 
   filters( constraint-5 )
-    3 slot-full!
+    <this> slot-full!
     form" Add ТАА"
     form" Cont LА"
     form" Ass₁ ОК"
   filters-end
   ; slot-add
 
-slot: <Perf/Prosp>  \ 4
-  4 slot-empty!
+<Perf> slot:  \ 4
+  <this> slot-empty!
   form" -noperf "
 
-  4 slot-full!
+  <this> slot-full!
 
   filters( constraint-3 )
     form" Perf (Ы)бЫс"
@@ -79,11 +85,11 @@ slot: <Perf/Prosp>  \ 4
   filters-end
   ; slot-add
 
-slot: <Dur>  \ 5
-  5 slot-empty!
-  form" -nodur "
+<Prosp,Dur1> slot:  \ 5
+  <this> slot-empty!
+  form" -noprosp "
 
-  5 slot-full!
+  <this> slot-full!
   filters( constraint-7 constraint-8 )
     filters( constraint-8.1ᵢ )
       flag-with Dur1@short  form" Dur1ᵢ и"
@@ -94,21 +100,27 @@ slot: <Dur>  \ 5
     form" Dur.dial.kac Ат"
   filters-end
 
-  filters( constraint-26₅ )
-    form" Dur чАт"
-  filters-end
-
   filters( constraint-6 )
     form" Prosp.dial АК"
   filters-end
   ; slot-add
 
-slot: <Neg/Iter>  \ 6
-  6 slot-empty!
+<Dur> slot:  \ 6
+  <this> slot-empty!
+  form" -nodur "
+
+  <this> slot-full!
+  filters( constraint-26₅ )
+    form" Dur чАт"
+  filters-end
+  ; slot-add
+
+<Neg/Iter> slot:  \ 7
+  <this> slot-empty!
   form" -noneg/iter "
 
   filters( constraint-11 )
-    6 slot-full!
+    <this> slot-full!
 
     filters( constraint-11.1 )
       form" Neg ПА"
@@ -123,11 +135,11 @@ slot: <Neg/Iter>  \ 6
   filters-end
   ; slot-add
 
-slot: <Tense/Mood/Conv2>  \ 7
-  7 slot-empty!
+<Tense/Mood/Conv2> slot:  \ 8
+  <this> slot-empty!
   form" -notense "
 
-  7 slot-full!
+  <this> slot-full!
 
   filters( constraint-26₇ )
     form" Pres чА"
@@ -217,14 +229,9 @@ slot: <Tense/Mood/Conv2>  \ 7
       form" Conv.a А"
     flag Conv2  flag-clear
   filters-end
-  ; slot-add
 
-slot: <Indir>  \ 8
-  8 slot-empty!
-  form" -noindir "
-
-  filters( constraint-15 constraint-26₈ )
-    8 slot-full!
+  filters( constraint-26₈ )
+    <this> slot-full!
     filters( constraint-voicedstem+Indir )
       form" Indir тЫр"
     filter-else
@@ -233,11 +240,11 @@ slot: <Indir>  \ 8
   filters-end
   ; slot-add
 
-slot: <Transp>  \ 9
-  9 slot-empty!
+<Transp> slot:  \ 9
+  <this> slot-empty!
   form" -nocomit "
 
-  9 slot-full!
+  <this> slot-full!
 
   form" Comit ЛЫГ"
 
@@ -246,30 +253,22 @@ slot: <Transp>  \ 9
   filters-end
   ; slot-add
 
-slot: <Affirm>  \ 10
-  10 slot-empty!
-  form" -noaffirm "
-
-  10 slot-full!
-  form" Affirm ЧЫК"
-  ; slot-add
-
-slot: <Pl₁>  \ 11
-  11 slot-empty!
+<Pl₁> slot:  \ 10
+  <this> slot-empty!
   form" -nopl1 "
 
   filters( constraint-16.1 )
-    11 slot-full!
+    <this> slot-full!
     form" Pl₁ ЛАр"
   filters-end
   ; slot-add
 
-slot: <Poss₁>  \ 12
-  12 slot-empty!
+<Poss₁> slot:  \ 11
+  <this> slot-empty!
   form" -noposs1 "
 
   filters( constraint-16.1 )
-    12 slot-full!
+    <this> slot-full!
 
     flag Poss1.nonpl  flag-set
       form" 1pos.sg₁ (Ы)м"
@@ -283,12 +282,12 @@ slot: <Poss₁>  \ 12
   filters-end
   ; slot-add
 
-slot: <Case₁>  \ 13
-  13 slot-empty!
+<Case₁> slot:  \ 12
+  <this> slot-empty!
   form" -nocase1 "
 
   filters( constraint-16.1 )
-    13 slot-full!
+    <this> slot-full!
 
     form" Gen₁ НЫң"
 
@@ -308,32 +307,32 @@ slot: <Case₁>  \ 13
   filters-end
   ; slot-add
 
-slot: <Attr>  \ 14
-  14 slot-empty!
+<Attr> slot:  \ 13
+  <this> slot-empty!
   form" -noattr "
 
   filters( constraint-16.2₁₄ )
-    14 slot-full!
+    <this> slot-full!
     form" Attr КЫ"
   filters-end
   ; slot-add
 
-slot: <Pl₂>  \ 15
-  15 slot-empty!
+<Pl₂> slot:  \ 14
+  <this> slot-empty!
   form" -nopl2 "
 
   filters( constraint-16.3 constraint-16.4 )
-    15 slot-full!
+    <this> slot-full!
     form" Pl₂ ЛАр"
   filters-end
   ; slot-add
 
-slot: <Poss₂>  \ 16
-  16 slot-empty!
+<Poss₂> slot:  \ 15
+  <this> slot-empty!
   form" -noposs2 "
 
   filters( constraint-16.5₁₆ )
-    16 slot-full!
+    <this> slot-full!
 
     flag Poss2.nonpl  flag-set
       form" 1pos.sg (Ы)м"
@@ -349,11 +348,11 @@ slot: <Poss₂>  \ 16
   filters-end
   ; slot-add
 
-slot: <Case₂>  \ 17
-  17 slot-empty!
+<Case₂> slot:  \ 16
+  <this> slot-empty!
   form" -nocase2 "
 
-  17 slot-full!
+  <this> slot-full!
 
   filters( constraint-16.5₁₇ )
     filters( constraint-29 )
@@ -412,20 +411,28 @@ slot: <Case₂>  \ 17
   filters-end
   ; slot-add
 
-slot: <Ptcl₂>  \ 18
-  18 slot-empty!
+<Ptcl₂> slot:  \ 17
+  <this> slot-empty!
   form" -noptcl2 "
 
-  18 slot-full!
+  <this> slot-full!
 
   form" Ass₂ ОК"
   ; slot-add
 
-slot: <Person>  \ 19
-  19 slot-empty!
+<Affirm> slot:  \ 18
+  <this> slot-empty!
+  form" -noaffirm "
+
+  <this> slot-full!
+  form" Affirm ЧЫК"
+  ; slot-add
+
+<Person> slot:  \ 19
+  <this> slot-empty!
   form" -3prs.sg "
 
-  19 slot-full!
+  <this> slot-full!
 
   filters( constraint-20-full-person )
     form" 1sg ПЫн"
@@ -473,21 +480,21 @@ slot: <Person>  \ 19
   filters-end
   ; slot-add
 
-slot: <PredPl>  \ 20
-  20 slot-empty!
+<PredPl> slot:  \ 20
+  <this> slot-empty!
   form" -nopredpl "
 
-  20 slot-full!
+  <this> slot-full!
   filters( constraint-21 )
     form" PredPl ЛАр"
   filters-end
   ; slot-add
 
-slot: <Ptcl₃>  \ 21
-  21 slot-empty!
+<Ptcl₃> slot:  \ 21
+  <this> slot-empty!
   form" -noptcl3 "
 
-  21 slot-full!
+  <this> slot-full!
 
   form" Ass₃ ОК"
 

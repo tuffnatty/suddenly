@@ -27,6 +27,19 @@ VARIABLE paradigm-slot-bitmap
   1- REPEAT 2DROP paradigm-slot-bitmap @ mask AND 0<> ;
 : slot-range-empty?  ( n1 n2 -- f )
   slot-range-full? NOT ;
+: slots[  ( "n" -- n1 )
+  ; IMMEDIATE
+: slots(  ( "n" -- n1 )
+  PARSE-NAME FIND-NAME NAME>INT EXECUTE 1+ POSTPONE LITERAL ; IMMEDIATE
+: ]-empty?  ( n1 n2 -- f )
+  ]] slot-range-empty? [[ ; IMMEDIATE
+: )-empty?  ( n1 n2 -- f )
+  ]] 1- slot-range-empty? [[ ; IMMEDIATE
+: ]-full?  ( n1 n2 -- f )
+  ]] slot-range-full? [[ ; IMMEDIATE
+: )-full?  ( n1 n2 -- f )
+  ]] 1- slot-range-full? [[ ; IMMEDIATE
+
 : slot-all-empty?  ( -- f )
   paradigm-slot-bitmap @ 0= ;
 : slot-full?  ( n -- f )
@@ -64,8 +77,12 @@ flag/VARIABLE local-flag
     local-flag!
   ELSE 1 ABORT"  word not found!" THEN ; IMMEDIATE
 
-: slot:  ( "name" -- )
-  : POSTPONE (slot-prolog) ;
+0 VALUE (<this>)
+: slot:  ( slot-pos -- )
+  DUP TO (<this>)
+  :noname POSTPONE (slot-prolog) ;
+: <this>  ( -- slot-pos )
+  (<this>) POSTPONE LITERAL ; IMMEDIATE
 
 : (compile-flag-if-exists)  ( D: affix-name -- )
   flagtype/FIND-NAME ?DUP-IF  ( ... nt )
