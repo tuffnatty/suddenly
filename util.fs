@@ -143,6 +143,9 @@ DEFER xemit
 : ||  ( f  R: x r -- true R: x PC: r | R: x r )  \ OR with boolean shortcircuiting
   ]] ?DUP-IF EXIT THEN [[ ; IMMEDIATE
 
+: &&  ( f R: x r -- false R: x PC: r | R: x r )  \ AND with boolean shortcircuiting
+  ]] ?DUP-0=-IF FALSE EXIT ELSE DROP THEN [[ ; IMMEDIATE
+
 : array-reverse  ( arr len -- )
   1- CELLS OVER + BEGIN 2DUP < WHILE  ( a1 a2 )
     2DUP 2DUP @ SWAP @ ROT ! SWAP !

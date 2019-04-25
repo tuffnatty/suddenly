@@ -4,6 +4,7 @@ T{ S" абылағ+ы"			S" абылаа"		parse-test -> TRUE }T
 T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
 T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
+\ T{ S" азыр+их+чат+хам"		S" азырихчатхам"	parse-test -> TRUE }T
 T{ S" анда+ох"			S" андох"		parse-test -> TRUE }T
 T{ S" аннаң+ох"			S" аннаңох"		parse-test -> TRUE }T
 T{ S" аннаңар+ох"		S" аннаңарох"		parse-test -> TRUE }T
@@ -82,12 +83,14 @@ T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
 T{ S" пар+ады+м"		S" парадым"		parse-test -> TRUE }T
+\ T{ S" пар+ат+саң"		S" паратсаң"		parse-test -> TRUE }T
 T{ S" пар+ат+хан"		S" паратхан"		parse-test -> TRUE }T
 T{ S" пар+ах+ча"		S" парахча"		parse-test -> TRUE }T
 T{ S" пар+0̸+ах+ча"		S" парахча"		parse-test -> FALSE }T
 T{ S" пар+ға+бын"		S" парғабын"		parse-test -> TRUE }T
 T{ S" пар+и+ған"		S" париған"		parse-test -> TRUE }T
 T{ S" пар+и+лар"		S" парилар"		parse-test -> TRUE }T
+\ T{ S" пар+ит+чады+п"		S" паритчадып"		parse-test -> TRUE }T
 T{ S" пар+0̸+даа+ча"		S" пардаача"		parse-test -> TRUE }T
 T{ S" пар+0̸+ла+ча"		S" парлача"		parse-test -> TRUE }T
 T{ S" пар+за+ох"		S" парзох"		parse-test -> TRUE }T
@@ -120,10 +123,12 @@ T{ S" поғ+ып"			S" пооп"		parse-test -> TRUE }T
 T{ S" пол+ар+ӌығ"		S" поларӌығ"		parse-test -> FALSE }T
 T{ S" пол+ар+ӌых"		S" поларӌых"		parse-test -> TRUE }T
 T{ S" пол+ах+ча"		S" полахча"		parse-test -> TRUE }T
+T{ S" пол+баан+дыр"		S" полбаандыр"		parse-test -> TRUE }T
 T{ S" пол+бас+пыс"		S" полбаспыс"		parse-test -> TRUE }T
 T{ S" пол+бин+ыбыс+хан"		S" полбиныбысхан"	parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат"		S" полдаачат"		parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат+са"		S" полдаачатса"		parse-test -> TRUE }T
+T{ S" пол+0̸+тыр+ох+чых"		S" полтырохчых"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧриим"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧрігім"		parse-test -> TRUE }T
 T{ S" пуғ+ы"			S" пуу"			parse-test -> TRUE }T

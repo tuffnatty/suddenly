@@ -54,6 +54,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" NF₀ 0̸"
     filters-end
     form" NF.Neg Пин"
+  filters-end
+  filters( constraint-4sh )
     form" NF.Neg.sh ПААн"
   filters-end
   ; slot-add
@@ -90,14 +92,19 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" -noprosp "
 
   <this> slot-full!
-  filters( constraint-7 constraint-8 )
-    filters( constraint-8.1ᵢ )
-      flag-with Dur1@short  form" Dur1ᵢ и"
+  filters( constraint-7 )
+    filters( constraint-8 )
+      filters( constraint-8.1ᵢ )
+        flag-with Dur1@short  form" Dur1ᵢ и"
+      filters-end
+      filters( constraint-8.1ᵢᵣ )
+        flag-with Dur1@full   form" Dur1ᵢᵣ ир"
+      filters-end
+      form" Dur₁.dial.kac Ат"
     filters-end
-    filters( constraint-8.1ᵢᵣ )
-      flag-with Dur1@full   form" Dur1ᵢᵣ ир"
+    filters( constraint-8sag )
+      form" Dur₁.dial.sag ит"
     filters-end
-    form" Dur.dial.kac Ат"
   filters-end
 
   filters( constraint-6 )
@@ -110,7 +117,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" -nodur "
 
   <this> slot-full!
-  filters( constraint-26₅ )
+  filters( constraint-26 )
     form" Dur чАт"
   filters-end
   ; slot-add
@@ -141,22 +148,24 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  filters( constraint-26₇ )
+  filters( constraint-26+paan )
     form" Pres чА"
 
     filters( constraint-frontstem )
       form" Pres.dial ча"
     filters-end
 
-    flag-with Pres.dial.kyz@full     form" Pres.dial.kyz тур"
-    filters( constraint-9.4 )
-      flag-with Pres.dial.kyz@short  form" Pres.dial.kyz ту"
-    filters-end
-
     filters( constraint-9.5 )
       ( flag-with Pres.dial.sh@short )  form" Pres.dial.sh чАр"
     filters-end
     ( flag-with Pres.dial.sh@full )     form" Pres.dial.sh чАрЫ"
+  filters-end
+
+  filters( constraint-26 )
+    flag-with Pres.dial.kyz@full     form" Pres.dial.kyz тур"
+    filters( constraint-9.4 )
+      flag-with Pres.dial.kyz@short  form" Pres.dial.kyz ту"
+    filters-end
 
     flag-with Pres2@full   form" Pres2 чАдЫр"
     flag-with Pres2@short  form" Pres2 чАдЫ"
@@ -198,7 +207,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
     form" Simul ААчЫК"
 
-    filters( constraint-26₇ )
+    filters( constraint-26 )
       form" PresPt.dial чАн"
     filters-end
   flag participles  flag-clear
@@ -230,7 +239,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     flag Conv2  flag-clear
   filters-end
 
-  filters( constraint-26₈ )
+  filters( constraint-26+paan )
     <this> slot-full!
     filters( constraint-voicedstem+Indir )
       form" Indir тЫр"
@@ -291,14 +300,14 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
     form" Gen₁ НЫң"
 
-    filters( constraint-17₁₃ )
+    filters( constraint-17-<Case₁> )
       form" Loc₁ ТА"
     filter-else
       form" Loc₁ (н)ТА"
     filters-end
 
     flag All₁  flag-set
-      filters( constraint-17₁₃ )
+      filters( constraint-17-<Case₁> )
         form" All₁ САр"
       filter-else
         form" All₁ (н)САр"
@@ -311,7 +320,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -noattr "
 
-  filters( constraint-16.2₁₄ )
+  filters( constraint-16.2 )
     <this> slot-full!
     form" Attr КЫ"
   filters-end
@@ -331,7 +340,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -noposs2 "
 
-  filters( constraint-16.5₁₆ )
+  filters( constraint-16.5-<Poss₂> )
     <this> slot-full!
 
     flag Poss2.nonpl  flag-set
@@ -354,7 +363,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  filters( constraint-16.5₁₇ )
+  filters( constraint-16.5-<Case₂> )
     filters( constraint-29 )
       form" Gen₂ НЫң"
       form" Gen.dial ТЫң"
@@ -364,7 +373,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Instr.dial ПлАң"
     filters-end
 
-    filters( constraint-17₁₇ )
+    filters( constraint-17-<Case₂> )
       filters( constraint-OK-fallout₁₇ )
         form" Dat ГА"
       filters-end

@@ -13,7 +13,7 @@ flagenum:
   flag: Conv2
   flag: Cunc
   flag: Dur
-  flag: Dur.dial.kac
+  flag: Dur₁.dial.kac
   flag: Dur1@full
   flag: Dur1@short
   flag: Fut@full
@@ -32,6 +32,7 @@ flagenum:
   flag: Neg.Fut
   flag: NF₀
   flag: NF.Neg
+  flag: NF.Neg.sh
   flag: Opt
   flag: Past
   flag: Past@short
