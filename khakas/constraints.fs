@@ -143,7 +143,7 @@ require khakas/slotnames.fs
   ;
 : constraint-8sag  ( -- f )
   <Dur> slot-full?  ||
-  slots( <Prosp,Dur1> <Tense/Mood/Conv2> )-empty?  flags( Past Cond PresPt.dial ) flag-is? ;
+  slots( <Prosp,Dur1> <Tense/Mood/Conv2> )-empty?  flags( Past Cond PresPt.dial ) flag-is? AND ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
 \ распределен: перед Past ГА(н) и перед Cond СА может
