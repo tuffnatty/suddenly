@@ -12,7 +12,7 @@ require khakas/slotnames.fs
 \ показателей не присоединяют! Слова с пометой Invar1
 \ присоединяют Ptcl3 ОК.
 : constraint-0  ( -- f )
-  invar1? NOT                                     ||
+  invar1? NOT                                         ||
   slots[ 1 <Ptcl₃> )-empty?  flag Ass₃  flag-is? AND  ||
   slot-all-empty?
   ;
@@ -83,14 +83,14 @@ require khakas/slotnames.fs
 \ возможны оба алломорфа.]
 : constraint-4.1ₚ  ( -- f )
   <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND  ||
-  <NF> form-slot-vowel-at-left?                                 ||
+  <NF> form-slot-vowel-at-left?                                          ||
   flags( Ass₁ Cont ) flag-is?
   ;
 : constraint-4.1₀  ( -- f )
-  <NF> form-slot-vowel-at-left? NOT
-  <NF> form-slot-xc-at-left fallout-short? NOT
+  <NF> form-slot-vowel-at-left? NOT  &&
+  <NF> form-slot-xc-at-left fallout-short? NOT  &&
   flag Ass₁  flag-empty?
-  AND AND ;
+  ;
 
 \ 5. Показатели поз. 3 (внутренние частицы) допускаются только
 \ при заполненной позиции 8 (время) или при обычном дуративе
@@ -122,10 +122,10 @@ require khakas/slotnames.fs
 \ (Dur) есть семантическая разница, но объяснение в грамматике
 \ непонятное.]
 : constraint-7  ( -- f )
-  <Distr> slot-empty?
-  slots( <NF> <Prosp,Dur1> )-empty?
+  <Distr> slot-empty?  &&
+  slots( <NF> <Prosp,Dur1> )-empty?  &&
   is-пар/кил?
-  AND AND ;
+  ;
 
 \ 8. Показатели Dur1 и(р) и Dur₁.dial.kac Ат могут стоять:
 \ 1) либо непосредственно перед пробелом,
@@ -137,7 +137,7 @@ require khakas/slotnames.fs
 \ Past ГА(н), Cond СА и PresPt.dial чАн.
 : constraint-8  ( -- f )
   slots( <Prosp,Dur1> <Ptcl₃> ]-empty?                             ||
-  slots( <Prosp,Dur1> <Person> )-empty?  <Person> slot-full?  AND   ||
+  slots( <Prosp,Dur1> <Person> )-empty?  <Person> slot-full?  AND  ||
   slots( <Prosp,Dur1> <PredPl> )-empty?  <PredPl> slot-full?  AND  ||
   flags( Past Cond Convₚ ) flag-is?  <Neg/Iter> slot-empty?  AND
   ;
@@ -160,9 +160,9 @@ require khakas/slotnames.fs
 \ перед всеми Person: пар-га-м 'я шел', тiк-ке-зер 'вы шили'.
 \ В остальных случаях принимается форма ГАн
 : constraint-9.1  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty?
+  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
   <Person> slot-full?
-  AND ;
+  ;
 
 \ 9.2. Показатель Hab ҶА(ң) может принимать форму ҶА
 \ непосредственно перед всеми Person: ырла-ӌаң-мын // ырла-ча-м
@@ -170,9 +170,9 @@ require khakas/slotnames.fs
 \ приходили (обычно)’. А может и принимать форму ҶАң. В
 \ остальных случаях принимается форма ҶАң
 : constraint-9.2  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty?
+  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
   <Person> slot-full?
-  AND ;
+  ;
 
 \ 9.3. Показатель Fut А(р) может принимать форму А
 \ непосредственно перед 1.sg.br и 1.pl: пар-а-м ‘я пойду’,
@@ -182,24 +182,24 @@ require khakas/slotnames.fs
 \ случаях фигурирует только форма Ар. В первом лице бывает также
 \ и форма Ар: пар-ар-бын ‘я пойду’, адир-быс ‘мы будем называть’.
 : constraint-9.3  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty?
+  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
   flags( 1sg.br 1.pl ) flag-is?
-  AND ;
+  ;
 
 \ 9.4 Pres.dial.kyz ту(р) может принимать форму ту
 \ непосредственно перед Person или PredPl. Форма тур возможна в
 \ любых контекстах.
 : constraint-9.4  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty?
+  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
   slots[ <Person> <PredPl> ]-full?
-  AND ;
+  ;
 
 \ 9.5. Pres.dial.sh чАр(Ы) перед показателями 1sg и 2sg
 \ принимает форму чАрЫ. (Это нужно, чтобы не было омонимичных
 \ разборов чар-ым / чары-м). В остальных контекстах показатели
 \ не распределены.
 : constraint-9.5  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-full? ||
+  slots( <Tense/Mood/Conv2> <Person> )-full?  ||
   flags( 1sg.br 2sg.br ) flag-empty? ;
 
 
@@ -229,17 +229,19 @@ require khakas/slotnames.fs
 \ лично-числовой показатель (Person), число предиката
 \ (PredPl) или показатель аффирматива (Affirm) или Ptcl3
 : constraint-12  ( -- f )
-  slots( <Tense/Mood/Conv2> <PredPl> )-empty?                                 ||  \ PredPl or Ptcl3 or end-of-wordform
-  slots( <Tense/Mood/Conv2> <Person> )-empty?  flag Person.br  flag-is?  AND  ||  \ Person
-  slots( <Tense/Mood/Conv2> <Affirm> )-empty?  <Affirm> slot-full?  AND           \ Affirm
+  slots( <Tense/Mood/Conv2> <PredPl> )-empty?                                 ||
+  slots( <Tense/Mood/Conv2> <Person> )-empty?  flag Person.br  flag-is?  AND  ||
+  slots( <Tense/Mood/Conv2> <Affirm> )-empty?  &&
+    <Affirm> slot-full?
   ;
 
 \ 13. Непосредственно после показателя условного наклонения
 \ (Cond) может следовать только краткий лично-числовой
 \ показатель (Person) или число предиката (PredPl) или Ptcl3
 : constraint-13  ( -- f )
-  slots( <Tense/Mood/Conv2> <PredPl> )-empty?                             ||  \ PredPl or Ptcl3 or end-of-wordform
-  slots( <Tense/Mood/Conv2> <Person> )-empty?  flag Person.br  flag-is?  AND  \ Person
+  slots( <Tense/Mood/Conv2> <PredPl> )-empty?  ||
+  slots( <Tense/Mood/Conv2> <Person> )-empty?  &&
+    flag Person.br  flag-is?
   ;
 
 \ 14. Непосредственно после Iter возможны только: Past
@@ -251,9 +253,9 @@ require khakas/slotnames.fs
 
 \ 14.1. Iter: Перед Past ГА(н) и Ptcl3 возможна только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
 : constraint-14.1  ( -- f )
-  flag Past  flag-empty?
+  flag Past  flag-empty?  &&
   slots( <Neg/Iter> <Ptcl₃> )-empty?  <Ptcl₃> slot-full?  AND NOT
-  AND ;
+  ;
 
 \ 16.1. Показатели позиций 10-12 (Pl1, Poss1, Case1) возможны
 \ только при наличии в словоформе одного или нескольких аффиксов
@@ -306,13 +308,13 @@ require khakas/slotnames.fs
 \ Nomen-основ, у которых в поле FORM есть помета poss
 \ (неотделяемая принадлежность)
 : constraint-17-<Case₁>  ( -- f )
-  flag Poss1.nonpl  flag-empty?
+  flag Poss1.nonpl  flag-empty?  &&
   slots[ 1 <Case₁> )-empty?  dictflag-poss dictflag-is?  AND NOT
-  AND ;
+  ;
 : constraint-17-<Case₂>
-  flag Poss2.nonpl  flag-empty?
+  flag Poss2.nonpl  flag-empty?  &&
   slots[ 1 <Case₂> )-empty?  dictflag-poss dictflag-is?  AND NOT
-  AND ;
+  ;
 
 \ 18. Аффикс Adv Ли может присоединяться к словам с пометой
 \ Verbum, у которых есть причастные показатели из поз. 7, и к
@@ -328,9 +330,9 @@ require khakas/slotnames.fs
 \ непосредственно после заполнителя позиции с номером меньше
 \ или равно 7
 : constraint-19  ( -- f )
-  verb?
+  verb?  &&
   slots( <Neg/Iter> <Person> )-empty?
-  AND ;
+  ;
 
 \ 20. К словам с пометой NOMEN присоединяются полные
 \ лично-числовые показатели (список внутри Person), которые
