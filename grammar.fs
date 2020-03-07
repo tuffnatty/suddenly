@@ -20,13 +20,22 @@ VARIABLE paradigm-slot-bitmap
   1 SWAP LSHIFT paradigm-slot-bitmap @ OR paradigm-slot-bitmap ! ;
 : slot-empty?  ( n -- f )
   1 SWAP LSHIFT paradigm-slot-bitmap @ AND 0= ;
-: slot-range-full?  ( n1 n2 -- f)
+: slot-mask  ( n1 n2 -- mask )
   0 { mask }
   BEGIN 2DUP <= WHILE
     1 OVER LSHIFT mask OR TO mask
-  1- REPEAT 2DROP paradigm-slot-bitmap @ mask AND 0<> ;
+  1- REPEAT 2DROP mask ;
+: slot-range-full?  ( n1 n2 -- f)
+  slot-mask  paradigm-slot-bitmap @  AND 0<> ;
 : slot-range-empty?  ( n1 n2 -- f )
   slot-range-full? NOT ;
+: slot-all-empty?  ( -- f )
+  paradigm-slot-bitmap @ 0= ;
+: slot-full?  ( n -- f )
+  1 SWAP LSHIFT paradigm-slot-bitmap @ AND 0<> ;
+
+
+debug-mode? [IF]
 : slots[  ( "n" -- n1 )
   ; IMMEDIATE
 : slots(  ( "n" -- n1 )
@@ -39,11 +48,21 @@ VARIABLE paradigm-slot-bitmap
   ]] slot-range-full? [[ ; IMMEDIATE
 : )-full?  ( n1 n2 -- f )
   ]] 1- slot-range-full? [[ ; IMMEDIATE
-
-: slot-all-empty?  ( -- f )
-  paradigm-slot-bitmap @ 0= ;
-: slot-full?  ( n -- f )
-  1 SWAP LSHIFT paradigm-slot-bitmap @ AND 0<> ;
+[ELSE]
+: slots[  ( "n1" "n2" -- slots-sys )
+  POSTPONE [ ; IMMEDIATE COMPILE-ONLY
+: slots(  ( "n1" "n2" -- slots-sys )
+  PARSE-NAME FIND-NAME NAME>INT EXECUTE 1+
+  POSTPONE [ ; IMMEDIATE COMPILE-ONLY
+: ]-empty?  ( slots-sys -- )  ( runtime: -- f )
+  ] slot-mask ]]L  paradigm-slot-bitmap @  AND 0= [[ ;
+: )-empty?  ( slots-sys -- )  ( runtime: -- f )
+  ] 1- slot-mask ]]L  paradigm-slot-bitmap @  AND 0= [[ ;
+: ]-full?  ( slots-sys -- )  ( runtime: -- f )
+  ] slot-mask ]]L  paradigm-slot-bitmap @  AND 0<> [[ ;
+: )-full?  ( slots-sys -- )  ( runtime: -- f )
+  ] 1- slot-mask ]]L  paradigm-slot-bitmap @  AND 0<> [[ ;
+[THEN]
 
 flag/VARIABLE paradigm-flags-ptr
 : paradigm-flags  ]] paradigm-flags-ptr flag/@ [[ ; IMMEDIATE
