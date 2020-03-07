@@ -157,3 +157,25 @@ DEFER xemit
   language-path NIP PAD +  ( ptr )
   [CHAR] / OVER C! 1+  ( ptr' )
   BL PARSE  ROT  2DUP + >R  SWAP MOVE  PAD R> PAD - REQUIRED ;
+
+: bi  ( x xt1 xt2 -- )
+  \G apply both xts to x
+  >R OVER >R EXECUTE  ( R: x xt2 )
+  R> R> EXECUTE ;
+
+: bi[
+  ]] >R R@ [[ ; IMMEDIATE
+: ][
+  ]] R@ [[ ; IMMEDIATE
+: ]bi
+  ]] RDROP [[ ; IMMEDIATE
+
+: 2bi  ( x y xt1 xt2 -- )
+  \G apply both xts to x y
+  2OVER 2>R >R EXECUTE R> 2R> ROT EXECUTE ;
+
+: tri  ( x xt1 xt2 xt3 -- )
+  \G apply all three xts to x
+  >R >R OVER >R EXECUTE  ( R: x xt2 xt3 )
+  R> R> OVER >R EXECUTE  ( R: x xt3 )
+  R> R> EXECUTE ;
