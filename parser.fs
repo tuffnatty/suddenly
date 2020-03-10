@@ -41,19 +41,19 @@ CREATE formflag bstr% %ALLOT bstr-init
   2DUP > IF NIP R> - ELSE RDROP 2DROP 0 THEN ;
 
 : stem-polysyllabic?  ( -- f )
-  guessed-stem polysyllabic? ;
+  ]] guessed-stem polysyllabic? [[ ; IMMEDIATE
 
 : stem-prev-sound  ( -- xc )
-  guessed-stem prev-sound ;
+  ]] guessed-stem prev-sound [[ ; IMMEDIATE
 
 : stem-prev-sound-ptr  ( -- addr u )
-  guessed-stem prev-sound-ptr ;
+  ]] guessed-stem prev-sound-ptr [[ ; IMMEDIATE
 
 : stem-last-sound  ( -- xc )
-  guessed-stem last-sound ;
+  ]] guessed-stem last-sound [[ ; IMMEDIATE
 
 : stem-last-char-vowel  ( -- xc )
-  guessed-stem last-char-vowel ;
+  ]] guessed-stem last-char-vowel [[ ; IMMEDIATE
 
 : form-slot  ( n -- addr u )
   formform form-get-slot ;
@@ -74,7 +74,7 @@ CREATE formflag bstr% %ALLOT bstr-init
   formform form-first-full-slot ?DUP-IF  ( n )
     formform form-get-slot
   ELSE $0. THEN ;
-  
+
 : first-affix-starts-with?  ( xc -- f )
   first-affix first-sound = ;
 
@@ -237,7 +237,9 @@ DEFER yield-stem  ( stem -- )
   sstr sstr-count @ 0 DO
     I sstr sstr-select { D: affix }
     affix string-length IF
-      affix rule I process-single-representation
+      DUP affix string-length >= IF
+        affix rule I process-single-representation
+      THEN
     THEN
   LOOP
   formform-morphonemic bstr-pop
