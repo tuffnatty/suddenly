@@ -1,3 +1,4 @@
+REQUIRE util.fs
 
 : bin.  ( u -- )
   BASE @  2 BASE !  SWAP .  BASE ! ;

@@ -33,7 +33,6 @@ language-require rules.fs
 : morphonemic-to-sstr-and-rule  { D: morphonemic -- sstr rule }
   \ ." morphonemic-to-sstr-and-rule:" morphonemic type cr
   morphonemic string-length 0= IF 0 0 EXIT THEN
-  \ OVER XC@  [CHAR] ∅  =  IF 0 0 EXIT THEN
   morphonemic morphonemic-get-rules { rule-sum }
   \ ." rule-sum: " rule-sum >NAME ?DUP-IF .NAME THEN
   rule-sum rule-capacity  { capacity }
