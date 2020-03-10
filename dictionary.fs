@@ -1,6 +1,13 @@
 REQUIRE lists.fs
 REQUIRE p-o-s.fs
 REQUIRE strings.fs
+REQUIRE util.fs
+
+: language-require  ( "name" -- )
+  language-path PAD SWAP MOVE
+  language-path NIP PAD +  ( ptr )
+  [CHAR] / OVER C! 1+  ( ptr' )
+  BL PARSE  ROT  2DUP + >R  SWAP MOVE  PAD R> PAD - REQUIRED ;
 
 32 CELLS  CONSTANT max-headword
 32 CELLS  CONSTANT max-semgloss
@@ -8,9 +15,9 @@ REQUIRE strings.fs
 STRUCT
   CELL%      FIELD dict-id
   CELL%      FIELD dict-p-o-s
-  CELL% 32 * FIELD dict-headword
+  CELL% 16 * FIELD dict-headword
   CELL%      FIELD dict-headnum
-  CELL% 32 * FIELD dict-semgloss
+  CELL% 16 * FIELD dict-semgloss
   CELL%      FIELD dict-stems        \ pointer to strlist%
   CELL%      FIELD dict-flags
 END-STRUCT dict%

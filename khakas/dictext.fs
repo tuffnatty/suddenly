@@ -1,3 +1,4 @@
+REQUIRE ../cleave.fs
 REQUIRE ./phonetics.fs
 
 %001 CONSTANT dictflag-no-envoice
@@ -6,10 +7,10 @@ REQUIRE ./phonetics.fs
 
 :noname  ( dictflags -- )
   ." <"
-  DUP dictflag-no-envoice AND IF ." +no-envoice" THEN
-  DUP dictflag-poss AND IF ." +poss" THEN
-  DUP dictflag-rus AND IF ." +rus" THEN
-  DROP ." >"
+  cleave[ dictflag-no-envoice AND IF ." +no-envoice" THEN
+       ][ dictflag-poss AND IF ." +poss" THEN
+       ][ dictflag-rus AND IF ." +rus" THEN ];  ( )
+  ." >"
   ; IS .dictflags
 
 : stem-postprocess-auto-no-envoice  { D: stem dict -- }

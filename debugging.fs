@@ -1,4 +1,3 @@
-INCLUDE util.fs
 
 : bin.  ( u -- )
   BASE @  2 BASE !  SWAP .  BASE ! ;
@@ -52,9 +51,6 @@ DEFER debug-bye
   THEN ; IMMEDIATE
 
 : \\." debug-mode? 1 > IF POSTPONE ." ELSE POSTPONE \ THEN ; IMMEDIATE
-: .as  ( -- )
-  \." AS:" slot-stack DUP @ HEX. CELL+ BEGIN DUP @ DUP HEX. WHILE CELL+ REPEAT DROP CR
-  ;
 
 : \stack-mark  ( -- )
   debug-mode? IF  ]] depth-stack-push                [[  THEN ; IMMEDIATE

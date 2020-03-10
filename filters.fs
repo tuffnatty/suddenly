@@ -1,3 +1,5 @@
+REQUIRE cleave.fs
+
 \ filters stack. Each element is 2 cells: xt negation
 STRUCT
   CELL% FIELD filter-xt
@@ -12,8 +14,8 @@ CREATE filters filter% 64 * %ALLOT
   n-filters @ 1- [ filter% %size ]L * filters + ;
 
 : .filter  ( -- )
-  filters-top-ptr DUP filter-negated @ IF ." negated: " THEN  ( top )
-  filter-xt @ >BODY SEE-THREADED ;
+  filters-top-ptr bi[ filter-negated @ IF ." negated: " THEN
+                   ][ filter-xt @ >BODY SEE-THREADED ]; ;
 
 : >filters  ( nt xt f -- )
   1 n-filters +!
@@ -41,10 +43,11 @@ CREATE filters filter% 64 * %ALLOT
     PARSE-NAME { D: s }
   s S" )" COMPARE WHILE
     s string-length IF
-      s FIND-NAME ?DUP-IF       ( nt )
-        DUP POSTPONE LITERAL
-        NAME>INT POSTPONE LITERAL  ( )
-      ELSE 1 ABORT"  word not found!" THEN
+      s FIND-NAME ?DUP-IF  ( nt )
+        DUP IMMEDIATE?  IF  NAME?INT EXECUTE  THEN
+        ( nt )  bi[ POSTPONE LITERAL
+                 ][ NAME>INT POSTPONE LITERAL ];
+      ELSE  1 ABORT"  word not found!"  THEN
       FALSE POSTPONE LITERAL
       POSTPONE >filters
       count 1+ TO count
