@@ -144,6 +144,24 @@ DEFER xemit
   : WTF?? ~~ store-backtrace dobacktrace BYE ;
 [THEN]
 
+[UNDEFINED] 2VALUE [IF]
+  : comp: ( -- colon-sys )  gstart-xt set-compiler ;
+
+  : (2to) ( addr -- ) >body 2! ;
+    comp: drop >body postpone literal postpone 2! ;
+
+  : 2Value ( d "name" -- ) \ Forth200x
+    Create 2,
+    [: >body postpone Literal postpone 2@ ;] set-compiler
+    ['] (2to) set-to
+    DOES> 2@ ;
+[THEN]
+
+[UNDEFINED] !@ [IF]
+  : !@  ( u1 addr -- u2 )
+    DUP @ >R ! R> ;
+[THEN]
+
 : ||  ( f  R: x r -- true R: x PC: r | R: x r )  \ OR with boolean shortcircuiting
   ]] ?DUP-IF EXIT THEN [[ ; IMMEDIATE
 

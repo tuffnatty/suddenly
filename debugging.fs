@@ -62,6 +62,9 @@ DEFER debug-bye
 variable last-timer
 CREATE timer-stack 256 CELLS ALLOT
 variable timer-stack-depth
+[UNDEFINED] timer-list [IF]
+  variable timer-list
+[THEN]
 : timer: Create $0. , , here timer-list !@ ,
   DOES> profile(
     timer-stack-depth @ ?DUP-IF 1- CELLS timer-stack + @  +t THEN
