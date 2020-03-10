@@ -140,6 +140,10 @@ DEFER xemit
   REQUIRE compat/glocals.fs
 [THEN]
 
+[UNDEFINED] WTF?? [IF]
+  : WTF?? ~~ store-backtrace dobacktrace BYE ;
+[THEN]
+
 : ||  ( f  R: x r -- true R: x PC: r | R: x r )  \ OR with boolean shortcircuiting
   ]] ?DUP-IF EXIT THEN [[ ; IMMEDIATE
 
