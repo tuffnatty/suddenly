@@ -1,3 +1,4 @@
+dist: bionic
 language: generic
 sudo: true
 before_script:
