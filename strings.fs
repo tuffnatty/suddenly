@@ -325,10 +325,10 @@ END-STRUCT bstr%  \ a string for fast prepending
   ]] string-addr cyr+ [[ ; IMMEDIATE
 
 : last-sound-ptr  ( addr u -- ptr )
-  string-end XCHAR- ;
+  ]] string-end XCHAR- [[ ; IMMEDIATE
 
 : prev-sound-ptr  ( addr u -- ptr )
-  string-end XCHAR- XCHAR- ;
+  ]] string-end XCHAR- XCHAR- [[ ; IMMEDIATE
 
 : first-sound  ( addr u -- xc )
   first-sound-ptr ?DUP-IF XC@ ELSE 0 THEN ;
