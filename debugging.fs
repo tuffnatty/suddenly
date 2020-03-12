@@ -62,16 +62,38 @@ DEFER debug-bye
 variable last-timer
 CREATE timer-stack 256 CELLS ALLOT
 variable timer-stack-depth
-[UNDEFINED] timer-list [IF]
+[UNDEFINED] timer-list [IF]  \ reuse gforth 0.7.9 timer-list
   variable timer-list
 [THEN]
+[UNDEFINED] profile( [IF]
+  6 CONSTANT assert-canary
+  : debug) POSTPONE THEN ;
+  : debug-does>  DOES>
+    ]] Literal @ IF [[ ['] debug) assert-canary ;
+  : debug: ( -- )
+    Create false , immediate debug-does> ;
+  : )else( ( -- ) 2>r postpone ELSE 2r> ; immediate compile-only
+  : ) assert-canary <> ABORT" unmatched debug: or assertion" EXECUTE ; IMMEDIATE
+  debug: profile(
+  : +db ( "word" -- ) (') >body on ;
+  : -db ( "word" -- ) (') >body off ;
+[THEN]
+
+[UNDEFINED] +t [IF]
+  2Variable last-tick
+
+  : 2+! ( d addr -- )  >r r@ 2@ d+ r> 2! ;
+  : +t ( addr -- )
+      utime 2dup last-tick dup 2@ 2>r 2! 2r> d- rot 2+! ;
+[THEN]
+
 : timer: Create $0. , , here timer-list !@ ,
   DOES> profile(
     timer-stack-depth @ ?DUP-IF 1- CELLS timer-stack + @  +t THEN
     timer-stack timer-stack-depth @ CELLS + !
     1 timer-stack-depth +!
   )else( drop ) ;
-: +record ( -- ) profile( -1 timer-stack-depth +!  timer-stack timer-stack-depth @ CELLS + @  +t ) ;
+: +record ( -- ) PROFILE( -1 timer-stack-depth +!  timer-stack timer-stack-depth @ CELLS + @  +t ) ;
 
 [undefined] SEE-THREADED [IF]
 [undefined] see-voc [if]
@@ -81,4 +103,4 @@ ALSO see-voc
 : see-threaded SEE-THREADED ;
 PREVIOUS
 [then]
-
+[THEN]

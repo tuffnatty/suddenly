@@ -145,16 +145,27 @@ DEFER xemit
 [THEN]
 
 [UNDEFINED] 2VALUE [IF]
-  : comp: ( -- colon-sys )  gstart-xt set-compiler ;
-
-  : (2to) ( addr -- ) >body 2! ;
-    comp: drop >body postpone literal postpone 2! ;
-
   : 2Value ( d "name" -- ) \ Forth200x
     Create 2,
-    [: >body postpone Literal postpone 2@ ;] set-compiler
-    ['] (2to) set-to
     DOES> 2@ ;
+  0. 2VALUE some-2value
+  :noname
+    ' dup >definer CASE
+      [ ' some-2value ]L >definer OF >BODY 2! ENDOF
+      [ ' locals-wordlist ]L >definer OF >BODY ! ENDOF
+      -&32 THROW
+    ENDCASE ;
+  :noname
+    comp' drop dup >definer CASE
+      [ ' some-2value ]L >definer OF >BODY ]] ALiteral 2! [[ ENDOF
+      [ ' locals-wordlist ]L >definer OF >body ]] Aliteral ! [[ ENDOF
+      [ comp' some-clocal drop ]L >definer OF POSTPONE laddr# >body @ lp-offset, POSTPONE c! ENDOF
+      [ comp' some-wlocal drop ]L >definer OF POSTPONE laddr# >body @ lp-offset, POSTPONE ! ENDOF
+      [ comp' some-dlocal drop ]L >definer OF POSTPONE laddr# >body @ lp-offset, POSTPONE 2! ENDOF
+      [ comp' some-flocal drop ]L >definer OF POSTPONE laddr# >body @ lp-offset, POSTPONE f! ENDOF
+      -&32 THROW
+    ENDCASE ;
+  interpret/compile: TO
 [THEN]
 
 [UNDEFINED] !@ [IF]
