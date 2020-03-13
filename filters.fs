@@ -1,4 +1,5 @@
 REQUIRE cleave.fs
+REQUIRE dstack.fs
 
 \ filters stack. Each element is 2 cells: xt negation
 STRUCT
@@ -61,10 +62,10 @@ CREATE filters filter% 64 * %ALLOT
 
 : filters-check  ( stem -- stem f )
   \." hypothesis:  " DUP .stem-single
-  \."  affixes:    " formform .bstr cr
-  \."  affixes(MP):" formform-morphonemic .bstr cr
-  \."  affix names:" formname .bstr cr
-  \."  slot flags: " formflag .bstr cr
+  \."  affixes:    " formform .dstack cr
+  \."  affixes(MP):" formform-morphonemic .dstack cr
+  \."  affix names:" formname .dstack cr
+  \."  slot flags: " formflag .dstack cr
   \."  slots:      " .slots cr
   \."  flags:      " paradigm-flags flags. cr
   \."  filters:    "
@@ -81,7 +82,7 @@ CREATE filters filter% 64 * %ALLOT
     \." OK, "
     \stack-check
     filter filter% %size -
-    \\." stem is now " over .stem-single cr
+    \ \." stem is now " over .stem-single cr
   REPEAT DROP TRUE
   \." " cr ." Filters check complete." cr
   ;

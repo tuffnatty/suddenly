@@ -47,49 +47,54 @@ FALSE VALUE expect-headword?
   ;
 : check-result  { stem -- }
   expected-str expected-len { D: pattern }
-  \ ." check-result:" stem .stem-single ." gloss:" guessed-stem TYPE  formform .bstr  ."  expected pattern:" pattern TYPE CR
+  \." check-result:" stem .stem-single ." gloss:" guessed-stem TYPE  formform .dstack  ."  expected pattern:" pattern TYPE CR
   guessed-stem { dict-str dict-len }
   dict-len expected-len <= IF
-    \ ." len is enough" CR
-    dict-str dict-len expected-str dict-len STR= IF
-      \ ." stem is equal" CR
+    \." len is enough" CR
+    pattern  [CHAR] + SCAN  string-addr expected-str - { pattern-stem-len }
+    dict-str dict-len expected-str pattern-stem-len STR= IF
+      \." stem is equal" CR
       FALSE { plusfound }
-      pattern  dict-len right-slice { D: pattern-rest }
-      formform cstr-get BEGIN DUP 0> WHILE  ( addr u )
-        \ ." checking " 2DUP TYPE ."  against " pattern-rest TYPE CR
-        OVER XC@ CASE
-          [CHAR] - OF
-            \ ." minus" CR
+      pattern pattern-stem-len right-slice { D: pattern-rest }
+      formform >O dstack-depth O> 1+ { depth }
+      \." checking " formform .dstack ."  against " pattern-rest TYPE ." :" CR
+      0 BEGIN DUP n-slots <= WHILE ( n )
+        DUP IF DUP formform formstack-slot ELSE $0. THEN ( n addr u )
+        \." checking " 2DUP TYPE ."  against " pattern-rest TYPE CR
+        ?DUP-0=-IF
+            \." minus" CR
+            DROP                          ( n )
             plusfound 0= IF
               pattern-rest string-length 0 = IF
-                \ ." pattern-rest is empty" CR
+                \." pattern-rest is empty" CR
                 TRUE TO plusfound
               ELSE pattern-rest first-sound  [CHAR] +  = IF
                 TRUE TO plusfound
                 pattern-rest 1 right-slice TO pattern-rest
-                \ ." pattern-rest is " pattern-rest TYPE CR
+                \." pattern-rest is " pattern-rest TYPE CR
               ELSE
-                \ ." failed" ~~ CR
-                2DROP EXIT                          ( )
+                \." failed" ~~ CR
+                DROP EXIT
               THEN THEN
             THEN
-          ENDOF
-          pattern-rest string-length 0= IF DROP 2DROP EXIT THEN  ( )
-          pattern-rest first-sound OF
-            FALSE TO plusfound
-            pattern-rest +X/STRING TO pattern-rest
-          ENDOF
-          DROP 2DROP EXIT                           ( )
-        ENDCASE
-        +X/STRING                          ( addr' u' )
+        ELSE
+          pattern-rest string-length 0= IF 2DROP DROP EXIT THEN
+          pattern-rest  [CHAR] +  SCAN  { D: pattern-next }
+          pattern-next string-addr  pattern-rest string-addr  -  { chunk-len }
+          pattern-rest chunk-len left-slice STR= IF  ( n )
+            pattern-next string-length 0> TO plusfound
+            pattern-next plusfound IF 1 /STRING THEN TO pattern-rest
+          ELSE DROP EXIT THEN
+        THEN
+        1+
       REPEAT
-      2DROP
+      DROP
       pattern-rest string-length 0= IF
         expected-found 1+ TO expected-found
       THEN
     THEN
   THEN
-  \ ." match count is " expected-found . CR
+  \." match count is " expected-found . CR
   ;
 : headword?  ( -- )
   TRUE TO expect-headword? ;

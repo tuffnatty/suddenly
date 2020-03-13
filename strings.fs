@@ -1,3 +1,16 @@
+CREATE utf8-size-table
+  $80 0 [DO] 1 C, [LOOP]
+  $C0 $80 [DO] 0 C, [LOOP]
+  $E0 $C0 [DO] 2 C, [LOOP]
+  $F0 $E0 [DO] 3 C, [LOOP]
+  $F8 $F0 [DO] 4 C, [LOOP]
+  $FC $F8 [DO] 5 C, [LOOP]
+  $FE $FC [DO] 6 C, [LOOP]
+  7 C, 8 C,
+: @xc-size  ( addr -- u )
+  \ length of UTF-8 char starting at addr
+  C@ utf8-size-table + C@ ;
+
 [UNDEFINED] XC!+? [IF]
 -77 Constant UTF-8-err
 128 CONSTANT max-single-byte
@@ -8,16 +21,7 @@
     2drop r> ;
 : x-size ( u8-addr u -- u1 )
     \ length of UTF-8 char starting at u8-addr (accesses only u8-addr)
-    drop c@
-    dup $80 u< if drop 1 exit then
-    dup $c0 u< if UTF-8-err throw then
-    dup $e0 u< if drop 2 exit then
-    dup $f0 u< if drop 3 exit then
-    dup $f8 u< if drop 4 exit then
-    dup $fc u< if drop 5 exit then
-    dup $fe u< if drop 6 exit then
-    dup $ff u< if drop 7 exit then
-    drop 8 ;
+    drop @xc-size ;
 : XC@+ ( u8addr -- u8addr' u )
     count  dup max-single-byte u< ?EXIT  \ special case ASCII
     dup $C2 u< IF  UTF-8-err throw  THEN  \ malformed character
@@ -177,36 +181,8 @@ VARIABLE sstr-last
   sstr sstr-preparse
   ; IMMEDIATE
 
-cstr%
-  CELL% 100 * FIELD bstr-buffer
-END-STRUCT bstr%  \ a string for fast prepending
 
-: .bstr  ( bstr -- )
-  .cstr ;
-
-: bstr-init  ( bstr -- )
-  DUP bstr-buffer 100 CELLS + OVER cstr-ptr !
-  0 SWAP cstr-len ! ;
-
-: bstr-prepend  ( addr u bstr -- )
-  2DUP cstr-len +!
-  OVER NEGATE OVER cstr-ptr +!
-  cstr-ptr @ SWAP CMOVE ;
-
-: bstr-pop  ( bstr -- )
-  \ ." popping" dup .bstr cr
-  1 OVER cstr-ptr +!
-  -1 OVER cstr-len +!
-  BEGIN
-  DUP cstr-len @ WHILE
-  DUP cstr-ptr @ C@ [CHAR] - <> WHILE
-    1 OVER cstr-ptr +!
-    -1 OVER cstr-len +!
-  REPEAT THEN
-  \ ." popped" dup .bstr cr
-  DROP ;
-
-: cs+  ( cs addr u -- )
+: cs+  ( cs addr u -- )  \ Concatenate addr u to cs
   2 PICK COUNT + SWAP DUP >R CMOVE DUP C@ R> + SWAP C! ;
 
 : cs=  ( cs1 cs2 -- f )

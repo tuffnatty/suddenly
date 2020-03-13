@@ -11,19 +11,3 @@ CREATE form-name 0 C, 255 ALLOT
   ELSE RDROP 2DROP 0  ( 0 )  THEN
   form-name C@ + 1+ form-name C!                           ( )
   [CHAR] -  form-name COUNT + C!  R> ;
-
-: form-name-at  ( depth -- ptr )
-  form-name 1+ SWAP ( ptr depth )
-  BEGIN DUP 0> WHILE
-    >R DUP C@ [CHAR] - = IF R> 1- >R THEN
-  1+ R> REPEAT
-  DROP ;
-
-: form-name-back  ( depth -- ptr )
-  form-name COUNT + SWAP  ( name-end depth )
-  1+ 0 ?DO  ( ptr )
-    BEGIN 1- DUP form-name > WHILE
-      DUP C@ [CHAR] - <> WHILE
-    REPEAT THEN
-  LOOP
-  1+ ;
