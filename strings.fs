@@ -159,34 +159,8 @@ VARIABLE sstr-last
   sstr% %ALLOC { sstr }
   sstr cstr-ptr !  sstr cstr-len !  sstr ;
 
-: "  ( "string" -- sstr )
-  [CHAR] " PARSE 0 { str len sstr }
-  len sstr-create TO sstr
-  str  sstr cstr-ptr @  len CMOVE
-  0 sstr sstr-count !
-  sstr sstr-preparse
-  sstr sstr-last !
-  sstr POSTPONE LITERAL ; IMMEDIATE
-
-: +"  ( sstr "string" -- sstr )
-  sstr-last @ { sstr }
-  [CHAR] " PARSE                                       ( addr u )
-  DUP  sstr cstr-get  ROT +                   ( addr u buf len' )
-  DUP -ROT                               ( addr u len' buf len' )
-  RESIZE IF ABORT" REALLOCATION ERROR" THEN  ( addr u len' buf' )
-  DUP sstr cstr-ptr !
-  sstr cstr-len @ +                           ( addr u len' ptr )
-  -ROT sstr cstr-len !                             ( addr ptr u )
-  CMOVE                                                       ( )
-  sstr sstr-preparse
-  ; IMMEDIATE
-
-
 : cs+  ( cs addr u -- )  \ Concatenate addr u to cs
   2 PICK COUNT + SWAP DUP >R CMOVE DUP C@ R> + SWAP C! ;
-
-: cs=  ( cs1 cs2 -- f )
-  COUNT ROT COUNT STR= ;
 
 : s-to-cs  ( addr u cs -- )
   2DUP C!  1+ SWAP CMOVE ;
@@ -198,20 +172,12 @@ VARIABLE sstr-last
   2DUP SWAP C!
   ROT 1+ ROT 1+ ROT CMOVE ;
 
-: stuff  { cs ptr n-del addr u -- }
-  cs COUNT +             ( cs-end )
-  u n-del - cs C@ + cs C!                    \ Update length byte
-  ptr n-del + ptr u + OVER 3 PICK SWAP - MOVE         \ Move tail
-  addr ptr u MOVE DROP ;
-
 : string-ends  { addr1 u1 addr2 u2 -- f }
   \ \." " addr1 u1 type ." |" addr2 u2 type ."  string-ends?" cr
   u1 u2 - DUP 0>= IF  ( len-delta )
     addr1 + u2 addr2 u2 STR=
     \ \." result " dup . cr
   ELSE DROP FALSE THEN ;
-: cs-ends ( cs1 cs2 -- f )
-  SWAP COUNT ROT COUNT string-ends ;
 
 : string-addr  ( addr u -- addr )
   POSTPONE DROP ; IMMEDIATE
@@ -247,12 +213,6 @@ VARIABLE sstr-last
 
 : left-slice+xc  ( addr u1 u2 -- addr u3 )
   left-slice  2DUP string-end  XC@ XC-SIZE  + ;
-
-: cs-buf-size  ( cs -- cs u )
-  ]] DUP C@ 1+ [[ ; IMMEDIATE
-
-: xc+@  ( addr1 -- addr2 u )
-  ]] XCHAR+ DUP XC@ [[ ; IMMEDIATE
 
 : +x/string@  ( addr u -- addr' u' xc )
   ]] OVER XC@ -ROT +X/STRING ROT [[ ; IMMEDIATE
