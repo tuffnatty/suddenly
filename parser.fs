@@ -4,7 +4,7 @@ REQUIRE grammar.fs
 REQUIRE strings.fs
 
 :noname
-  \stack-mark
+  \stack-mark \\." slot-prolog " depth-stack-depth . .s cr
   ; IS (slot-prolog)
 
 :noname
@@ -116,10 +116,11 @@ REQUIRE debugging.fs
 : affix-name-clean  ( affix-name len -- affix-name len | 0 )
   OVER C@  [CHAR] -  = IF  2DROP 0  THEN ;
 
-:noname  ( [addr u] affix-name len -- [addr u] )
-  \\." " indent ." form-prolog: " 2over type ." +" 2dup type \.s
+TIMER: +form-prolog
+:noname  ( [addr u] affix-name len -- [addr u] )  +form-prolog
+  \\." " indent ." form-prolog: " depth-stack-depth . 2over type ." +" 2dup type \.s
   affix-name-clean formname form-prepend  ( )
-  ; IS (form-prolog)
+  +record ; IS (form-prolog)
 
 language-require rules.fs
 REQUIRE loaddefs.fs
@@ -130,6 +131,7 @@ DEFER yield-stem  ( stem -- )
   1 n-forms +! ; IS yield-stem
 
 : check-stem  ( addr u stem -- addr u )
+  \\." check-stem " >R 2DUP TYPE R> DUP .stem-single CR
   >R \stack-mark 2DUP paradigm-stem 2! R>
   DUP stem-p-o-s paradigm-p-o-s !
   DUP stem-dict @ dict-stems @  paradigm-stems !
@@ -151,31 +153,48 @@ DEFER yield-stem  ( stem -- )
   \stack-check
   ;
 
-: parse-try  ( addr u -- )
-  \ ." stackin " .s 2dup type cr
-  slot-stack-pop ?DUP-IF  ( addr u xt )
-    \ ." stacknext! "
-    EXECUTE  ( should go through affix-position trying to strip off affix and calling parse-try on success )
-    2DROP
-  ELSE  ( addr u )
-    \ ." stackdone!" .s 2dup type cr
-    OVER 0= IF ABORT" Corrupt stem?" THEN
-    2DUP stem-find ?DUP-IF  ( addr u stem )
-      ['] check-stem  list-map  ( addr u )
+:+ parse-try-slot  { D: s xt -- }
+  \stack-mark
+  \\." " indent ." stack.parse-try-slot " depth-stack-depth . ~~ s type xt hex. cr
+  s xt EXECUTE (slot-epilog) ( should go through affix-position trying to strip off affix and calling parse-try on success ) 2DROP
+  \\." " indent ." stack.parse-try-slot.checking! " depth-stack-depth . .s cr
+  \stack-check
+  \\." " indent ." stack.parse-try-slot.checked! " depth-stack-depth . .s cr
+  ;
+
+:+ parse-try-stem  { D: s -- }
+  \stack-mark
+    \\." " indent ." stack.done!" .s s type cr
+    s string-addr 0= IF ABORT" Corrupt stem?" THEN
+    s stem-find ?DUP-IF  { stem }
+      s  stem  ['] check-stem  list-map  2DROP
       \." ~~~~~~~~~" cr
     ELSE
-      \." STEM " 2dup type ."  not in dictionary! was trying " 2dup type formform-morphonemic .bstr bl emit formname .bstr cr
+      \." STEM " s type ."  not in dictionary! was trying " s type formform-morphonemic .dstack bl emit formname .dstack cr
     THEN
-    2DROP
+  \stack-check
+  \\." " indent ." stack.done.checked! " .s cr
+  ;
+
+:+ parse-try  { D: s -- }
+  \stack-mark
+  \\." " indent ." stack.in " depth-stack-depth . s type s . . cr
+  slot-stack-pop ?DUP-IF  { xt }
+    s xt parse-try-slot
+  ELSE
+    s parse-try-stem
   THEN
+  \\." " indent ." stack.in.checking! " depth-stack-depth . .s cr
+  \stack-check
   slot-stack-push
+  \\." " indent ." stack.in.checked! " depth-stack-depth . .s cr
   ;
 
 : rule-check  ( addr u i xt | 0 -- addr u f )
   ?DUP-IF SWAP >R EXECUTE ( rule-result ) R> =
   ELSE DROP TRUE THEN ;
 
-: after-fallout  { pairlist rule n-rule -- }
+:+ after-fallout  { pairlist rule n-rule -- }
   \." " pairlist ?DUP-IF indent ." Pairlist: " .pairlist
   \."  while processing " formname .cstr ."  " formform .cstr cr THEN
   BEGIN pairlist WHILE
@@ -209,8 +228,10 @@ DEFER yield-stem  ( stem -- )
   REPEAT
   ;
 
-: process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
+:+ process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }                 ( addr u )
+
+  \stack-mark
   \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule HEX. n-rule . .s CR
   affix formform form-prepend
   0 { pairlist }
@@ -228,9 +249,11 @@ DEFER yield-stem  ( stem -- )
     \\." " indent ." After after-fallout: " .s CR
   THEN
   formform bstr-pop
+
+  \stack-check
   ;
 
-: process-representations  ( addr u rule sstr -- )
+:+ process-representations  ( addr u rule sstr -- )
   { rule sstr }                         ( addr u )
   \\." " indent ." <All-reps>" 2DUP TYPE ." +" sstr .sstr rule HEX. .s CR
   sstr sstr-morphonemic 2@  formform-morphonemic form-prepend
@@ -247,14 +270,15 @@ DEFER yield-stem  ( stem -- )
   ;
 
 \ an awful big word
-:noname  ( addr u rule sstr -- addr u )
+TIMER: +form-epilog
+:noname +form-epilog ( addr u rule sstr -- addr u )
   \." " parse-depth 1+ TO parse-depth
   \\." " indent ." form-epilog " 2>r 2dup type ." +" 2r> 2dup .sstr .rule \.s cr
-  { rule sstr }  ( addr u )
-  sstr IF  \ Non-empty affix
+  ?DUP-IF  \ Non-empty affix
     \\." " indent ." non-empty" CR
-    rule sstr process-representations
+    process-representations
   ELSE
+    DROP  ( addr u )
     \\." " indent ." Trying 0 " 2dup type ." +0" CR
     0 formform form-prepend
     0 formform-morphonemic form-prepend
@@ -265,10 +289,10 @@ DEFER yield-stem  ( stem -- )
     formflag bstr-pop
     \\." " indent ." out of parse-try" CR
   THEN
-  \." " parse-depth 1- TO parse-depth
   \\." " indent ." form-epilog ending:" over HEX. dup . 2dup type \.s
+  \." " parse-depth 1- TO parse-depth
   formname bstr-pop
-  ; IS (form-epilog)
+  +record ; IS (form-epilog)
 
 : parse-yield  ( cs1 cs2 -- )
   COUNT TYPE  9 EMIT  COUNT TYPE  1 n-forms +! ;

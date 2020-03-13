@@ -122,6 +122,8 @@ TABLE CONSTANT dictionary-wordlist
 
 language-require dictext.fs
 
+utime 2CONSTANT dict-timer
+
 GET-CURRENT dictionary-wordlist SET-CURRENT
 
 : i  ( "word" -- ; -- pos-i )
@@ -162,3 +164,5 @@ language-require dict.fs
 PREVIOUS
 
 SET-CURRENT
+
+utime dict-timer D- ." parsing dictionary: " D. ." us." CR

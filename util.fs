@@ -171,13 +171,31 @@ DEFER xemit
 [UNDEFINED] !@ [IF]
   : !@  ( u1 addr -- u2 )
     DUP @ >R ! R> ;
+  : +!@  ( u1 addr -- u2 )
+    DUP @ >R +! R> ;
+[THEN]
+
+[UNDEFINED] [: [IF]
+  : [:  ( -- )
+    POSTPONE AHEAD :noname ; IMMEDIATE COMPILE-ONLY
+  : ;]  ( -- xt )
+    POSTPONE ; ] POSTPONE THEN LATESTXT POSTPONE LITERAL ; IMMEDIATE COMPILE-ONLY
+[THEN]
+
+[UNDEFINED] safe/string [IF]
+  : safe/string  ( c_addr1 u1 n -- c_addr2 u2 )
+    tuck - >r + r> dup 0< IF  - 0  THEN ;
+[THEN]
+
+[UNDEFINED] >LINK [IF]
+  ' noop ALIAS >LINK
 [THEN]
 
 : ||  ( f  R: x r -- true R: x PC: r | R: x r )  \ OR with boolean shortcircuiting
-  ]] ?DUP-IF EXIT THEN [[ ; IMMEDIATE
+  ]] ?DUP-IF EXIT THEN [[ ; IMMEDIATE COMPILE-ONLY
 
 : &&  ( f R: x r -- false R: x PC: r | R: x r )  \ AND with boolean shortcircuiting
-  ]] ?DUP-0=-IF FALSE EXIT ELSE DROP THEN [[ ; IMMEDIATE
+  ]] ?DUP-0=-IF FALSE EXIT ELSE DROP THEN [[ ; IMMEDIATE COMPILE-ONLY
 
 : array-reverse  ( arr len -- )
   1- CELLS OVER + BEGIN 2DUP < WHILE  ( a1 a2 )

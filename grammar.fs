@@ -97,9 +97,10 @@ flag/VARIABLE local-flag
   ELSE 1 ABORT"  word not found!" THEN ; IMMEDIATE
 
 0 VALUE (<this>)
+TIMER: +slot
 : slot:  ( slot-pos -- )
   DUP TO (<this>)
-  :noname POSTPONE (slot-prolog) ;
+  :noname  ]] +slot [[ ['] +record >BODY ]]L >R  (slot-prolog) [[ ;
 : <this>  ( -- slot-pos )
   (<this>) POSTPONE LITERAL ; IMMEDIATE
 

@@ -1,14 +1,36 @@
 #! /usr/local/bin/gforth -m22M
 
+INCLUDE ../util.fs
+
+utime 2VALUE test-timer
+
 : language-path  ( -- addr u )
   S" khakas" ;
 
 INCLUDE ../compat/ttester.fs
-
-\ S" khakas"  FPATH  ALSO-PATH
 INCLUDE ../debugging.fs
 \ 1 TO debug-mode?
 \ 2 TO debug-mode?
+-DB PROFILE(
+
+CREATE t_name CHAR + C, 127 ALLOT
+: :+
+  PROFILE(
+    PARSE-NAME  ( addr u )
+    2DUP t_name 1+ SWAP MOVE
+    t_name OVER 1+ NEXTNAME TIMER:
+    LATESTXT { t }
+    NEXTNAME : ( )
+    ['] +record >BODY ]]L >R [[ t ]]L EXECUTE [[
+  )ELSE(
+    :
+  ) ;
+
+TIMER: +init
+TIMER: +rest
+TIMER: +compile
++init +record +compile
+
 REQUIRE ../parser.fs
 
 CREATE wordform-buffer 0 , 255 ALLOT
@@ -81,7 +103,7 @@ FALSE VALUE expect-headword?
   wordform-buffer parse-khak expected-found 0>
   FALSE TO expect-headword? ;
 
-: test-error
+:+ test-error
    ERROR1
    n_failures 1+ TO n_failures
 ;
@@ -109,10 +131,11 @@ T{ S" пас+ты+ңар" S" пастар" parse-test -> TRUE }T
 \ T{ S" ті+ген" S" теен" parse-test -> TRUE }T
 
 
-2VARIABLE timer  utime timer 2!
++record +rest
+utime test-timer D- ." compiling: " D. ." µs" CR  utime TO test-timer
 REQUIRE khakas/gentest.fs
-utime timer 2@ D- D. ." µs" CR
-\ .TIMES CR
+utime test-timer D- ." testing: " D. ." µs" CR
+PROFILE( .TIMES CR )
 
 check-failures
 BYE

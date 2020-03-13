@@ -162,15 +162,16 @@ language-require phonetics.fs
     THEN
   CELL +LOOP ;
 
-: polysyllabic?  ( addr u -- f )
+TIMER: +polysyllabic?
+: polysyllabic?  ( addr u -- f ) +polysyllabic?
   OVER + SWAP ( cs-end ptr )
   0 { cnt }
   BEGIN 2DUP > WHILE
     XC@+ vowel? IF
-      cnt IF 2DROP TRUE EXIT THEN
+      cnt IF 2DROP TRUE +record EXIT THEN
       1 TO cnt
     THEN
-  REPEAT 2DROP FALSE ;
+  REPEAT 2DROP FALSE +record ;
 : polysyllabic-cs?  ( cs -- f )
   COUNT polysyllabic? ;
 
@@ -179,6 +180,7 @@ VARIABLE paradigm-stems
 2VARIABLE paradigm-stem
 VARIABLE paradigm-dict-flags
 REQUIRE p-o-s.fs
+
 : verb?  ( -- f )
   paradigm-p-o-s @  pos-v = ;
 
