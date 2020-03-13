@@ -177,6 +177,34 @@ DEFER yield-stem  ( stem -- )
   ?DUP-IF SWAP >R EXECUTE ( rule-result ) R> =
   ELSE DROP TRUE THEN ;
 
+:+ after-fallout-pair  { D: left-part  D: affix  slot-flag rule n-rule -- }
+  \." " indent rule if ." Pair " left-part TYPE ." +" affix TYPE ." harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
+  left-part  n-rule rule rule-check { harmony-ok? }  2DROP
+  harmony-ok? NOT IF
+    slot-flag 0= IF
+      left-part last-sound-except-ь voiced? IF
+        PAD left-part string-length { D: buffer }
+        left-part string-addr buffer CMOVE
+        buffer last-sound-except-ь unvoice  buffer last-sound-except-ь-ptr XC!
+        buffer n-rule rule rule-check TO harmony-ok? 2DROP
+        harmony-ok? IF
+          harmony-vu-broken TO slot-flag
+        THEN
+      THEN
+    THEN
+  THEN
+  harmony-ok? IF
+    \stack-mark \\." ENTERING PARSE-TRY" .s cr
+    slot-flag ?DUP-IF S>D <<# #s #> ELSE $0. THEN formflag >dstack
+    \\." " indent ." Trying " left-part TYPE ." +" affix TYPE ."  formflags " formflag .dstack CR
+    left-part parse-try
+    \\." " indent ." after-fallout-pair: out of parse-try" .s cr
+    formflag dstack> slot-flag IF #>> THEN
+    \stack-check
+    \\." " indent ." out of harmony-ok cr
+  THEN
+  ;
+
 :+ after-fallout  { pairlist rule n-rule -- }
   \." " pairlist ?DUP-IF indent ." Pairlist: " .pairlist
   \."  while processing " formname .dstack ."  " formform .dstack cr THEN
@@ -184,29 +212,7 @@ DEFER yield-stem  ( stem -- )
     pairlist pair-1  ( ... addr' u' )
     \." " indent rule if ." Pair " pairlist .pairlist-node ." harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
     pairlist pair-flags @ { slot-flag }
-    n-rule rule rule-check { harmony-ok? }
-    harmony-ok? NOT IF
-      slot-flag 0= IF
-        2DUP last-sound-except-ь voiced? IF
-          PAD OVER { D: buffer }
-          OVER buffer MOVE
-          buffer last-sound-except-ь unvoice  buffer last-sound-except-ь-ptr XC!
-          buffer n-rule rule rule-check TO harmony-ok? 2DROP
-          harmony-ok? IF
-            harmony-vu-broken TO slot-flag
-          THEN
-        THEN
-      THEN
-    THEN
-    harmony-ok? IF
-      slot-flag S>D <<# #s #> formflag >dstack
-      \\." " indent ." Trying " 2DUP TYPE ." +" pairlist pair-2 TYPE ."  formflags " formflag .dstack CR
-      parse-try  ( ... )
-      \\." " indent ." out of parse-try" cr
-      formflag dstack> slot-flag IF #>> THEN
-    ELSE
-      2DROP  ( ... )
-    THEN
+    pairlist pair-2  slot-flag  rule n-rule  after-fallout-pair  ( )
     pairlist list-swallow  TO pairlist
   REPEAT
   ;
