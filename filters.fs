@@ -60,6 +60,26 @@ CREATE filters filter% 64 * %ALLOT
 : filters-end  ( compile: filters-sys -- )
   NEGATE ]]L n-filters +! [[ ; IMMEDIATE
 
+: right-context(  ( <name>... -- rhc-sys )
+  DEPTH 0 { depth0 count }
+  BEGIN
+    PARSE-NAME { D: s }
+  s S" )" COMPARE WHILE
+    s string-length IF
+      s FIND-NAME ?DUP-IF  ( nt )
+        DUP IMMEDIATE? IF NAME?INT EXECUTE ( nt' ) THEN
+        NAME>INT COMPILE, ]] IF [[
+      ELSE 1 ABORT"  word not found!" THEN
+      count 1+ TO count
+    ELSE
+      REFILL 0= ABORT"  no closing parenthesis"
+    THEN
+  REPEAT count ; IMMEDIATE
+: right-context-else  ( if-sys rhc-sys -- if-sys rhc-sys )
+  >R ]] ELSE [[ R> ; IMMEDIATE
+: right-context-end  ( rhc-sys -- )
+  0 DO ]] THEN [[ LOOP ; IMMEDIATE
+
 : filters-check  ( stem -- stem f )
   \." hypothesis:  " DUP .stem-single
   \."  affixes:    " formform .dstack cr

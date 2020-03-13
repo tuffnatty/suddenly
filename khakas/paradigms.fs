@@ -16,60 +16,64 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 <Distr> slot:  \ 1
   \ Навесим глобальные фильтры на 1-ю позицию с любым
   \ (в том числе нулевым!) аффиксом
-  filters( constraint-0
-           constraint-1
-           constraint-2
-           constraint-27
-           constraint-cluster-envoice
-           constraint-non-envoiceable-stem
-           constraint-non-envoiced-rus
-           constraint-(СА|ТЫ)ңАр-fallout
-           constraint-[Гң]Г-fallout
-           constraint-V[кх]V-fallout
-           constraint-VГV-fallout
-           constraint-VVГV-fallout
-           constraint-VңV-fallout
-           constraint-CCC-fallout
-           constraint-broken-harmony )
-    <this> slot-empty!
-    form" -nodistr "
+  right-context( constraint-(СА|ТЫ)ңАр-fallout
+                 constraint-VңV-fallout
+                 constraint-[Гң]Г-fallout )
+    filters( constraint-0
+             constraint-1
+             constraint-2
+             constraint-cluster-envoice
+             constraint-non-envoiceable-stem
+             constraint-non-envoiced-rus
+             constraint-V[кх]V-fallout
+             constraint-VГV-fallout
+             constraint-VVГV-fallout
+             constraint-CCC-fallout
+             constraint-broken-harmony )
+      <this> slot-empty!
+      form" -nodistr "
 
-    <this> slot-full!
-    ( flag-with Distr@full )   form" Distr КлА"
-    ( flag-with Distr@short )  form" Distr лА"
-  filters-end
+      <this> slot-full!
+      ( flag-with Distr@full )   form" Distr КлА"
+      ( flag-with Distr@short )  form" Distr лА"
+    filters-end
+  right-context-end
   ; slot-add
 
 <NF> slot:  \ 2
   <this> slot-empty!
   form" -noconv1 "
 
-  filters( constraint-4 )
+  right-context( constraint-4 )
     <this> slot-full!
 
     filters( constraint-4.1ₚ )
       form" NF (Ы)п"
     filters-end
-    filters( constraint-4.1₀ )
-      form" NF₀ 0̸"
-    filters-end
-    form" NF.Neg Пин"
-  filters-end
-  filters( constraint-4sh )
+    right-context( constraint-4.1₀-right )
+      filters( constraint-4.1₀ )
+        form" NF₀ 0̸"
+      filters-end
+    right-context-end
+    right-context( constraint-11.1 constraint-10 constraint-10.1 )
+      form" NF.Neg Пин"
+    right-context-end
+  right-context-end
+  right-context( constraint-4sh constraint-10 constraint-10.1 )
     form" NF.Neg.sh ПААн"
-  filters-end
+  right-context-end
   ; slot-add
 
 <Ptcl1> slot:  \ 3
   <this> slot-empty!
   form" -noptcl1 "
 
-  filters( constraint-5 )
+  right-context( constraint-27 constraint-5 )
     <this> slot-full!
     form" Add ТАА"
-    form" Cont LА"
+    flag-with Cont  form" Cont₁ LА"
     form" Ass₁ ОК"
-  filters-end
+  right-context-end
   ; slot-add
 
 <Perf> slot:  \ 4
@@ -78,9 +82,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  filters( constraint-3 )
-    form" Perf (Ы)бЫс"
-  filters-end
+  right-context( constraint-10 )
+    filters( constraint-3 )
+      form" Perf (Ы)бЫс"
+    filters-end
+  right-context-end
 
   filters( constraint-5.1 )
     form" Perf0 (Ы)с"
@@ -93,23 +99,25 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
   filters( constraint-7 )
-    filters( constraint-8 )
-      filters( constraint-8.1ᵢ )
+    right-context( constraint-8 )
+      right-context( constraint-8.1ᵢ )
         flag-with Dur1@short  form" Dur1ᵢ и"
-      filters-end
-      filters( constraint-8.1ᵢᵣ )
+      right-context-end
+      right-context( constraint-8.1ᵢᵣ )
         flag-with Dur1@full   form" Dur1ᵢᵣ ир"
-      filters-end
+      right-context-end
       form" Dur₁.dial.kac Ат"
-    filters-end
-    filters( constraint-8sag )
+    right-context-end
+    right-context( constraint-8sag )
       form" Dur₁.dial.sag ит"
-    filters-end
+    right-context-end
   filters-end
 
-  filters( constraint-6 )
-    form" Prosp.dial АК"
-  filters-end
+  right-context( constraint-6-right )
+    filters( constraint-6 )
+      form" Prosp.dial АК"
+    filters-end
+  right-context-end
   ; slot-add
 
 <Dur> slot:  \ 6
@@ -126,20 +134,20 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -noneg/iter "
 
-  filters( constraint-11 )
+  right-context( constraint-11 )
     <this> slot-full!
 
-    filters( constraint-11.1 )
+    right-context( constraint-10 constraint-10.1 )
       form" Neg ПА"
-    filters-end
+    right-context-end
 
-    filters( constraint-14 )
-      flag-with Iter@full     form" Iter₁ АдЫр"
-      filters( constraint-14.1 )
-        flag-with Iter@short  form" Iter₂ АдЫ"
-      filters-end
-    filters-end
-  filters-end
+    right-context( constraint-14 )
+      flag-with Iter@full     form" Iter АдЫр"
+      right-context( constraint-14.1 )
+        flag-with Iter@short  form" Iter АдЫ"
+      right-context-end
+    right-context-end
+  right-context-end
   ; slot-add
 
 <Tense/Mood/Conv2> slot:  \ 8
@@ -155,17 +163,17 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Pres.dial ча"
     filters-end
 
-    filters( constraint-9.5 )
+    right-context( constraint-9.5 )
       ( flag-with Pres.dial.sh@short )  form" Pres.dial.sh чАр"
-    filters-end
+    right-context-end
     ( flag-with Pres.dial.sh@full )     form" Pres.dial.sh чАрЫ"
   filters-end
 
   filters( constraint-26 )
     flag-with Pres.dial.kyz@full     form" Pres.dial.kyz тур"
-    filters( constraint-9.4 )
+    right-context( constraint-9.4 )
       flag-with Pres.dial.kyz@short  form" Pres.dial.kyz ту"
-    filters-end
+    right-context-end
 
     flag-with Pres2@full   form" Pres2 чАдЫр"
     flag-with Pres2@short  form" Pres2 чАдЫ"
@@ -177,33 +185,29 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
 
   flag participles  flag-set  \ причастные показатели
-    filters( constraint-9.1 )
+    right-context( constraint-9.1 )
       flag-with Past@short     form" Past ГА"
-    filter-else
+    right-context-else
       ( flag-with Past@full )  form" Past ГАн"
-    filters-end
+    right-context-end
 
-    filters( constraint-10.1 )
-      filters( constraint-9.3 )
-        flag-with Fut@short  form" Fut А"
-      filters-end
-      flag-with Fut@full     form" Fut Ар"
-    filters-end
+    right-context( constraint-9.3 )
+      flag-with Fut@short  form" Fut А"
+    right-context-end
+    flag-with Fut@full     form" Fut Ар"
 
     flag Neg7  flag-set
       form" Neg.Fut ПАс"
     flag Neg7  flag-clear
 
-    filters( constraint-9.2 )
+    right-context( constraint-9.2 )
       flag-with Hab@short  form" Hab ЧА"
-    filters-end
+    right-context-end
     flag-with Hab@full     form" Hab ЧАң"
 
     form" Assum ГАдАГ"
 
-    filters( constraint-10 )
-      form" Cunc ГАлАК"
-    filters-end
+    form" Cunc ГАлАК"
 
     form" Simul ААчЫК"
 
@@ -212,35 +216,32 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
   flag participles  flag-clear
 
-  filters( constraint-12 )
+  right-context( constraint-12 )
     form" RPast ТЫ"
-  filters-end
+  right-context-end
 
-  filters( constraint-13 )
+  right-context( constraint-13 )
     form" Cond СА"
-  filters-end
+  right-context-end
 
   form" Opt ГАй"
 
-  filters( constraint-25 )
+  right-context( constraint-25 )
     form" Lim ГАли"
 
-    flag Neg7  flag-set
-      flag Conv2  flag-set
+    flag Conv2  flag-set
+      flag Neg7  flag-set
         form" Neg.Conv Пин"
         form" Neg.Conv.Abl ПинАң"
-      flag Conv2  flag-clear
-    flag Neg7  flag-clear
+      flag Neg7  flag-clear
 
-    flag Conv2  flag-set
       form" Convₚ (Ы)п"
       form" Conv.pas.dial АбАс"
       form" Conv.a А"
     flag Conv2  flag-clear
-  filters-end
+  right-context-end
 
   filters( constraint-26+paan )
-    <this> slot-full!
     filters( constraint-voicedstem+Indir )
       form" Indir тЫр"
     filter-else
@@ -257,45 +258,47 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   form" Comit ЛЫГ"
 
-  filters( constraint-18 )
-    form" Adv Ли"
-  filters-end
+  right-context( constraint-18-right )
+    filters( constraint-18 )
+      form" Adv Ли"
+    filters-end
+  right-context-end
   ; slot-add
 
 <Pl₁> slot:  \ 10
   <this> slot-empty!
   form" -nopl1 "
 
-  filters( constraint-16.1 )
+  right-context( constraint-16.1 constraint-16.5 constraint-27 )
     <this> slot-full!
     form" Pl₁ ЛАр"
-  filters-end
+  right-context-end
   ; slot-add
 
 <Poss₁> slot:  \ 11
   <this> slot-empty!
   form" -noposs1 "
 
-  filters( constraint-16.1 )
+  right-context( constraint-16.1 constraint-16.5 constraint-27 )
     <this> slot-full!
 
     flag Poss1.nonpl  flag-set
       form" 1pos.sg₁ (Ы)м"
       form" 2pos.sg₁ (Ы)ң"
-      filters( constraint-OK-fallout₁₂ )
+      filters( constraint-OK-fallout-<Poss₁> )
         form" 3pos₁ (з)Ы"
       filters-end
     flag Poss1.nonpl  flag-clear
     form" 1pos.pl₁ (Ы)бЫс"
     form" 2pos.pl₁ (Ы)ңАр"
-  filters-end
+  right-context-end
   ; slot-add
 
 <Case₁> slot:  \ 12
   <this> slot-empty!
   form" -nocase1 "
 
-  filters( constraint-16.1 )
+  right-context( constraint-16.1 constraint-27 )
     <this> slot-full!
 
     form" Gen₁ НЫң"
@@ -306,14 +309,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Loc₁ (н)ТА"
     filters-end
 
-    flag All₁  flag-set
-      filters( constraint-17-<Case₁> )
-        form" All₁ САр"
-      filter-else
-        form" All₁ (н)САр"
-      filters-end
-    flag All₁  flag-clear
-  filters-end
+    filters( constraint-17-<Case₁> )
+      form" All₁ САр"
+    filter-else
+      form" All₁ (н)САр"
+    filters-end
+  right-context-end
   ; slot-add
 
 <Attr> slot:  \ 13
@@ -340,21 +341,19 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -noposs2 "
 
-  filters( constraint-16.5-<Poss₂> )
-    <this> slot-full!
+  <this> slot-full!
 
-    flag Poss2.nonpl  flag-set
-      form" 1pos.sg (Ы)м"
-      form" 2pos.sg (Ы)ң"
-      filters( constraint-OK-fallout₁₆ )
-        form" 3pos (з)Ы"
-      filters-end
-      form" Gen.3pos Ни"
-      form" Gen.3pos.dial Ди"
-    flag Poss2.nonpl  flag-clear
-    form" 1pos.pl (Ы)бЫс"
-    form" 2pos.pl (Ы)ңАр"
-  filters-end
+  flag Poss2.nonpl  flag-set
+    form" 1pos.sg (Ы)м"
+    form" 2pos.sg (Ы)ң"
+    filters( constraint-OK-fallout-<Poss₂> )
+      form" 3pos (з)Ы"
+    filters-end
+    form" Gen.3pos Ни"
+    form" Gen.3pos.dial Ди"
+  flag Poss2.nonpl  flag-clear
+  form" 1pos.pl (Ы)бЫс"
+  form" 2pos.pl (Ы)ңАр"
   ; slot-add
 
 <Case₂> slot:  \ 16
@@ -363,60 +362,58 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  filters( constraint-16.5-<Case₂> )
-    filters( constraint-29 )
-      form" Gen₂ НЫң"
-      form" Gen.dial ТЫң"
-      form" Instr нАң"
+  right-context( constraint-29 )
+    form" Gen НЫң"
+    form" Gen.dial ТЫң"
+    form" Instr нАң"
+  right-context-end
+
+  filters( constraint-17-<Case₂> )
+    right-context( constraint-OK-fallout-<Case₂> )
+      form" Dat ГА"
+    right-context-end
+    right-context( constraint-29 )
+      form" Acc НЫ"
+      form" Acc.dial ТЫ"
       form" Instr.dial ПАң"
       form" Instr.dial мАң"
       form" Instr.dial ПлАң"
+    right-context-end
+    form" Loc ТА"
+    form" Abl₁ ДАң"
+    form" All САр"
+    form" All.dial САрЫ"
+    form" All.dial СА"
+    form" Prol ЧА"
+    form" Delib ДАңАр"
+    form" Comp ТАГ"
+    filters( constraint-30 )
+      form" Abl₂ тЫн"
     filters-end
-
-    filters( constraint-17-<Case₂> )
-      filters( constraint-OK-fallout₁₇ )
-        form" Dat ГА"
+  filter-else
+    right-context( constraint-OK-fallout-<Case₂> )
+      form" Dat (н)А"
+      form" Dat.dial (н)ГА"
+    right-context-end
+    right-context( constraint-29 )
+      filters( constraint-V+Acc )
+        form" Acc₂ Н"
+        form" Acc.dial₂ Т"
+      filter-else
+        form" Acc₁ НЫ"
+        form" Acc.dial₁ ТЫ"
       filters-end
-      filters( constraint-29 )
-        form" Acc НЫ"
-        form" Acc.dial ТЫ"
-      filters-end
-      form" Loc ТА"
-      form" Abl₁ ДАң"
-      form" All САр"
-      form" All.dial САрЫ"
-      form" All.dial СА"
-      form" Prol ЧА"
-      form" Delib ДАңАр"
-      form" Comp ТАГ"
-      filters( constraint-30 )
-        form" Abl₂ тЫн"
-      filters-end
-    filter-else
-      filters( constraint-OK-fallout₁₇ )
-        form" Dat (н)А"
-        form" Dat.dial (н)ГА"
-      filters-end
-      filters( constraint-29 )
-        filters( constraint-V+Acc )
-          form" Acc₂ Н"
-          form" Acc.dial₂ Т"
-        filter-else
-          form" Acc₁ НЫ"
-          form" Acc.dial₁ ТЫ"
-        filters-end
-      filters-end
-      form" Loc (н)ТА"
-      form" Abl нАң"
-      form" All (н)САр"
-      form" All.dial₁ (н)САрЫ"
-      form" All.dial₂ (н)СА"
-      form" Prol (н)ЧА"
-      form" Delib нАңАр"
-      form" Comp (н)ТАГ"
       form" Instr.dial₁ (н)мАң"
       form" Instr.dial₂ (н)млАң"
-    filters-end
+    right-context-end
+    form" Loc (н)ТА"
+    form" Abl нАң"
+    form" All (н)САр"
+    form" All.dial₁ (н)САрЫ"
+    form" All.dial₂ (н)СА"
+    form" Prol (н)ЧА"
+    form" Delib нАңАр"
+    form" Comp (н)ТАГ"
   filters-end
   ; slot-add
 
@@ -426,7 +423,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  form" Ass₂ ОК"
+  right-context( constraint-27 )
+    form" Ass₂ ОК"
+    flag-with Cont  form" Cont₂ LА"
+  right-context-end
   ; slot-add
 
 <Affirm> slot:  \ 18

@@ -1,5 +1,8 @@
 require khakas/slotnames.fs
 
+: =>  ( slot-pos "name" )
+  ]] (<this>) = IF [(')] EXIT THEN [[ ; IMMEDIATE
+
 0  S" пар апар кил "  strlist-parse-alloc  CONSTANT пар|кил
 : is-пар/кил?  ( -- f )
   paradigm-stems @  пар|кил  strlists-intersect? ;
@@ -88,9 +91,10 @@ require khakas/slotnames.fs
   ;
 : constraint-4.1₀  ( -- f )
   <NF> form-slot-vowel-at-left? NOT  &&
-  <NF> form-slot-xc-at-left fallout-short? NOT  &&
-  flag Ass₁  flag-empty?
+  <NF> form-slot-xc-at-left fallout-short? NOT
   ;
+: constraint-4.1₀-right  ( -- f )
+  flag Ass₁  flag-empty? ;
 
 \ 5. Показатели поз. 3 (внутренние частицы) допускаются только
 \ при заполненной позиции 8 (время) или при обычном дуративе
@@ -110,9 +114,9 @@ require khakas/slotnames.fs
 \ морфемами Pres чА, PresPt чАн и Dur чАТ. Показатель NF в
 \ этом случае в словоформе отсутствует.
 : constraint-6  ( -- f )
-  flags( Dur Pres PresPt.dial ) flag-is?
-  <NF> slot-empty?
-  AND ;
+  <NF> slot-empty? ;
+: constraint-6-right  ( -- f )
+  flags( Dur Pres PresPt.dial ) flag-is? ;
 
 \ 7. Показатели Dur1 и(р), Dur₁.dial.kac Ат, Dur₁.dial.sag ит
 \ заполняются только, если позиции 1, 3, 4 не заполнены, а в
@@ -207,13 +211,13 @@ require khakas/slotnames.fs
 \ словоформе с показателями Perf или отрицательными
 \ (всеми, в названия которых входит элемент Neg);
 : constraint-10  ( -- f )
-  flags( Perf NF.Neg NF.Neg.sh Neg Neg7 ) flag-empty? ;
+  flag Cunc  flag-empty? ;
 
 \ 10.1. Показатель Fut А(р) не встречается в одной словоформе с
 \ отрицательными показателями (Neg, NF.Neg[, Neg.Conv,
 \ Neg.Сonv.Abl - в этом же слоте]).
 : constraint-10.1  ( -- f )
-  flags( Neg NF.Neg NF.Neg.sh ) flag-empty? ;
+  flag Fut  flag-empty? ;
 
 \ 11. Показатели Neg.Fut ПАС, Neg.Conv Пин, Neg.Сonv.Abl
 \ Пин.Аң исключают заполнение поз. 6.
@@ -222,7 +226,7 @@ require khakas/slotnames.fs
 
 \ 11.1. Показатель NF.Neg исключает заполнение Neg в поз. 6.
 : constraint-11.1  ( -- f )
-  flag NF.Neg  flag-empty? ;
+  flag Neg  flag-empty? ;
 
 \ 12. Непосредственно после показателя недавно прошедшего
 \ времени (RPast) может следовать только краткий
@@ -292,14 +296,19 @@ require khakas/slotnames.fs
 
 \ 16.5. Case₂ не может следовать непосредственно за Pl₁ или Poss₁.
 \ Poss₂ не может следовать непосредственно за Pl₁.
-: constraint-16.5-<Poss₂>  ( -- f )
-  <Pl₁> slot-empty?  ||
-  slots( <Pl₁> <Poss₂> )-full?
-  ;
-: constraint-16.5-<Case₂>  ( -- f )
-  <Pl₁> slot-empty?  slots( <Pl₁> <Case₂> )-full?  OR
-  <Poss₁> slot-empty?  slots( <Poss₁> <Case₂> )-full?  OR
-  AND ;
+: constraint-16.5-<Pl₁>  ( -- f )
+  [: slots( <Pl₁> <Poss₂> )-full? ||
+     <Poss₂> slot-empty? ;] EXECUTE &&
+  [: slots( <Pl₁> <Case₂> )-full? ||
+     <Case₂> slot-empty? ;] EXECUTE ;
+: constraint-16.5-<Poss₁>  ( -- f )
+  slots( <Poss₁> <Case₂> )-full? ||
+  <Case₂> slot-empty? ;
+: constraint-16.5  ( -- f)
+  <Pl₁> => constraint-16.5-<Pl₁>
+  <Poss₁> => constraint-16.5-<Poss₁>
+  TRUE ABORT" Invalid slot for constraint-16.5!"
+  ; IMMEDIATE
 
 \ 17. В поз. 12/16 Case набор аффиксов посессивного
 \ склонения выбирается: а) в случае заполнения позиций
@@ -320,10 +329,11 @@ require khakas/slotnames.fs
 \ Verbum, у которых есть причастные показатели из поз. 7, и к
 \ словам с пометой Nomen. После него возможен только Ptcl3 OK.
 : constraint-18  ( -- f )
-  slots( <Transp> <Ptcl₃> )-full?  &&
-    verb?  flag participles  flag-is?  AND  ||
-    nomen?
+  verb?  flag participles  flag-is?  AND  ||
+  nomen?
   ;
+: constraint-18-right  ( -- f )
+  slots( <Transp> <Ptcl₃> )-full? ;
 
 \ 19. Показатели поз. 19 (Person) с пометой Imp могут быть
 \ только у слов, имеющих помету Verbum; они следуют
@@ -438,13 +448,19 @@ require khakas/slotnames.fs
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
 \ последними заполненными позициями в словоформe
+: constraint-27-<Ptcl1>  ( -- f )  slots( <Ptcl1> <Ptcl₃> ]-full? ;
+: constraint-27-<Pl₁>    ( -- f )  slots( <Pl₁>   <Ptcl₃> ]-full? ;
+: constraint-27-<Poss₁>  ( -- f )  slots( <Poss₁> <Ptcl₃> ]-full? ;
+: constraint-27-<Case₁>  ( -- f )  slots( <Case₁> <Ptcl₃> ]-full? ;
+: constraint-27-<Ptcl₂>  ( -- f )  slots( <Ptcl₂> <Ptcl₃> ]-full? ;
 : constraint-27  ( -- f )
-  <Ptcl1> slot-empty?  slots( <Ptcl1> <Ptcl₃> ]-full?  OR  &&
-  <Pl₁> slot-empty?  slots( <Pl₁> <Ptcl₃> ]-full?  OR  &&
-  <Poss₁> slot-empty?  slots( <Poss₁> <Ptcl₃> ]-full?  OR  &&
-  <Case₁> slot-empty?  slots( <Case₁> <Ptcl₃> ]-full?  OR  &&
-  <Ptcl₂> slot-empty?  slots( <Ptcl₂> <Ptcl₃> ]-full?  OR
-  ;
+  <Ptcl1> => constraint-27-<Ptcl1>
+  <Pl₁>   => constraint-27-<Pl₁>
+  <Poss₁> => constraint-27-<Poss₁>
+  <Case₁> => constraint-27-<Case₁>
+  <Ptcl₂> => constraint-27-<Ptcl₂>
+  TRUE ABORT" Invalid slot for constraint-27!"
+  ; IMMEDIATE
 
 \ 29. Предикативные показатели (Person, PredPl) невозможны в
 \ сочетании с падежами: Gen2, Acc2, Instr2.
@@ -551,7 +567,7 @@ require khakas/slotnames.fs
 \ стягивается: хызох < хыс+ох, но не < хыс-ы-ох. Гласная
 \ дательного падежа не стягивается: суғ+ға+ох > суғаох ‘в воду
 \ же’.
-: constraint-OK-fallout₁₂  ( -- f )
+: constraint-OK-fallout-<Poss₁>  ( -- f )
   slots( <Poss₁> <Ptcl₂> )-full?
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT
   OR
@@ -561,7 +577,7 @@ require khakas/slotnames.fs
   AND                                                  ||
   <Poss₁> form-slot first-sound consonant?
   ;
-: constraint-OK-fallout₁₆  ( -- f )
+: constraint-OK-fallout-<Poss₂>  ( -- f )
   slots( <Poss₂> <Ptcl₂> )-full?
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT
   OR
@@ -571,7 +587,7 @@ require khakas/slotnames.fs
   AND                                                  ||
   <Poss₂> form-slot first-sound consonant?
   ;
-: constraint-OK-fallout₁₇  ( -- f )
+: constraint-OK-fallout-<Case₂>  ( -- f )
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT  &&
     slots( <Case₂> <Ptcl₃> )-full?  ||
     <Ptcl₃> form-slot-flags untransformed-fallout-OK AND NOT
