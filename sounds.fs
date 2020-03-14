@@ -1,43 +1,58 @@
-CREATE sound-buf 4000 ALLOT
-sound-buf 2 + CONSTANT sound-buf-name
+REQUIRE lists.fs
+REQUIRE trie.fs
 
-: s+/  ( ptr addr u -- ptr' )
-  >R OVER R@ MOVE R> + ;
 
-: sound-class  ( "name" -- len size addr )
-  sound-buf-name PARSE-NAME DUP >R s+/             ( ptr' )
-  [CHAR] s OVER C! 1+
-  sound-buf-name - sound-buf-name SWAP NEXTNAME CREATE  ( )
-  R> 0 HERE ;
+1 VALUE sound-class-mask
+trie-new CONSTANT sound-trie
+compact-tries-region region-here VALUE sound-compact-trie
 
-: sound  ( size buf "letter" -- size' buf )
-  OVER CELLS OVER +       ( size buf ptr )
-  PARSE-NAME DROP XC@ SWAP !  ( size buf )
-  SWAP 1+ SWAP ;
+: sounds-compile  ( -- )
+  sound-trie trie-compact TO sound-compact-trie
+  sound-trie trie-forget ;
 
-: sound-each  ( start )
-  ]] BEGIN DUP @ ?DUP-IF [[
-  1 CS-ROLL ; IMMEDIATE
-: sound-next  ( ptr )
-  ]] CELL+ AGAIN THEN DROP [[ ; IMMEDIATE
+: sound-class  ( "name" -- sound-sys )
+  PARSE-NAME NEXTNAME
+  TABLE  DUP CONSTANT  GET-CURRENT SWAP SET-CURRENT  LATEST NAME>STRING ;
 
-: sound-class;  { len size buf -- }
-  size CELLS ALLOT  0 ,
-  \ Create vowels# VARIABLE with class size
-  [CHAR] #  sound-buf-name len 1+ +  C!
-  sound-buf-name len 1+ 1+ NEXTNAME CREATE
-  size ,
-  \ Create vowel? ( xc -- f ) word
-  [CHAR] ?  sound-buf-name len + C!
-  S" : " string-addr  sound-buf 2 MOVE
-  sound-buf 3 + len + ( ptr )
-  size 0 ?DO
-    S"  DUP " s+/
-    buf I CELLS + @ S>D <# #s #> s+/
-    S"  = IF DROP TRUE EXIT THEN" S+/
-  LOOP
-  S"  DROP 0 ;" s+/
-  sound-buf - sound-buf SWAP EVALUATE
+: sound  ( "letter" -- )
+  PARSE-NAME 2DUP sound-class-mask -ROT sound-trie trie-put OVER XC@ -ROT NEXTNAME VALUE ;
+
+: sound-each  ( wid -- xc )
+  ]] WORDLIST-ID @ BEGIN ?DUP-IF [[
+  1 CS-ROLL
+  ]] >R R@ NAME>INT EXECUTE [[
+  ; IMMEDIATE COMPILE-ONLY
+
+: sound-each-str  ( wid -- addr u )
+  ]] WORDLIST-ID @ BEGIN ?DUP-IF [[
+  1 CS-ROLL
+  ]] >R R@ NAME>STRING [[
+  ; IMMEDIATE COMPILE-ONLY
+
+: sound-next  ( -- )
+  ]] R> >LINK @ AGAIN THEN [[
+  ; IMMEDIATE COMPILE-ONLY
+
+: sound-class;  ( sound-sys -- )
+  GET-CURRENT { wid }
+  TUCK PAD SWAP MOVE  ( wid len )
+
+  [CHAR] ?  OVER PAD +  C!
+
+  1+ PAD SWAP NEXTNAME  SET-CURRENT  :  ( )
+    wid WORDLIST-ID @  BEGIN DUP WHILE  ( nt )
+      ]]  DUP  [[ DUP NAME>INT EXECUTE ]]L  = ?EXIT [[
+      >LINK @
+    REPEAT DROP
+    ]] DROP FALSE ; [[
+
+  [CHAR] @  PAD C!
+  LATEST NAME>STRING PAD 1+ SWAP MOVE
+  PAD  LATEST NAME>STRING string-length 1+ NEXTNAME  :
+    \ ]] DUP @xc-size [[ wid ]]L FIND-NAME-IN ; [[
+    ]] DUP @xc-size sound-compact-trie compact-trie-find [[ sound-class-mask ]]L AND ; [[
+
+  sound-class-mask 2* TO sound-class-mask
   ;
 
 

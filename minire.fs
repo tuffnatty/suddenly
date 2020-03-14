@@ -77,10 +77,8 @@ populate-vowels
           [CHAR] V OF  vowels-str vowels-str-len startclass  vowels-str vowels-str-len + 1+ 0 endclass  rest 1 /STRING TO rest  state-0 TO state  ENDOF
           [CHAR] ] OF  rest endclass  state-0 TO state  ENDOF
 [ [ELSE] ]
-          [CHAR] C OF  consonants sound-each SWAP >R
-                         ]]L OF TRUE ENDOF [[    R> sound-next     ENDOF
-          [CHAR] V OF  vowels sound-each SWAP >R
-                         ]]L OF TRUE ENDOF [[    R> sound-next     ENDOF
+          [CHAR] C OF  consonant sound-each ]]L OF TRUE ENDOF [[    sound-next     ENDOF
+          [CHAR] V OF  vowel sound-each ]]L OF TRUE ENDOF [[    sound-next     ENDOF
           [CHAR] ] OF  ]] FALSE SWAP ENDCASE [[  state-0 TO state  ENDOF
           ( xc )       ]]L OF TRUE ENDOF [[                        xc
 [ [THEN] ]
@@ -92,4 +90,83 @@ populate-vowels
   ]] >R 2DROP R> [[
   ; IMMEDIATE
 
+
+\ Trie-based pattern matching:
+
+DEFER (t~/)
+
+: string-parse  ( addr u c -- addr+u' u-u' addr u' )
+  { D: orig  c }                            ( )
+  orig BEGIN DUP WHILE             ( addr' u' )
+    OVER C@  c  <>  WHILE
+      1 /STRING
+  REPEAT THEN
+  OVER  orig string-addr -  { len }
+  DUP IF  1 /STRING  THEN  \ skip delimiter
+  orig string-addr len ;
+
+: (t~/)-doclass  { D: rest  wid  trie -- }
+  \ Build subtrie for the first sound in wid.
+  \ Refer to that subtrie for every sound in wid.
+  \\." (t~/)-doclass " rest type cr
+  0 { child }
+  wid sound-each-str  ( c-addr c-u )
+    child IF
+      trie trie-get-ref-ptr  child  SWAP !
+    ELSE
+      trie trie-get TO child      ( )
+      rest child (t~/)
+    THEN
+  sound-next
+  \\." doclass-done" cr
+  ;
+
+: parse-class  ( addr u -- wid )
+  [CHAR] } string-parse   FIND-NAME NAME>INT EXECUTE ;
+
+:noname  ( addr u trie -- )
+  \\." (t~/) " >r 2dup type ." ," r> dup .trie ." ." cr
+  { trie }  ( addr u )
+  DUP IF
+    OVER C@ CASE
+      [CHAR] { OF   1 /STRING   parse-class trie (t~/)-doclass   ENDOF
+      [CHAR] C OF   1 /STRING     consonant trie (t~/)-doclass   ENDOF
+      [CHAR] V OF   1 /STRING         vowel trie (t~/)-doclass   ENDOF
+      [CHAR] R OF   1 /STRING      sonorant trie (t~/)-doclass   ENDOF
+      ( c )  >R                               ( addr u  R: c )
+        OVER 1 trie trie-get   >R 1 /STRING R>   RECURSE   ( )
+        R>                                               ( c )
+    ENDCASE
+  ELSE
+    2DROP
+    TRUE trie trie-data !
+  THEN
+  ; IS (t~/)
+
+
+: t~/  ( addr u "regex" -- f )
+  \\." t~/ start: " RP@ . cr
+  \stack-mark
+  trie-new { trie }
+  BL PARSE          ( addr u )
+  BEGIN DUP WHILE
+    [CHAR] | string-parse trie (t~/)
+  REPEAT 2DROP             ( )
+  trie trie-compact ]]L compact-trie-find-prefix [[
+  trie trie-forget
+  \stack-check
+  \\." t~/ end " RP@ . cr
+  ; IMMEDIATE COMPILE-ONLY
+
+
 PREVIOUS
+
+FALSE [IF]
+: test-t~/
+  T{ S" а" t~/ V -> TRUE }T
+  T{ S" б" t~/ V -> FALSE }T
+  T{ S" 0̸" t~/ гV -> FALSE }T
+  T{ S" 0̸" t~/ гV|ғV -> FALSE }T
+  ." OK" cr
+  ;
+[THEN]

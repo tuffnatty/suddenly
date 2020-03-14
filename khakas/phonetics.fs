@@ -72,7 +72,11 @@ sound-class nasal
 sound-class;
 
 sound-class unvoiced
-  sound п sound ф sound к sound х sound т sound ш sound с sound ц sound ч sound щ
+  sound п sound ф sound к sound х sound т sound ш sound ц sound с sound ч sound щ
+sound-class;
+
+sound-class envoiceable
+  sound п sound ф sound к sound х sound т sound ш sound ц sound с
 sound-class;
 
 sound-class voiced
@@ -115,5 +119,6 @@ sound-class o-yo
   sound о sound ӧ
 sound-class;
 
+sounds-compile
 
 REQUIRE ./../phonetics-common.fs

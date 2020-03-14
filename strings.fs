@@ -10,6 +10,7 @@ CREATE utf8-size-table
 : @xc-size  ( addr -- u )
   \ length of UTF-8 char starting at addr
   C@ utf8-size-table + C@ ;
+: XCHAR+ DUP @xc-size + ;
 
 [UNDEFINED] XC!+? [IF]
 -77 Constant UTF-8-err
@@ -32,7 +33,6 @@ CREATE utf8-size-table
 	    $3F and r> or
     REPEAT  rdrop ;
 : XC@ ]] XC@+ nip [[ ; immediate
-: XCHAR+ ]] XC@+ DROP [[ ; immediate
 : XCHAR- ( u8addr -- u8addr' )
     BEGIN  1- dup c@ $C0 and max-single-byte <>  UNTIL ;
 : +x/string ( xc-addr1 u1 -- xc-addr2 u2 )
@@ -104,55 +104,11 @@ END-STRUCT sstr%
 
 VARIABLE sstr-last
 
-: count-words  ( addr u -- n )
-  0 0 { count in-word }
-  OVER + SWAP DO
-    I C@ BL = IF
-      in-word IF FALSE TO in-word THEN
-    ELSE
-      in-word 0= IF TRUE TO in-word  1 count + TO count THEN
-    THEN
-  LOOP count ;
-
 : sstr-allocate-arr  { sstr -- }
   sstr sstr-count @  1+  [ cstr% %SIZE ]L *  ALLOCATE IF
     ABORT" Allocation error while preparsing"
   THEN  ( addr )
   sstr sstr-arr ! ;
-
-: sstr-preparse  ( sstr -- )
-  0 0 0 0 { sstr start n in-word cur arr-ptr }
-  sstr sstr-count @ IF
-    sstr sstr-arr @ FREE IF
-      ABORT" Free error while preparsing"
-    THEN
-  THEN
-  sstr cstr-get  count-words  sstr sstr-count !
-  sstr sstr-allocate-arr
-  sstr cstr-ptr @
-  sstr cstr-len @  0 DO
-    sstr cstr-ptr @ I + DUP C@ BL = IF              ( ptr )
-      in-word IF
-        sstr sstr-arr @ n cstr% %SIZE * + TO arr-ptr
-        start   arr-ptr cstr-ptr !
-        start - arr-ptr cstr-len !                   ( )
-        FALSE TO in-word
-        n 1+ TO n
-      ELSE DROP THEN
-    ELSE
-      in-word IF DROP
-      ELSE
-        TO start                                       ( )
-        TRUE TO in-word
-      THEN
-    THEN
-  LOOP
-  in-word IF
-    sstr sstr-arr @ n cstr% %SIZE * + TO arr-ptr
-    start arr-ptr cstr-ptr !
-    sstr cstr-get + start - arr-ptr cstr-len !
-  THEN
-  ;
 
 : sstr-create  ( buf-len -- sstr )
   DUP ALLOCATE IF ABORT" ALLOCATION ERROR" THEN  ( buf-len buf )
@@ -185,10 +141,6 @@ VARIABLE sstr-last
 : string-end  ( addr u -- addr' )
   POSTPONE + ; IMMEDIATE
 
-: string-append-char  { xc addr u -- addr u' }
-  addr u  string-end  ( ptr )
-  xc OVER XC!  addr  SWAP XCHAR+ addr - ;
-
 : string-length  ( addr u -- u )
   POSTPONE NIP ; IMMEDIATE
 
@@ -210,9 +162,6 @@ VARIABLE sstr-last
 
 : right-slice  ( addr u1 u2 -- addr' u1' )
   POSTPONE /STRING ; IMMEDIATE
-
-: left-slice+xc  ( addr u1 u2 -- addr u3 )
-  left-slice  2DUP string-end  XC@ XC-SIZE  + ;
 
 : +x/string@  ( addr u -- addr' u' xc )
   ]] OVER XC@ -ROT +X/STRING ROT [[ ; IMMEDIATE
@@ -276,11 +225,11 @@ VARIABLE sstr-last
   prev-sound-ptr XC@ ;
 : third-sound ( addr u -- xc )
   prev-sound-ptr XCHAR- XC@ ;
-: last-sound-change  ( xc addr u -- )
-  last-sound-ptr XC! ;
-: last-sound-add ( u cs -- )
-  SWAP OVER COUNT + XC!  ( cs )
-  DUP C@ cyr+ SWAP C! ;
+: last-sound-change  ( new-addr new-u addr u -- )
+  last-sound-ptr SWAP MOVE ;
+: last-sound-add  { str len cs -- }
+  str  cs COUNT +  len  CMOVE
+  cs @ len +  cs C! ;
 : last-sound-cut  ( cs -- )
   DUP COUNT last-sound-ptr OVER 1+ - SWAP C! ;
 : prev-sound-cut  ( cs -- )

@@ -43,8 +43,14 @@ dstack: formflag
 : stem-last-sound  ( -- xc )
   ]] guessed-stem last-sound [[ ; IMMEDIATE
 
+: stem-last-sound-ptr  ( -- addr )
+  ]] guessed-stem last-sound-ptr [[ ; IMMEDIATE
+
 : stem-last-char-vowel  ( -- xc )
   ]] guessed-stem last-char-vowel [[ ; IMMEDIATE
+
+: stem-last-char-vowel-row  ( -- wid )
+  ]] guessed-stem last-char-vowel-row [[ ; IMMEDIATE
 
 : form-slot  ( n -- addr u )
   ]] formform formstack-slot [[ ; IMMEDIATE
@@ -182,10 +188,10 @@ DEFER yield-stem  ( stem -- )
   left-part  n-rule rule rule-check { harmony-ok? }  2DROP
   harmony-ok? NOT IF
     slot-flag 0= IF
-      left-part last-sound-except-ь voiced? IF
+      left-part last-sound-except-ь-ptr cyr t~/ {voiced} IF
         PAD left-part string-length { D: buffer }
         left-part string-addr buffer CMOVE
-        buffer last-sound-except-ь unvoice  buffer last-sound-except-ь-ptr XC!
+        buffer last-sound-except-ь-ptr cyr  2DUP unvoice-str DROP -ROT CMOVE
         buffer n-rule rule rule-check TO harmony-ok? 2DROP
         harmony-ok? IF
           harmony-vu-broken TO slot-flag
@@ -205,17 +211,14 @@ DEFER yield-stem  ( stem -- )
   THEN
   ;
 
-:+ after-fallout  { pairlist rule n-rule -- }
-  \." " pairlist ?DUP-IF indent ." Pairlist: " .pairlist
-  \."  while processing " formname .dstack ."  " formform .dstack cr THEN
-  BEGIN pairlist WHILE
-    pairlist pair-1  ( ... addr' u' )
-    \." " indent rule if ." Pair " pairlist .pairlist-node ." harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
-    pairlist pair-flags @ { slot-flag }
-    pairlist pair-2  slot-flag  rule n-rule  after-fallout-pair  ( )
-    pairlist list-swallow  TO pairlist
-  REPEAT
-  ;
+[: HERE 128 0 DO Untransformer new DROP LOOP ;] STATIC-A WITH-ALLOCATER CONSTANT untransformer-stack
+0 VALUE untransformer-stack-depth
+: get-untransformer  ( -- )
+  untransformer-stack-depth 1+ TO untransformer-stack-depth ;
+: top-untransformer  ( -- o )
+  untransformer-stack-depth 1- [ Untransformer >OSIZE @ CELL+ ]L * untransformer-stack + ;
+: dispose-untransformer  ( -- )
+  untransformer-stack-depth 1- TO untransformer-stack-depth ;
 
 :+ process-single-representation  ( addr u affix affix-len rule n-rule -- addr u )
   { D: affix rule n-rule }                 ( addr u )
@@ -224,20 +227,19 @@ DEFER yield-stem  ( stem -- )
   \\." " indent ." <Singlerep> " 2DUP type ." +" affix type rule HEX. n-rule . .s CR
 
   affix  formform >dstack
-  0 { pairlist }
-  affix string-length IF
-    \ \." BEFORE:" .s CR
-    2DUP affix untransform-fallout2 TO pairlist
-    \ \." AFTER:" .s BL EMIT DUP .strlist CR
-  THEN
-  \\." " pairlist IF indent ." Remaining list: " pairlist .pairlist .s CR THEN
-  pairlist rule n-rule after-fallout
+  get-untransformer  top-untransformer >O
+
+  2DUP  affix  rule  n-rule  ['] after-fallout-pair  configure
+
+  unfallout
+
   DUP  affix string-length > IF
     \\." " indent ." Unchanged guess: " 2DUP TYPE .s CR
-    2DUP affix untransform-envoice  ( addr u pairlist )
-    rule n-rule after-fallout                ( addr u )
+    unjoin
     \\." " indent ." After after-fallout: " .s CR
   THEN
+
+  O> dispose-untransformer
   formform dstack>
 
   \stack-check

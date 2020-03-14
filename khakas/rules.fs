@@ -1,9 +1,11 @@
+REQUIRE ./../debugging.fs
+REQUIRE ./../minire.fs
 REQUIRE ./../strings.fs
 REQUIRE ./phonetics.fs
 
 : last-char-vowel ( addr u -- u | 0 )
-  OVER >R
-  0 -ROT last-sound-ptr BEGIN ( vowel cs-cur  r: cs )
+  OVER >R                      ( addr u -- R: cs )
+  0 -ROT last-sound-ptr BEGIN ( vowel cs-cur  R: cs )
     DUP XC@ DUP unchar-vowel? IF  ( vowel cs-cur cs-cur@ )
       -ROT NIP XCHAR- DUP R@ <    ( vowel cs-cur 0 )
     ELSE DUP front-vowel? IF      ( vowel cs-cur cs-cur@ )
@@ -14,5 +16,12 @@ REQUIRE ./phonetics.fs
     THEN THEN THEN
   UNTIL
   DROP RDROP ;
+
+:+ last-char-vowel-row  { addr u -- wid }
+  addr u last-sound-ptr BEGIN  ( addr' )
+    DUP cyr t~/ {front-vowel} IF DROP front-vowel EXIT THEN
+    DUP cyr t~/ {back-vowel}  IF DROP back-vowel  EXIT THEN
+  XCHAR-  DUP addr <  UNTIL
+  DROP front-vowel ;
 
 REQUIRE ./../rules-common.fs

@@ -11,20 +11,6 @@ INCLUDE ../compat/ttester.fs
 INCLUDE ../debugging.fs
 \ 1 TO debug-mode?
 \ 2 TO debug-mode?
--DB PROFILE(
-
-CREATE t_name CHAR + C, 127 ALLOT
-: :+
-  PROFILE(
-    PARSE-NAME  ( addr u )
-    2DUP t_name 1+ SWAP MOVE
-    t_name OVER 1+ NEXTNAME TIMER:
-    LATESTXT { t }
-    NEXTNAME : ( )
-    ['] +record >BODY ]]L >R [[ t ]]L EXECUTE [[
-  )ELSE(
-    :
-  ) ;
 
 TIMER: +init
 TIMER: +rest

@@ -3,13 +3,11 @@ require khakas/slotnames.fs
 : =>  ( slot-pos "name" )
   ]] (<this>) = IF [(')] EXIT THEN [[ ; IMMEDIATE
 
-0  S" пар апар кил "  strlist-parse-alloc  CONSTANT пар|кил
 : is-пар/кил?  ( -- f )
-  paradigm-stems @  пар|кил  strlists-intersect? ;
+  paradigm-stems @  [: strlist-get t~/ пар|апар|кил ;] list-any? ;
 
-0  S" мин син ол піс сірер олар " strlist-parse-alloc CONSTANT personal-pronouns
 : is-personal-pronoun?  ( -- f )
-  paradigm-stem 2@  personal-pronouns  strlist-in? ;
+  paradigm-stem 2@  [: strlist-get t~/ мин|син|ол|піс|сірер|олар ;] list-any? ;
 
 \ 0. Слова с пометой INVAR (не Nomen и не Verbum) никаких
 \ показателей не присоединяют! Слова с пометой Invar1
@@ -517,7 +515,7 @@ require khakas/slotnames.fs
 
 \ Запрещенные контексты для выпадения одной из трех одинаковых согласных
 : constraint-CCC-fallout  ( -- f )
-  stem-last-sound stem-prev-sound <>                                                  ||
+  stem-last-sound-ptr cyr  stem-prev-sound-ptr cyr COMPARE                            ||
   stem-last-sound first-affix-starts-with? NOT                                        ||
   dictflag-rus dictflag-is?  first-form-flag untransformed-fallout-CCC  AND  0<> AND  ||
   dictflag-rus dictflag-empty?  first-form-flag untransformed-fallout-CCC AND NOT  AND
@@ -535,12 +533,12 @@ require khakas/slotnames.fs
   first-form-flag untransformed-fallout-VГV untransformed-fallout-VңV OR AND  ||
   slot-all-empty?                                                             ||
   stem-polysyllabic? NOT                                                      ||
-  stem-last-sound gh-g-ng? NOT                                                ||
-  stem-prev-sound vowel? NOT                                                  ||
-  stem-prev-sound short-vowel? NOT                                            ||
+  stem-last-sound-ptr cyr t~/ {gh-g-ng} NOT                                   ||
+  stem-prev-sound-ptr cyr t~/ {vowel} NOT                                     ||
+  stem-prev-sound-ptr cyr t~/ {short-vowel} NOT                               ||
   stem-prev-sound-ptr vowel-long-middle?                                      ||
   first-affix vowel-long?                                                     ||
-  first-affix first-sound short-vowel? NOT
+  first-affix t~/ {short-vowel} NOT
   ;
 
 \ Запрещенные контексты для выпадения конечного к, х
@@ -560,7 +558,7 @@ require khakas/slotnames.fs
 
 \ Pres.dial ча, Pres2.dial.kac чадыр только после переднерядных основ
 : constraint-frontstem  ( -- f )
-  stem-last-char-vowel back-vowel? NOT
+  stem-last-char-vowel-row back-vowel <>
   ;
 
 \ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не
@@ -575,7 +573,7 @@ require khakas/slotnames.fs
   <Ptcl₃> form-slot-flags untransformed-fallout-OK AND NOT
   OR
   AND                                                  ||
-  <Poss₁> form-slot first-sound consonant?
+  <Poss₁> form-slot t~/ {consonant}
   ;
 : constraint-OK-fallout-<Poss₂>  ( -- f )
   slots( <Poss₂> <Ptcl₂> )-full?
@@ -585,7 +583,7 @@ require khakas/slotnames.fs
   <Ptcl₃> form-slot-flags untransformed-fallout-OK AND NOT
   OR
   AND                                                  ||
-  <Poss₂> form-slot first-sound consonant?
+  <Poss₂> form-slot t~/ {consonant}
   ;
 : constraint-OK-fallout-<Case₂>  ( -- f )
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT  &&

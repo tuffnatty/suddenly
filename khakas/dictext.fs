@@ -1,4 +1,4 @@
-REQUIRE ../cleave.fs
+REQUIRE ./../cleave.fs
 REQUIRE ./phonetics.fs
 
 %001 CONSTANT dictflag-no-envoice

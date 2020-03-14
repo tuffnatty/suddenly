@@ -1,69 +1,62 @@
 REQUIRE strings.fs
+REQUIRE minire.fs
 language-require phonetics.fs
 
 : vowel-long?  ( addr u -- f )
   2 cyrs < IF DROP FALSE EXIT THEN  ( addr )
-  XC@+ SWAP XC@ = ;
+  DUP @xc-size  2DUP + OVER STR= ;
 
 : vowel-long-middle?  ( ptr -- f )
-  DUP XC@ SWAP XCHAR- XC@ = ;
+  DUP XCHAR-  2DUP -  SWAP OVER STR= ;
 
-: rule-cv   ( addr u -- addr u table-index )
-  2DUP last-sound class-cv ;
-: rule-cv ['] rule-cv ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-ptr sclass-cv ;] CONSTANT rule-cv
 
 : last-sound-except-ь-ptr  ( addr u -- addr' )
-  2DUP last-sound [CHAR] ь = IF prev-sound-ptr ELSE last-sound-ptr THEN ;
+  last-sound-ptr  DUP cyr "ь" STR=  IF XCHAR- THEN ;
 
 : last-sound-except-ь  ( addr u -- xc )
   last-sound-except-ь-ptr XC@ ;
 
-: rule-cv-fb   ( addr u -- addr u table-index )
-  2DUP last-sound class-cv >R 2DUP last-char-vowel class-fb 2* R> + ;
-: rule-cv-fb ['] rule-cv-fb ;
+: rclass-fb ( wid -- class )
+  back-vowel = IF cl-back ELSE cl-front THEN ;
 
-: rule-fb      ( addr u -- addr u table-index )
-  2DUP last-char-vowel class-fb ;
-: rule-fb ['] rule-fb ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-ptr sclass-cv >R  2DUP last-char-vowel-row rclass-fb 2* R> + ;] CONSTANT rule-cv-fb
 
-: rule-nvu  ( addr u -- addr u table-index )
-  2DUP last-sound-except-ь class-nvu ;
-: rule-nvu ['] rule-nvu ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-char-vowel-row rclass-fb ;] CONSTANT rule-fb
 
-: rule-nvu-fb  ( addr u -- addr u table-index )
-  2DUP last-sound-except-ь class-nvu >R 2DUP last-char-vowel class-fb 3 * R> + ;
-: rule-nvu-fb ['] rule-nvu-fb ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-except-ь-ptr sclass-nvu ;] CONSTANT rule-nvu
 
-: rule-vu  ( addr u -- addr u table-index )
-  2DUP last-sound-except-ь class-vu ;
-: rule-vu ['] rule-vu ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-except-ь-ptr sclass-nvu >R 2DUP last-char-vowel-row rclass-fb 3 * R> + ;] CONSTANT rule-nvu-fb
 
-: rule-vu-fb   ( addr u -- addr u table-index )
-  2DUP last-sound-except-ь class-vu >R 2DUP last-char-vowel class-fb 2* R> + ;
-: rule-vu-fb ['] rule-vu-fb ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-except-ь-ptr sclass-vu ;] CONSTANT rule-vu
+
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-except-ь-ptr sclass-vu >R 2DUP last-char-vowel-row rclass-fb 2* R> + ;] CONSTANT rule-vu-fb
 
 \ : rule-cv-nvu-fb  ( addr u -- addr u table-index )
 \   2DUP last-sound class-cv >R  ( addr u R: class-cv )
 \   R@ cl-vowel = IF cl-voiced ELSE R@ class-nvu THEN 2* 2*
-: rule-cv-vu  ( addr u -- addr u table-index )
-  2DUP last-sound-except-ь >R R@ class-cv  ( addr u class-cv  R: xc )
-  DUP cl-vowel = IF cl-voiced RDROP ELSE R> class-vu THEN 2* + ;
-: rule-cv-vu ['] rule-cv-vu ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-except-ь-ptr >R R@ sclass-cv  ( addr u class-cv  R: xc )
+  DUP cl-vowel = IF cl-voiced RDROP ELSE R> sclass-vu THEN 2* + ;] CONSTANT rule-cv-vu
 
-: rule-cv-nvu  ( addr u -- addr u table-index )
-  2DUP last-sound-except-ь >R R@ class-cv  ( addr u class-cv  R: xc )
-  DUP cl-vowel = IF cl-voiced RDROP ELSE R> class-nvu THEN 2* + ;
-: rule-cv-nvu ['] rule-cv-nvu ;
+[:  ( addr u -- addr u table-index )
+  2DUP last-sound-except-ь-ptr >R R@ sclass-cv  ( addr u class-cv  R: xc )
+  DUP cl-vowel = IF cl-voiced RDROP ELSE R> sclass-nvu THEN 2* + ;] CONSTANT rule-cv-nvu
 
-: rule-cv-vu-fb  ( addr u -- addr u table-index )
+[:  ( addr u -- addr u table-index )
   rule-cv-vu EXECUTE  ( addr u class-cv-vu )
-  >R 2DUP last-char-vowel class-fb R> 2* + ;
-: rule-cv-vu-fb ['] rule-cv-vu-fb ;
+  >R 2DUP last-char-vowel-row rclass-fb R> 2* + ;] CONSTANT rule-cv-vu-fb
 
-: rule-cv-nvu-fb  ( addr u -- addr u table-index )
+[:  ( addr u -- addr u table-index )
   rule-cv-nvu EXECUTE  ( addr u class-cv-nvu )
-  >R 2DUP last-char-vowel class-fb R> 2* + ;
-: rule-cv-nvu-fb ['] rule-cv-nvu-fb ;
+  >R 2DUP last-char-vowel-row rclass-fb R> 2* + ;] CONSTANT rule-cv-nvu-fb
 
 : .rule  ( xt -- )
   >NAME ?DUP-IF .NAME ELSE ." rule-0" THEN ;
@@ -145,32 +138,40 @@ language-require phonetics.fs
   ." Could not compute capacity of rule " >NAME .ID
   ABORT ;
 
-: envoice  ( u -- u )
-  unvoiceds# CELLS 0 ?DO
-    unvoiceds I + @ OVER = IF
-      DROP voiceds I + @ LEAVE
+: wid-map-new  ( from-wid to-wid -- compact-trie )
+  trie-new { trie }
+  WORDLIST-ID @  SWAP sound-each-str  ( to-nt D: from-str )
+    2DUP trie trie-find-prefix 0= IF
+      2 PICK NAME>STRING string-addr  -ROT trie trie-put  ( nt )
+    ELSE
+      2DROP
     THEN
-  CELL +LOOP ;
+    >LINK @
+  sound-next DROP  ( )
+  trie trie-compact  trie trie-forget ;
 
-: envoiced-copy  ( addr u -- addr1 u )
-  string-copy  OVER  DUP XC@ envoice  SWAP XC! ;
+: wid-map  ( addr u compact-trie -- addr' u' )
+  { compact-trie } 2DUP compact-trie compact-trie-find-prefix ?DUP-IF cyr 2NIP THEN ;
 
-: unvoice  ( u -- u )
-  voiceds# CELLS 0 ?DO
-    voiceds I + @ OVER = IF
-      DROP unvoiceds I + @ LEAVE
-    THEN
-  CELL +LOOP ;
+voiced unvoiced wid-map-new CONSTANT unvoice-compact-trie
+unvoiced voiced wid-map-new CONSTANT envoice-compact-trie
+
+: envoice-str  ( addr u -- addr' u' )
+  envoice-compact-trie wid-map ;
+
+: unvoice-str  ( addr u -- addr' u' )
+  unvoice-compact-trie wid-map ;
 
 TIMER: +polysyllabic?
 : polysyllabic?  ( addr u -- f ) +polysyllabic?
   OVER + SWAP ( cs-end ptr )
   0 { cnt }
   BEGIN 2DUP > WHILE
-    XC@+ vowel? IF
+    DUP cyr t~/ {vowel} IF
       cnt IF 2DROP TRUE +record EXIT THEN
       1 TO cnt
     THEN
+    cyr+
   REPEAT 2DROP FALSE +record ;
 : polysyllabic-cs?  ( cs -- f )
   COUNT polysyllabic? ;

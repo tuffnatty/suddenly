@@ -105,36 +105,3 @@ END-STRUCT strlist%
     list-next @
   REPEAT                              ( 0 )
   ;
-
-
-list%
-  CELL%      FIELD pair-1-len
-  CELL% 32 * FIELD pair-1-buf
-  CELL%      FIELD pair-2-len
-  CELL% 5  * FIELD pair-2-buf
-  CELL%      FIELD pair-flags
-END-STRUCT pairlist%
-
-: pairlist-prepend  ( list addr1 len1 addr2 len2 -- list' )
-  pairlist% %ALLOC >R  ( R: list' )
-  R@ pair-2-len !
-  R@ pair-2-buf  R@ pair-2-len @ CMOVE
-  R@ pair-1-len !
-  R@ pair-1-buf  R@ pair-1-len @ CMOVE
-  0 R@ pair-flags !
-  R@ list-next !
-  \ \." allocated " r@ . ."  with next " r@ list-next @ . cr
-  R> ;
-
-: pair-1  ( list -- addr u )
-  \ ." getting pair for " dup . cr
-  DUP pair-1-buf SWAP pair-1-len @ ;
-
-: pair-2  ( list -- addr u )
-  DUP pair-2-buf SWAP pair-2-len @ ;
-
-: .pairlist-node  ( pairlist -- )
-  DUP pair-1 TYPE ." +" DUP pair-2 TYPE [CHAR] . EMIT pair-flags @ bin. ;
-
-: .pairlist  ( pairlist -- )
-  ['] .pairlist-node list-map ;

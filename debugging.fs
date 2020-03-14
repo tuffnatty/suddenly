@@ -95,6 +95,21 @@ variable timer-stack-depth
   )else( drop ) ;
 : +record ( -- ) PROFILE( -1 timer-stack-depth +!  timer-stack timer-stack-depth @ CELLS + @  +t ) ;
 
+-DB PROFILE(
+
+CREATE t_name CHAR + C, 127 ALLOT
+: :+
+  PROFILE(
+    PARSE-NAME  ( addr u )
+    2DUP t_name 1+ SWAP MOVE
+    t_name OVER 1+ NEXTNAME TIMER:
+    LATESTXT { t }
+    NEXTNAME : ( )
+    ['] +record >BODY ]]L >R [[ t ]]L EXECUTE [[
+  )ELSE(
+    :
+  ) ;
+
 [undefined] SEE-THREADED [IF]
 [undefined] see-voc [if]
 : see-threaded see ;
