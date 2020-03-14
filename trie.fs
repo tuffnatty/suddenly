@@ -1,7 +1,8 @@
 REQUIRE debugging.fs
 REQUIRE memregion.fs
 
-TRUE CONSTANT optimize-tries
+FALSE CONSTANT optimize-tries
+TRUE CONSTANT optimize-compact-tries
 
 STRUCT
   CELL% 256 * FIELD trie-children
@@ -157,7 +158,7 @@ CREATE compact-tries-region  2 1024 * 1024 *  region-make
     THEN
   LOOP ;
 
-optimize-tries 0= [IF]
+optimize-compact-tries 0= [IF]
 : compact-trie-find-prefix  ( addr u compact-trie -- data )
   { compact-trie }  ( addr u )
   BEGIN ?DUP WHILE
@@ -186,6 +187,7 @@ optimize-tries 0= [IF]
 
 c-library trie_lib
 \c #include <stdint.h>
+optimize-tries [IF]
 \c typedef struct Trie {
 \c    struct Trie *children[256];
 \c    int data;
@@ -206,6 +208,7 @@ c-library trie_lib
 \c    }
 \c    return trie->data;
 \c }
+[THEN]
 \c typedef struct CompactTrie {
 \c    int end, start, data;
 \c } CompactTrie;
@@ -241,8 +244,10 @@ c-library trie_lib
 \c    }
 \c    return trie->data;
 \c }
+optimize-tries [IF]
 c-function trie-find trie_find a n a -- n
 c-function trie-find-prefix trie_find_prefix a n a -- n
+[THEN]
 c-function compact-trie-find compact_trie_find a n a -- n
 c-function compact-trie-find-prefix compact_trie_find_prefix a n a -- n
 end-c-library
