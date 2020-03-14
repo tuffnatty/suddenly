@@ -125,11 +125,9 @@ CREATE compact-tries-region  2 1024 * 1024 *  region-make
     [ compact-trie% %SIZE ]L + +  ( addr )
   ELSE 2DROP 0 THEN ;
 
-see compact-trie-[]child-ref
 : compact-trie-[]child  ( c compact-trie -- subtrie|0 )
   \\." getting child " over . ." from " dup .compact-trie-raw cr
   compact-trie-[]child-ref ?DUP-IF @ ELSE 0 THEN ;
-see compact-trie-[]child
 
 : (.compact-trie)  { compact-trie prefix-len -- }
   compact-trie compact-trie-data @ IF
@@ -249,7 +247,6 @@ c-function compact-trie-find compact_trie_find a n a -- n
 c-function compact-trie-find-prefix compact_trie_find_prefix a n a -- n
 end-c-library
 [THEN]
-see compact-trie-find-prefix
 
 : trie-compact  { trie -- compact-trie }
   \stack-mark

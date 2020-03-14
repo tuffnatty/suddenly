@@ -3,6 +3,7 @@ language: generic
 sudo: true
 before_script:
   - wget http://newstar.rinet.ru/~phil/dist/gforth/{gforth_0.7.9-20161123_amd64.deb,gforth-bin_0.7.9-20161123_amd64.deb,gforth-bin-dbgsym_0.7.9-20161123_amd,gforth-common_0.7.9-20161123_all.deb,gforth-dev_0.7.9-20161123_amd64.deb,gforth-lib_0.7.9-20161123_amd64.deb}; sudo dpkg -i gforth*.deb
+  - sudo apt-get install libtool-bin
   # - sudo apt-get install gforth || true
   # - git clone https://git.savannah.gnu.org/git/gforth.git
   # - (cd gforth && ./install-deps.sh && ./autogen.sh && ./configure --enable-lib && make && sudo make install)
