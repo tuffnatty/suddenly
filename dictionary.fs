@@ -1,6 +1,7 @@
 REQUIRE lists.fs
 REQUIRE p-o-s.fs
 REQUIRE strings.fs
+REQUIRE trie.fs
 REQUIRE util.fs
 
 : language-require  ( "name" -- )
@@ -46,16 +47,15 @@ END-STRUCT stem%
 : stem-p-o-s ( stem -- p-o-s )
   stem-dict @  dict-p-o-s  @ ;
 
-TABLE CONSTANT stem-table
 TABLE CONSTANT fuzzy-stem-table
 VARIABLE dictionary-ptr
+
+trie-new CONSTANT stem-trie
 
 : stem-find-in-table  ( key len table -- stem|0 )
   SEARCH-WORDLIST IF EXECUTE ELSE 0 THEN ;
 : fuzzy-stem-find  ( key len -- stem|0 )
   fuzzy-stem-table stem-find-in-table ;
-: stem-find  ( key len -- stem|0 )
-  stem-table stem-find-in-table ;
 
 : find-headwords  { D: s -- dicts|0 }
   0 >R                                              ( R: dicts )
@@ -84,15 +84,12 @@ VARIABLE dictionary-ptr
     THEN
   REPEAT DROP R> ;
 
-: stem-table-add-key  { D: key dict table -- }
-  key table stem-find-in-table ?DUP-IF     ( stem )
+: stem-trie-add-key  { D: key dict trie -- }
+  key trie trie-find ?DUP-IF     ( stem )
     dict SWAP stem-get-for-dict DROP            ( )
   ELSE
     \ ." add key " 2DUP TYPE cr
-    GET-CURRENT table SET-CURRENT      ( wordlist )
-    key NEXTNAME
-    dict stem-create-for-dict CONSTANT
-    SET-CURRENT                                 ( )
+    dict stem-create-for-dict key trie trie-put
   THEN ;
 
 : (dict-check-headword)  ( head len -- head len )
@@ -113,10 +110,10 @@ VARIABLE dictionary-ptr
   0  dict dict-flags    !
 
   \ Add stem for search
-  dict dict-headword COUNT      ( head len )
-  pos pos-v <> IF 2DUP dict stem-table stem-table-add-key THEN
-  pos pos-n = IF str-trim-last-cyr str-trim-last-cyr THEN
-  dict fuzzy-stem-table stem-table-add-key ;
+  pos pos-v <> IF
+    dict dict-headword COUNT      ( head len )
+    dict stem-trie stem-trie-add-key
+  THEN ;
 
 TABLE CONSTANT dictionary-wordlist
 
@@ -145,9 +142,9 @@ GET-CURRENT dictionary-wordlist SET-CURRENT
 : stem  ( "word" -- )
   BL PARSE dictionary-ptr @  { D: stem dict }
   dict dict-stems @  stem strlist-prepend  dict dict-stems !
-  stem dict stem-table stem-table-add-key
-  stem str-trim-last-cyr str-trim-last-cyr  dict  fuzzy-stem-table stem-table-add-key
-  stem dict stem-postprocess ;
+  stem dict stem-trie stem-trie-add-key
+  \ stem str-trim-last-cyr str-trim-last-cyr  dict  fuzzy-stem-table stem-table-add-key
+  ;
 
 : #  ( "number" -- )
   BL PARSE S>NUMBER? IF
@@ -164,5 +161,11 @@ language-require dict.fs
 PREVIOUS
 
 SET-CURRENT
+
+stem-trie trie-compact CONSTANT stem-compact-trie
+stem-trie trie-forget
+
+: stem-find  ( addr u -- stem )
+  stem-compact-trie compact-trie-find ;
 
 utime dict-timer D- ." parsing dictionary: " D. ." us." CR

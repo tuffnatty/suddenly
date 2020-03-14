@@ -133,8 +133,10 @@ T{ CHAR ң class-nvu -> cl-nasal }T
 T{ S" пас+са+ңар" S" пассар" parse-test -> TRUE }T
 T{ S" пас+ты+ңар" S" пастар" parse-test -> TRUE }T
 [THEN]
-\ T{ S" ті+ген" S" теен" parse-test -> TRUE }T
 
+\." tries-region: " tries-region .region
+tries-region region-dispose
+." compact-tries-region: " compact-tries-region .region
 
 +record +rest
 utime test-timer D- ." compiling: " D. ." µs" CR  utime TO test-timer
