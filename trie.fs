@@ -2,7 +2,7 @@ REQUIRE debugging.fs
 REQUIRE memregion.fs
 
 FALSE CONSTANT optimize-tries
-TRUE CONSTANT optimize-compact-tries
+FALSE CONSTANT optimize-compact-tries
 
 STRUCT
   CELL% 256 * FIELD trie-children
