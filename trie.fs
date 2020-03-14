@@ -10,7 +10,7 @@ STRUCT
 END-STRUCT trie%
 
 
-CREATE tries-region  94 1024 * 1024 *  region-make
+CREATE tries-region  96000 trie% %SIZE *  region-make
 
 
 : trie-new  ( -- trie )
@@ -106,7 +106,7 @@ STRUCT
   CELL%       FIELD compact-trie-data
 END-STRUCT compact-trie%
 
-CREATE compact-tries-region  2 1024 * 1024 *  region-make
+CREATE compact-tries-region  170000 compact-trie% %SIZE *  region-make
 
 : .compact-trie-raw  ( compact-trie -- )
   DUP HEX.
