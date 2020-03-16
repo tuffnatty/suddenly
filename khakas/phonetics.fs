@@ -4,7 +4,7 @@ REQUIRE ./../sounds.fs
 
 sound-class vowel
   sound и
-  sound а sound о sound ы sound у sound ю sound я
+  sound а sound о sound ы sound у sound ю sound я sound ё
   sound е sound і sound ӧ sound ӱ sound э
 sound-class;
 
@@ -39,7 +39,7 @@ sound-class;
 
 sound-class long-back-vowel
   sound и
-  sound о
+  sound о sound ё
 sound-class;
 
 sound-class long-front-vowel
@@ -52,7 +52,7 @@ sound-class unchar-vowel
 sound-class;
 
 sound-class back-vowel
-  sound а sound о sound ы sound у sound я sound ю
+  sound а sound о sound ы sound у sound я sound ю sound ё
 sound-class;
 
 sound-class front-vowel
@@ -116,7 +116,7 @@ sound-class k-kh
 sound-class;
 
 sound-class o-yo
-  sound о sound ӧ
+  sound о sound ӧ sound ё
 sound-class;
 
 orthographic-variants-initials е|э
