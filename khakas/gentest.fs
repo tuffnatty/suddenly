@@ -233,6 +233,7 @@ T{ S" хатхыр+0̸+чадыр+бын"	S" хатхырчадырбын"	parse
 T{ S" хат+ым"			S" хатым"		parse-test -> TRUE }T
 T{ S" хах+ы"			S" хағы"		parse-test -> TRUE }T
 T{ S" хол+да+хы+лар"		S" холдағылар"		parse-test -> TRUE }T
+T{ S" хол+ы+нда+хы+лар"		S" холындағылар"	parse-test -> TRUE }T
 T{ S" хомай+зыбыс"		S" хомайзыбыс"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузиим"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузуғым"		parse-test -> TRUE }T

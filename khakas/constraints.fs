@@ -282,13 +282,13 @@ require khakas/slotnames.fs
   flag Gen₁  flag-is?
   ;
 
-\ ₁6.4. Pl₂ может следовать непосредственно за Poss₁ только при
+\ 16.4. Pl₂ может следовать непосредственно за Poss₁ только при
 \ наличии Poss₂: чӱс-паз-ы-лар-ы-ның ікізін ‘двоих из сотников’.
 \ В прочих случаях это не Pl₂, а PredPl: олар хызыбыстар ‘они –
 \ наши дочери’.
 : constraint-16.4  ( -- f )
-  <Poss₁> slot-empty?            ||
-  slots( <Poss₁> <Pl₂> )-empty?  ||
+  <Poss₁> slot-empty?           ||
+  slots( <Poss₁> <Pl₂> )-full?  ||
   <Poss₂> slot-full?
   ;
 
