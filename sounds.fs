@@ -5,9 +5,19 @@ REQUIRE trie.fs
 1 VALUE sound-class-mask
 trie-new CONSTANT sound-trie
 compact-tries-region region-here VALUE sound-compact-trie
+trie-new CONSTANT orthographic-variants-initials-trie
+trie-new CONSTANT orthographic-variants-trie
+0 VALUE orthographic-variants-initials-compact-trie
+0 VALUE orthographic-variants-compact-trie
+
 
 : sounds-compile  ( -- )
-  sound-trie trie-compact TO sound-compact-trie
+  sound-trie                          trie-compact TO sound-compact-trie
+  orthographic-variants-initials-trie trie-compact TO orthographic-variants-initials-compact-trie
+  orthographic-variants-trie          trie-compact TO orthographic-variants-compact-trie
+  \." orthographic-variants-initials-trie: " orthographic-variants-initials-trie .trie
+  \." orthographic-variants-initials-compact-trie: " orthographic-variants-initials-compact-trie .twolevel-trie
+  \." orthographic-variants-compact-trie: "          orthographic-variants-compact-trie          .twolevel-trie
   sound-trie trie-forget ;
 
 : sound-class  ( "name" -- sound-sys )
@@ -55,6 +65,54 @@ compact-tries-region region-here VALUE sound-compact-trie
   sound-class-mask 2* TO sound-class-mask
   ;
 
+
+REQUIRE triere.fs  \ needs sound-each-str to be defined above
+
+: orthographic-variants-initials  ( "pattern" -- )
+  BL PARSE  orthographic-variants-initials-trie twolevel-trie-put ;
+
+: orthographic-variants  ( "pattern" -- )
+  BL PARSE 2bi[  orthographic-variants-trie twolevel-trie-put
+             ][  orthographic-variants-initials-trie twolevel-trie-put ]; ;
+
+DEFER trie-get-with-orthographic-variants-each
+:noname ( addr u trie xt -- )  ( xt: ... trie -- ... )
+  { trie xt }  ( addr u )
+    \stack-mark
+  \\." trie-get-with-orthographic-variants " 2DUP TYPE trie HEX. xt HEX. CR
+  TRUE { initial? }
+  BEGIN ?DUP WHILE
+    \\." at " 2DUP TYPE CR
+    initial? IF
+      orthographic-variants-initials-compact-trie
+    ELSE orthographic-variants-compact-trie THEN  { variants-trie-trie }
+    FALSE TO initial?
+    \\." variants-trie-trie" variants-trie-trie .compact-trie
+    2DUP variants-trie-trie compact-trie-find-prefix-full OVER IF  { variants-compact-trie prefix-length }
+      \\." found " variants-compact-trie .compact-trie prefix-length . ." xt:" xt hex. CR
+      prefix-length /STRING  trie  xt  [: { D: rest trie xt D: prefix -- D: rest trie xt}  ( )
+        \\." HERE:" rest type trie hex. xt hex. prefix type cr
+        prefix trie trie-get  { trie' }
+        rest trie' xt trie-get-with-orthographic-variants-each
+        rest trie xt
+      ;] variants-compact-trie compact-trie-each-prefix  ( D: rest trie xt )
+      2DROP 2DROP EXIT
+    ELSE
+      \\." not found" CR
+      2DROP  ( addr u )
+      OVER 1 trie trie-get TO trie
+      1 /STRING  ( addr' u' )
+    THEN
+  REPEAT DROP
+  \\." done" CR
+  trie xt \stack-check EXECUTE
+; IS trie-get-with-orthographic-variants-each
+
+: trie-put-with-orthographic-variants  ( data addr u trie -- )
+  \." trie-put-with-orthographic-variants " >R >R >R DUP HEX. R> R> 2DUP TYPE R> DUP HEX. .s CR
+  [: ( data trie -- data ) trie-data OVER SWAP ! ;]  trie-get-with-orthographic-variants-each  ( data )
+  DROP
+  ;
 
 TABLE CONSTANT morphonemes-table
 

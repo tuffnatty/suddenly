@@ -84,13 +84,17 @@ trie-new CONSTANT stem-trie
     THEN
   REPEAT DROP R> ;
 
+REQUIRE sounds.fs
+
 : stem-trie-add-key  { D: key dict trie -- }
-  key trie trie-find ?DUP-IF     ( stem )
-    dict SWAP stem-get-for-dict DROP            ( )
+  key trie trie-find ?DUP-IF        ( stem )
+    dict SWAP stem-get-for-dict DROP     ( )
   ELSE
-    \ ." add key " 2DUP TYPE cr
-    dict stem-create-for-dict key trie trie-put
-  THEN ;
+    \ \." add key " key TYPE cr
+    dict stem-create-for-dict      ( stem' )
+    key trie trie-put-with-orthographic-variants  ( )
+  THEN
+  ;
 
 : (dict-check-headword)  ( head len -- head len )
   DUP max-headword > IF TYPE ABORT"  headword too long" THEN ;

@@ -122,6 +122,7 @@ DEFER yield-stem  ( stem -- )
 : check-stem  ( addr u stem -- addr u )
   \\." check-stem " >R 2DUP TYPE R> DUP .stem-single CR
   >R \stack-mark 2DUP paradigm-stem 2! R>
+  DUP stem-dict @  paradigm-dict !
   DUP stem-p-o-s paradigm-p-o-s !
   DUP stem-dict @ dict-stems @  paradigm-stems !
   DUP stem-dict @ dict-flags @  paradigm-dict-flags !

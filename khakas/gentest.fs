@@ -238,6 +238,8 @@ T{ S" хузух+ым"			S" хузиим"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузуғым"		parse-test -> TRUE }T
 T{ S" хулун+ы"			S" хулуны"		parse-test -> TRUE }T
 T{ S" хус+тар"			S" хустар"		parse-test -> TRUE }T
+T{ S" хыйа"			S" хыя"		        parse-test -> TRUE }T
+T{ S" хуйу"			S" хую"		        parse-test -> TRUE }T
 T{ S" хыс+ы+ох"			S" хызох"		parse-test -> FALSE }T
 T{ S" хыс+ох"			S" хызох"		parse-test -> TRUE }T
 T{ S" хыс+тар+ың+ни"		S" хыстарыңни"		parse-test -> TRUE }T

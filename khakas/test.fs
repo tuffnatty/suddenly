@@ -33,8 +33,14 @@ FALSE VALUE expect-headword?
   ;
 : check-result  { stem -- }
   expected-str expected-len { D: pattern }
-  \." check-result:" stem .stem-single ." gloss:" guessed-stem TYPE  formform .dstack  ."  expected pattern:" pattern TYPE CR
-  guessed-stem { dict-str dict-len }
+  \." check-result:" stem .stem-single ." gloss:" guessed-stem TYPE  formform .dstack ."  dict:" paradigm-stems @ .strlist  ."  expected pattern:" pattern TYPE CR
+  guessed-stem paradigm-stems @ strlist-in? IF
+    guessed-stem
+  ELSE
+    paradigm-dict @ dict-headword COUNT
+  THEN
+  \ guessed-stem
+  { dict-str dict-len }
   dict-len expected-len <= IF
     \." len is enough" CR
     pattern  [CHAR] + SCAN  string-addr expected-str - { pattern-stem-len }
@@ -126,6 +132,7 @@ tries-region region-dispose
 
 +record +rest
 utime test-timer D- ." compiling: " D. ." µs" CR  utime TO test-timer
+
 REQUIRE khakas/gentest.fs
 utime test-timer D- ." testing: " D. ." µs" CR
 PROFILE( .TIMES CR )

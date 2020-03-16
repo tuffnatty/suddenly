@@ -119,6 +119,10 @@ sound-class o-yo
   sound о sound ӧ
 sound-class;
 
+orthographic-variants-initials е|э
+orthographic-variants я|йа
+orthographic-variants ю|йу
+
 sounds-compile
 
 REQUIRE ./../phonetics-common.fs

@@ -10,7 +10,7 @@ STRUCT
 END-STRUCT trie%
 
 
-CREATE tries-region  96000 trie% %SIZE *  region-make
+CREATE tries-region  110000 trie% %SIZE *  region-make
 
 
 : trie-new  ( -- trie )
@@ -106,7 +106,7 @@ STRUCT
   CELL%       FIELD compact-trie-data
 END-STRUCT compact-trie%
 
-CREATE compact-tries-region  170000 compact-trie% %SIZE *  region-make
+CREATE compact-tries-region  180000 compact-trie% %SIZE *  region-make
 
 : .compact-trie-raw  ( compact-trie -- )
   DUP HEX.
@@ -127,23 +127,30 @@ CREATE compact-tries-region  170000 compact-trie% %SIZE *  region-make
   ELSE 2DROP 0 THEN ;
 
 : compact-trie-[]child  ( c compact-trie -- subtrie|0 )
-  \\." getting child " over . ." from " dup .compact-trie-raw cr
+  \ \." getting child " over . ." from " dup .compact-trie-raw cr
   compact-trie-[]child-ref ?DUP-IF @ ELSE 0 THEN ;
 
-: (.compact-trie)  { compact-trie prefix-len -- }
+: (compact-trie-each-prefix)  { xt compact-trie prefix-buf prefix-len -- }  ( xt: ... addr u -- ... )
   compact-trie compact-trie-data @ IF
-    PAD prefix-len TYPE ." |"
+    prefix-buf prefix-len xt EXECUTE
   THEN
   compact-trie compact-trie-bounds +DO
     I compact-trie compact-trie-[]child ?DUP-IF  ( subtrie )
-      I  PAD prefix-len + C!
-      prefix-len 1+ RECURSE  ( )
+      I  prefix-buf prefix-len + C!
+      xt SWAP  prefix-buf prefix-len 1+ RECURSE  ( )
     THEN
   LOOP ;
 
+: compact-trie-each-prefix  ( ... xt compact-trie -- )  ( xt: ... addr u -- ... )
+  PAD RP@ RP0 - 10 * +  0  (compact-trie-each-prefix) ;
+
 : .compact-trie  ( compact-trie -- )
-  DUP HEX. ." : "
-  0 (.compact-trie) CR ;
+  ." <CompactTrie " DUP HEX.
+  ?DUP-IF
+    ." data=" DUP compact-trie-data @ HEX.
+    [: TYPE ." |" ;]  SWAP compact-trie-each-prefix
+  THEN
+  ." >" ;
 
 : compact-trie-[]child!  ( x c compact-trie -- )
   compact-trie-[]child-ref ! ;
@@ -158,12 +165,25 @@ CREATE compact-tries-region  170000 compact-trie% %SIZE *  region-make
     THEN
   LOOP ;
 
+: compact-trie-find-prefix-full  ( addr u compact-trie -- data prefix-len|0 )
+  0 { compact-trie prefix-len }  ( addr u )
+  BEGIN ?DUP WHILE
+    \stack-mark
+    \ \." searching " 2dup type ."  in " compact-trie .compact-trie
+    OVER C@ compact-trie compact-trie-[]child ?DUP-0=-IF
+      \stack-check 2DROP  compact-trie compact-trie-data @  prefix-len EXIT
+    ELSE  TO compact-trie  THEN
+    1 /STRING
+    prefix-len 1+ TO prefix-len
+    \stack-check
+  REPEAT DROP  compact-trie compact-trie-data @  prefix-len ;
+
 optimize-compact-tries 0= [IF]
 : compact-trie-find-prefix  ( addr u compact-trie -- data )
   { compact-trie }  ( addr u )
   BEGIN ?DUP WHILE
     \stack-mark
-    \." searching " 2dup type ." in " compact-trie .compact-trie
+    \ \." searching " 2dup type ." in " compact-trie .compact-trie
     OVER C@ compact-trie compact-trie-[]child ?DUP-0=-IF
       \stack-check 2DROP  compact-trie compact-trie-data @  EXIT
     ELSE  TO compact-trie  THEN
@@ -175,8 +195,9 @@ optimize-compact-tries 0= [IF]
   { compact-trie }  ( addr u )
   BEGIN ?DUP WHILE
     \stack-mark
-    \." searching " 2dup type ." in " compact-trie .compact-trie
+    \ \." searching " 2dup type ." in " compact-trie .compact-trie
     OVER C@ compact-trie compact-trie-[]child ?DUP-0=-IF
+      \ \." not found" cr
       \stack-check 2DROP  0 EXIT
     ELSE  TO compact-trie  THEN
     1 /STRING
@@ -255,20 +276,27 @@ end-c-library
 
 : trie-compact  { trie -- compact-trie }
   \stack-mark
-  \\." trie-compact: " trie .trie compact-tries-region .region
+  \ \." trie-compact: " trie .trie compact-tries-region .region
   compact-tries-region region-here @ { compact-trie }
   trie trie-data @  compact-trie compact-trie-data !
   trie compact-trie compact-trie-collect-bounds
   compact-trie compact-trie-bounds  ( end start )
-  \\." bounds" 2dup . . cr
+  \ \." bounds" 2dup . . cr
   2DUP - CELLS  compact-trie% %SIZE  +  compact-tries-region region-allot DROP
   2DUP <> IF
     DO   ( )
       I trie trie-[]child ?DUP-IF  ( subtrie )
-        \\." subtrie " I . ." : " dup .trie
+        \ \." subtrie " I . ." : " dup .trie
         RECURSE  I compact-trie compact-trie-[]child! ( )
       THEN
     LOOP
   ELSE 2DROP THEN
   \stack-check
   compact-trie ;
+
+: .twolevel-trie  ( trie -- )
+  [: ( trie addr u -- trie )
+    { addr u }
+    addr u TYPE ." :" addr u TYPE
+    addr u 2 PICK compact-trie-find-prefix-full DROP .compact-trie SPACE
+  ;] OVER compact-trie-each-prefix CR ;

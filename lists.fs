@@ -80,12 +80,10 @@ END-STRUCT strlist%
   list ;
 
 : strlist-in?  ( addr u list -- f )
-  2DUP strlist-maxlen @ <= IF
-    BEGIN DUP WHILE  { list' }                          ( addr u )
-      list' strlist-get  2OVER STR= IF  2DROP TRUE EXIT  THEN
-      list' list-next @                           ( addr u list' )
-    REPEAT
-  THEN
+  BEGIN DUP WHILE  { list' }                          ( addr u )
+    list' strlist-get  2OVER STR= IF  2DROP TRUE EXIT  THEN
+    list' list-next @                           ( addr u list' )
+  REPEAT
   DROP 2DROP FALSE ;
 
 : strlist-prefix-in?  ( addr u list -- f )

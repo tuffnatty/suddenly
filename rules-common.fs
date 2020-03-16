@@ -176,6 +176,7 @@ TIMER: +polysyllabic?
 : polysyllabic-cs?  ( cs -- f )
   COUNT polysyllabic? ;
 
+VARIABLE paradigm-dict
 VARIABLE paradigm-p-o-s
 VARIABLE paradigm-stems
 2VARIABLE paradigm-stem
