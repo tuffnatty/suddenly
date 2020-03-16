@@ -189,13 +189,31 @@ DEFER yield-stem  ( stem -- )
   left-part  n-rule rule rule-check { harmony-ok? }  2DROP
   harmony-ok? NOT IF
     slot-flag 0= IF
+      PAD left-part string-length { D: buffer }
       left-part last-sound-except-ь-ptr cyr t~/ {voiced} IF
-        PAD left-part string-length { D: buffer }
         left-part string-addr buffer CMOVE
         buffer last-sound-except-ь-ptr cyr  2DUP unvoice-str DROP -ROT CMOVE
+        \." Correcting VU harmony to " buffer TYPE CR
         buffer n-rule rule rule-check TO harmony-ok? 2DROP
         harmony-ok? IF
-          harmony-vu-broken TO slot-flag
+          slot-flag harmony-vu-broken OR TO slot-flag
+        THEN
+      ELSE
+        left-part last-vowel [CHAR] и = IF
+          left-part string-addr buffer CMOVE
+          buffer string-end { ptr }
+          BEGIN ptr buffer string-addr > WHILE
+            ptr XCHAR- TO ptr
+            ptr XC@ [CHAR] и = IF
+              [CHAR] і ptr XC!
+              FALSE
+            ELSE TRUE THEN WHILE
+          REPEAT THEN
+          \." Correcting FB harmony to " buffer TYPE CR
+          buffer n-rule rule rule-check TO harmony-ok? 2DROP
+          harmony-ok? IF
+            slot-flag harmony-fb-broken OR TO slot-flag
+          THEN
         THEN
       THEN
     THEN

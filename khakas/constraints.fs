@@ -595,7 +595,10 @@ require khakas/slotnames.fs
   <Case₂> form-slot-vowel-at-left? ;
 
 : constraint-broken-harmony  ( -- f )
-  harmony-vu-broken any-form-flag-is? NOT  ||
-  dictflag-rus dictflag-is?  &&
-    first-form-flag harmony-vu-broken AND 0<>
+  [: harmony-vu-broken any-form-flag-is? NOT  ||
+     dictflag-rus dictflag-is?  &&
+       first-form-flag harmony-vu-broken AND 0<> ;] EXECUTE &&
+  [: harmony-fb-broken any-form-flag-is? NOT  ||
+     dictflag-rus dictflag-is?  &&
+       first-form-flag harmony-fb-broken AND 0<> ;] EXECUTE
   ;

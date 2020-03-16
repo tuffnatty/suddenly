@@ -109,7 +109,7 @@ DEFER trie-get-with-orthographic-variants-each
 ; IS trie-get-with-orthographic-variants-each
 
 : trie-put-with-orthographic-variants  ( data addr u trie -- )
-  \." trie-put-with-orthographic-variants " >R >R >R DUP HEX. R> R> 2DUP TYPE R> DUP HEX. .s CR
+  \\." trie-put-with-orthographic-variants " >R >R >R DUP HEX. R> R> 2DUP TYPE R> DUP HEX. .s CR
   [: ( data trie -- data ) trie-data OVER SWAP ! ;]  trie-get-with-orthographic-variants-each  ( data )
   DROP
   ;

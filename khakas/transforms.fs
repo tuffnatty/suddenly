@@ -17,19 +17,20 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
-%0000000000001 CONSTANT untransformed-cluster-envoice
-%0000000000010 CONSTANT untransformed-left-envoice
-%0000000000100 CONSTANT untransformed-left-envoice-missing
-%0000000001000 CONSTANT untransformed-fallout
-%0000000010000 CONSTANT untransformed-fallout-CCC
-%0000000100000 CONSTANT untransformed-fallout-VГV
-%0000001000000 CONSTANT untransformed-fallout-VVГV
-%0000010000000 CONSTANT untransformed-fallout-V[кх]V
-%0000100000000 CONSTANT untransformed-fallout-VңV
-%0001000000000 CONSTANT untransformed-fallout-confluence
-%0010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
-%0100000000000 CONSTANT untransformed-fallout-OK
-%1000000000000 CONSTANT harmony-vu-broken
+%00000000000001 CONSTANT untransformed-cluster-envoice
+%00000000000010 CONSTANT untransformed-left-envoice
+%00000000000100 CONSTANT untransformed-left-envoice-missing
+%00000000001000 CONSTANT untransformed-fallout
+%00000000010000 CONSTANT untransformed-fallout-CCC
+%00000000100000 CONSTANT untransformed-fallout-VГV
+%00000001000000 CONSTANT untransformed-fallout-VVГV
+%00000010000000 CONSTANT untransformed-fallout-V[кх]V
+%00000100000000 CONSTANT untransformed-fallout-VңV
+%00001000000000 CONSTANT untransformed-fallout-confluence
+%00010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
+%00100000000000 CONSTANT untransformed-fallout-OK
+%01000000000000 CONSTANT harmony-fb-broken
+%10000000000000 CONSTANT harmony-vu-broken
 
 
 : /[ае]($|[бдркх])/  ( D: s -- f )

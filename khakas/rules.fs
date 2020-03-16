@@ -3,6 +3,16 @@ REQUIRE ./../minire.fs
 REQUIRE ./../strings.fs
 REQUIRE ./phonetics.fs
 
+: last-vowel ( addr u -- u | 0 )
+  OVER >R                      ( addr u -- R: cs )
+  0 -ROT last-sound-ptr BEGIN ( vowel cs-cur  R: cs )
+    DUP XC@ DUP vowel? IF  ( vowel cs-cur cs-cur@ )
+      -ROT NIP 1
+    ELSE DROP XCHAR- DUP R@ <     ( vowel cs-next f )
+    THEN
+  UNTIL
+  DROP RDROP ;
+
 : last-char-vowel ( addr u -- u | 0 )
   OVER >R                      ( addr u -- R: cs )
   0 -ROT last-sound-ptr BEGIN ( vowel cs-cur  R: cs )
