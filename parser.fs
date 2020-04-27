@@ -56,7 +56,7 @@ dstack: formflag
   ]] formform formstack-slot [[ ; IMMEDIATE
 
 : form-slot-xc-at-left  ( n -- xc )
-  1- BEGIN DUP WHILE
+  BEGIN DUP WHILE
     DUP 1- form-slot ?DUP-IF last-sound NIP EXIT THEN
     DROP 1-
   REPEAT
