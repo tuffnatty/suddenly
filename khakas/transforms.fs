@@ -812,7 +812,9 @@ end-public-class Untransformer
   left-part guess-make
   left-part last-sound-ptr cyr { D: last }
   last t~/ {unvoiced} IF
-    untransformed-left-envoice-missing  TO flags
+    last "ч" COMPARE IF
+      untransformed-left-envoice-missing  TO flags
+    THEN
     guess-yield
   ELSE last t~/ {voiced} IF
     guess-yield
