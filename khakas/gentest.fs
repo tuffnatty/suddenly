@@ -5,6 +5,7 @@ T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
 T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
 \ T{ S" азыр+их+чат+хам"		S" азырихчатхам"	parse-test -> TRUE }T
+T{ S" акел+ер+ге"		S" акелерге"		parse-test -> TRUE }T
 T{ S" алкоголик+ке"		S" алкоголикке"		parse-test -> TRUE }T
 T{ S" анда+ох"			S" андох"		parse-test -> TRUE }T
 T{ S" аннаң+ох"			S" аннаңох"		parse-test -> TRUE }T
