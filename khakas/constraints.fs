@@ -40,7 +40,7 @@ require khakas/slotnames.fs
   <Transp> slot-full?                 \ Comit, Affirm
   ;
 
-\ 3. Показатели позиции 2 (NF) и показатель Perf (I)бIС
+\ 3. Показатели позиции 2 (NF) и показатель Perf (Ы)бЫС
 \ (4) в пределах одной словоформы встречаются только в
 \ случае заполнения позиции 2 кумулятивным показателем
 \ NF.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
@@ -71,7 +71,7 @@ require khakas/slotnames.fs
 : constraint-4sh  ( -- f )
   flags( Pres Pres.dial Pres.dial.sh Indir ) flag-is? ;
 
-\ 4.1. NF выбирает алломорф (I)П, если:
+\ 4.1. NF выбирает алломорф (Ы)п, если:
 \ 1) он непосредственно следует за основой, которая оканчивается
 \    на (выпадающие, см. ниже) п, г, ғ или ӊ;
 \ 2) он непосредственно следует за основой или аффиксом,
@@ -265,7 +265,7 @@ require khakas/slotnames.fs
 : constraint-16.1  ( -- f )
   slots[ <Attr> <Case₂> ]-full? ;
 
-\ 16.2. Показатель позиции 13 Attr КI может присутствовать в
+\ 16.2. Показатель позиции 13 Attr КЫ может присутствовать в
 \ словоформе только при наличии Case1. [В такой словоформе могут
 \ также присутствовать морфемы из позиций Pl1 и Poss1.]
 \ Морфонология у показателей поз. 10/14, 11/15, 12/16 одинаковая.
@@ -353,10 +353,10 @@ require khakas/slotnames.fs
 \ Pres.dial.kyz тур, Dur1 ир, Dur₁.dial.kac Ат, Hab ҶАң, Fut Ар,
 \ в качинском также Past в форме ГА (парғабын ‘я шел’);
 \ для смешанных форм: Pres ЧА, Pres.dial ча, Pres.dial.sh
-\ чАр(Ы), Past ГА(н), краткие формы аффиксов Iter А.дI, Pres2
+\ чАр(Ы), Past ГА(н), краткие формы аффиксов Iter А.дЫ, Pres2
 \ чАдЫ, Pres2.dial.kac чады, Pres.dial.kyz ту, Dur1 и, Hab ҶА,
 \ Fut А (+ в диалектах также Ар: килерім ‘я приду’);
-\ для кратких форм: Cond СА, Rpast ТI.
+\ для кратких форм: Cond СА, Rpast ТЫ.
 : constraint-20-full-person  ( -- f )
   nomen? ||
   verb? &&
@@ -385,7 +385,7 @@ require khakas/slotnames.fs
 \ 21. Показатель поз. 20 PredPl может стоять после:
 \ а) пок-ля времени (позиция 8 [за исключением ConvA, ConvP,
 \    Neg.Conv (.Abl), Lim и PresPt чАн, согласно пр.25] + Indir
-\    TIр + Affirm ЧIК + Iter AдIр + Dur1 и(р) + Dur₁.dial.kac Ат),
+\    TЫр + Affirm ЧЫК + Iter AдЫр + Dur1 и(р) + Dur₁.dial.kac Ат),
 \ б) пок-ля падежа (п. 16) или посессивности (п. 15),
 \ в) некоторых полей Person (1pl, Imp.3),
 \ г) чистой именной основы,
@@ -420,19 +420,19 @@ require khakas/slotnames.fs
   ;
 
 \ 25. После деепричастных показателей позиции 8 (Lim ГАли,
-\ Convп (I)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl) может
+\ Convп (Ы)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl) может
 \ стоять только показатель Ass ОК из позиции Ptcl3.
 : constraint-25  ( -- f )
   slots( <Tense/Mood/Conv2> <Ptcl₃> ]-empty?  ||
   flag Ass₃  flag-is?
   ;
 
-\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Pres2 чАдIр,
+\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Pres2 чАдЫр,
 \ Pres2.dial.kac чадыр, Pres.dial.kyz тур, Pres.dial ча,
-\ Pres.dial.sh чАр(Ы), Indir тIр возможны только при наличии
+\ Pres.dial.sh чАр(Ы), Indir тЫр возможны только при наличии
 \ показателей позиции 2 (NF или NF.Neg) или 4 (Perf) или
 \ Prosp АК.
-\ Pres чА, Pres.dial ча, Pres.dial.shor чАр(Ы), Indir тIр
+\ Pres чА, Pres.dial ча, Pres.dial.shor чАр(Ы), Indir тЫр
 \ возможны также при NF.Neg.sh ПААн
 : constraint-26  ( -- f )
   <NF> slot-full?    ||
