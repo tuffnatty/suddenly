@@ -209,6 +209,7 @@ T{ S" тӧзе+едір"		S" тӧзидір"		parse-test -> TRUE }T
 T{ S" тоң+ар"			S" тоор"		parse-test -> TRUE }T
 T{ S" тоң+ған"			S" тоңан"		parse-test -> TRUE }T
 T{ S" тоң+ып"			S" тооп"		parse-test -> TRUE }T
+T{ S" тоос+ып+таа+быс+ты+лар"	S" тоозыптаабыстылар"	parse-test -> TRUE }T
 T{ S" тохта+хла+п+ох+ыс+хан+нар" S" тохтағлабоғысханнар" parse-test -> TRUE }T
 T{ S" тӱк+і"			S" тӱгі"		parse-test -> TRUE }T
 T{ S" тӱлгӱ+ге"			S" тӱлгее"		parse-test -> TRUE }T

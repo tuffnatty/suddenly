@@ -1,6 +1,7 @@
 \ flags in different slots must be distinct!
 flagenum:
   flag: Abl₂
+  flag: Add
   flag: All₁
   flag: Affirm
   flag: Ass₁

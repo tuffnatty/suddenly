@@ -76,7 +76,10 @@ require khakas/slotnames.fs
 \    на (выпадающие, см. ниже) п, г, ғ или ӊ;
 \ 2) он непосредственно следует за основой или аффиксом,
 \    оканчивающимися на гласную;
-\ 3) непосредственно за ним следует Ass ОК или Cont LA.
+\ 3) непосредственно за ним следует Ass ОК или Cont LA
+\    или Add ТАА (см. пример в п. 3).
+\ 4) основа оканчивается на согласную (действует опционально для
+\    качинского диалекта, но проникло и в литературные тексты).
 \ NF выбирает алломорф 0 после основы или аффикса на
 \ невыпадающую согласную, если после него также стоит любой
 \ аффикс, кроме ОК, или конец словоформы. [Таким образом, после
@@ -85,7 +88,8 @@ require khakas/slotnames.fs
 : constraint-4.1ₚ  ( -- f )
   <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND  ||
   <NF> form-slot-vowel-at-left?                                          ||
-  flags( Ass₁ Cont ) flag-is?
+  flags( Add Ass₁ Cont ) flag-is?                                        ||
+  stem-prev-sound-ptr cyr t~/ {vowel} NOT
   ;
 : constraint-4.1₀  ( -- f )
   <NF> form-slot-vowel-at-left? NOT  &&
@@ -351,8 +355,9 @@ require khakas/slotnames.fs
 \ ГАдАГ, Indir ТЫр, Cunc ГАлАК, Neg.Fut ПАс, полные формы
 \ аффиксов Iter А.дЫр, Pres2 чАдЫр, Pres2.dial.kac чадыр,
 \ Pres.dial.kyz тур, Dur1 ир, Dur₁.dial.kac Ат, Hab ҶАң, Fut Ар,
-\ в качинском также Past в форме ГА (парғабын ‘я шел’);
-\ для смешанных форм: Pres ЧА, Pres.dial ча, Pres.dial.sh
+\ в качинском также Past в форме ГА (парғабын ‘я шел’) и Pres чА
+\ (тоғынчабын ‘я работаю’);
+\ для смешанных форм: Pres чА, Pres.dial ча, Pres.dial.sh
 \ чАр(Ы), Past ГА(н), краткие формы аффиксов Iter А.дЫ, Pres2
 \ чАдЫ, Pres2.dial.kac чады, Pres.dial.kyz ту, Dur1 и, Hab ҶА,
 \ Fut А (+ в диалектах также Ар: килерім ‘я приду’);
@@ -365,7 +370,7 @@ require khakas/slotnames.fs
              Iter@full Pres2@full Pres2.dial.kac@full
              Pres.dial.kyz@full Dur1@full Dur₁.dial.kac
              Hab@full Fut@full
-             Past@short ) flag-is?
+             Past@short Pres ) flag-is?
   ;
 : constraint-20-mix-person  ( -- f )
   verb?  &&
