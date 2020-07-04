@@ -264,7 +264,7 @@ T{ S" чӧгіг+і"			S" чӧгии"		parse-test -> TRUE }T
 T{ S" чӧлег+і"			S" чӧлее"		parse-test -> TRUE }T
 T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T
 T{ S" чӧр+ӌең+і"		S" чӧрӌее"		parse-test -> TRUE }T
-T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 2 }T
+T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 3 }T
 T{ S" чӱг+і"			S" чӱгі"		parse-test -> TRUE }T
 T{ S" чӱзӱг+і"			S" чӱзии"		parse-test -> TRUE }T
 T{ S" чӱк+і"			S" чӱгі"		parse-test -> TRUE }T
