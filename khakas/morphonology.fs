@@ -36,5 +36,7 @@ S" ӌч" rule-vu morphoneme Ч
 S" ғг" rule-fb morphoneme G
 S" хк" rule-fb morphoneme Q
 
+morphonemes-compile
+
 S" Г" rule-vu cl-voiced S" G" morphoneme-substitution
 S" К" rule-cv cl-vowel S" Q" morphoneme-substitution

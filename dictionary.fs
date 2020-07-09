@@ -10,17 +10,17 @@ REQUIRE util.fs
   [CHAR] / OVER C! 1+  ( ptr' )
   BL PARSE  ROT  2DUP + >R  SWAP MOVE  PAD R> PAD - REQUIRED ;
 
-32 CELLS  CONSTANT max-headword
-32 CELLS  CONSTANT max-semgloss
+64 CHARS  CONSTANT max-headword
+128 CHARS CONSTANT max-semgloss
 
 STRUCT
-  CELL%      FIELD dict-id
-  CELL%      FIELD dict-p-o-s
-  CELL% 16 * FIELD dict-headword
-  CELL%      FIELD dict-headnum
-  CELL% 16 * FIELD dict-semgloss
-  CELL%      FIELD dict-stems        \ pointer to strlist%
-  CELL%      FIELD dict-flags
+  CELL%                FIELD dict-id
+  CELL%                FIELD dict-p-o-s
+  CELL%                FIELD dict-headnum
+  CELL%                FIELD dict-stems        \ pointer to strlist%
+  CELL%                FIELD dict-flags
+  CHAR% max-headword * FIELD dict-headword
+  CHAR% max-semgloss * FIELD dict-semgloss
 END-STRUCT dict%
 
 DEFER .dictflags  ( dictflags -- )

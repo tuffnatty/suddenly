@@ -40,7 +40,7 @@ END-STRUCT ptrlist%
 
 
 list%
-  CELL% 64 * FIELD strlist-str
+  CHAR% 256 * FIELD strlist-str
 END-STRUCT strlist%
 
 : strlist-get  ( list -- addr u )

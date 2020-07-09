@@ -1,14 +1,14 @@
-language-require morphonology.fs
+language-require morphonology.fs  \ for stem-fugitive
 
 STRUCT
-  CELL% 64 * FIELD warp-text
-  CELL%      FIELD warp-fugitive
-  CELL% 5 *  FIELD warp-seg-len
-  CELL%      FIELD warp-segs#
-  CELL% 64 * FIELD warp-result
-  CELL%      FIELD warp-result-segs#
-  CELL% 64 * FIELD warp-cached-result
-  CELL%      FIELD warp-prev-form-len
+  CHAR% 256 * FIELD warp-text
+  CELL%       FIELD warp-fugitive
+  CHAR% 32 *  FIELD warp-seg-len
+  CELL%       FIELD warp-segs#
+  CHAR% 256 * FIELD warp-result
+  CELL%       FIELD warp-result-segs#
+  CHAR% 256 * FIELD warp-cached-result
+  CELL%       FIELD warp-prev-form-len
 END-STRUCT warp%
 
 : warp-cached-result-seg  ( warp -- addr )

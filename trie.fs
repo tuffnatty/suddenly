@@ -82,7 +82,10 @@ optimize-tries 0= [IF]
   REPEAT DROP  trie trie-data @ ;
 [THEN]
 
-: trie-put  ( mask addr u trie -- )
+: trie-put  ( data addr u trie -- )
+  trie-get trie-data ! ;
+
+: trie-put-mask  ( mask addr u trie -- )
   trie-get trie-data  SWAP OVER @ OR  SWAP ! ;
 
 : (.trie) { trie prefix-len -- }
@@ -91,12 +94,14 @@ optimize-tries 0= [IF]
   THEN
   256 0 DO
     I trie trie-[]child ?DUP-IF  ( subtrie )
+      DUP trie <= ABORT" subtrie less than trie!"
       I  PAD prefix-len + C!
       prefix-len 1+ RECURSE  ( )
     THEN
   LOOP ;
 
 : .trie  ( trie -- )
+  \ DUP HEX. CR DUP 16 DUMP  DUP $D0 CELLS + 16 DUMP CR DROP EXIT
   DUP HEX. ." : "   0 (.trie) CR ;
 
 

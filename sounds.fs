@@ -25,7 +25,7 @@ trie-new CONSTANT orthographic-variants-trie
   TABLE  DUP CONSTANT  GET-CURRENT SWAP SET-CURRENT  LATEST NAME>STRING ;
 
 : sound  ( "letter" -- )
-  PARSE-NAME 2DUP sound-class-mask -ROT sound-trie trie-put OVER XC@ -ROT NEXTNAME VALUE ;
+  PARSE-NAME 2DUP sound-class-mask -ROT sound-trie trie-put-mask OVER XC@ -ROT NEXTNAME VALUE ;
 
 : sound-each  ( wid -- xc )
   ]] WORDLIST-ID @ BEGIN ?DUP-IF [[
@@ -114,16 +114,23 @@ DEFER trie-get-with-orthographic-variants-each
   DROP
   ;
 
-TABLE CONSTANT morphonemes-table
+0 VALUE morphonemes-trie
 
-: morphoneme-choose-variant  ( xt n -- xc )
-  SWAP >BODY SWAP 2 + CELLS + @ ;
+: morphonemes-init  ( -- )
+  trie-new TO morphonemes-trie
+  \ \." ========== ALLOCATED " morphonemes-trie HEX. CR
+  ;
+
+: morphoneme-choose-variant  ( ptr n -- xc )
+  2 + CELLS + @ ;
 
 : morphoneme  ( addr u rule "name" -- )
-  GET-CURRENT morphonemes-table SET-CURRENT  >R
-  CREATE , DUP , BOUNDS BEGIN 2DUP > WHILE XC@+ , REPEAT 2DROP R> SET-CURRENT
-DOES>  ( cs buf -- xc )
-  >R R@ @ EXECUTE R> SWAP morphoneme-choose-variant ;
+  \ \." *** morphoneme : " morphonemes-trie .trie
+  morphonemes-trie 0= IF morphonemes-init THEN
+  HERE  PARSE-NAME  morphonemes-trie  trie-put
+  , DUP , BOUNDS BEGIN 2DUP > WHILE XC@+ , REPEAT 2DROP
+  \ \." *** morphoneme exit : " morphonemes-trie .trie
+  ;
 
 list%
   CELL% FIELD msub-source
@@ -134,27 +141,39 @@ END-STRUCT msublist%  \ Morphoneme substitutions list
 
 0 VALUE msubs
 
-: morphoneme-rule  ( xt -- rule )
-  >BODY @ ;
-\ : morphoneme-rule  ( xt -- rule )
-\   POSTPONE >BODY  POSTPONE @ ; IMMEDIATE
+: morphoneme-rule  ( ptr -- rule )
+  ]] @ [[ ; IMMEDIATE
 
-: morphoneme-size  ( xt -- rule )
-  ]] >BODY CELL+ @ [[ ; IMMEDIATE
+: morphoneme-size  ( ptr -- rule )
+  ]] CELL+ @ [[ ; IMMEDIATE
 
 : morphoneme-width  ( addr u1 -- u2 )
+  \ \." morphoneme-width  ( " 2dup type OVER XC@ DUP . XEMIT
   OVER XC@ DUP [CHAR] ( = IF  ( addr u1 xc )
     DROP 1 /STRING X-SIZE 2 +         ( u2 )
-  ELSE >R 2DROP R> XC-SIZE THEN ;
+  ELSE >R 2DROP R> XC-SIZE THEN
+  \ \."  -- " dup . ." )" cr
+  ;
+
+0 VALUE morphonemes-compact-trie
+
+: morphonemes-compile  ( -- )
+  \ \." ***** morphonemes-compile: " morphonemes-trie .trie
+  morphonemes-trie trie-compact TO morphonemes-compact-trie
+  morphonemes-trie trie-forget ;
 
 : morphoneme-skip  ( addr u -- addr' u')
   2DUP morphoneme-width /STRING ;
 
-: morphoneme-find  ( addr u -- xt true | false )
-  2DUP morphoneme-width NIP morphonemes-table SEARCH-WORDLIST ;
+: morphoneme-find  ( addr u -- ptr true | false )
+  2DUP morphoneme-width NIP morphonemes-compact-trie compact-trie-find DUP IF TRUE THEN ;
 
 : morphoneme-get-internal  ( addr u -- xt )
-  morphoneme-find 0= IF ABORT" no such morphoneme" THEN ;
+  2DUP morphoneme-find 0= IF
+    TYPE ABORT" no such morphoneme"
+  ELSE
+    NIP NIP
+  THEN ;
 
 : morphoneme-substitution  ( D: source  rule  cls  D: target -- )
   msublist% %ALLOT >R
