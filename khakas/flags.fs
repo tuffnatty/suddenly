@@ -42,6 +42,7 @@ flagenum:
   flag: Person.br
   flag: Poss1.nonpl
   flag: Poss2.nonpl
+  flag: Poss2.3pos
   flag: Pres
   flag: Pres.dial
   flag: Pres.dial.kyz@full

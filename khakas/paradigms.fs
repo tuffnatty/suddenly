@@ -40,6 +40,17 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
   ; slot-add
 
+<Voice> slot:  \ 1.5
+  <this> slot-empty!
+  form" -novoice "
+
+  <this> slot-full!
+  form" Pass (Ы)л"
+  form" Refl (Ы)н"
+  form" Rec (Ы)с"
+  form" Caus ТЫр"
+  ; slot-add
+
 <NF> slot:  \ 2
   <this> slot-empty!
   form" -noconv1 "
@@ -141,12 +152,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     right-context( constraint-10 constraint-10.1 )
       form" Neg ПА"
     right-context-end
+  right-context-end
 
-    right-context( constraint-14 )
-      flag-with Iter@full     form" Iter АдЫр"
-      right-context( constraint-14.1 )
-        flag-with Iter@short  form" Iter АдЫ"
-      right-context-end
+  right-context( constraint-14 )
+    flag-with Iter@full     form" Iter АдЫр"
+    right-context( constraint-14.1 )
+      flag-with Iter@short  form" Iter АдЫ"
     right-context-end
   right-context-end
   ; slot-add
@@ -347,11 +358,13 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   flag Poss2.nonpl  flag-set
     form" 1pos.sg (Ы)м"
     form" 2pos.sg (Ы)ң"
-    filters( constraint-OK-fallout-<Poss₂> )
-      form" 3pos (з)Ы"
-    filters-end
-    form" Gen.3pos Ни"
-    form" Gen.3pos.dial Ди"
+    flag Poss2.3pos  flag-set
+      filters( constraint-OK-fallout-<Poss₂> )
+        form" 3pos (з)Ы"
+      filters-end
+      form" Gen.3pos Ни"
+      form" Gen.3pos.dial Ди"
+    flag Poss2.3pos  flag-clear
   flag Poss2.nonpl  flag-clear
   form" 1pos.pl (Ы)бЫс"
   form" 2pos.pl (Ы)ңАр"

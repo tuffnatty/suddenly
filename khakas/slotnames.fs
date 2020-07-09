@@ -6,25 +6,26 @@
   DROP ;
 
 enum:
-  +enum <Distr>  \ 1
-  +enum <NF>  \ 2
-  +enum <Ptcl1>  \ 3
-  +enum <Perf>  \ 4
-  +enum <Prosp,Dur1>  \ 5
-  +enum <Dur>  \ 6
-  +enum <Neg/Iter>  \ 7
-  +enum <Tense/Mood/Conv2>  \ 8
-  +enum <Transp>  \ 9
-  +enum <Pl₁>  \ 10
-  +enum <Poss₁>  \ 11
-  +enum <Case₁>  \ 12
-  +enum <Attr>  \ 13
-  +enum <Pl₂>  \ 14
-  +enum <Poss₂>  \ 15
-  +enum <Case₂>  \ 16
-  +enum <Ptcl₂>  \ 17
-  +enum <Affirm>  \ 18
-  +enum <Person>  \ 19
-  +enum <PredPl>  \ 20
-  +enum <Ptcl₃>  \ 21
+  +enum <Distr>
+  +enum <Voice>
+  +enum <NF>
+  +enum <Ptcl1>
+  +enum <Perf>
+  +enum <Prosp,Dur1>
+  +enum <Dur>
+  +enum <Neg/Iter>
+  +enum <Tense/Mood/Conv2>
+  +enum <Transp>
+  +enum <Pl₁>
+  +enum <Poss₁>
+  +enum <Case₁>
+  +enum <Attr>
+  +enum <Pl₂>
+  +enum <Poss₂>
+  +enum <Case₂>
+  +enum <Ptcl₂>
+  +enum <Affirm>
+  +enum <Person>
+  +enum <PredPl>
+  +enum <Ptcl₃>
 enum;
