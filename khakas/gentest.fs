@@ -4,7 +4,7 @@ T{ S" абылағ+ы"			S" абылаа"		parse-test -> TRUE }T
 T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
 T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
-\ T{ S" азыр+их+чат+хам"		S" азырихчатхам"	parse-test -> TRUE }T
+T{ S" азыра+ах+чат+ха+м"	S" азырихчатхам"	parse-test -> TRUE }T
 T{ S" акел+ер+ге"		S" акелерге"		parse-test -> TRUE }T
 T{ S" алкоголик+ке"		S" алкоголикке"		parse-test -> TRUE }T
 T{ S" анда+ох"			S" андох"		parse-test -> TRUE }T
@@ -87,14 +87,14 @@ T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
 T{ S" пар+ады+м"		S" парадым"		parse-test -> TRUE }T
-\ T{ S" пар+ат+саң"		S" паратсаң"		parse-test -> TRUE }T
+T{ S" пар+ат+са+ң"		S" паратсаң"		parse-test -> TRUE }T
 T{ S" пар+ат+хан"		S" паратхан"		parse-test -> TRUE }T
 T{ S" пар+ах+ча"		S" парахча"		parse-test -> TRUE }T
 T{ S" пар+0̸+ах+ча"		S" парахча"		parse-test -> FALSE }T
 T{ S" пар+ға+бын"		S" парғабын"		parse-test -> TRUE }T
 T{ S" пар+и+ған"		S" париған"		parse-test -> TRUE }T
 T{ S" пар+и+лар"		S" парилар"		parse-test -> TRUE }T
-\ T{ S" пар+ит+чады+п"		S" паритчадып"		parse-test -> TRUE }T
+T{ S" пар+ит+чат+ып"		S" паритчадып"		parse-test -> TRUE }T
 T{ S" пар+0̸+даа+ча"		S" пардаача"		parse-test -> TRUE }T
 T{ S" пар+0̸+ла+ча"		S" парлача"		parse-test -> TRUE }T
 T{ S" пар+за+ох"		S" парзох"		parse-test -> TRUE }T
