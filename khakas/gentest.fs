@@ -47,6 +47,8 @@ T{ S" кил+0̸+чады+м"		S" килчадым"		parse-test -> TRUE }T
 T{ S" кил+0̸+чадыр+бын"		S" килчадырбын"		parse-test -> TRUE }T
 T{ S" кил+0̸+чен"		S" килчен"		parse-test -> TRUE }T
 T{ S" киме+ге"			S" кимее"		parse-test -> TRUE }T
+T{ S" кип-азах+ы"		S" кип-азаа"		parse-test -> TRUE }T
+T{ S" кип-азах+ым"		S" кип-азаам"		parse-test -> TRUE }T
 T{ S" кис+0̸+чет+кен"		S" кисчеткен"		parse-test -> TRUE }T
 T{ S" кис+0̸+чет+ер+ге"		S" кисчедерге"		parse-test -> TRUE }T
 T{ S" кізі+ге"			S" кізее"		parse-test -> TRUE }T

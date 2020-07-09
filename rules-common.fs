@@ -171,7 +171,7 @@ TIMER: +polysyllabic?
       cnt IF 2DROP TRUE +record EXIT THEN
       1 TO cnt
     THEN
-    cyr+
+    XCHAR+
   REPEAT 2DROP FALSE +record ;
 : polysyllabic-cs?  ( cs -- f )
   COUNT polysyllabic? ;
