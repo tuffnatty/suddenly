@@ -338,7 +338,7 @@ require khakas/slotnames.fs
   nomen?
   ;
 : constraint-18-right  ( -- f )
-  slots( <Transp> <Ptcl₃> )-full? ;
+  slots( <Transp> <Ptcl₃> )-empty? ;
 
 \ 19. Показатели поз. <Person> с пометой Imp могут быть
 \ только у слов, имеющих помету Verbum; они следуют
