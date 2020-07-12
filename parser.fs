@@ -185,7 +185,7 @@ DEFER yield-stem  ( stem -- )
   ELSE DROP TRUE THEN ;
 
 :+ after-fallout-pair  { D: left-part  D: affix  slot-flag rule n-rule -- }
-  \." " indent rule if ." Pair " left-part TYPE ." +" affix TYPE ." harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
+  \." " indent rule if ." Pair " left-part TYPE ." +" affix TYPE ."  harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
   left-part  n-rule rule rule-check { harmony-ok? }  2DROP
   harmony-ok? NOT IF
     slot-flag 0= IF
