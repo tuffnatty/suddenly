@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth-fast -m22M
+#! /usr/local/bin/gforth -m10M
 
 : language-path  ( -- addr u )
   1 ARG ;
@@ -73,14 +73,26 @@ REQUIRE parser.fs
   socket CLOSE-SOCKET
   ;
 
-require lib.fs
-libc fork (int) fork
-libc signal int int (int) signal
-17 CONSTANT SIGCHLD  \ Linux!
-1 CONSTANT SIG_IGN   \ Linux!
+c-library forklib
+\c #include <stdio.h>
+\c #include <unistd.h>
+\c int do_fork(void) {
+\c   fflush(stdout);
+\c   fflush(stderr);
+\c   return fork();
+\c }
+\c #include <signal.h>
+\c int init_reaper(void) {
+\c   signal(SIGCHLD, SIG_IGN);
+\c   return 0;
+\c }
+c-function fork do_fork -- n
+c-function init-reaper init_reaper -- n
+end-c-library
+
 
 : main
-  SIGCHLD SIG_IGN signal
+  init-reaper DROP
   BEGIN
     server @  100 LISTEN
     TRY
