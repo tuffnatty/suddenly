@@ -90,17 +90,14 @@ CREATE filters filter% 64 * %ALLOT
   \."  flags:      " paradigm-flags flags. cr
   \."  filters:    "
   filters-top-ptr BEGIN DUP filters >= WHILE  { filter }
-    \stack-mark
     \." " filter filter-nt @ .ID  filter filter-negated @ if ."  [negated]" then
-    filter filter-xt @ EXECUTE                ( stem f )
+    filter filter-xt @ checked-execute(0-1)   ( stem f )
     filter filter-negated @ NOT IF NOT THEN       ( f' )
     IF                                               ( )
       \." FAILED" cr
-      \stack-check
       FALSE EXIT
     THEN                                             ( )
     \." OK, "
-    \stack-check
     filter filter% %size -
     \ \." stem is now " over .stem-single cr
   REPEAT DROP TRUE

@@ -7,11 +7,10 @@ REQUIRE strings.fs
 0 VALUE n-slots
 
 :noname
-  \stack-mark \\." slot-prolog " depth-stack-depth . .s cr
+  \\." slot-prolog " depth-stack-depth . .s cr
   ; IS (slot-prolog)
 
 :noname
-  \stack-check
   ; IS (slot-epilog)
 
 \ Buffers for delimited form names and affixes
@@ -120,22 +119,23 @@ DEFER yield-stem  ( stem -- )
   1 n-forms +! ; IS yield-stem
 
 : check-stem  ( addr u stem -- addr u )
-  \\." check-stem " >R 2DUP TYPE R> DUP .stem-single CR
-  >R \stack-mark 2DUP paradigm-stem 2! R>
-  DUP stem-dict @  paradigm-dict !
-  DUP stem-p-o-s paradigm-p-o-s !
-  DUP stem-dict @ dict-stems @  paradigm-stems !
-  DUP stem-dict @ dict-flags @  paradigm-dict-flags !
+  \." check-stem " >R 2DUP TYPE SPACE R> .s DUP .stem-single CR
+  { stem }  ( addr u )
+  \stack-mark
+  2DUP paradigm-stem 2!
+  stem stem-dict @  paradigm-dict !
+  stem stem-p-o-s paradigm-p-o-s !
+  stem stem-dict @ dict-stems @  paradigm-stems !
+  stem stem-dict @ dict-flags @  paradigm-dict-flags !
   \." " CR
   indecl? IF
     slot-all-empty? IF
-      yield-stem  ( addr u )
+      stem yield-stem
     ELSE
-      \." indeclinate stem but there are affixes: " DUP .stem-single CR
-      DROP  ( addr u )
+      \." indeclinate stem but there are affixes: " stem .stem-single CR
     THEN
   ELSE
-    filters-check IF
+    stem filters-check IF  ( stem )
       \\." yielding" CR
       yield-stem  ( addr u )
     ELSE DROP THEN  ( addr u )
@@ -248,16 +248,20 @@ DEFER yield-stem  ( stem -- )
   affix  formform >dstack
   get-untransformer  top-untransformer >O
 
-  2DUP  affix  rule  n-rule  ['] after-fallout-pair  configure
+  TRY
+    2DUP  affix  rule  n-rule  ['] after-fallout-pair  configure
 
-  unfallout
+    unfallout
 
-  DUP  affix string-length > IF
-    \\." " indent ." Unchanged guess: " 2DUP TYPE .s CR
-    unjoin
-    \\." " indent ." After after-fallout: " .s CR
+    DUP  affix string-length > IF
+      \\." " indent ." Unchanged guess: " 2DUP TYPE .s CR
+      unjoin
+      \\." " indent ." After after-fallout: " .s CR
+    THEN
+
+  ENDTRY-IFERROR
+    O> dispose-untransformer THROW
   THEN
-
   O> dispose-untransformer
   formform dstack>
 
@@ -319,5 +323,15 @@ TIMER: +form-epilog
   slot-stack /slot-stack slot-stack-set
   /slot-stack TO n-slots
   slot-stack-reverse
+  0 paradigm-slot-bitmap !
+  0 n-filters !
+  flag-none paradigm-flags!
+  formform dstack-clear
+  formname dstack-clear
+  formform-morphonemic dstack-clear
+  formflag dstack-clear
+  0 TO untransformer-stack-depth
+
   parse-form
+
   debug-bye ;

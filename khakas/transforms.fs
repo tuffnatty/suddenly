@@ -326,9 +326,11 @@ end-public-class Untransformer
   s string-length affix-len - { affix-pos }
   s string-addr  affix-pos + { fallout-start }
 
+  fallout-start C@  good-xchar-start? &&  \ malformed UTF-8
+
   \ if u >= affix.len and affix ~= /[гғ]V/, e.g. суу = су+ға
   affix-pos 0>= IF
-    fallout-start affix-len  S" -" SEARCH NIP NIP IF FALSE EXIT THEN
+    fallout-start affix-len  S" -" SEARCH NIP NIP 0= &&
 
     affix t~/ г{vowel}|ғ{vowel} IF
       \ (end of form - affix.len (c|уу), 1cyr)

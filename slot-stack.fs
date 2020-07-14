@@ -16,7 +16,7 @@ CREATE slot-stack 0 , 32 CELLS ALLOT
   0 slot-stack ! ;
 
 : slot-stack-set  ( slot-stack slot-stack-len -- )
-  SWAP slot-stack CELL+ ROT 1+ CELLS CMOVE ;
+  slot-stack-reset SWAP slot-stack CELL+ ROT 1+ CELLS CMOVE ;
 
 : slot-stack-reverse  ( -- )
   slot-stack CELL+ DUP BEGIN

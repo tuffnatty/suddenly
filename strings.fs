@@ -12,6 +12,9 @@ CREATE utf8-size-table
   C@ utf8-size-table + C@ ;
 : XCHAR+ DUP @xc-size + ;
 
+: good-xchar-start?  ( c -- f )
+  ]] DUP $80 U> IF $C2 U>= THEN [[ ; IMMEDIATE
+
 [UNDEFINED] XC!+? [IF]
 -77 Constant UTF-8-err
 128 CONSTANT max-single-byte
@@ -23,6 +26,7 @@ CREATE utf8-size-table
 : x-size ( u8-addr u -- u1 )
     \ length of UTF-8 char starting at u8-addr (accesses only u8-addr)
     drop @xc-size ;
+
 : XC@+ ( u8addr -- u8addr' u )
     count  dup max-single-byte u< ?EXIT  \ special case ASCII
     dup $C2 u< IF  UTF-8-err throw  THEN  \ malformed character

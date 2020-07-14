@@ -78,38 +78,37 @@ REQUIRE triere.fs  \ needs sound-each-str to be defined above
 DEFER trie-get-with-orthographic-variants-each
 :noname ( addr u trie xt -- )  ( xt: ... trie -- ... )
   { trie xt }  ( addr u )
-    \stack-mark
-  \\." trie-get-with-orthographic-variants " 2DUP TYPE trie HEX. xt HEX. CR
+  \ \." trie-get-with-orthographic-variants " 2DUP TYPE trie HEX. xt HEX. CR
   TRUE { initial? }
   BEGIN ?DUP WHILE
-    \\." at " 2DUP TYPE CR
+    \ \." at " 2DUP TYPE CR
     initial? IF
       orthographic-variants-initials-compact-trie
     ELSE orthographic-variants-compact-trie THEN  { variants-trie-trie }
     FALSE TO initial?
-    \\." variants-trie-trie" variants-trie-trie .compact-trie
+    \ \." variants-trie-trie" variants-trie-trie .compact-trie
     2DUP variants-trie-trie compact-trie-find-prefix-full OVER IF  { variants-compact-trie prefix-length }
-      \\." found " variants-compact-trie .compact-trie prefix-length . ." xt:" xt hex. CR
+      \ \." found " variants-compact-trie .compact-trie prefix-length . ." xt:" xt hex. CR
       prefix-length /STRING  trie  xt  [: { D: rest trie xt D: prefix -- D: rest trie xt}  ( )
-        \\." HERE:" rest type trie hex. xt hex. prefix type cr
+        \ \." HERE:" rest type trie hex. xt hex. prefix type cr
         prefix trie trie-get  { trie' }
         rest trie' xt trie-get-with-orthographic-variants-each
         rest trie xt
       ;] variants-compact-trie compact-trie-each-prefix  ( D: rest trie xt )
       2DROP 2DROP EXIT
     ELSE
-      \\." not found" CR
+      \ \." not found" CR
       2DROP  ( addr u )
       OVER 1 trie trie-get TO trie
       1 /STRING  ( addr' u' )
     THEN
   REPEAT DROP
-  \\." done" CR
-  trie xt \stack-check EXECUTE
+  \ \." done" CR
+  trie xt EXECUTE
 ; IS trie-get-with-orthographic-variants-each
 
 : trie-put-with-orthographic-variants  ( data addr u trie -- )
-  \\." trie-put-with-orthographic-variants " >R >R >R DUP HEX. R> R> 2DUP TYPE R> DUP HEX. .s CR
+  \ \." trie-put-with-orthographic-variants " >R >R >R DUP HEX. R> R> 2DUP TYPE R> DUP HEX. .s CR
   [: ( data trie -- data ) trie-data OVER SWAP ! ;]  trie-get-with-orthographic-variants-each  ( data )
   DROP
   ;

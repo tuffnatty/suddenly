@@ -173,40 +173,34 @@ CREATE compact-tries-region  180000 compact-trie% %SIZE *  region-make
 : compact-trie-find-prefix-full  ( addr u compact-trie -- data prefix-len|0 )
   0 { compact-trie prefix-len }  ( addr u )
   BEGIN ?DUP WHILE
-    \stack-mark
     \ \." searching " 2dup type ."  in " compact-trie .compact-trie
     OVER C@ compact-trie compact-trie-[]child ?DUP-0=-IF
-      \stack-check 2DROP  compact-trie compact-trie-data @  prefix-len EXIT
+      2DROP  compact-trie compact-trie-data @  prefix-len EXIT
     ELSE  TO compact-trie  THEN
     1 /STRING
     prefix-len 1+ TO prefix-len
-    \stack-check
   REPEAT DROP  compact-trie compact-trie-data @  prefix-len ;
 
 optimize-compact-tries 0= [IF]
 : compact-trie-find-prefix  ( addr u compact-trie -- data )
   { compact-trie }  ( addr u )
   BEGIN ?DUP WHILE
-    \stack-mark
     \ \." searching " 2dup type ." in " compact-trie .compact-trie
     OVER C@ compact-trie compact-trie-[]child ?DUP-0=-IF
-      \stack-check 2DROP  compact-trie compact-trie-data @  EXIT
+      2DROP  compact-trie compact-trie-data @  EXIT
     ELSE  TO compact-trie  THEN
     1 /STRING
-    \stack-check
   REPEAT DROP  compact-trie compact-trie-data @ ;
 
 : compact-trie-find  ( addr u compact-trie -- data )
   { compact-trie }  ( addr u )
   BEGIN ?DUP WHILE
-    \stack-mark
     \ \." searching " 2dup type ." in " compact-trie .compact-trie
     OVER C@ compact-trie compact-trie-[]child ?DUP-0=-IF
       \ \." not found" cr
-      \stack-check 2DROP  0 EXIT
+      2DROP  0 EXIT
     ELSE  TO compact-trie  THEN
     1 /STRING
-    \stack-check
   REPEAT DROP  compact-trie compact-trie-data @ ;
 
 [ELSE]
@@ -280,9 +274,9 @@ end-c-library
 [THEN]
 
 : trie-compact  { trie -- compact-trie }
-  \stack-mark
   \ \." trie-compact: " trie .trie compact-tries-region .region
   compact-tries-region region-here @ { compact-trie }
+  \stack-mark
   trie trie-data @  compact-trie compact-trie-data !
   trie compact-trie compact-trie-collect-bounds
   compact-trie compact-trie-bounds  ( end start )

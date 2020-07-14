@@ -5,8 +5,11 @@ object CLASS
   VALUE: dstack-depth
 END-CLASS DStack
 
+: dstack-clear  ( dstack -- )
+  >O -1 TO dstack-depth O> ;
+
 : dstack:
-  [: DStack new ;] STATIC-A WITH-ALLOCATER DUP CONSTANT >O -1 TO dstack-depth O> ;
+  [: DStack new ;] STATIC-A WITH-ALLOCATER DUP CONSTANT dstack-clear ;
 
 : dstack-nth-ptr  ( n -- addr )
   2 CELLS ]]L * dstack-data + [[ ; IMMEDIATE

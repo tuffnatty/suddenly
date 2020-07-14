@@ -17,25 +17,30 @@ CREATE depth-stack depth-stack-limit CELLS ALLOT
 0 VALUE depth-stack-depth
 : depth-stack@ ( -- u )
   depth-stack depth-stack-depth CELLS + @ ;
-: depth-stack-push  ( -- )
+: depth-stack-push  ( n  -- )
   depth-stack-depth depth-stack-limit = ABORT" DEPTH STACK OVERFLOW!"
-  DEPTH depth-stack depth-stack-depth CELLS + !
+  DUP 0< ABORT" PUSHING NEGATIVE DEPTH"
+  depth-stack depth-stack-depth CELLS + !  ( )
   depth-stack-depth 1+ TO depth-stack-depth ;
+: depth-stack-drop  ( -- )
+  depth-stack-depth 1- TO depth-stack-depth ;
 : depth-stack-check ( -- f )
-  depth-stack-depth 1- TO depth-stack-depth
-  depth-stack-depth 0< ABORT" DEPTH STACK OVERFLOW!"
+  depth-stack-drop
+  depth-stack-depth 0< ABORT" DEPTH STACK UNDERFLOW!"
   \ depth-stack-depth 0 DO BL EMIT LOOP ." \stack-check" CR
   DEPTH depth-stack@ <> IF
     ." UNEXPECTED STACK DEPTH CHANGE! (" DEPTH . ." instead of " depth-stack@ . ." )"
+    ~~bt
     TRUE
   ELSE FALSE THEN ;
 
 : debug-init
-  utime timer 2! ;
+  utime timer 2!
+  0 n-forms ! ;
 
 DEFER debug-bye
 :noname
-  n-forms @ . ."  wordforms generated in " utime timer 2@ D- D. ." μs." cr
+  n-forms @ . ."  hypotheses generated in " utime timer 2@ D- D. ." μs." cr
   \ trans-timer 2@ D. ." μs in transform." cr
   ; IS debug-bye
 
@@ -54,10 +59,15 @@ DEFER debug-bye
 : \\." debug-mode? 1 > IF POSTPONE ." ELSE POSTPONE \ THEN ; IMMEDIATE
 
 : \stack-mark  ( -- )
-  debug-mode? IF  ]] depth-stack-push                [[  THEN ; IMMEDIATE
+  debug-mode? IF  ]] DEPTH depth-stack-push                TRY [[  THEN ; IMMEDIATE
 
 : \stack-check  ( -- )
-  debug-mode? IF  ]] depth-stack-check IF WTF?? THEN [[  THEN ; IMMEDIATE
+  debug-mode? IF  ]] ENDTRY-IFERROR depth-stack-drop THROW THEN depth-stack-check IF WTF?? THEN [[  THEN ; IMMEDIATE
+
+: checked-execute(0-1)  ( xt -- u )
+  debug-mode? IF
+    ]] >R DEPTH 1+ depth-stack-push R> TRY EXECUTE \stack-check [[
+  ELSE ]] EXECUTE [[ THEN ; IMMEDIATE
 
 variable last-timer
 CREATE timer-stack 256 CELLS ALLOT

@@ -1,5 +1,6 @@
 CREATE input-word 0 C, 255 ALLOT
 : fix-percent ( addr len )
+  0 input-word C!
   0 ?DO
     DUP I + C@
     DUP [CHAR] % = IF
@@ -16,6 +17,7 @@ VARIABLE parse-mode
 REQUIRE debugging.fs
 
 : parse-args  ( ptr len -- )
+  \stack-mark
   2DUP S" debug=" SEARCH IF  ( ptr len value n-rest )
     6 /STRING 2>R $0. 2R> >NUMBER 2DROP D>S TO debug-mode? ( ptr len )
   ELSE 2DROP THEN ( ptr len )
@@ -25,12 +27,13 @@ REQUIRE debugging.fs
   \     FPATH ALSO-PATH ( ptr len )
   \   ELSE 2DROP 2DROP THEN
   \ ELSE 2DROP THEN ( ptr len )
-  2DUP S" parse=" SEARCH IF
+  2DUP S" parse=" SEARCH IF  ( ptr len value n-rest )
     TRUE parse-mode !
-    6 /STRING fix-percent input-word ." Parsing: " COUNT TYPE CR CR
+    6 /STRING fix-percent 2DROP input-word ." Parsing: " COUNT TYPE CR CR
   ELSE
     2DROP S" generate=" SEARCH IF
-      9 /STRING fix-percent input-word ." Paradigm for: " COUNT TYPE CR CR
+      9 /STRING fix-percent 2DROP input-word ." Paradigm for: " COUNT TYPE CR CR
     ELSE ." arguments?" CR BYE THEN
   THEN
+  \stack-check
 ;
