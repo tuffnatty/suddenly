@@ -331,6 +331,7 @@ end-public-class Untransformer
   \ if u >= affix.len and affix ~= /[гғ]V/, e.g. суу = су+ға
   affix-pos 0>= IF
     fallout-start affix-len  S" -" SEARCH NIP NIP 0= &&
+    fallout-start affix-len  S" _" SEARCH NIP NIP 0= &&
 
     affix t~/ г{vowel}|ғ{vowel} IF
       \ (end of form - affix.len (c|уу), 1cyr)
