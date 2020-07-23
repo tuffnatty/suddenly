@@ -37,3 +37,15 @@ REQUIRE debugging.fs
   THEN
   \stack-check
 ;
+
+REQUIRE unix/libc.fs
+CREATE pid-string 16 ALLOT
+0 VALUE pid-string-len
+: .pid  ( -- )
+  pid-string pid-string-len TYPE ;
+: new-pid  ( -- )
+  (getpid) TO getpid
+  '(' pid-string C!  1 TO pid-string-len
+  [: getpid . SPACE ;] [: ( addr u ) pid-string pid-string-len +  OVER +TO pid-string-len  SWAP MOVE ;] with-type
+  ')' pid-string pid-string-len 1- 1- + C! ;
+new-pid

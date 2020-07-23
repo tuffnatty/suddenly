@@ -37,10 +37,18 @@ VARIABLE my-emit-buf-len
 ACTION-OF TYPE CONSTANT orig-type
 ACTION-OF EMIT CONSTANT orig-emit
 ACTION-OF XEMIT CONSTANT orig-xemit
-: my-type
-  2DUP STDERR WRITE-FILE THROW
+: with-stderr  ( xt -- )
+  ['] stderr-type with-type ;
+TRUE VALUE nettype-linestart
+: stderr-nettype  ( addr u -- )
+  nettype-linestart >R DUP IF 2DUP + 1- C@ 10 = TO nettype-linestart THEN R> [:
+   IF .pid ." => " THEN TYPE
+  ;] with-stderr ;
+
+: my-type  ( addr u -- )
+  2DUP stderr-nettype
   socket WRITE-SOCKET ;
-: my-emit
+: my-emit  ( c -- )
   my-emit-buf DUP >R C! R> 1 my-type ;
 : my-xemit  ( u -- )
   dup max-single-byte u< IF  my-emit  EXIT  THEN \ special case ASCII
@@ -75,22 +83,23 @@ REQUIRE parser.fs
   TRY
     BEGIN  req req-size socket READ-LINE  THROW  DROP  ?DUP WHILE ( size )
       req OVER  S" GET /?"  STRING-PREFIX? IF
-        req OVER STDERR WRITE-LINE THROW
+        req OVER  [: .pid TYPE CR ;] with-stderr
         req 6 +  SWAP 6 - parse-query
       ELSE DROP THEN
     REPEAT
-    s\" HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n" socket WRITE-SOCKET
-
     query query-len parse-args
 
     ['] my-emit IS EMIT
     ['] my-type IS TYPE
     ['] my-xemit IS XEMIT
+
+    s\" HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n" TYPE
+
     parse-mode @ IF
       input-word parse-khak
     THEN
   ENDTRY-IFERROR
-    ." ERROR " . bt
+    [: .pid ." ERROR " . dobacktrace ;] with-stderr
   THEN
   socket CLOSE-SOCKET  0 TO socket
   orig-emit IS EMIT
@@ -112,9 +121,9 @@ c-library forklib
 \c   if (child) {
 \c     children[n_children++] = child;
 \c   } else {
-\c     fprintf(stderr, "forked, in child from C\n"); fflush(stderr);
+\ c     fprintf(stderr, "forked, in child from C\n"); fflush(stderr);
 \c     signal(SIGINT, SIG_DFL);
-\c     fprintf(stderr, "forked, in child from C after signal\n"); fflush(stderr);
+\ c     fprintf(stderr, "forked, in child from C after signal\n"); fflush(stderr);
 \c   }
 \c   return child;
 \c }
@@ -166,18 +175,14 @@ c-library forklib
 c-function fork do_fork -- n
 c-function init-reaper init_reaper -- n
 c-function pause pause -- n
+c-variable n-children n_children
 end-c-library
 
 
-: main
-  init-reaper DROP
-  server @  100 LISTEN
-  fork IF fork IF fork IF fork IF
-    "4 workers preforked" STDERR WRITE-LINE THROW  STDERR FLUSH-FILE THROW
-    BEGIN pause DROP AGAIN
-  THEN THEN THEN THEN
+: worker  ( -- )
   BEGIN
     \stack-mark
+    [: .pid ." accepting" CR ;] with-stderr
     TRY
       server @  ACCEPT-SOCKET TRUE
     ENDTRY-IFERROR
@@ -188,10 +193,22 @@ end-c-library
       \ fork IF CLOSE-SOCKET ELSE
         \ server @  CLOSE-SOCKET ." rrrr"
         TO socket
-        serve \ BYE
+        serve  \ BYE
       \ THEN
     THEN
     \stack-check
+  AGAIN ;
+
+: main
+  init-reaper DROP
+  server @  100 LISTEN
+  BEGIN
+    BEGIN n-children @ 4 < WHILE
+      fork ?DUP-IF
+        [: .pid ." process forked: " DUP . CR ;] with-stderr  ( pid|0 )
+      ELSE new-pid worker BYE THEN
+    REPEAT
+    PAUSE DROP
   AGAIN ;
 
 main

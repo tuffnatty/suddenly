@@ -1,4 +1,4 @@
-REQUIRE ./../minire.fs
+REQUIRE minire.fs
 REQUIRE ./phonetics.fs
 REQUIRE util.fs
 REQUIRE warp.fs

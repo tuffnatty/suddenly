@@ -1,6 +1,6 @@
-REQUIRE ./../debugging.fs
-REQUIRE ./../minire.fs
-REQUIRE ./../strings.fs
+REQUIRE debugging.fs
+REQUIRE minire.fs
+REQUIRE strings.fs
 REQUIRE ./phonetics.fs
 
 : last-vowel ( addr u -- u | 0 )

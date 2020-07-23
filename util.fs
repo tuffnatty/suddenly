@@ -203,3 +203,12 @@ DEFER xemit
     CELL - SWAP CELL+ SWAP          ( a1' a2' )
   REPEAT 2DROP ;
 
+CREATE emit-buffer 1 ALLOT
+: with-type  ( xt type-xt -- )
+  ACTION-OF TYPE  ACTION-OF EMIT  2>R
+    IS TYPE
+    [: emit-buffer C! emit-buffer 1 TYPE ;] IS EMIT
+    EXECUTE
+  2R>  IS EMIT  IS TYPE ;
+: stderr-type  ( addr u -- )
+  STDERR WRITE-FILE THROW  STDERR FLUSH-FILE THROW ;

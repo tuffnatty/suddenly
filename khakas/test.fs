@@ -1,6 +1,6 @@
 #! /usr/local/bin/gforth -m22M
 
-INCLUDE ../util.fs
+INCLUDE util.fs
 
 utime 2VALUE test-timer
 
