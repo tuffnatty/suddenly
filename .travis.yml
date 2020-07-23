@@ -7,4 +7,4 @@ before_script:
   # - sudo apt-get install gforth || true
   # - git clone https://git.savannah.gnu.org/git/gforth.git
   # - (cd gforth && ./install-deps.sh && ./autogen.sh && ./configure --enable-lib && make && sudo make install)
-script: GFORTHPATH=/usr/local/lib/gforth/0.7.9_20161123:/usr/local/share/gforth/0.7.9_20161123:.:.. gforth -m12M khakas/test.fs
+script: GFORTHPATH=/usr/lib/gforth/0.7.9_20161123:/usr/share/gforth/0.7.9_20161123:.:.. gforth -m12M khakas/test.fs
