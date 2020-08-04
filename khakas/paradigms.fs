@@ -125,7 +125,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
 
   right-context( constraint-6-right )
-    filters( constraint-6 )
+    filters( constraint-6 constraint-VA>и-fallout )
       form" Prosp.dial АК"
     filters-end
   right-context-end
@@ -155,10 +155,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
 
   right-context( constraint-14 )
-    flag-with Iter@full     form" Iter АдЫр"
-    right-context( constraint-14.1 )
-      flag-with Iter@short  form" Iter АдЫ"
-    right-context-end
+    filters( constraint-VA>и-fallout )
+      flag-with Iter@full     form" Iter АдЫр"
+      right-context( constraint-14.1 )
+        flag-with Iter@short  form" Iter АдЫ"
+      right-context-end
+    filters-end
   right-context-end
   ; slot-add
 
@@ -203,10 +205,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       ( flag-with Past@full )  form" Past ГАн"
     right-context-end
 
-    right-context( constraint-9.3 )
-      flag-with Fut@short  form" Fut А"
-    right-context-end
-    flag-with Fut@full     form" Fut Ар"
+    filters( constraint-VA>и-fallout )
+      right-context( constraint-9.3 )
+        flag-with Fut@short  form" Fut А"
+      right-context-end
+      flag-with Fut@full     form" Fut Ар"
+    filters-end
 
     flag Neg7  flag-set
       form" Neg.Fut ПАс"
@@ -248,8 +252,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       flag Neg7  flag-clear
 
       form" Convₚ (Ы)п"
-      form" Conv.pas.dial АбАс"
-      form" Conv.a А"
+      filters( constraint-VA>и-fallout )
+        form" Conv.pas.dial АбАс"
+        form" Conv.a А"
+      filters-end
     flag Conv2  flag-clear
   right-context-end
 

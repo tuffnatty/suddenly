@@ -17,20 +17,21 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
-%00000000000001 CONSTANT untransformed-cluster-envoice
-%00000000000010 CONSTANT untransformed-left-envoice
-%00000000000100 CONSTANT untransformed-left-envoice-missing
-%00000000001000 CONSTANT untransformed-fallout
-%00000000010000 CONSTANT untransformed-fallout-CCC
-%00000000100000 CONSTANT untransformed-fallout-VГV
-%00000001000000 CONSTANT untransformed-fallout-VVГV
-%00000010000000 CONSTANT untransformed-fallout-V[кх]V
-%00000100000000 CONSTANT untransformed-fallout-VңV
-%00001000000000 CONSTANT untransformed-fallout-confluence
-%00010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
-%00100000000000 CONSTANT untransformed-fallout-OK
-%01000000000000 CONSTANT harmony-fb-broken
-%10000000000000 CONSTANT harmony-vu-broken
+%000000000000001 CONSTANT untransformed-cluster-envoice
+%000000000000010 CONSTANT untransformed-left-envoice
+%000000000000100 CONSTANT untransformed-left-envoice-missing
+%000000000001000 CONSTANT untransformed-fallout
+%000000000010000 CONSTANT untransformed-fallout-CCC
+%000000000100000 CONSTANT untransformed-fallout-VГV
+%000000001000000 CONSTANT untransformed-fallout-VVГV
+%000000010000000 CONSTANT untransformed-fallout-V[кх]V
+%000000100000000 CONSTANT untransformed-fallout-VңV
+%000001000000000 CONSTANT untransformed-fallout-confluence
+%000010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
+%000100000000000 CONSTANT untransformed-fallout-OK
+%001000000000000 CONSTANT untransformed-fallout-VA>и
+%010000000000000 CONSTANT harmony-fb-broken
+%100000000000000 CONSTANT harmony-vu-broken
 
 
 : /[ае]($|[бдркх])/  ( D: s -- f )
@@ -624,10 +625,12 @@ end-public-class Untransformer
   \stack-mark
   affix /[ае]($|[бдркх])/ IF
     fallout-rslice t~/ и IF
+      untransformed-fallout-VA>и TO flags
       wordform-row back-vowel = IF "а" ELSE "е" THEN  { D: V2 }
       wordform-row sound-each-str { D: V1 }
         V1 V2 unfallout-add-vv
       sound-next
+      untransformed-fallout TO flags
     THEN
   THEN
   \stack-check

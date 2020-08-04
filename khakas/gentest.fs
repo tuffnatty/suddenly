@@ -76,6 +76,7 @@ T{ S" мында+ох"			S" мындох"		parse-test DROP expected-found -> 1 }
 T{ S" ник+тер+ім+ді"		S" никтерімді"		parse-test -> TRUE }T
 T{ S" ниң+ӧк"			S" ниик"		parse-test -> FALSE }T
 T{ S" нуғ+ар"			S" нуур"		parse-test -> TRUE }T
+T{ S" ойна+а+быс"		S" ойнаабыс"		parse-test -> FALSE }T
 T{ S" олар+дың"			S" олардың"		parse-test -> TRUE }T
 T{ S" ол+ох"			S" олох"		parse-test -> TRUE }T
 T{ S" ӧң+і"			S" ӧӧ"			parse-test -> TRUE }T

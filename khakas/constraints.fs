@@ -611,3 +611,16 @@ require khakas/slotnames.fs
      dictflag-rus dictflag-is?  &&
        first-form-flag harmony-fb-broken AND 0<> ;] EXECUTE
   ;
+
+: constraint-VA>и-fallout-with-slot  { n-slot -- f }
+  n-slot form-slot-vowel-at-left? NOT  ||
+  n-slot form-slot-flags untransformed-fallout-VA>и AND ;
+: constraint-VA>и-fallout-<Tense/Mood/Conv2>  <Tense/Mood/Conv2> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Neg/Iter>          <Neg/Iter> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Prosp,Dur1>        <Prosp,Dur1> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout  ( -- f )
+  <Tense/Mood/Conv2> => constraint-VA>и-fallout-<Tense/Mood/Conv2>
+  <Neg/Iter>         => constraint-VA>и-fallout-<Neg/Iter>
+  <Prosp,Dur1>       => constraint-VA>и-fallout-<Prosp,Dur1>
+  TRUE ABORT" Invalid slot for constraint-VA>и-fallout
+  ; IMMEDIATE
