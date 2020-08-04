@@ -470,7 +470,9 @@ require khakas/slotnames.fs
   ; IMMEDIATE
 
 \ 29. Предикативные показатели (Person, PredPl) невозможны в
-\ сочетании с падежами: Gen2, Acc2, Instr2.
+\ сочетании с падежами: Gen2, Acc2, Instr2, Dat (а также их
+\ диалектными вариантами Gen2.dial, Acc.dial, Instr.dial,
+\ Dat.dial).
 : constraint-29  ( -- f )
   slots[ <Person> <PredPl> ]-empty? ;
 

@@ -389,10 +389,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
 
   filters( constraint-17-<Case₂> )
-    right-context( constraint-OK-fallout-<Case₂> )
-      form" Dat ГА"
-    right-context-end
     right-context( constraint-29 )
+      right-context( constraint-OK-fallout-<Case₂> )
+        form" Dat ГА"
+      right-context-end
       form" Acc НЫ"
       form" Acc.dial ТЫ"
       form" Instr.dial ПАң"
@@ -411,11 +411,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Abl₂ тЫн"
     filters-end
   filter-else
-    right-context( constraint-OK-fallout-<Case₂> )
-      form" Dat (н)А"
-      form" Dat.dial (н)ГА"
-    right-context-end
     right-context( constraint-29 )
+      right-context( constraint-OK-fallout-<Case₂> )
+        form" Dat (н)А"
+        form" Dat.dial (н)ГА"
+      right-context-end
       filters( constraint-V+Acc )
         form" Acc₂ Н"
         form" Acc.dial₂ Т"
