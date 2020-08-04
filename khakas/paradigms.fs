@@ -297,18 +297,20 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -noposs1 "
 
-  right-context( constraint-16.1 constraint-16.5 constraint-27 )
-    <this> slot-full!
+  right-context( constraint-16.1 constraint-27 )
+    filters( constraint-16.5 )
+      <this> slot-full!
 
-    flag Poss1.nonpl  flag-set
-      form" 1pos.sg₁ (Ы)м"
-      form" 2pos.sg₁ (Ы)ң"
-      filters( constraint-OK-fallout-<Poss₁> )
-        form" 3pos₁ (з)Ы"
-      filters-end
-    flag Poss1.nonpl  flag-clear
-    form" 1pos.pl₁ (Ы)бЫс"
-    form" 2pos.pl₁ (Ы)ңАр"
+      flag Poss1.nonpl  flag-set
+        form" 1pos.sg₁ (Ы)м"
+        form" 2pos.sg₁ (Ы)ң"
+        filters( constraint-OK-fallout-<Poss₁> )
+          form" 3pos₁ (з)Ы"
+        filters-end
+      flag Poss1.nonpl  flag-clear
+      form" 1pos.pl₁ (Ы)бЫс"
+      form" 2pos.pl₁ (Ы)ңАр"
+    filters-end
   right-context-end
   ; slot-add
 

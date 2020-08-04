@@ -308,11 +308,12 @@ require khakas/slotnames.fs
   [: slots( <Poss₁> <Case₂> )-full? ||
      <Case₂> slot-empty? ;] EXECUTE &&
   [: slots( <Poss₁> <Poss₂> )-full? ||
-     <Poss₂> slot-empty? ||
-     flag Poss2.3pos flag-is? ;] EXECUTE ;
-: constraint-16.5  ( -- f)
-  <Pl₁> => constraint-16.5-<Pl₁>
-  <Poss₁> => constraint-16.5-<Poss₁>
+     <Poss₂> slot-empty?            ||
+     <Poss₁> form-slot string-length  cyr >  ||
+     <Poss₁> form-slot t~/ {vowel} NOT  ;] EXECUTE ;
+: constraint-16.5  ( -- f )
+  <Pl₁> => constraint-16.5-<Pl₁>      \ right-context
+  <Poss₁> => constraint-16.5-<Poss₁>  \ can't work as right-context
   TRUE ABORT" Invalid slot for constraint-16.5!"
   ; IMMEDIATE
 
