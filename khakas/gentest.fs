@@ -121,6 +121,7 @@ T{ S" пас+са+ңар"		S" пассаар"		parse-test -> TRUE }T
 T{ S" пас+ты+ңар"		S" пастар"		parse-test -> TRUE }T
 T{ S" пас+ты+ңар"		S" пастаар"		parse-test -> TRUE }T
 T{ S" пасты+ңар"		S" пастар"		parse-test -> FALSE }T
+T{ S" піл+бин+чат+хан"		S" пілбинчатхан"	parse-test -> TRUE }T
 T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T
 T{ S" піс+тің+нер"		S" пістіңнер"		parse-test -> TRUE }T
 T{ S" пир+бе+дек"		S" пирбедек"		parse-test -> TRUE }T
@@ -205,6 +206,7 @@ T{ S" теп+ібіс"			S" теебіс"		parse-test -> TRUE }T
 T{ S" ті+ген"			S" теен"		parse-test -> TRUE }T
 T{ S" ті+ер"			S" тир"			parse-test -> TRUE }T
 T{ S" тік+ер"			S" тігер"		parse-test -> TRUE }T
+T{ S" тіле+п+чат"		S" тілепчат"		parse-test -> TRUE }T
 T{ S" ті+п+чен"			S" тіпчен"		parse-test -> TRUE }T
 T{ S" тоғыс+ы+наңар"		S" тоғызынаңар"		parse-test -> TRUE }T
 T{ S" тӧзе+е"			S" тӧзи"		parse-test -> TRUE }T

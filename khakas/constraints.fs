@@ -53,15 +53,16 @@ require khakas/slotnames.fs
 
 \ 4. Показатели позиции 2 (NF) могут встретиться только в
 \ словоформе, где есть один или несколько из показателей: 1)
-\ позиции 3 (Ptcl1), 2) Dur чАТ, 3) Perf (Ы)бЫс, Perf0 (Ы)c,
+\ позиции 3 (Ptcl1), 2) позиции 6 <Dur> Dur чАТ, Dur.dial чаТ,
+\ 3) Perf (Ы)бЫс, Perf0 (Ы)c,
 \ 4) Pres2 чАдЫр, чады(р) 5) Pres (чА, ча, чАр(Ы), ту(р)),
 \ 6) Indir ТЫр, 7) PresPt чАн - или на конце словоформы.
 \ Показатель NF.Neg.sh ПААн допустим при сочетании с Pres ЧА,
 \ чА, чАр(Ы) и Indir ТЫр.
 : constraint-4  ( -- f )
   <Ptcl1> slot-full?             ||
-  flags( Dur
-         Perf Perf0
+  <Dur> slot-full?               ||
+  flags( Perf Perf0
          Pres2 Pres2.dial.kac
          Pres Pres.dial Pres.dial.kyz Pres.dial.sh
          Indir
