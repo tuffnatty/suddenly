@@ -26,7 +26,6 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
              constraint-non-envoiceable-stem
              constraint-non-envoiced-rus
              constraint-V[кх]V-fallout
-             constraint-VГV-fallout
              constraint-VVГV-fallout
              constraint-CCC-fallout
              constraint-broken-harmony )

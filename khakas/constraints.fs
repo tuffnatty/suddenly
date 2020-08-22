@@ -545,7 +545,7 @@ require khakas/slotnames.fs
   first-form-flag untransformed-fallout-VГV untransformed-fallout-VңV OR AND  ||
   slot-all-empty?                                                             ||
   stem-polysyllabic? NOT                                                      ||
-  stem-last-sound-ptr cyr t~/ {gh-g-ng} NOT                                   ||
+  TRUE ||
   stem-prev-sound-ptr cyr t~/ {vowel} NOT                                     ||
   stem-prev-sound-ptr cyr t~/ {short-vowel} NOT                               ||
   stem-prev-sound-ptr vowel-long-middle?                                      ||

@@ -1,6 +1,6 @@
 T{ S" аал+да+хы+лар"		S" аалдағылар"		parse-test -> TRUE }T
 T{ S" абылағ+ы"			S" абылаа"		parse-test -> TRUE }T
-\ искл? T{ S" ағ+ы"		S" аа"			parse-test -> FALSE }T
+T{ S" ағ+ы"			S" аа"			parse-test -> TRUE }T  \ #147
 T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
 T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
@@ -67,7 +67,7 @@ T{ S" кӱн+і+нке"		S" кӱнінке"		parse-test -> FALSE }T
 T{ S" мағаа+ох"			S" мағааох"		parse-test -> TRUE }T
 T{ S" маң+ы"			S" маа"			parse-test -> TRUE }T
 T{ S" марығ+ы"			S" марии"		parse-test -> TRUE }T
-T{ S" марығ+ы"			S" марығы"		parse-test -> FALSE }T
+T{ S" марығ+ы"			S" марығы"		parse-test -> TRUE }T  \ #147
 T{ S" марығ+ды"			S" марығды"		parse-test -> TRUE }T
 T{ S" меню+ға"			S" менюға"		parse-test -> TRUE }T
 T{ S" меню+ге"			S" менюге"		parse-test -> FALSE }T
