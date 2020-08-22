@@ -413,11 +413,17 @@ require khakas/slotnames.fs
   ;
 
 \ 22. Показатель Perm присоединяется только к императивным
-\ показателям из поз. <Person>, к отрицанию ПА или к чистой
-\ основе слов категории Verbum (имеющей значение Imp.2sg).
+\ показателям из поз. <Person>, к отрицанию ПА, Dist (К)лА,
+\ залоговым показателям (Pass, Rec, Refl, Caus), Perf (Ы)бЫс,
+\ Dur чАт, чат или к чистой основе слов категории Verbum
+\ (имеющей значение Imp.2sg).
 : constraint-22  ( -- f )
   slots( <Person> <Ptcl₃> )-empty?  flag Imp  flag-is?  AND    ||
   slots( <Neg/Iter> <Ptcl₃> )-empty?  flag Neg  flag-is?  AND  ||
+  slots( <Distr> <Ptcl₃> )-empty?  <Distr> slot-full?  AND  ||
+  slots( <Voice> <Ptcl₃> )-empty?  <Voice> slot-full?  AND  ||
+  slots( <Perf> <Ptcl₃> )-empty?  flag Perf  flag-is?  AND  ||
+  slots( <Dur> <Ptcl₃> )-empty?      <Dur> slot-full?  AND  ||
   slots[ 1 <Ptcl₃> )-empty?  verb?  AND
   ;
 

@@ -115,6 +115,7 @@ T{ S" пар+0̸+чары"		S" парчары"		parse-test -> TRUE }T
 T{ S" пар+0̸+чары"		S" парчары"		parse-test DROP expected-found -> 1 }T
 T{ S" пар+0̸+чары+м"		S" парчарым"		parse-test -> TRUE }T
 T{ S" пар+0̸+чат+пас"            S" парчатпас"		parse-test -> TRUE }T
+T{ S" пар+ыбыс+тах"		S" парыбыстах"		parse-test -> TRUE }T  \ #144
 T{ S" пар+ыбыс+ча"		S" парыбысча"		parse-test -> TRUE }T
 T{ S" пар+ып+ох+чат+тыр"	S" парыбохчаттыр"	parse-test -> TRUE }T
 T{ S" пас+па+за+ңар"		S" паспазар"		parse-test -> TRUE }T
