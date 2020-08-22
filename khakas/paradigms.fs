@@ -230,6 +230,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters( constraint-26 )
       form" PresPt.dial чАн"
     filters-end
+
+    form" Opt ГАй"
   flag participles  flag-clear
 
   right-context( constraint-12 )
@@ -239,8 +241,6 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-13 )
     form" Cond СА"
   right-context-end
-
-  form" Opt ГАй"
 
   right-context( constraint-25 )
     form" Lim ГАли"
