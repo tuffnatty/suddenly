@@ -431,10 +431,10 @@ require khakas/slotnames.fs
 
 \ 23. Пок-тель Foc может встретиться: а) в словоформах с
 \ пометой Nomen; б) в глаголах, у которых есть временные
-\ показатели Past ГАн и Hab ЧАӊ.
+\ показатели Past ГАн, Fut А(р) и Hab ЧАӊ.
 : constraint-23  ( -- f )
   nomen?  ||
-  flags( Past Hab ) flag-is?
+  flags( Past Fut Hab ) flag-is?
   ;
 
 \ 25. После деепричастных показателей позиции <Tense/Mood> (Lim ГАли,
