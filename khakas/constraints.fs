@@ -101,11 +101,12 @@ require khakas/slotnames.fs
   flag Ass₁  flag-empty? ;
 
 \ 5. Показатели поз. 3 (внутренние частицы) допускаются только
-\ при заполненной позиции <Tense/Mood> или при обычном дуративе
-\ (Dur чАт). Примеров с Dur1 не попадалось.
+\ при: а) заполненной позиции <Tense/Mood>, б) при обычном
+\ дуративе (Dur чАт), в) при Iter АдЫ(р) (чіплеізеді ‘всё время
+\ съедает’). Примеров с Dur1 не попадалось.
 : constraint-5  ( -- f )
-  <Tense/Mood/Conv2> slot-full?  ||
-  flag Dur  flag-is?
+  <Tense/Mood/Conv2> slot-full?
+  || flags( Dur Iter )  flag-is?
   ;
 
 \ 5.1. Показатель Perf0 Ыс возможен [пока встретился] только
