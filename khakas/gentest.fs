@@ -234,6 +234,7 @@ T{ S" тура+да+хы+лар+ы"		S" турадағылары"	parse-test -> 
 T{ S" тура+ох"			S" турох"		parse-test -> TRUE }T
 T{ S" тус+ы"			S" тузы"		parse-test -> TRUE }T
 T{ S" тут+ар+ға"		S" тударға"		parse-test -> TRUE }T
+T{ S" тың+ып+ла+ыс+хан"		S" тыыплаысхан"		parse-test -> TRUE }T
 T{ S" ӱг+ер"			S" ӱӱр"			parse-test -> TRUE }T
 T{ S" ӱг+іп"			S" ӱӱп"			parse-test -> TRUE }T
 T{ S" узу+аң"			S" узааң"		parse-test -> TRUE }T

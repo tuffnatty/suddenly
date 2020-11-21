@@ -99,7 +99,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
 
   filters( constraint-5.1 )
-    form" Perf0 (Ы)с"
+    form" Perf0 Ыс"
   filters-end
   ; slot-add
 
