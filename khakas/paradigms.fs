@@ -137,8 +137,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-full!
   filters( constraint-26 )
     form" Dur чАт"
+    form" Dur.dial чат"
   filters-end
-  form" Dur.dial чат"
   ; slot-add
 
 <Neg/Iter> slot:  \ 7

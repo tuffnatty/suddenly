@@ -58,7 +58,7 @@ require khakas/slotnames.fs
 \ 4) Pres2 чАдЫр, чады(р) 5) Pres (чА, ча, чАр(Ы), ту(р)),
 \ 6) Indir ТЫр, 7) PresPt чАн - или на конце словоформы.
 \ Показатель NF.Neg.sh ПААн допустим при сочетании с Pres ЧА,
-\ чА, чАр(Ы) и Indir ТЫр.
+\ чА, чАр(Ы), Dur чАТ, Dur.dial чаТ и Indir ТЫр.
 : constraint-4  ( -- f )
   <Ptcl1> slot-full?             ||
   <Dur> slot-full?               ||
@@ -70,6 +70,7 @@ require khakas/slotnames.fs
   slots( <NF> <Ptcl₃> ]-empty?
   ;
 : constraint-4sh  ( -- f )
+  <Dur> slot-full?               ||
   flags( Pres Pres.dial Pres.dial.sh Indir ) flag-is? ;
 
 \ 4.1. NF выбирает алломорф (Ы)п, если:
@@ -443,17 +444,18 @@ require khakas/slotnames.fs
   flag Ass₃  flag-is?
   ;
 
-\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Pres2 чАдЫр,
-\ Pres2.dial.kac чадыр, Pres.dial.kyz тур, Pres.dial ча,
-\ Pres.dial.sh чАр(Ы), Indir тЫр возможны только при наличии
-\ показателей позиции <NF> (NF или NF.Neg) или <Perf> (Perf)
-\ или Prosp АК.
+\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Dur.dial чаТ,
+\ Pres2 чАдЫр, Pres2.dial.kac чадыр, Pres.dial.kyz тур,
+\ Pres.dial ча, Pres.dial.sh чАр(Ы), Indir тЫр возможны только
+\ при наличии показателей позиции <NF> (NF или NF.Neg) или
+\ <Perf> (Perf) или Prosp АК.
 \ Pres чА, Pres.dial ча, Pres.dial.shor чАр(Ы), Indir тЫр
 \ возможны также при NF.Neg.sh ПААн
 : constraint-26  ( -- f )
   <NF> slot-full?    ||
   <Perf> slot-full?  ||
-  flag Prosp.dial  flag-is? ;
+  flag Prosp.dial  flag-is?
+  ;
 : constraint-26+paan  ( -- f )
   <NF> slot-full?    ||
   <Perf> slot-full?  ||

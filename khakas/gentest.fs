@@ -186,6 +186,7 @@ T{ S" соғ+ы"			S" соғы"		parse-test -> TRUE }T
 T{ S" сӧле+ебес"		S" сӧлибес"		parse-test -> TRUE }T
 T{ S" стол+зар+тын"		S" столзартын"		parse-test -> TRUE }T
 T{ S" стол+ы+нзар+тын"		S" столынзартын"	parse-test -> TRUE }T
+T{ S" сых+паан+чат+хан"		S" сыхпаанчатхан"	parse-test -> TRUE }T
 T{ S" суғ+ға"			S" суға"		parse-test -> TRUE }T
 T{ S" суғ+ға+ох"		S" суғаох"		parse-test -> TRUE }T
 T{ S" суғ+ы"			S" суу"			parse-test -> TRUE }T
