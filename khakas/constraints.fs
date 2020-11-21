@@ -109,9 +109,11 @@ require khakas/slotnames.fs
   ;
 
 \ 5.1. Показатель Perf0 Ыс возможен [пока встретился] только
-\ при наличии Ptcl1.
+\ при наличии Ptcl1, а также при диалектном показателе
+\ NF.Neg.sh ПААн.
 : constraint-5.1  ( -- f )
-  <Ptcl1> slot-full?
+  <Ptcl1> slot-full?  ||
+  flag NF.Neg.sh  flag-is?
   ;
 
 \ 6. Показатель Prosp АК встречается только перед
