@@ -281,6 +281,7 @@ T{ S" чиң+ер"			S" чиңер"		parse-test -> TRUE }T
 T{ S" чиң+іп"			S" чиип"		parse-test -> TRUE }T
 T{ S" чілің+і"			S" чілии"		parse-test -> TRUE }T
 T{ S" чоохта+ды+ңар"            S" чоохтадар"           parse-test -> TRUE }T
+T{ S" чоохта+ған+ох+пын"	S" чоохтаанохпын"       parse-test -> TRUE }T
 T{ S" чӧгіг+і"			S" чӧгии"		parse-test -> TRUE }T
 T{ S" чӧлег+і"			S" чӧлее"		parse-test -> TRUE }T
 T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T

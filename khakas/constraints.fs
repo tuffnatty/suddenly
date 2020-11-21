@@ -362,8 +362,10 @@ require khakas/slotnames.fs
 \ ГАдАГ, Indir ТЫр, Cunc ГАлАК, Neg.Fut ПАс, полные формы
 \ аффиксов Iter А.дЫр, Pres2 чАдЫр, Pres2.dial.kac чадыр,
 \ Pres.dial.kyz тур, Dur1 ир, Dur₁.dial.kac Ат, Hab ҶАң, Fut Ар,
-\ в качинском также Past в форме ГА (парғабын ‘я шел’) и Pres чА
-\ (тоғынчабын ‘я работаю’);
+\ в качинском также Pres чА (тоғынчабын ‘я работаю’) и Past в
+\ форме ГА непосредственно перед окончанием (парғабын ‘я шел’)
+\ и в форме ГАн, если между ними стоит Ptcl2 (чоохтаанохпын ‘я
+\ тоже говорил’);
 \ для смешанных форм: Pres чА, Pres.dial ча, Pres.dial.sh
 \ чАр(Ы), Past ГА(н), краткие формы аффиксов Iter А.дЫ, Pres2
 \ чАдЫ, Pres2.dial.kac чады, Pres.dial.kyz ту, Dur1 и, Hab ҶА,
@@ -377,7 +379,7 @@ require khakas/slotnames.fs
              Iter@full Pres2@full Pres2.dial.kac@full
              Pres.dial.kyz@full Dur1@full Dur₁.dial.kac
              Hab@full Fut@full
-             Past@short Pres ) flag-is?
+             Past Pres ) flag-is?
   ;
 : constraint-20-mix-person  ( -- f )
   verb?  &&
