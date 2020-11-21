@@ -387,6 +387,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" Gen НЫң"
     form" Gen.dial ТЫң"
     form" Instr нАң"
+    form" Instr.dial мАң"
+    form" Instr.dial мнаң"
+    form" Instr.dial ПЫнАң"
   right-context-end
 
   filters( constraint-17-<Case₂> )
@@ -397,7 +400,6 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Acc НЫ"
       form" Acc.dial ТЫ"
       form" Instr.dial ПАң"
-      form" Instr.dial мАң"
       form" Instr.dial ПлАң"
     right-context-end
     form" Loc ТА"
@@ -424,8 +426,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" Acc₁ НЫ"
         form" Acc.dial₁ ТЫ"
       filters-end
-      form" Instr.dial₁ (н)мАң"
-      form" Instr.dial₂ (н)млАң"
+      form" Instr.dial (н)мАң"
+      form" Instr.dial (н)млАң"
+      form" Instr.dial бАң"
     right-context-end
     form" Loc (н)ТА"
     form" Abl нАң"

@@ -22,6 +22,8 @@ T{ S" грузчик+тер"		S" грузчиктер"		parse-test -> TRUE }T
 T{ S" заочно+ға"		S" заочнаа"	        parse-test -> TRUE }T
 T{ S" заочно+ға"		S" заочноға"	        parse-test -> TRUE }T
 T{ S" завод+тар"		S" заводтар"		parse-test -> TRUE }T
+T{ S" иней+лер+і+мең"		S" инейлерімең"		parse-test -> TRUE }T
+T{ S" ит+і+бең"			S" идібең"		parse-test -> TRUE }T
 T{ S" ирін+і"			S" ирні"		parse-test -> TRUE }T
 T{ S" изерге"	headword?	S" искен"		parse-test -> TRUE }T
 T{ S" истерге"	headword?	S" искен"		parse-test -> TRUE }T
@@ -60,6 +62,7 @@ T{ S" кіртӧң+ге+ӧк"		S" кіртӧңӧк"		parse-test -> FALSE }T
 T{ S" комиссия+ға"		S" комиссияа"           parse-test -> TRUE }T
 T{ S" кӧг+і"			S" кӧӧ"			parse-test -> TRUE }T
 T{ S" кӧзӧ+ге"			S" кӧзӧге"		parse-test -> TRUE }T
+T{ S" кӧр+беен+дее+бін"		S" кӧрбеендеебін"	parse-test -> TRUE }T
 T{ S" курс+ы"			S" курзы"		parse-test -> TRUE }T
 T{ S" курс+ы"			S" курсы"		parse-test -> TRUE }T
 T{ S" кӱн+і+нге"		S" кӱнінге"		parse-test -> TRUE }T
@@ -88,6 +91,7 @@ T{ S" пағ+ы"			S" паа"			parse-test -> TRUE }T
 T{ S" пала+баң"			S" палабаң"		parse-test -> TRUE }T
 T{ S" пала+блаң"		S" палаблаң"		parse-test -> TRUE }T
 T{ S" пала+маң"			S" паламаң"		parse-test -> TRUE }T
+T{ S" палты+мнаң"		S" палтымнаң"		parse-test -> TRUE }T
 T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
@@ -251,6 +255,7 @@ T{ S" хах+ы"			S" хағы"		parse-test -> TRUE }T
 T{ S" хол+да+хы+лар"		S" холдағылар"		parse-test -> TRUE }T
 T{ S" хол+ы+нда+хы+лар"		S" холындағылар"	parse-test -> TRUE }T
 T{ S" хомай+зыбыс"		S" хомайзыбыс"		parse-test -> TRUE }T
+T{ S" худай+бынаң"		S" худайбынаң"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузиим"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузуғым"		parse-test -> TRUE }T
 T{ S" хулун+ы"			S" хулуны"		parse-test -> TRUE }T
