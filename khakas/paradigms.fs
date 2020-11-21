@@ -409,6 +409,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" All.dial СА"
     form" Prol ЧА"
     form" Delib ДАңАр"
+    form" Delib.dial ДАңАрЫ"
     form" Comp ТАГ"
     filters( constraint-30 )
       form" Abl₂ тЫн"
