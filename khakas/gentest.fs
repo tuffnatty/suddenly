@@ -96,6 +96,8 @@ T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
 T{ S" пар+ады+м"		S" парадым"		parse-test -> TRUE }T
+T{ S" пар+адыр+а"		S" парадыра"		parse-test -> TRUE }T
+T{ S" пар+адыр+ып"		S" парадырып"		parse-test -> TRUE }T
 T{ S" пар+ат+са+ң"		S" паратсаң"		parse-test -> TRUE }T
 T{ S" пар+ат+хан"		S" паратхан"		parse-test -> TRUE }T
 T{ S" пар+ах+ча"		S" парахча"		parse-test -> TRUE }T

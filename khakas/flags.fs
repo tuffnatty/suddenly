@@ -10,6 +10,7 @@ flagenum:
   flag: Assum
   flag: Cond
   flag: Cont
+  flag: Conv.a
   flag: Convₚ
   flag: Conv2
   flag: Cunc

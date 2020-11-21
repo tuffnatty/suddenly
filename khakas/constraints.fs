@@ -248,10 +248,11 @@ require khakas/slotnames.fs
     flag Person.br  flag-is?
   ;
 
-\ 14. Непосредственно после Iter возможны только: Past
-\ ГА(н), Person, PredPl, Ptcl3 или конец словоформы.
+\ 14. Непосредственно после Iter возможны только: конец
+\ словоформы [(обрабатывается правилом 27),] Past ГА(н),
+\ ConvA, ConvП, Person, PredPl или Ptcl3.
 : constraint-14  ( -- f )
-  flag Past  flag-is?  ||
+  flags( Past Convₚ Conv.a ) flag-is?  ||
   slots( <Neg/Iter> <Person> )-empty?
   ;
 
