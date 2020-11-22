@@ -60,6 +60,14 @@ CREATE filters filter% 64 * %ALLOT
 : filters-end  ( compile: filters-sys -- )
   NEGATE ]]L n-filters +! [[ ; IMMEDIATE
 
+debug-mode? [IF]
+
+  ' filters( ALIAS right-context( IMMEDIATE
+  ' filter-else ALIAS right-context-else
+  ' filters-end ALIAS right-context-end IMMEDIATE
+
+[ELSE]
+
 : right-context(  ( <name>... -- rhc-sys )
   DEPTH 0 { depth0 count }
   BEGIN
@@ -79,6 +87,9 @@ CREATE filters filter% 64 * %ALLOT
   >R ]] ELSE [[ R> ; IMMEDIATE
 : right-context-end  ( rhc-sys -- )
   0 DO ]] THEN [[ LOOP ; IMMEDIATE
+
+[THEN]
+
 
 : filters-check  ( stem -- stem f )
   \." hypothesis:  " DUP .stem-single
