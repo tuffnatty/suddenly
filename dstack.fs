@@ -27,8 +27,22 @@ END-CLASS DStack
 : dstack-pick  ( n dstack -- d )
   >O dstack-depth SWAP - DUP 0>= IF dstack-nth-ptr 2@ ELSE DROP $0. THEN O> ;
 
-: .dstack  ( dstack -- )
-  >O dstack-depth 1+ BEGIN DUP WHILE
-    DUP 1- dstack-nth-ptr 2@ TYPE
+: .circled  ( n -- )
+  DUP 35 > IF 12941 + XEMIT ELSE
+  DUP 20 > IF 12861 + XEMIT ELSE
+  DUP  0 > IF  9311 + XEMIT ELSE
+  DROP 9450 XEMIT THEN THEN THEN ;
+
+: (.dstack)  ( dstack enumerate -- )
+  { enumerate }  >O dstack-depth 1+ BEGIN DUP WHILE
+    DUP 1- dstack-nth-ptr 2@  ( content )
+    enumerate IF DUP IF dstack-depth 1+ 3 PICK 1- - .circled THEN THEN
+    TYPE ( )
     [CHAR] -  EMIT
   1- REPEAT DROP O> ;
+
+: .dstack  ( dstack -- )
+  FALSE (.dstack) ;
+
+: .dstack-enum  ( dstack -- )
+  TRUE (.dstack) ;

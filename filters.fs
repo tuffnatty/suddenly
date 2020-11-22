@@ -82,10 +82,10 @@ CREATE filters filter% 64 * %ALLOT
 
 : filters-check  ( stem -- stem f )
   \." hypothesis:  " DUP .stem-single
-  \."  affixes:    " formform .dstack cr
-  \."  affixes(MP):" formform-morphonemic .dstack cr
-  \."  affix names:" formname .dstack cr
-  \."  slot flags: " formflag .dstack cr
+  \."  affixes:    " formform .dstack-enum cr
+  \."  affixes(MP):" formform-morphonemic .dstack-enum cr
+  \."  affix names:" formname .dstack-enum cr
+  \."  slot flags: " formflag .dstack-enum cr
   \."  slots:      " .slots cr
   \."  flags:      " paradigm-flags flags. cr
   \."  filters:    "
