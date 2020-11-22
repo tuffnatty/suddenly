@@ -92,6 +92,9 @@ T{ S" пала+баң"			S" палабаң"		parse-test -> TRUE }T
 T{ S" пала+блаң"		S" палаблаң"		parse-test -> TRUE }T
 T{ S" пала+маң"			S" паламаң"		parse-test -> TRUE }T
 T{ S" палты+мнаң"		S" палтымнаң"		parse-test -> TRUE }T
+T{ S" параан"			S" параан"		parse-test -> TRUE }T
+T{ S" пара+ң+ы+н"		S" параан"		parse-test -> TRUE }T
+T{ S" пар+и+ған"		S" параан"		parse-test -> FALSE }T
 T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T

@@ -550,8 +550,8 @@ require khakas/slotnames.fs
 
 \ Запрещенные контексты для выпадения после долгой гласной
 : constraint-VVГV-fallout  ( -- f )
-  first-form-flag untransformed-fallout-VVГV AND NOT  ||
   dictflag-rus dictflag-is?
+  || untransformed-fallout-VVГV any-form-flag-is? NOT
   ;
 
 \ Разрешенные контексты для невыпадения VГV
