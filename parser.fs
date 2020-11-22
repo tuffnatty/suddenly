@@ -125,7 +125,7 @@ DEFER yield-stem  ( stem -- )
   1 n-forms +! ; IS yield-stem
 
 : check-stem  ( addr u stem -- addr u )
-  \." check-stem " >R 2DUP TYPE SPACE R> .s DUP .stem-single CR
+  \." check-stem " >R 2DUP TYPE SPACE R> DUP .stem-single CR
   { stem }  ( addr u )
   \stack-mark
   2DUP paradigm-stem 2!
