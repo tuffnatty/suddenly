@@ -62,7 +62,7 @@ T{ S" кіртӧң+ге+ӧк"		S" кіртӧңӧк"		parse-test -> FALSE }T
 T{ S" комиссия+ға"		S" комиссияа"           parse-test -> TRUE }T
 T{ S" кӧг+і"			S" кӧӧ"			parse-test -> TRUE }T
 T{ S" кӧзӧ+ге"			S" кӧзӧге"		parse-test -> TRUE }T
-T{ S" кӧр+беен+дее+бін"		S" кӧрбеендеебін"	parse-test -> TRUE }T
+T{ S" кӧр+бе+ген+дее+бін"	S" кӧрбеендеебін"	parse-test -> TRUE }T
 T{ S" курс+ы"			S" курзы"		parse-test -> TRUE }T
 T{ S" курс+ы"			S" курсы"		parse-test -> TRUE }T
 T{ S" кӱн+і+нге"		S" кӱнінге"		parse-test -> TRUE }T

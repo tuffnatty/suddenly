@@ -80,7 +80,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   right-context( constraint-27 constraint-5 )
     <this> slot-full!
-    form" Add ТАА"
+    flag-with Add  form" Add₁ ТАА"
     flag-with Cont  form" Cont₁ LА"
     form" Ass₁ ОК"
   right-context-end
@@ -451,6 +451,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-27 )
     form" Ass₂ ОК"
     flag-with Cont  form" Cont₂ LА"
+    flag-with Add  form" Add₂ ТАА"
   right-context-end
   ; slot-add
 
