@@ -23,12 +23,15 @@ dstack: formflag
   ]] >O n-slots dstack-depth 1+ - - 1- O dstack-pick O> [[
   ; IMMEDIATE
 
-: form-first-full-slot  { dstack -- n }
-  n-slots  dstack >O dstack-depth O> 1+ -  1+  { first-existing }
-  n-slots first-existing BEGIN 2DUP >= WHILE
+: form-next-full-slot  { start-slot dstack -- n }
+  n-slots start-slot 1+ BEGIN 2DUP >= WHILE
     DUP dstack formstack-slot  IF DROP NIP EXIT THEN
     DROP 1+
   REPEAT 2DROP 0 ;
+
+: form-first-full-slot  { dstack -- n }
+  n-slots  dstack >O dstack-depth O> 1+ -  { before-first-existing }
+  before-first-existing dstack form-next-full-slot ;
 
 : stem-polysyllabic?  ( -- f )
   ]] guessed-stem polysyllabic? [[ ; IMMEDIATE
@@ -78,6 +81,9 @@ dstack: formflag
 
 : form-flag-is?  ( n flag -- f )
   >R form-slot-flags R> AND ;
+
+: next-form-flag-is?  ( n flag -- f )
+  >R formform form-next-full-slot R> form-flag-is? ;
 
 : any-form-flag-is?  { flag -- f }
   formflag >O dstack-depth O> 1+ BEGIN DUP WHILE

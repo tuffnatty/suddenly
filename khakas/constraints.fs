@@ -517,8 +517,8 @@ require khakas/slotnames.fs
 \ Запрещенные контексты для выпадения VңV
 : constraint-VңV-fallout  ( -- f )
   \ флаг выпадения конечного ң находится в слоте справа
-  <Poss₁> 1+ form-slot-flags untransformed-fallout-VңV AND NOT  &&
-  <Poss₂> 1+ form-slot-flags untransformed-fallout-VңV AND NOT
+  <Poss₁> slot-empty?  <Poss₁> untransformed-fallout-VңV next-form-flag-is? NOT  OR  &&
+  <Poss₂> slot-empty?  <Poss₂> untransformed-fallout-VңV next-form-flag-is? NOT  OR
   ;
 
 \ Запрещенные контексты для выпадения (СА|ТЫ)ңАр
