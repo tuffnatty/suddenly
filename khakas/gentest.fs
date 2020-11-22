@@ -83,6 +83,7 @@ T{ S" ойла+а+м"			S" ойлаам"		parse-test -> FALSE }T
 T{ S" ойна+а+быс"		S" ойнаабыс"		parse-test -> FALSE }T
 T{ S" олар+дың"			S" олардың"		parse-test -> TRUE }T
 T{ S" ол+ох"			S" олох"		parse-test -> TRUE }T
+T{ S" ӧдір+бе+ек"		S" ӧдірбеек"		parse-test -> TRUE }T
 T{ S" ӧң+і"			S" ӧӧ"			parse-test -> TRUE }T
 T{ S" орын+ы"			S" орны"		parse-test -> TRUE }T
 T{ S" орын+ы+лар+ы"		S" орнылары"		parse-test -> TRUE }T
