@@ -158,6 +158,7 @@ T{ S" пызо+ға"			S" пызаа"		parse-test -> FALSE }T
 T{ S" пызо+ға"			S" пызоға"		parse-test -> TRUE }T
 T{ S" сағ+им"			S" сағим"		parse-test -> TRUE }T
 T{ S" сағ+ы"			S" саа"			parse-test -> TRUE }T
+T{ S" сағын+адыр+даа+бын"	S" сағынадырдаабын"	parse-test -> TRUE }T
 T{ S" сап+ыбыс"			S" саабыс"		parse-test -> TRUE }T
 T{ S" сап+ыбыс+хан"		S" саабысхан"		parse-test -> TRUE }T
 T{ S" сағ+ып"			S" саап"		parse-test -> TRUE }T

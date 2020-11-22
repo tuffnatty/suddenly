@@ -256,10 +256,11 @@ require khakas/slotnames.fs
 
 \ 14. Непосредственно после Iter возможны только: конец
 \ словоформы [(обрабатывается правилом 27),] Past ГА(н),
-\ ConvA, ConvП, Person, PredPl или Ptcl3.
+\ ConvA, ConvП, <Ptcl₂>, <Person>, <PredPl> или <Ptcl₃>.
 : constraint-14  ( -- f )
-  flags( Past Convₚ Conv.a ) flag-is?  ||
-  slots( <Neg/Iter> <Person> )-empty?
+  flags( Past Convₚ Conv.a ) flag-is?
+  || slots( <Neg/Iter> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
+  || slots( <Neg/Iter> <Person> )-empty?
   ;
 
 \ 14.1. Iter: Перед Past ГА(н) и Ptcl3 возможна только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
