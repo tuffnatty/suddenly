@@ -266,6 +266,7 @@ T{ S" хус+тар"			S" хустар"		parse-test -> TRUE }T
 T{ S" хусхаӌах+таңары"		S" хусхаӌахтаңары"	parse-test -> TRUE }T
 T{ S" хуйу"			S" хую"		        parse-test -> TRUE }T
 T{ S" хыйа"			S" хыя"		        parse-test -> TRUE }T
+T{ S" хын+маан+ыс+хан+да"	S" хынмаанысханда"	parse-test -> TRUE }T
 T{ S" хыс+ы+ох"			S" хызох"		parse-test -> FALSE }T
 T{ S" хыс+ох"			S" хызох"		parse-test -> TRUE }T
 T{ S" хыс+тар+ы+н"		S" хыстарын"		parse-test -> TRUE }T

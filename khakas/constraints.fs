@@ -51,27 +51,30 @@ require khakas/slotnames.fs
   <Ptcl1> slot-full?
   ;
 
-\ 4. Показатели позиции 2 (NF) могут встретиться только в
-\ словоформе, где есть один или несколько из показателей: 1)
-\ позиции 3 (Ptcl1), 2) позиции 6 <Dur> Dur чАТ, Dur.dial чаТ,
+\ 4. Показатели NF, NF.Neg могут встретиться только в
+\ словоформе, где есть один или несколько из показателей:
+\ 1) позиции 3 <Ptcl1>,
+\ 2) позиции 6 <Dur> Dur чАТ, Dur.dial чаТ,
 \ 3) Perf (Ы)бЫс, Perf0 Ыc,
-\ 4) Pres2 чАдЫр, чады(р) 5) Pres (чА, ча, чАр(Ы), ту(р)),
-\ 6) Indir ТЫр, 7) PresPt чАн - или на конце словоформы.
-\ Показатель NF.Neg.sh ПААн допустим при сочетании с Pres ЧА,
-\ чА, чАр(Ы), Dur чАТ, Dur.dial чаТ и Indir ТЫр.
-: constraint-4  ( -- f )
-  <Ptcl1> slot-full?             ||
-  <Dur> slot-full?               ||
-  flags( Perf Perf0
-         Pres2 Pres2.dial.kac
-         Pres Pres.dial Pres.dial.kyz Pres.dial.sh
-         Indir
-         PresPt.dial ) flag-is?  ||
-  slots( <NF> <Ptcl₃> ]-empty?
-  ;
+\ 4) Pres2 чАдЫр, чады(р), Pres.dial.kyz ту(р),
+\ 5) прочие Pres (чА, ча, чАр(Ы)),
+\ 6) Indir ТЫр,
+\ 7) PresPt чАн
+\ - или на конце словоформы.
+\ Показатель NF.Neg.sh ПААн допустим в тех же случаях,
+\ исключая 4) и 7)
 : constraint-4sh  ( -- f )
-  <Dur> slot-full?               ||
-  flags( Pres Pres.dial Pres.dial.sh Indir ) flag-is? ;
+  <Ptcl1> slot-full?
+  || <Dur> slot-full?
+  || flags( Perf Perf0
+            Pres Pres.dial Pres.dial.sh
+            Indir ) flag-is?
+  || slots( <NF> <Ptcl₃> ]-empty?
+  ;
+: constraint-4  ( -- f )
+  constraint-4sh
+  || flags( Pres2 Pres2.dial.kac Pres.dial.kyz
+            PresPt.dial ) flag-is? ;
 
 \ 4.1. NF выбирает алломорф (Ы)п, если:
 \ 1) он непосредственно следует за основой, которая оканчивается
