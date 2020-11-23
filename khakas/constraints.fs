@@ -326,6 +326,11 @@ require khakas/slotnames.fs
   TRUE ABORT" Invalid slot for constraint-16.5!"
   ; IMMEDIATE
 
+\ 16.6. Показатель Gen.3pos(.dial) не может присутствовать в
+\ словоформе одновременно с Case1.
+: constraint-16.6  ( -- f )
+  flag Gen.3pos  flag-empty? ;
+
 \ 17. В поз. <Case₁>/<Case₂> набор аффиксов посессивного
 \ склонения выбирается: а) в случае заполнения позиций
 \ <Poss₁>/<Poss₂> соответственно аффиксами не-множественного

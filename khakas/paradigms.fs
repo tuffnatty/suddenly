@@ -322,11 +322,13 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
     form" Gen₁ НЫң"
 
-    filters( constraint-17-<Case₁> )
-      form" Loc₁ ТА"
-    filter-else
-      form" Loc₁ (н)ТА"
-    filters-end
+    right-context( constraint-16.6 )
+      filters( constraint-17-<Case₁> )
+        form" Loc₁ ТА"
+      filter-else
+        form" Loc₁ (н)ТА"
+      filters-end
+    right-context-end
 
     filters( constraint-17-<Case₁> )
       form" All₁ САр"
@@ -370,7 +372,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" 3pos (з)Ы"
       filters-end
       form" Gen.3pos Ни"
-      form" Gen.3pos.dial Ди"
+      flag-with Gen.3pos  form" Gen.3pos.dial Ди"
     flag Poss2.3pos  flag-clear
   flag Poss2.nonpl  flag-clear
   form" 1pos.pl (Ы)бЫс"

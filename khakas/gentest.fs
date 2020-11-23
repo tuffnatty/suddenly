@@ -257,6 +257,7 @@ T{ S" финн+нең"			S" финннең"		parse-test -> FALSE }T
 T{ S" харах+ым"			S" хараам"		parse-test -> TRUE }T
 T{ S" харах+ым"			S" харағым"		parse-test -> TRUE }T
 T{ S" харын+ы"			S" харны"		parse-test -> TRUE }T
+T{ S" хас+та+ди"		S" хастади"		parse-test -> FALSE }T  \ #152
 T{ S" хатхыр+0̸+чадыр+бын"	S" хатхырчадырбын"	parse-test -> TRUE }T
 T{ S" хат+ым"			S" хатым"		parse-test -> TRUE }T
 T{ S" хах+ы"			S" хағы"		parse-test -> TRUE }T
