@@ -198,6 +198,7 @@ T{ S" соғ+ы"			S" соғы"		parse-test -> TRUE }T
 T{ S" сӧле+ебес"		S" сӧлибес"		parse-test -> TRUE }T
 T{ S" стол+зар+тын"		S" столзартын"		parse-test -> TRUE }T
 T{ S" стол+ы+нзар+тын"		S" столынзартын"	parse-test -> TRUE }T
+T{ S" сых+ып+ох+ыс+чых"		S" сығыбоғысчых"	parse-test -> TRUE }T
 T{ S" сых+лағла+п"		S" сыхлағлап"		parse-test -> TRUE }T
 T{ S" сых+паан+чат+хан"		S" сыхпаанчатхан"	parse-test -> TRUE }T
 T{ S" суғ+ға"			S" суға"		parse-test -> TRUE }T
@@ -299,7 +300,7 @@ T{ S" чӧлег+і"			S" чӧлее"		parse-test -> TRUE }T
 T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T
 T{ S" чӧр+беен+іс+тір"		S" чӧрбееністір"	parse-test -> TRUE }T
 T{ S" чӧр+ӌең+і"		S" чӧрӌее"		parse-test -> TRUE }T
-T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 3 }T
+T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 2 }T
 T{ S" чурта+п+чадыр"		S" чуртапчадыр"		parse-test -> TRUE }T
 T{ S" чӱг+і"			S" чӱгі"		parse-test -> TRUE }T
 T{ S" чӱгӱрт+ібіс+пе+гей+і+н"	S" чӱгӱртібіспеейін"	parse-test -> TRUE }T  \ #145
