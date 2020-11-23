@@ -65,11 +65,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" NF₀ 0̸"
       filters-end
     right-context-end
-    right-context( constraint-11.1 constraint-10 constraint-10.1 )
+    right-context( constraint-11.1 constraint-10 )
       form" NF.Neg Пин"
     right-context-end
   right-context-end
-  right-context( constraint-4sh constraint-10 constraint-10.1 )
+  right-context( constraint-4sh constraint-10 )
     form" NF.Neg.sh ПААн"
   right-context-end
   ; slot-add

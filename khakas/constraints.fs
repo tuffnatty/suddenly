@@ -220,8 +220,7 @@ require khakas/slotnames.fs
   flag Cunc  flag-empty? ;
 
 \ 10.1. Показатель Fut А(р) не встречается в одной словоформе с
-\ отрицательными показателями (Neg, NF.Neg[, Neg.Conv,
-\ Neg.Сonv.Abl - в этом же слоте]).
+\ отрицательным показателем Neg.
 : constraint-10.1  ( -- f )
   flag Fut  flag-empty? ;
 

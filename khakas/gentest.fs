@@ -138,6 +138,7 @@ T{ S" піл+бин+чат+хан"		S" пілбинчатхан"	parse-test -> T
 T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T
 T{ S" піс+тің+нер"		S" пістіңнер"		parse-test -> TRUE }T
 T{ S" пир+бе+дек"		S" пирбедек"		parse-test -> TRUE }T
+T{ S" пир+бин+ібіс+ер+ӌік"	S" пирбинібізерӌік"	parse-test -> TRUE }T
 T{ S" пир+дек"			S" пирдек"		parse-test -> TRUE }T
 T{ S" поғ+ып"			S" пооп"		parse-test -> TRUE }T
 \ T{ S" пол+аачых+тан+ча+зар"     S" полаачыхтанчазар"	parse-test -> TRUE }T
