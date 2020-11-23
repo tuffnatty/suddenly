@@ -198,6 +198,7 @@ T{ S" соғ+ы"			S" соғы"		parse-test -> TRUE }T
 T{ S" сӧле+ебес"		S" сӧлибес"		parse-test -> TRUE }T
 T{ S" стол+зар+тын"		S" столзартын"		parse-test -> TRUE }T
 T{ S" стол+ы+нзар+тын"		S" столынзартын"	parse-test -> TRUE }T
+T{ S" сых+лағла+п"		S" сыхлағлап"		parse-test -> TRUE }T
 T{ S" сых+паан+чат+хан"		S" сыхпаанчатхан"	parse-test -> TRUE }T
 T{ S" суғ+ға"			S" суға"		parse-test -> TRUE }T
 T{ S" суғ+ға+ох"		S" суғаох"		parse-test -> TRUE }T
@@ -213,6 +214,7 @@ T{ S" тал+аачых"		S" талаачых"		parse-test -> TRUE }T
 T{ S" таны+ған"			S" танаан"		parse-test -> TRUE }T
 T{ S" тап+ып"			S" таап"		parse-test -> TRUE }T
 T{ S" тариф+ы"			S" тарифы"		parse-test -> TRUE }T
+T{ S" тарт+лағла+п+ча"		S" тартлағлапча"	parse-test -> TRUE }T
 T{ S" тарт+ып+ла+ча+лар"        S" тартыплачалар"       parse-test -> TRUE }T
 T{ S" таста+ар+ға"		S" тастирға"		parse-test -> TRUE }T
 T{ S" тег+іп"			S" тееп"		parse-test -> TRUE }T
