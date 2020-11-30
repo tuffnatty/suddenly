@@ -4,6 +4,7 @@ T{ S" ағ+ы"			S" аа"			parse-test -> TRUE }T  \ #147
 T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
 T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
+T{ S" азах+ым+ай"		S" азаамай"		parse-test -> TRUE }T
 T{ S" азыра+ах+чат+ха+м"	S" азырихчатхам"	parse-test -> TRUE }T
 T{ S" акел+ер+ге"		S" акелерге"		parse-test -> TRUE }T
 T{ S" алкоголик+ке"		S" алкоголикке"		parse-test -> TRUE }T
@@ -26,6 +27,7 @@ T{ S" завод+тар"		S" заводтар"		parse-test -> TRUE }T
 T{ S" иней+лер+і+мең"		S" инейлерімең"		parse-test -> TRUE }T
 T{ S" ин+еліс"			S" инеліс"		parse-test -> TRUE }T
 T{ S" ит+і+бең"			S" идібең"		parse-test -> TRUE }T
+T{ S" ирке+м+ей"		S" иркемей"		parse-test -> TRUE }T
 T{ S" ирін+і"			S" ирні"		parse-test -> TRUE }T
 T{ S" изерге"	headword?	S" искен"		parse-test -> TRUE }T
 T{ S" истерге"	headword?	S" искен"		parse-test -> TRUE }T
@@ -87,10 +89,11 @@ T{ S" ойла+а+м"			S" ойлаам"		parse-test -> FALSE }T
 T{ S" ойна+а+быс"		S" ойнаабыс"		parse-test -> FALSE }T
 T{ S" олар+дың"			S" олардың"		parse-test -> TRUE }T
 T{ S" ол+ох"			S" олох"		parse-test -> TRUE }T
-T{ S" ӧдір+бе+ек"		S" ӧдірбеек"		parse-test -> TRUE }T
-T{ S" ӧң+і"			S" ӧӧ"			parse-test -> TRUE }T
+T{ S" оолғы+м+ай"		S" оолғымай"		parse-test -> TRUE }T
 T{ S" орын+ы"			S" орны"		parse-test -> TRUE }T
 T{ S" орын+ы+лар+ы"		S" орнылары"		parse-test -> TRUE }T
+T{ S" ӧдір+бе+ек"		S" ӧдірбеек"		parse-test -> TRUE }T
+T{ S" ӧң+і"			S" ӧӧ"			parse-test -> TRUE }T
 T{ S" паба+м+ни"		S" пабамни"		parse-test -> TRUE }T
 T{ S" пағ+ы"			S" паа"			parse-test -> TRUE }T
 T{ S" пала+баң"			S" палабаң"		parse-test -> TRUE }T
@@ -275,6 +278,7 @@ T{ S" хол+да+хы+лар"		S" холдағылар"		parse-test -> TRUE }T
 T{ S" хол+ы+нда+хы+лар"		S" холындағылар"	parse-test -> TRUE }T
 T{ S" хомай+зыбыс"		S" хомайзыбыс"		parse-test -> TRUE }T
 T{ S" худай+бынаң"		S" худайбынаң"		parse-test -> TRUE }T
+T{ S" худай+ым+ай"		S" худайымай"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузиим"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузуғым"		parse-test -> TRUE }T
 T{ S" хулун+ы"			S" хулуны"		parse-test -> TRUE }T

@@ -443,6 +443,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" Prol (н)ЧА"
     form" Delib нАңАр"
     form" Comp (н)ТАГ"
+    form" Voc Ай"
   filters-end
   ; slot-add
 
