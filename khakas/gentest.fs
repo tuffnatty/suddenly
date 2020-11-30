@@ -198,9 +198,6 @@ T{ S" соғ+ы"			S" соғы"		parse-test -> TRUE }T
 T{ S" сӧле+ебес"		S" сӧлибес"		parse-test -> TRUE }T
 T{ S" стол+зар+тын"		S" столзартын"		parse-test -> TRUE }T
 T{ S" стол+ы+нзар+тын"		S" столынзартын"	parse-test -> TRUE }T
-T{ S" сых+ып+ох+ыс+чых"		S" сығыбоғысчых"	parse-test -> TRUE }T
-T{ S" сых+лағла+п"		S" сыхлағлап"		parse-test -> TRUE }T
-T{ S" сых+паан+чат+хан"		S" сыхпаанчатхан"	parse-test -> TRUE }T
 T{ S" суғ+ға"			S" суға"		parse-test -> TRUE }T
 T{ S" суғ+ға+ох"		S" суғаох"		parse-test -> TRUE }T
 T{ S" суғ+ы"			S" суу"			parse-test -> TRUE }T
@@ -208,6 +205,9 @@ T{ S" сӱрдег+і"			S" сӱрдее"		parse-test -> TRUE }T
 T{ S" сурығ+ы"			S" сурии"		parse-test -> TRUE }T
 T{ S" сыда+ӌаң+ы"		S" сыдаӌаа"		parse-test -> TRUE }T
 T{ S" сых+ар+ға"	        S" сығарға"		parse-test -> TRUE }T
+T{ S" сых+ып+ох+ыс+чых"		S" сығыбоғысчых"	parse-test -> TRUE }T
+T{ S" сых+лағла+п"		S" сыхлағлап"		parse-test -> TRUE }T
+T{ S" сых+паан+чат+хан"		S" сыхпаанчатхан"	parse-test -> TRUE }T
 T{ S" тағ+ы"			S" таа"			parse-test -> TRUE }T
 T{ S" тайға+за"			S" тайғаза"		parse-test -> TRUE }T
 T{ S" тайға+зары"		S" тайғазары"		parse-test -> TRUE }T

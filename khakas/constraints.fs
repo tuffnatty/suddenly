@@ -46,9 +46,9 @@ require khakas/slotnames.fs
 \ NF.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
 \ – (кончить-NF-Add-Perf-RPast-Pl) ‘почти закончили’].
 : constraint-3  ( -- f )
-  <NF> slot-empty?       ||
-  flag NF.Neg  flag-is?  ||
-  <Ptcl1> slot-full?
+  <NF,Dur₁> slot-empty?
+  || flag NF.Neg  flag-is?
+  || <Ptcl1> slot-full?
   ;
 
 \ 4. Показатели NF, NF.Neg могут встретиться только в
@@ -69,7 +69,7 @@ require khakas/slotnames.fs
   || flags( Perf Perf0
             Pres Pres.dial Pres.dial.sh
             Indir ) flag-is?
-  || slots( <NF> <Ptcl₃> ]-empty?
+  || slots( <NF,Dur₁> <Ptcl₃> ]-empty?
   ;
 : constraint-4  ( -- f )
   constraint-4sh
@@ -91,14 +91,14 @@ require khakas/slotnames.fs
 \ основы на невыпадающую согласную в конце словоформы для NF
 \ возможны оба алломорфа.]
 : constraint-4.1ₚ  ( -- f )
-  <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND  ||
-  <NF> form-slot-vowel-at-left?                                          ||
-  flags( Add Ass₁ Cont ) flag-is?                                        ||
-  stem-prev-sound-ptr cyr t~/ {vowel} NOT
+  <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND
+  || <NF,Dur₁> form-slot-vowel-at-left?
+  || flags( Add Ass₁ Cont ) flag-is?
+  || stem-prev-sound-ptr cyr t~/ {vowel} NOT
   ;
 : constraint-4.1₀  ( -- f )
-  <NF> form-slot-vowel-at-left? NOT  &&
-  <NF> form-slot-xc-at-left fallout-short? NOT
+  <NF,Dur₁> form-slot-vowel-at-left? NOT
+  && <NF,Dur₁> form-slot-xc-at-left fallout-short? NOT
   ;
 : constraint-4.1₀-right  ( -- f )
   flag Ass₁  flag-empty? ;
@@ -133,17 +133,15 @@ require khakas/slotnames.fs
 \ морфемами Pres чА, PresPt чАн и Dur чАТ. Показатель NF в
 \ этом случае в словоформе отсутствует.
 : constraint-6  ( -- f )
-  <NF> slot-empty? ;
+  <NF,Dur₁> slot-empty? ;
 : constraint-6-right  ( -- f )
   flags( Dur Pres PresPt.dial ) flag-is? ;
 
 \ 7. Показатели Dur1 и(р), Dur₁.dial.kac Ат, Dur₁.dial.sag ит
-\ заполняются только, если предыдущие позиции (Distr, Voice,
-\ NF, Ptcl₁, Perf) не заполнены, а основой является лемма пар-,
-\ апар- или кил- (но при этих основах может выбираться с тем же
+\ заполняются только, если основой является лемма пар-, апар-
+\ или кил- (но при этих основах может выбираться с тем же
 \ успехом и показатель Dur чАТ, свободное варьирование).
 : constraint-7  ( -- f )
-  slots[ <Distr> <Prosp,Dur1> )-empty?  &&
   is-пар/кил?
   ;
 
@@ -155,14 +153,15 @@ require khakas/slotnames.fs
 \ Показатель Dur₁.dial.sag ит может стоять перед Dur чАт,
 \ Past ГА(н), Cond СА и PresPt.dial чАн.
 : constraint-8  ( -- f )
-  slots( <Prosp,Dur1> <Ptcl₃> ]-empty?                             ||
-  slots( <Prosp,Dur1> <Person> )-empty?  <Person> slot-full?  AND  ||
-  slots( <Prosp,Dur1> <PredPl> )-empty?  <PredPl> slot-full?  AND  ||
-  flags( Past Cond Convₚ ) flag-is?  <Neg/Iter> slot-empty?  AND
+  slots( <NF,Dur₁> <Ptcl₃> ]-empty?
+  || slots( <NF,Dur₁> <Person> )-empty?  <Person> slot-full?  AND
+  || slots( <NF,Dur₁> <PredPl> )-empty?  <PredPl> slot-full?  AND
+  || flags( Past Cond Convₚ ) flag-is?  <Neg/Iter> slot-empty?  AND
   ;
 : constraint-8sag  ( -- f )
-  <Dur> slot-full?  ||
-  slots( <Prosp,Dur1> <Tense/Mood/Conv2> )-empty?  flags( Past Cond PresPt.dial ) flag-is? AND ;
+  slots( <NF,Dur₁> <Dur> )-empty?  <Dur> slot-full?  AND
+  || slots( <NF,Dur₁> <Tense/Mood/Conv2> )-empty?  flags( Past Cond PresPt.dial ) flag-is? AND
+  ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
 \ распределен: перед Past ГА(н) и перед Cond СА может
@@ -468,19 +467,15 @@ require khakas/slotnames.fs
 \ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Dur.dial чаТ,
 \ Pres2 чАдЫр, Pres2.dial.kac чадыр, Pres.dial.kyz тур,
 \ Pres.dial ча, Pres.dial.sh чАр(Ы), Indir тЫр возможны только
-\ при наличии показателей позиции <NF> (NF или NF.Neg) или
-\ <Perf> (Perf) или Prosp АК.
-\ Pres чА, Pres.dial ча, Pres.dial.shor чАр(Ы), Indir тЫр
-\ возможны также при NF.Neg.sh ПААн
+\ при наличии показателей NF / NF.Neg / Perf / Prosp.
+\ Pres чА, Pres.dial ча, Pres.dial.sh чАр(Ы), Dur чАТ, Dur.dial
+\ чаТ, Indir тЫр возможны также при NF.Neg.sh ПААн
 : constraint-26  ( -- f )
-  <NF> slot-full?    ||
-  <Perf> slot-full?  ||
-  flag Prosp.dial  flag-is?
+  flags( NF NF₀ NF.Neg Perf Prosp.dial )  flag-is?
   ;
 : constraint-26+paan  ( -- f )
-  <NF> slot-full?    ||
-  <Perf> slot-full?  ||
-  flags( Prosp.dial NF.Neg.sh ) flag-is?
+  constraint-26
+  || flag NF.Neg.sh  flag-is?
   ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
@@ -590,7 +585,7 @@ require khakas/slotnames.fs
 
 \ После NF глухое: пар-тыр, сом-тыр
 : constraint-voicedstem+Indir  ( -- f )
-  flag NF₀  flag-is?  slots( <NF> <Tense/Mood/Conv2> )-empty?  AND
+  flag NF₀  flag-is?  slots( <NF,Dur₁> <Tense/Mood/Conv2> )-empty?  AND
   \ 1 7 slot-range-empty?
   \ stem-last-sound consonant?
   \ stem-last-sound unvoiced? NOT
@@ -645,14 +640,15 @@ require khakas/slotnames.fs
   ;
 
 : constraint-VA>и-fallout-with-slot  { n-slot -- f }
-  n-slot form-slot-vowel-at-left? NOT  ||
-  n-slot form-slot-flags untransformed-fallout-VA>и AND ;
+  n-slot form-slot-vowel-at-left? NOT
+  || n-slot form-slot-flags untransformed-fallout-VA>и AND
+  ;
 : constraint-VA>и-fallout-<Tense/Mood/Conv2>  <Tense/Mood/Conv2> constraint-VA>и-fallout-with-slot ;
-: constraint-VA>и-fallout-<Neg/Iter>          <Neg/Iter> constraint-VA>и-fallout-with-slot ;
-: constraint-VA>и-fallout-<Prosp,Dur1>        <Prosp,Dur1> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Neg/Iter>                  <Neg/Iter> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Prosp>                        <Prosp> constraint-VA>и-fallout-with-slot ;
 : constraint-VA>и-fallout  ( -- f )
   <Tense/Mood/Conv2> => constraint-VA>и-fallout-<Tense/Mood/Conv2>
   <Neg/Iter>         => constraint-VA>и-fallout-<Neg/Iter>
-  <Prosp,Dur1>       => constraint-VA>и-fallout-<Prosp,Dur1>
+  <Prosp>            => constraint-VA>и-fallout-<Prosp>
   TRUE ABORT" Invalid slot for constraint-VA>и-fallout
   ; IMMEDIATE

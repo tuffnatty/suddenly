@@ -8,10 +8,10 @@
 enum:
   +enum <Distr>
   +enum <Voice>
-  +enum <NF>
+  +enum <NF,Dur₁>
   +enum <Ptcl1>
   +enum <Perf>
-  +enum <Prosp,Dur1>
+  +enum <Prosp>
   +enum <Dur>
   +enum <Neg/Iter>
   +enum <Tense/Mood/Conv2>

@@ -51,7 +51,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" Caus ТЫр"
   ; slot-add
 
-<NF> slot:  \ 2
+<NF,Dur₁> slot:  \ 2
   <this> slot-empty!
   form" -noconv1 "
 
@@ -73,6 +73,22 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-4sh constraint-10 )
     form" NF.Neg.sh ПААн"
   right-context-end
+
+  filters( constraint-7 )
+    right-context( constraint-8 )
+      right-context( constraint-8.1ᵢ )
+        flag-with Dur1@short  form" Dur1ᵢ и"
+      right-context-end
+      right-context( constraint-8.1ᵢᵣ )
+        flag-with Dur1@full   form" Dur1ᵢᵣ ир"
+      right-context-end
+      form" Dur₁.dial.kac Ат"
+    right-context-end
+    right-context( constraint-8sag )
+      form" Dur₁.dial.sag ит"
+    right-context-end
+  filters-end
+
   ; slot-add
 
 <Ptcl1> slot:  \ 3
@@ -104,26 +120,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
   ; slot-add
 
-<Prosp,Dur1> slot:  \ 5
+<Prosp> slot:  \ 5
   <this> slot-empty!
   form" -noprosp "
 
   <this> slot-full!
-  filters( constraint-7 )
-    right-context( constraint-8 )
-      right-context( constraint-8.1ᵢ )
-        flag-with Dur1@short  form" Dur1ᵢ и"
-      right-context-end
-      right-context( constraint-8.1ᵢᵣ )
-        flag-with Dur1@full   form" Dur1ᵢᵣ ир"
-      right-context-end
-      form" Dur₁.dial.kac Ат"
-    right-context-end
-    right-context( constraint-8sag )
-      form" Dur₁.dial.sag ит"
-    right-context-end
-  filters-end
-
   right-context( constraint-6-right )
     filters( constraint-6 constraint-VA>и-fallout )
       form" Prosp.dial АК"
@@ -136,7 +137,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" -nodur "
 
   <this> slot-full!
-  filters( constraint-26 )
+  filters( constraint-26+paan )
     form" Dur чАт"
     form" Dur.dial чат"
   filters-end

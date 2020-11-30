@@ -1,6 +1,5 @@
 \ flags in different slots must be distinct!
 flagenum:
-  flag: Abl₂
   flag: Add
   flag: All₁
   flag: Affirm
@@ -32,6 +31,7 @@ flagenum:
   flag: Neg
   flag: Neg7
   flag: Neg.Fut
+  flag: NF
   flag: NF₀
   flag: NF.Neg
   flag: NF.Neg.sh
