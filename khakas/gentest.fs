@@ -207,6 +207,7 @@ T{ S" суғ+ға+ох"		S" суғаох"		parse-test -> TRUE }T
 T{ S" суғ+ы"			S" суу"			parse-test -> TRUE }T
 T{ S" сӱрдег+і"			S" сӱрдее"		parse-test -> TRUE }T
 T{ S" сурығ+ы"			S" сурии"		parse-test -> TRUE }T
+T{ S" сустал+ып+чат+ып"		S" сусталыпчадып"	parse-test -> TRUE }T
 T{ S" сыда+ӌаң+ы"		S" сыдаӌаа"		parse-test -> TRUE }T
 T{ S" сых+ар+ға"	        S" сығарға"		parse-test -> TRUE }T
 T{ S" сых+ып+ох+ыс+чых"		S" сығыбоғысчых"	parse-test -> TRUE }T

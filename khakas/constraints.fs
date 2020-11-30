@@ -86,18 +86,17 @@ require khakas/slotnames.fs
 \ 4) основа оканчивается на согласную (действует опционально для
 \    качинского диалекта, но проникло и в литературные тексты).
 \ NF выбирает алломорф 0 после основы или аффикса на
-\ невыпадающую согласную, если после него также стоит любой
-\ аффикс, кроме ОК, или конец словоформы. [Таким образом, после
-\ основы на невыпадающую согласную в конце словоформы для NF
-\ возможны оба алломорфа.]
+\ невыпадающую согласную, если после него не стоит аффикс ОК.
+\ [Таким образом, после основы на невыпадающую согласную в конце
+\ словоформы для NF возможны оба алломорфа.]
 : constraint-4.1ₚ  ( -- f )
   <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND
   || <NF,Dur₁> form-slot-vowel-at-left?
   || flags( Add Ass₁ Cont ) flag-is?
-  || stem-prev-sound-ptr cyr t~/ {vowel} NOT
+  || stem-last-sound-ptr cyr t~/ {vowel} NOT
   ;
 : constraint-4.1₀  ( -- f )
-  <NF,Dur₁> form-slot-vowel-at-left? NOT
+  stem-last-sound-ptr cyr t~/ {vowel} NOT
   && <NF,Dur₁> form-slot-xc-at-left fallout-short? NOT
   ;
 : constraint-4.1₀-right  ( -- f )
