@@ -39,6 +39,7 @@ T{ S" ізі+гелек"		S" ізеелек"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізиим"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізігім"		parse-test -> TRUE }T
 T{ S" істі+нде"                 S" істінде" 		parse-test -> TRUE }T
+T{ S" итті+ни+м"		S" иттіним"		parse-test -> TRUE }T
 T{ S" іч+ер+ге"			S" ічерге"		parse-test -> TRUE }T
 T{ S" іче+еліс"			S" ічееліс"		parse-test -> TRUE }T
 T{ S" киле+гедег"		S" килеедег"		parse-test -> TRUE }T
@@ -157,6 +158,8 @@ T{ S" пол+бас+пыс"		S" полбаспыс"		parse-test -> TRUE }T
 T{ S" пол+бин+ыбыс+хан"		S" полбиныбысхан"	parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат"		S" полдаачат"		parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат+са"		S" полдаачатса"		parse-test -> TRUE }T
+T{ S" пол+ды+ни"		S" полдыни"		parse-test -> TRUE }T
+T{ S" пол+ды+ни+м"		S" полдыним"		parse-test -> TRUE }T
 T{ S" пол+0̸+тыр+ох+чых"		S" полтырохчых"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧриим"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧрігім"		parse-test -> TRUE }T

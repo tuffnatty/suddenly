@@ -34,10 +34,10 @@ require khakas/slotnames.fs
 \ непосредственно после показателей позиции <Comit> или
 \ <Affirm>.
 : constraint-2  ( -- f )
-  <Transp> slot-empty?  slots[ <Pl₁> <Case₂> ]-empty?  AND  ||
-  nomen?  slots[ 1 <Transp> )-empty? AND                    ||
-  flag participles  flag-is?  slots( <Tense/Mood/Conv2> <Transp> )-empty?  AND ||
-  <Transp> slot-full?                 \ Comit, Affirm
+  slots[ <Transp> <Case₂> ]-empty? 
+  || nomen?  slots[ 1 <Transp> )-empty? AND
+  || flag participles  flag-is?  slots( <Tense/Mood/Conv2> <Transp> )-empty?  AND
+  || <Transp> slot-full?                 \ Comit, Affirm
   ;
 
 \ 3. Показатели позиции 2 (NF) и показатель Perf (Ы)бЫС
@@ -478,7 +478,8 @@ require khakas/slotnames.fs
   ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
-\ последними заполненными позициями в словоформe
+\ последними заполненными позициями в словоформe, за исключением
+\ Part ни.
 : constraint-27-<Ptcl1>  ( -- f )  slots( <Ptcl1> <Ptcl₃> ]-full? ;
 : constraint-27-<Pl₁>    ( -- f )  slots( <Pl₁>   <Ptcl₃> ]-full? ;
 : constraint-27-<Poss₁>  ( -- f )  slots( <Poss₁> <Ptcl₃> ]-full? ;
@@ -503,6 +504,11 @@ require khakas/slotnames.fs
 \ 30. Алломорф Abl -тЫн возможен в словоформе только при наличии All₁.
 : constraint-30  ( -- f )
   flag All₁  flag-is? ;
+
+\ 32. Part ни встречается только при наличии RPast ТЫ (других
+\ примеров пока не встретилось).
+: constraint-32  ( -- f )
+  flag RPast  flag-is? ;
 
 \ 33. Voc Ай возможен только на конце словоформы.
 : constraint-33  ( -- f )

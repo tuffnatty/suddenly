@@ -460,6 +460,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     flag-with Cont  form" Cont₂ LА"
     flag-with Add  form" Add₂ ТАА"
   right-context-end
+  filters( constraint-32 )
+    form" Part ни"
+  filters-end
   ; slot-add
 
 <Affirm> slot:  \ 18
