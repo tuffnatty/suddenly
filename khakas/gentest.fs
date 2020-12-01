@@ -115,6 +115,7 @@ T{ S" пар+ат+хан"		S" паратхан"		parse-test -> TRUE }T
 T{ S" пар+ах+ча"		S" парахча"		parse-test -> TRUE }T
 T{ S" пар+0̸+ах+ча"		S" парахча"		parse-test -> FALSE }T
 T{ S" пар+ға+бын"		S" парғабын"		parse-test -> TRUE }T
+T{ S" пар+ған+дағ+зың"		S" парғандағзың"	parse-test -> TRUE }T
 T{ S" пар+и+ған"		S" париған"		parse-test -> TRUE }T
 T{ S" пар+и+лар"		S" парилар"		parse-test -> TRUE }T
 T{ S" пар+ит+чат+ып"		S" паритчадып"		parse-test -> TRUE }T

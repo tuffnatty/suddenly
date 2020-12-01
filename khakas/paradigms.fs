@@ -246,18 +246,16 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-25 )
     form" Lim ГАли"
 
-    flag Conv2  flag-set
-      flag Neg7  flag-set
-        form" Neg.Conv Пин"
-        form" Neg.Conv.Abl ПинАң"
-      flag Neg7  flag-clear
+    flag Neg7  flag-set
+      form" Neg.Conv Пин"
+      form" Neg.Conv.Abl ПинАң"
+    flag Neg7  flag-clear
 
-      form" Convₚ (Ы)п"
-      filters( constraint-VA>и-fallout )
-        form" Conv.pas.dial АбАс"
-        form" Conv.a А"
-      filters-end
-    flag Conv2  flag-clear
+    form" Convₚ (Ы)п"
+    filters( constraint-VA>и-fallout )
+      form" Conv.pas.dial АбАс"
+      form" Conv.a А"
+    filters-end
   right-context-end
 
   filters( constraint-26+paan )

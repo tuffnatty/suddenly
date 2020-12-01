@@ -7,11 +7,11 @@ flagenum:
   flag: Ass₂
   flag: Ass₃
   flag: Assum
+  flag: Comp
   flag: Cond
   flag: Cont
   flag: Conv.a
   flag: Convₚ
-  flag: Conv2
   flag: Cunc
   flag: Dur
   flag: Dur₁.dial.kac
