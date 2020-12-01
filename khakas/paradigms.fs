@@ -322,7 +322,14 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-16.1 constraint-27 )
     <this> slot-full!
 
-    form" Gen₁ НЫң"
+    right-context( constraint-16.5 )
+      form" Gen₁ НЫң"
+      filters( constraint-17-<Case₁> )
+        form" All₁ САр"
+      filter-else
+        form" All₁ (н)САр"
+      filters-end
+    right-context-end
 
     right-context( constraint-16.6 )
       filters( constraint-17-<Case₁> )
@@ -332,11 +339,6 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       filters-end
     right-context-end
 
-    filters( constraint-17-<Case₁> )
-      form" All₁ САр"
-    filter-else
-      form" All₁ (н)САр"
-    filters-end
   right-context-end
   ; slot-add
 

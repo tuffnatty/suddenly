@@ -311,9 +311,8 @@ require khakas/slotnames.fs
 
 \ 16.5. <Case₂> не может следовать непосредственно за <Pl₁> или
 \ <Poss₁>.
-\ <Poss₂> не может следовать непосредственно за <Pl₁>, а также
-\ за <Poss₁>, если <Poss₂> не 3 лица (хыз-ым ‘моя дочь’, но не
-\ хыз-ы-м, однако встречается иб-i-зi ‘его дом’).
+\ <Poss₂>, исключая Gen.3pos, не может следовать непосредственно
+\ за <Pl₁>, Gen₁, All₁ и за <Poss₁>.
 : constraint-16.5-<Pl₁>  ( -- f )
   [: slots( <Pl₁> <Poss₂> )-full? ||
      <Poss₂> slot-empty? ;] EXECUTE &&
@@ -322,13 +321,17 @@ require khakas/slotnames.fs
 : constraint-16.5-<Poss₁>  ( -- f )
   [: slots( <Poss₁> <Case₂> )-full? ||
      <Case₂> slot-empty? ;] EXECUTE &&
-  [: slots( <Poss₁> <Poss₂> )-full? ||
-     <Poss₂> slot-empty?            ||
-     <Poss₁> form-slot string-length  cyr >  ||
-     <Poss₁> form-slot t~/ {vowel} NOT  ;] EXECUTE ;
+  [: slots( <Poss₁> <Poss₂> )-full?
+     || <Poss₂> slot-empty?
+     || flag Gen.3pos flag-is?
+  ;] EXECUTE ;
+: constraint-16.5-<Case₁>  ( -- f )
+  slots( <Case₁> <Poss₂> )-full?
+  || <Poss₂> slot-empty? ;
 : constraint-16.5  ( -- f )
   <Pl₁> => constraint-16.5-<Pl₁>      \ right-context
   <Poss₁> => constraint-16.5-<Poss₁>  \ can't work as right-context
+  <Case₁> => constraint-16.5-<Case₁>  \ right-context
   TRUE ABORT" Invalid slot for constraint-16.5!"
   ; IMMEDIATE
 
