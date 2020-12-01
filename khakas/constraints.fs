@@ -244,12 +244,12 @@ require khakas/slotnames.fs
 \ 12. Непосредственно после показателя недавно прошедшего
 \ времени (RPast) может следовать только краткий
 \ лично-числовой показатель (Person), число предиката
-\ (PredPl) или показатель аффирматива (Affirm) или Ptcl3
+\ (PredPl), показатель аффирматива (Affirm), <Ptcl₂> или <Ptcl₃>
 : constraint-12  ( -- f )
-  slots( <Tense/Mood/Conv2> <PredPl> )-empty?                                 ||
-  slots( <Tense/Mood/Conv2> <Person> )-empty?  flag Person.br  flag-is?  AND  ||
-  slots( <Tense/Mood/Conv2> <Affirm> )-empty?  &&
-    <Affirm> slot-full?
+  slots( <Tense/Mood/Conv2> <PredPl> )-empty?
+  || slots( <Tense/Mood/Conv2> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
+  || slots( <Tense/Mood/Conv2> <Person> )-empty?  flag Person.br  flag-is?  AND
+  || slots( <Tense/Mood/Conv2> <Affirm> )-empty?  <Affirm> slot-full?  AND
   ;
 
 \ 13. Непосредственно после показателя условного наклонения
