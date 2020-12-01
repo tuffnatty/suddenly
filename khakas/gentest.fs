@@ -152,6 +152,7 @@ T{ S" пир+бин+ібіс+ер+ӌік"	S" пирбинібізерӌік"	par
 T{ S" пир+дек"			S" пирдек"		parse-test -> TRUE }T
 T{ S" поғ+ып"			S" пооп"		parse-test -> TRUE }T
 \ T{ S" пол+аачых+тан+ча+зар"     S" полаачыхтанчазар"	parse-test -> TRUE }T
+T{ S" пол+а+зың"		S" полазың"		parse-test -> TRUE }T
 T{ S" пол+ар+ӌығ"		S" поларӌығ"		parse-test -> FALSE }T
 T{ S" пол+ар+ӌых"		S" поларӌых"		parse-test -> TRUE }T
 T{ S" пол+ах+ча"		S" полахча"		parse-test -> TRUE }T
