@@ -31,7 +31,6 @@ flagenum:
   flag: Neg
   flag: Neg7
   flag: Neg.Fut
-  flag: NF
   flag: NF₀
   flag: NF.Neg
   flag: NF.Neg.sh

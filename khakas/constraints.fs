@@ -473,15 +473,16 @@ require khakas/slotnames.fs
 \ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Dur.dial чаТ,
 \ Pres2 чАдЫр, Pres2.dial.kac чадыр, Pres.dial.kyz тур,
 \ Pres.dial ча, Pres.dial.sh чАр(Ы), Indir тЫр возможны только
-\ при наличии показателей NF / NF.Neg / Perf / Prosp.
+\ при наличии показателей NF / NF.Neg / Perf / Prosp / Dur₁.
 \ Pres чА, Pres.dial ча, Pres.dial.sh чАр(Ы), Dur чАТ, Dur.dial
 \ чаТ, Indir тЫр возможны также при NF.Neg.sh ПААн
 : constraint-26  ( -- f )
-  flags( NF NF₀ NF.Neg Perf Prosp.dial )  flag-is?
+  <NF,Dur₁> slot-full?  flag NF.Neg.sh flag-empty?  AND
+  || flags( Perf Prosp.dial ) flag-is?
   ;
 : constraint-26+paan  ( -- f )
-  constraint-26
-  || flag NF.Neg.sh  flag-is?
+  <NF,Dur₁> slot-full?
+  || flags( Perf Prosp.dial ) flag-is?
   ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
