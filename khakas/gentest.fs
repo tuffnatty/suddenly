@@ -35,13 +35,13 @@ T{ S" ис+кен"			S" искен"		parse-test -> TRUE }T
 T{ S" изерге"	headword?	S" исткен"		parse-test -> FALSE }T
 T{ S" истерге"	headword?	S" исткен"		parse-test -> TRUE }T
 T{ S" ист+кен"			S" исткен"		parse-test -> TRUE }T
+T{ S" итті+ни+м"		S" иттіним"		parse-test -> TRUE }T
 T{ S" ізі+гелек"		S" ізеелек"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізиим"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізігім"		parse-test -> TRUE }T
 T{ S" істі+нде"                 S" істінде" 		parse-test -> TRUE }T
-T{ S" итті+ни+м"		S" иттіним"		parse-test -> TRUE }T
 T{ S" іч+ер+ге"			S" ічерге"		parse-test -> TRUE }T
-T{ S" іче+еліс"			S" ічееліс"		parse-test -> TRUE }T
+T{ S" іч+еліс"			S" ічеліс"		parse-test -> TRUE }T
 T{ S" киле+гедег"		S" килеедег"		parse-test -> TRUE }T
 T{ S" кил"			S" кил"			parse-test -> TRUE }T
 T{ S" кил+0̸"			S" кил"			parse-test -> TRUE }T
