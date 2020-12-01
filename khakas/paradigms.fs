@@ -443,7 +443,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" Prol (н)ЧА"
     form" Delib нАңАр"
     form" Comp (н)ТАГ"
-    form" Voc Ай"
+    right-context( constraint-33 )
+      form" Voc Ай"
+    right-context-end
   filters-end
   ; slot-add
 

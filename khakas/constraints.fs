@@ -504,6 +504,11 @@ require khakas/slotnames.fs
 : constraint-30  ( -- f )
   flag All₁  flag-is? ;
 
+\ 33. Voc Ай возможен только на конце словоформы.
+: constraint-33  ( -- f )
+  slots( <Case₂> <Ptcl₃> ]-empty? ;
+
+
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT  ||
