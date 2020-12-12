@@ -30,14 +30,10 @@ require khakas/slotnames.fs
 \ имеет помету Nomen, 2) либо непосредственно после позиции
 \ <Tense/Mood>, заполненной одним из причастных показателей,
 \ если слово имеет помету Verbum;
-\ Заполнение позиций с <Pl₁> до <Case₂> также возможно
-\ непосредственно после показателей позиции <Comit> или
-\ <Affirm>.
 : constraint-2  ( -- f )
-  slots[ <Transp> <Case₂> ]-empty? 
+  slots[ <Transp> <Case₂> ]-empty?
   || nomen?  slots[ 1 <Transp> )-empty? AND
   || flag participles  flag-is?  slots( <Tense/Mood/Conv2> <Transp> )-empty?  AND
-  || <Transp> slot-full?                 \ Comit, Affirm
   ;
 
 \ 3. Показатели позиции 2 (NF) и показатель Perf (Ы)бЫС
