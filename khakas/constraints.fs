@@ -424,15 +424,17 @@ require khakas/slotnames.fs
 \ г) чистой именной основы,
 \ д) пок-ля Ptcl₂: Хай пірее одыртхан ағастар парохтар
 \    мында - Здесь имеется и несколько посаженных деревьев (ГХЯ)
+\ е) показателя Comit ЛЫГ.
 : constraint-21  ( -- f )
-  flag Iter flag-is?  slots( <Neg/Iter> <PredPl> )-empty?  AND                     ||
-  <Tense/Mood/Conv2> slot-full?  slots( <Tense/Mood/Conv2> <PredPl> )-empty?  AND  ||
-  <Affirm> slot-full?  slots( <Affirm> <PredPl> )-empty?  AND                      ||
-  <Poss₂> slot-full?  slots( <Poss₂> <PredPl> )-empty?  AND                        ||
-  <Case₂> slot-full?  slots( <Case₂> <PredPl> )-empty?  AND                        ||
-  <Ptcl₂> slot-full?  slots( <Ptcl₂> <PredPl> )-empty?  AND                        ||
-  flags( Dur1 Dur₁.dial.kac 1.pl Imp.3 ) flag-is?                                  ||
-  slots[ 1 <PredPl> )-empty?  nomen?  AND
+  flag Iter flag-is?  slots( <Neg/Iter> <PredPl> )-empty?  AND
+  || <Tense/Mood/Conv2> slot-full?  slots( <Tense/Mood/Conv2> <PredPl> )-empty?  AND
+  || <Affirm> slot-full?  slots( <Affirm> <PredPl> )-empty?  AND
+  || <Poss₂> slot-full?  slots( <Poss₂> <PredPl> )-empty?  AND
+  || <Case₂> slot-full?  slots( <Case₂> <PredPl> )-empty?  AND
+  || <Ptcl₂> slot-full?  slots( <Ptcl₂> <PredPl> )-empty?  AND
+  || flags( Dur1 Dur₁.dial.kac 1.pl Imp.3 ) flag-is?
+  || slots[ 1 <PredPl> )-empty?  nomen?  AND
+  || flag Comit  flag-is?  slots( <Transp> <PredPl> )-empty?  AND
   ;
 
 \ 22. Показатель Perm присоединяется только к императивным

@@ -7,6 +7,7 @@ flagenum:
   flag: Ass₂
   flag: Ass₃
   flag: Assum
+  flag: Comit
   flag: Comp
   flag: Cond
   flag: Cont
