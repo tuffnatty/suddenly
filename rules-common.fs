@@ -164,6 +164,7 @@ unvoiced voiced wid-map-new CONSTANT envoice-compact-trie
 
 TIMER: +polysyllabic?
 : polysyllabic?  ( addr u -- f ) +polysyllabic?
+  "-" SEARCH DROP  \ in composite, skip left part
   OVER + SWAP ( cs-end ptr )
   0 { cnt }
   BEGIN 2DUP > WHILE

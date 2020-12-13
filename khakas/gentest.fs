@@ -313,6 +313,7 @@ T{ S" чилін+і"			S" чилні"		parse-test -> TRUE }T
 T{ S" чі+е+м+дір"		S" чимдір"		parse-test -> TRUE }T
 T{ S" чиң+ер"			S" чиңер"		parse-test -> TRUE }T
 T{ S" чиң+іп"			S" чиип"		parse-test -> TRUE }T
+T{ S" чир-суғ+ы+н"		S" чир-суун"		parse-test -> TRUE }T
 T{ S" чілің+і"			S" чілии"		parse-test -> TRUE }T
 T{ S" чі+п+ле+іс+еді"		S" чіплеізеді"		parse-test -> TRUE }T
 T{ S" чоохта+ды+ңар"            S" чоохтадар"           parse-test -> TRUE }T
