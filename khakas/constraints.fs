@@ -216,22 +216,17 @@ require khakas/slotnames.fs
   slots( <Tense/Mood/Conv> <Person> )-full?  ||
   flags( 1sg.br 2sg.br ) flag-empty? ;
 
-
 \ 10. Показатель Cunc не встречается в одной
 \ словоформе с показателями Perf или отрицательными
 \ (всеми, в названия которых входит элемент Neg);
 : constraint-10  ( -- f )
   flag Cunc  flag-empty? ;
 
-\ 10.1. Показатель Fut А(р) не встречается в одной словоформе с
-\ отрицательным показателем Neg.
-: constraint-10.1  ( -- f )
-  flag Fut  flag-empty? ;
-
-\ 11. Показатели Neg.Fut ПАС, Neg.Conv Пин, Neg.Сonv.Abl
-\ Пин.Аң не могут быть в одной словоформе с пок-лем Neg ПА.
+\ 11. Показатели Fut А(р), Neg.Fut ПАС, Neg.Conv Пин,
+\ Neg.Сonv.Abl Пин.Аң не могут быть в одной словоформе с
+\ пок-лем Neg ПА.
 : constraint-11  ( -- f )
-  flag Neg7  flag-empty? ;
+  flags( Fut Neg7 )  flag-empty? ;
 
 \ 11.1. Показатель NF.Neg исключает заполнение Neg в поз. 6.
 : constraint-11.1  ( -- f )

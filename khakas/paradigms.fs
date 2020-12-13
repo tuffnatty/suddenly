@@ -150,7 +150,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-11 )
     <this> slot-full!
 
-    right-context( constraint-10 constraint-10.1 )
+    right-context( constraint-10 )
       form" Neg ПА"
     right-context-end
   right-context-end
