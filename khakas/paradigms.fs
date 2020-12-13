@@ -437,6 +437,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" All.dial₂ (н)СА"
     form" Prol (н)ЧА"
     form" Delib нАңАр"
+    form" Delib.dial нАңАрЫ"
     form" Comp (н)ТАГ"
     right-context( constraint-33 )
       form" Voc Ай"
