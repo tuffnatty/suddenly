@@ -1,16 +1,16 @@
 \ flags in different slots must be distinct!
 flagenum:
-  flag: Add
+  flag: Add|Cont
   flag: All₁
   flag: Affirm
   flag: Ass₁
   flag: Ass₂
   flag: Ass₃
   flag: Assum
+  flag: Attr
   flag: Comit
   flag: Comp
   flag: Cond
-  flag: Cont
   flag: Conv.a
   flag: Convₚ
   flag: Cunc

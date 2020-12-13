@@ -18,26 +18,26 @@ require khakas/slotnames.fs
   slot-all-empty?
   ;
 
-\ 1. Позиции с <Distr> до <Tense/Mood> могут заполняться только
-\ у слов с пометой Verbum.
+\ 1. Позиции с <Distr> до <Tense/Mood/Conv> могут заполняться
+\ только у слов с пометой Verbum.
 : constraint-1  ( -- f )
   verb? ||
-  slots[ <Distr> <Tense/Mood/Conv2> ]-empty?
+  slots[ <Distr> <Tense/Mood/Conv> ]-empty?
   ;
 
-\ 2. Заполнение позиций 9-16 (с <Transp> до <Case₂>)
+\ 2. Заполнение позиций 10-16 (с <Pl₁> до <Case₂>)
 \ может происходить: 1) либо сразу после основы, если слово
 \ имеет помету Nomen, 2) либо непосредственно после позиции
 \ <Tense/Mood>, заполненной одним из причастных показателей,
 \ если слово имеет помету Verbum;
 : constraint-2  ( -- f )
-  slots[ <Transp> <Case₂> ]-empty?
-  || nomen?  slots[ 1 <Transp> )-empty? AND
-  || flag participles  flag-is?  slots( <Tense/Mood/Conv2> <Transp> )-empty?  AND
+  slots[ <Pl₁> <Case₂> ]-empty?
+  || nomen?  slots[ 1 <Pl₁> )-empty? AND
+  || flag participles  flag-is?  slots( <Tense/Mood/Conv> <Pl₁> )-empty?  AND
   ;
 
 \ 3. Показатели позиции 2 (NF) и показатель Perf (Ы)бЫС
-\ (4) в пределах одной словоформы встречаются только в
+\ в пределах одной словоформы встречаются только в
 \ случае заполнения позиции 2 кумулятивным показателем
 \ NF.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
 \ – (кончить-NF-Add-Perf-RPast-Pl) ‘почти закончили’].
@@ -88,7 +88,7 @@ require khakas/slotnames.fs
 : constraint-4.1ₚ  ( -- f )
   <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND
   || <NF,Dur₁> form-slot-vowel-at-left?
-  || flags( Add Ass₁ Cont ) flag-is?
+  || flags( Add|Cont Ass₁ ) flag-is?
   || stem-last-sound-ptr cyr t~/ {vowel} NOT
   ;
 : constraint-4.1₀  ( -- f )
@@ -155,7 +155,7 @@ require khakas/slotnames.fs
   ;
 : constraint-8sag  ( -- f )
   slots( <NF,Dur₁> <Dur> )-empty?  <Dur> slot-full?  AND
-  || slots( <NF,Dur₁> <Tense/Mood/Conv2> )-empty?  flags( Past Cond PresPt.dial ) flag-is? AND
+  || slots( <NF,Dur₁> <Tense/Mood/Conv> )-empty?  flags( Past Cond PresPt.dial ) flag-is? AND
   ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
@@ -173,7 +173,7 @@ require khakas/slotnames.fs
 \ перед всеми Person: пар-га-м 'я шел', тiк-ке-зер 'вы шили'.
 \ В остальных случаях принимается форма ГАн
 : constraint-9.1  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
+  slots( <Tense/Mood/Conv> <Person> )-empty? &&
   <Person> slot-full?
   ;
 
@@ -183,7 +183,7 @@ require khakas/slotnames.fs
 \ приходили (обычно)’. А может и принимать форму ҶАң. В
 \ остальных случаях принимается форма ҶАң
 : constraint-9.2  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
+  slots( <Tense/Mood/Conv> <Person> )-empty? &&
   <Person> slot-full?
   ;
 
@@ -196,7 +196,7 @@ require khakas/slotnames.fs
 \ случаях фигурирует только форма Ар. В первом лице бывает также
 \ и форма Ар: пар-ар-бын ‘я пойду’, адир-быс ‘мы будем называть’.
 : constraint-9.3  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
+  slots( <Tense/Mood/Conv> <Person> )-empty? &&
   <Person>  slot-full?
   ;
 
@@ -204,7 +204,7 @@ require khakas/slotnames.fs
 \ непосредственно перед Person или PredPl. Форма тур возможна в
 \ любых контекстах.
 : constraint-9.4  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-empty? &&
+  slots( <Tense/Mood/Conv> <Person> )-empty? &&
   slots[ <Person> <PredPl> ]-full?
   ;
 
@@ -213,7 +213,7 @@ require khakas/slotnames.fs
 \ разборов чар-ым / чары-м). В остальных контекстах показатели
 \ не распределены.
 : constraint-9.5  ( -- f )
-  slots( <Tense/Mood/Conv2> <Person> )-full?  ||
+  slots( <Tense/Mood/Conv> <Person> )-full?  ||
   flags( 1sg.br 2sg.br ) flag-empty? ;
 
 
@@ -242,18 +242,18 @@ require khakas/slotnames.fs
 \ лично-числовой показатель (Person), число предиката
 \ (PredPl), показатель аффирматива (Affirm), <Ptcl₂> или <Ptcl₃>
 : constraint-12  ( -- f )
-  slots( <Tense/Mood/Conv2> <PredPl> )-empty?
-  || slots( <Tense/Mood/Conv2> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
-  || slots( <Tense/Mood/Conv2> <Person> )-empty?  flag Person.br  flag-is?  AND
-  || slots( <Tense/Mood/Conv2> <Affirm> )-empty?  <Affirm> slot-full?  AND
+  slots( <Tense/Mood/Conv> <PredPl> )-empty?
+  || slots( <Tense/Mood/Conv> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
+  || slots( <Tense/Mood/Conv> <Person> )-empty?  flag Person.br  flag-is?  AND
+  || slots( <Tense/Mood/Conv> <Affirm> )-empty?  <Affirm> slot-full?  AND
   ;
 
 \ 13. Непосредственно после показателя условного наклонения
 \ (Cond) может следовать только краткий лично-числовой
 \ показатель (Person) или число предиката (PredPl) или Ptcl3
 : constraint-13  ( -- f )
-  slots( <Tense/Mood/Conv2> <PredPl> )-empty?  ||
-  slots( <Tense/Mood/Conv2> <Person> )-empty?  &&
+  slots( <Tense/Mood/Conv> <PredPl> )-empty?  ||
+  slots( <Tense/Mood/Conv> <Person> )-empty?  &&
     flag Person.br  flag-is?
   ;
 
@@ -274,9 +274,11 @@ require khakas/slotnames.fs
 
 \ 16.1. Показатели позиций <Pl₁>, <Poss₁>, <Case₁> возможны
 \ только при наличии в словоформе одного или нескольких аффиксов
-\ из позиций <Attr>, <Pl₂>, <Poss₂>, <Case₂>.
+\ из позиций <Transp> (Attr, Comit), <Pl₂>, <Poss₂>, <Case₂>.
 : constraint-16.1  ( -- f )
-  slots[ <Attr> <Case₂> ]-full? ;
+  flags( Attr Comit ) flag-is?
+  || slots( <Transp> <Case₂> ]-full?
+  ;
 
 \ 16.2. Показатель Attr КЫ может присутствовать в
 \ словоформе только при наличии <Case₁>. [В такой словоформе могут
@@ -291,9 +293,9 @@ require khakas/slotnames.fs
 \ 1.25). В прочих случаях перед нами не Pl2, а PredPl: ибделер
 \ ‘они дома’.
 : constraint-16.3  ( -- f )
-  <Case₁> slot-empty?  ||
-  <Attr> slot-full?    ||
-  flag Gen₁  flag-is?
+  <Case₁> slot-empty?
+  || <Transp> slot-full?
+  || flag Gen₁  flag-is?
   ;
 
 \ 16.4. Pl₂ может следовать непосредственно за Poss₁ только при
@@ -368,10 +370,10 @@ require khakas/slotnames.fs
 \ предшествующих <Tense/Mood>
 : constraint-19  ( -- f )
   verb?  &&
-  slots[ <Tense/Mood/Conv2> <Person> )-empty?
+  slots[ <Tense/Mood/Conv> <Person> )-empty?
   ;
 
-\ 20. К словам с пометой NOMEN присоединяются полные
+\ 20. К словам с пометой Nomen присоединяются полные
 \ лично-числовые показатели (список внутри Person), которые
 \ могут следовать после любых морфем. У глаголов заполнение
 \ Person возможно только при незаполненных позициях с 11 по 17
@@ -427,7 +429,7 @@ require khakas/slotnames.fs
 \ е) показателя Comit ЛЫГ.
 : constraint-21  ( -- f )
   flag Iter flag-is?  slots( <Neg/Iter> <PredPl> )-empty?  AND
-  || <Tense/Mood/Conv2> slot-full?  slots( <Tense/Mood/Conv2> <PredPl> )-empty?  AND
+  || <Tense/Mood/Conv> slot-full?  slots( <Tense/Mood/Conv> <PredPl> )-empty?  AND
   || <Affirm> slot-full?  slots( <Affirm> <PredPl> )-empty?  AND
   || <Poss₂> slot-full?  slots( <Poss₂> <PredPl> )-empty?  AND
   || <Case₂> slot-full?  slots( <Case₂> <PredPl> )-empty?  AND
@@ -438,7 +440,7 @@ require khakas/slotnames.fs
   ;
 
 \ 22. Показатель Perm присоединяется только к императивным
-\ показателям из поз. <Person>, к отрицанию ПА, Dist (К)лА,
+\ показателям из поз. <Person>, к отрицанию Neg ПА, Dist (К)лА,
 \ залоговым показателям (Pass, Rec, Refl, Caus), Perf (Ы)бЫс,
 \ Dur чАт, чат или к чистой основе слов категории Verbum
 \ (имеющей значение Imp.2sg).
@@ -464,7 +466,7 @@ require khakas/slotnames.fs
 \ Convп (Ы)П, Convа; Convпас; Neg.Conv и Neg.Conv.Abl) может
 \ стоять только показатель Ass ОК из позиции Ptcl3.
 : constraint-25  ( -- f )
-  slots( <Tense/Mood/Conv2> <Ptcl₃> ]-empty?  ||
+  slots( <Tense/Mood/Conv> <Ptcl₃> ]-empty?  ||
   flag Ass₃  flag-is?
   ;
 
@@ -601,7 +603,7 @@ require khakas/slotnames.fs
 
 \ После NF глухое: пар-тыр, сом-тыр
 : constraint-voicedstem+Indir  ( -- f )
-  flag NF₀  flag-is?  slots( <NF,Dur₁> <Tense/Mood/Conv2> )-empty?  AND
+  flag NF₀  flag-is?  slots( <NF,Dur₁> <Tense/Mood/Conv> )-empty?  AND
   \ 1 7 slot-range-empty?
   \ stem-last-sound consonant?
   \ stem-last-sound unvoiced? NOT
@@ -659,12 +661,12 @@ require khakas/slotnames.fs
   n-slot form-slot-vowel-at-left? NOT
   || n-slot form-slot-flags untransformed-fallout-VA>и AND
   ;
-: constraint-VA>и-fallout-<Tense/Mood/Conv2>  <Tense/Mood/Conv2> constraint-VA>и-fallout-with-slot ;
-: constraint-VA>и-fallout-<Neg/Iter>                  <Neg/Iter> constraint-VA>и-fallout-with-slot ;
-: constraint-VA>и-fallout-<Prosp>                        <Prosp> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Tense/Mood/Conv>  <Tense/Mood/Conv> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Neg/Iter>                <Neg/Iter> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Prosp>                      <Prosp> constraint-VA>и-fallout-with-slot ;
 : constraint-VA>и-fallout  ( -- f )
-  <Tense/Mood/Conv2> => constraint-VA>и-fallout-<Tense/Mood/Conv2>
-  <Neg/Iter>         => constraint-VA>и-fallout-<Neg/Iter>
-  <Prosp>            => constraint-VA>и-fallout-<Prosp>
+  <Tense/Mood/Conv> => constraint-VA>и-fallout-<Tense/Mood/Conv>
+  <Neg/Iter>        => constraint-VA>и-fallout-<Neg/Iter>
+  <Prosp>           => constraint-VA>и-fallout-<Prosp>
   TRUE ABORT" Invalid slot for constraint-VA>и-fallout
   ; IMMEDIATE

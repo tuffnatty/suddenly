@@ -14,12 +14,11 @@ enum:
   +enum <Prosp>
   +enum <Dur>
   +enum <Neg/Iter>
-  +enum <Tense/Mood/Conv2>
-  +enum <Transp>
+  +enum <Tense/Mood/Conv>
   +enum <Pl₁>
   +enum <Poss₁>
   +enum <Case₁>
-  +enum <Attr>
+  +enum <Transp>
   +enum <Pl₂>
   +enum <Poss₂>
   +enum <Case₂>

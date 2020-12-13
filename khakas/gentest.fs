@@ -1,4 +1,5 @@
 T{ S" аал+да+хы+лар"		S" аалдағылар"		parse-test -> TRUE }T
+T{ S" аар+лығ+ы"		S" аарлии"		parse-test -> TRUE }T
 T{ S" абылағ+ы"			S" абылаа"		parse-test -> TRUE }T
 T{ S" ағ+ы"			S" аа"			parse-test -> TRUE }T  \ #147
 T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
@@ -268,6 +269,7 @@ T{ S" узу+ғай"			S" узаай"		parse-test -> TRUE }T
 T{ S" уйғу+ға"			S" уйғаа"		parse-test -> TRUE }T
 T{ S" улуғ+ы"			S" улии"		parse-test -> TRUE }T
 T{ S" улуғла+аачых"		S" улуғлаачых"		parse-test -> TRUE }T
+T{ S" ӱс+і+ліг"			S" ӱзіліг"		parse-test -> TRUE }T  \ #178
 T{ S" фамилия+зы"		S" фамилиязы"		parse-test -> TRUE }T
 T{ S" фамилия+ы"		S" фамилияы"		parse-test -> FALSE }T
 T{ S" финн+нең"			S" финнең"		parse-test -> TRUE }T

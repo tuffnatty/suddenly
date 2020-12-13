@@ -40,7 +40,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
   ; slot-add
 
-<Voice> slot:  \ 1.5
+<Voice> slot:  \ 2
   <this> slot-empty!
   form" -novoice "
 
@@ -51,7 +51,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" Caus ТЫр"
   ; slot-add
 
-<NF,Dur₁> slot:  \ 2
+<NF,Dur₁> slot:  \ 3
   <this> slot-empty!
   form" -noconv1 "
 
@@ -91,19 +91,19 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   ; slot-add
 
-<Ptcl1> slot:  \ 3
+<Ptcl1> slot:  \ 4
   <this> slot-empty!
   form" -noptcl1 "
 
   right-context( constraint-27 constraint-5 )
     <this> slot-full!
-    flag-with Add  form" Add₁ ТАА"
-    flag-with Cont  form" Cont₁ LА"
+    flag-with Add|Cont  form" Add₁ ТАА"
+    flag-with Add|Cont  form" Cont₁ LА"
     form" Ass₁ ОК"
   right-context-end
   ; slot-add
 
-<Perf> slot:  \ 4
+<Perf> slot:  \ 5
   <this> slot-empty!
   form" -noperf "
 
@@ -120,7 +120,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
   ; slot-add
 
-<Prosp> slot:  \ 5
+<Prosp> slot:  \ 6
   <this> slot-empty!
   form" -noprosp "
 
@@ -132,7 +132,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
   ; slot-add
 
-<Dur> slot:  \ 6
+<Dur> slot:  \ 7
   <this> slot-empty!
   form" -nodur "
 
@@ -143,7 +143,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
   ; slot-add
 
-<Neg/Iter> slot:  \ 7
+<Neg/Iter> slot:  \ 8
   <this> slot-empty!
   form" -noneg/iter "
 
@@ -165,7 +165,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
   ; slot-add
 
-<Tense/Mood/Conv2> slot:  \ 8
+<Tense/Mood/Conv> slot:  \ 9
   <this> slot-empty!
   form" -notense "
 
@@ -267,21 +267,6 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
   ; slot-add
 
-<Transp> slot:  \ 9
-  <this> slot-empty!
-  form" -nocomit "
-
-  <this> slot-full!
-
-  form" Comit ЛЫГ"
-
-  right-context( constraint-18-right )
-    filters( constraint-18 )
-      form" Adv Ли"
-    filters-end
-  right-context-end
-  ; slot-add
-
 <Pl₁> slot:  \ 10
   <this> slot-empty!
   form" -nopl1 "
@@ -340,14 +325,24 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
   ; slot-add
 
-<Attr> slot:  \ 13
+<Transp> slot:  \ 13
   <this> slot-empty!
-  form" -noattr "
+  form" -notransp "
+
+  <this> slot-full!
 
   filters( constraint-16.2 )
     <this> slot-full!
     form" Attr КЫ"
   filters-end
+
+  form" Comit ЛЫГ"
+
+  right-context( constraint-18-right )
+    filters( constraint-18 )
+      form" Adv Ли"
+    filters-end
+  right-context-end
   ; slot-add
 
 <Pl₂> slot:  \ 14
@@ -457,8 +452,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   right-context( constraint-27 )
     form" Ass₂ ОК"
-    flag-with Cont  form" Cont₂ LА"
-    flag-with Add  form" Add₂ ТАА"
+    flag-with Add|Cont  form" Cont₂ LА"
+    flag-with Add|Cont  form" Add₂ ТАА"
   right-context-end
   filters( constraint-32 )
     form" Part ни"
