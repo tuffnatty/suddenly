@@ -179,9 +179,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
 
     right-context( constraint-9.5 )
-      ( flag-with Pres.dial.sh@short )  form" Pres.dial.sh чАр"
+      ( flag-with Pres.dial.sh@short )  form" Pres.dial.sh чар"
     right-context-end
-    ( flag-with Pres.dial.sh@full )     form" Pres.dial.sh чАрЫ"
+    ( flag-with Pres.dial.sh@full )     form" Pres.dial.sh чары"
   filters-end
 
   filters( constraint-26 )
