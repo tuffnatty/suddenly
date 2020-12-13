@@ -79,8 +79,9 @@ require khakas/slotnames.fs
 \    оканчивающимися на гласную;
 \ 3) непосредственно за ним следует Ass ОК или Cont LA
 \    или Add ТАА (см. пример в п. 3).
-\ 4) основа оканчивается на согласную (действует опционально для
-\    качинского диалекта, но проникло и в литературные тексты).
+\ 4) основа или предшествующий аффикс оканчивается на согласную
+\    (действует опционально для качинского диалекта, но проникло
+\    и в литературные тексты).
 \ NF выбирает алломорф 0 после основы или аффикса на
 \ невыпадающую согласную, если после него не стоит аффикс ОК.
 \ [Таким образом, после основы на невыпадающую согласную в конце
@@ -89,10 +90,10 @@ require khakas/slotnames.fs
   <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND
   || <NF,Dur₁> form-slot-vowel-at-left?
   || flags( Add|Cont Ass₁ ) flag-is?
-  || stem-last-sound-ptr cyr t~/ {vowel} NOT
+  || <NF,Dur₁> form-slot-xc-at-left consonant?
   ;
 : constraint-4.1₀  ( -- f )
-  stem-last-sound-ptr cyr t~/ {vowel} NOT
+  <NF,Dur₁> form-slot-xc-at-left consonant?
   && <NF,Dur₁> form-slot-xc-at-left fallout-short? NOT
   ;
 : constraint-4.1₀-right  ( -- f )

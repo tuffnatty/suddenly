@@ -290,6 +290,7 @@ T{ S" хол+ы+нда+хы+лар"		S" холындағылар"	parse-test -> 
 T{ S" хомай+зыбыс"		S" хомайзыбыс"		parse-test -> TRUE }T
 T{ S" худай+бынаң"		S" худайбынаң"		parse-test -> TRUE }T
 T{ S" худай+ым+ай"		S" худайымай"		parse-test -> TRUE }T
+T{ S" худала+н+0̸+чат+чаң"	S" худаланчатчаң"	parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузиим"		parse-test -> TRUE }T
 T{ S" хузух+ым"			S" хузуғым"		parse-test -> TRUE }T
 T{ S" хулун+ы"			S" хулуны"		parse-test -> TRUE }T
