@@ -201,6 +201,7 @@ T{ S" сенек+і"                  S" сенее"               parse-test ->
 T{ S" сиг+ер"			S" сиир"		parse-test -> TRUE }T
 T{ S" сиг+і"			S" сии"			parse-test -> TRUE }T
 T{ S" сиг+іп"			S" сиип"		parse-test -> TRUE }T
+T{ S" сиихта+ар"		S" сиихтир"		parse-test -> TRUE }T  \ #175
 T{ S" сине+еңер"		S" синееңер"		parse-test -> TRUE }T
 T{ S" сине+елер"		S" синеелер"		parse-test -> TRUE }T
 T{ S" сине+ибіс"		S" синибіс"		parse-test -> TRUE }T

@@ -626,9 +626,12 @@ end-public-class Untransformer
   affix /[ае]($|[бдркх])/ IF
     fallout-rslice t~/ и IF
       untransformed-fallout-VA>и TO flags
-      wordform-row back-vowel = IF "а" ELSE "е" THEN  { D: V2 }
-      wordform-row sound-each-str { D: V1 }
-        V1 V2 unfallout-add-vv
+      \ сиихта+а(р) > сиихти(р). Try both rows for this special case
+      back-vowel sound-each-str { D: V1 }
+        V1 "а" unfallout-add-vv
+      sound-next
+      front-vowel sound-each-str { D: V1 }
+        V1 "е" unfallout-add-vv
       sound-next
       untransformed-fallout TO flags
     THEN

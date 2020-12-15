@@ -608,7 +608,7 @@ require khakas/slotnames.fs
 
 \ Pres.dial ча, Pres2.dial.kac чадыр только после переднерядных основ
 : constraint-frontstem  ( -- f )
-  stem-last-char-vowel-row back-vowel <>
+  stem-last-char-vowel-row front-vowel =
   ;
 
 \ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не
