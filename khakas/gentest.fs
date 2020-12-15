@@ -309,6 +309,7 @@ T{ S" хыс+ым"			S" хызым"		parse-test -> TRUE }T
 T{ S" чазы+ға"			S" чазаа"		parse-test -> TRUE }T
 T{ S" чайлағ+ы"			S" чайлаа"		parse-test -> TRUE }T
 T{ S" чарын+ы"			S" чарны"		parse-test -> TRUE }T
+T{ S" часка+лығ+ға"		S" часкалыға"		parse-test -> TRUE }T
 T{ S" чі+гелек"			S" чеелек"		parse-test -> TRUE }T
 T{ S" чилін+і"			S" чилні"		parse-test -> TRUE }T
 T{ S" чі+е+м+дір"		S" чимдір"		parse-test -> TRUE }T

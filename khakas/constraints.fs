@@ -557,12 +557,6 @@ require khakas/slotnames.fs
       AND NOT
   ;
 
-\ Запрещенные контексты для выпадения Г после Г, ң без стяжения
-: constraint-[Гң]Г-fallout  ( -- f )
-  first-form-flag untransformed-fallout-confluence AND  ||
-  untransformed-fallout-confluence any-form-flag-is? NOT
-  ;
-
 \ Запрещенные контексты для выпадения одной из трех одинаковых согласных
 : constraint-CCC-fallout  ( -- f )
   stem-last-sound-ptr cyr  stem-prev-sound-ptr cyr COMPARE                            ||

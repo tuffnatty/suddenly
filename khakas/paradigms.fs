@@ -17,8 +17,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   \ Навесим глобальные фильтры на 1-ю позицию с любым
   \ (в том числе нулевым!) аффиксом
   right-context( constraint-(СА|ТЫ)ңАр-fallout
-                 constraint-VңV-fallout
-                 constraint-[Гң]Г-fallout )
+                 constraint-VңV-fallout )
     filters( constraint-0
              constraint-1
              constraint-2
