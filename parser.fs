@@ -199,27 +199,26 @@ DEFER yield-stem  ( stem -- )
       left-part last-sound-except-ь-ptr cyr t~/ {voiced} IF
         left-part string-addr buffer CMOVE
         buffer last-sound-except-ь-ptr cyr  2DUP unvoice-str DROP -ROT CMOVE
-        \." Correcting VU harmony to " buffer TYPE CR
+        \." " indent ." Correcting VU harmony to " buffer TYPE CR
         buffer n-rule rule rule-check TO harmony-ok? 2DROP
         harmony-ok? IF
           slot-flag harmony-vu-broken OR TO slot-flag
         THEN
-      ELSE
-        left-part last-vowel [CHAR] и = IF
-          left-part string-addr buffer CMOVE
-          buffer string-end { ptr }
-          BEGIN ptr buffer string-addr > WHILE
-            ptr XCHAR- TO ptr
-            ptr XC@ [CHAR] и = IF
-              [CHAR] і ptr XC!
-              FALSE
-            ELSE TRUE THEN WHILE
-          REPEAT THEN
-          \." Correcting FB harmony to " buffer TYPE CR
-          buffer n-rule rule rule-check TO harmony-ok? 2DROP
-          harmony-ok? IF
-            slot-flag harmony-fb-broken OR TO slot-flag
-          THEN
+      THEN
+      left-part last-vowel [CHAR] и = IF
+        left-part string-addr buffer CMOVE
+        buffer string-end { ptr }
+        BEGIN ptr buffer string-addr > WHILE
+          ptr XCHAR- TO ptr
+          ptr XC@ [CHAR] и = IF
+            [CHAR] і ptr XC!
+            FALSE
+          ELSE TRUE THEN WHILE
+        REPEAT THEN
+        \." " indent ." Correcting FB harmony to " buffer TYPE CR
+        buffer n-rule rule rule-check TO harmony-ok? 2DROP
+        harmony-ok? IF
+          slot-flag harmony-fb-broken OR TO slot-flag
         THEN
       THEN
     THEN

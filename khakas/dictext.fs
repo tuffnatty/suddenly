@@ -1,15 +1,17 @@
 REQUIRE ./../cleave.fs
 REQUIRE ./phonetics.fs
 
-%001 CONSTANT dictflag-no-envoice
-%010 CONSTANT dictflag-poss
-%100 CONSTANT dictflag-rus
+%0001 CONSTANT dictflag-no-envoice
+%0010 CONSTANT dictflag-poss
+%0100 CONSTANT dictflag-rus
+%1000 CONSTANT dictflag-composite
 
 :noname  ( dictflags -- )
   ." <"
   cleave[ dictflag-no-envoice AND IF ." +no-envoice" THEN
        ][ dictflag-poss AND IF ." +poss" THEN
-       ][ dictflag-rus AND IF ." +rus" THEN ];  ( )
+       ][ dictflag-rus AND IF ." +rus" THEN
+       ][ dictflag-composite AND IF ." +composite" THEN ];  ( )
   ." >"
   ; IS .dictflags
 
@@ -35,5 +37,8 @@ GET-CURRENT dictionary-wordlist SET-CURRENT
 
 : +unvoiced ( -- )
   dictflag-no-envoice dictionary-ptr @ dict-flags +! ;
+
+: +composite ( -- )
+  dictflag-composite dictionary-ptr @ dict-flags +! ;
 
 SET-CURRENT

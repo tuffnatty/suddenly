@@ -643,7 +643,7 @@ require khakas/slotnames.fs
      dictflag-rus dictflag-is?  &&
        first-form-flag harmony-vu-broken AND 0<> ;] EXECUTE &&
   [: harmony-fb-broken any-form-flag-is? NOT  ||
-     dictflag-rus dictflag-is?  &&
+     dictflag-rus dictflag-composite OR  dictflag-is?  &&
        first-form-flag harmony-fb-broken AND 0<> ;] EXECUTE
   ;
 
