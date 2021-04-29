@@ -152,7 +152,7 @@ require khakas/slotnames.fs
   slots( <NF,Dur₁> <Ptcl₃> ]-empty?
   || slots( <NF,Dur₁> <Person> )-empty?  <Person> slot-full?  AND
   || slots( <NF,Dur₁> <PredPl> )-empty?  <PredPl> slot-full?  AND
-  || flags( Past Cond Convₚ ) flag-is?  <Neg/Iter> slot-empty?  AND
+  || flags( Past Cond Convₚ ) flag-is?  <Neg/Gener> slot-empty?  AND
   ;
 : constraint-8sag  ( -- f )
   slots( <NF,Dur₁> <Dur> )-empty?  <Dur> slot-full?  AND
@@ -254,19 +254,19 @@ require khakas/slotnames.fs
     flag Person.br  flag-is?
   ;
 
-\ 14. Непосредственно после Iter возможны только: конец
+\ 14. Непосредственно после Gener возможны только: конец
 \ словоформы [(обрабатывается правилом 27),] Past ГА(н),
 \ ConvA, ConvП, <Ptcl₂>, <Person>, <PredPl> или <Ptcl₃>.
 : constraint-14  ( -- f )
   flags( Past Convₚ Conv.a ) flag-is?
-  || slots( <Neg/Iter> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
-  || slots( <Neg/Iter> <Person> )-empty?
+  || slots( <Neg/Gener> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
+  || slots( <Neg/Gener> <Person> )-empty?
   ;
 
-\ 14.1. Iter: Перед Past ГА(н) и Ptcl3 возможна только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
+\ 14.1. Gener: Перед Past ГА(н) и Ptcl3 возможна только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
 : constraint-14.1  ( -- f )
   flag Past  flag-empty?  &&
-  slots( <Neg/Iter> <Ptcl₃> )-empty?  <Ptcl₃> slot-full?  AND NOT
+  slots( <Neg/Gener> <Ptcl₃> )-empty?  <Ptcl₃> slot-full?  AND NOT
   ;
 
 \ 16.1. Показатели позиций <Pl₁>, <Poss₁>, <Case₁> возможны
@@ -377,12 +377,12 @@ require khakas/slotnames.fs
 \ (за исключением Comp ТАГ) и при наличии показателей:
 \ для полных форм: Dur₁.dial.kac Ат, Irr ЧЫК, Opt ГАй, Assum
 \ ГАдАГ, Indir ТЫр, Cunc ГАлАК, Neg.Fut ПАс, полные формы
-\ аффиксов Iter А.дЫр, Pres2 чАдЫр, Pres2.dial.kac чадыр,
+\ аффиксов Gener А.дЫр, Pres2 чАдЫр, Pres2.dial.kac чадыр,
 \ Pres.dial.kyz тур, Dur1 ир, Dur₁.dial.kac Ат, Hab ҶАң, Fut Ар,
 \ в качинском также Pres чА (тоғынчабын ‘я работаю’) и Past
 \ ГА(н) (парғабын ‘я шел’, чоохтаанохпын ‘я тоже говорил’);
 \ для смешанных форм: Pres чА, Pres.dial ча, Pres.dial.sh
-\ чАр(Ы), Past ГА(н), краткие формы аффиксов Iter А.дЫ, Pres2
+\ чАр(Ы), Past ГА(н), краткие формы аффиксов Gener А.дЫ, Pres2
 \ чАдЫ, Pres2.dial.kac чады, Pres.dial.kyz ту, Dur1 и, Hab ҶА,
 \ Fut А (+ в диалектах также Ар: килерім ‘я приду’);
 \ для кратких форм: Cond СА, Rpast ТЫ.
@@ -392,7 +392,7 @@ require khakas/slotnames.fs
      && flag Comp  flag-is?
         || slots[ <Pl₁> <Case₂> ]-empty?
            && flags( Opt Assum Indir Cunc Neg.Fut
-                     Iter@full Pres2@full Pres2.dial.kac@full
+                     Gener@full Pres2@full Pres2.dial.kac@full
                      Pres.dial.kyz@full Dur1@full Dur₁.dial.kac
                      Hab@full Fut@full
                      Past Pres ) flag-is?
@@ -403,7 +403,7 @@ require khakas/slotnames.fs
     flag Comp  flag-is? ||
     slots[ <Pl₂> <Case₂> ]-empty?  &&
       flags( Pres Pres.dial Pres.dial.sh Past
-             Iter@short
+             Gener@short
              Pres2@short Pres2.dial.kac@short
              Pres.dial.kyz@short
              Dur1@short Hab@short Fut ) flag-is?
@@ -418,7 +418,7 @@ require khakas/slotnames.fs
 \ 21. Показатель PredPl ЛАр может стоять после:
 \ а) пок-ля времени (позиции <Tense/Mood> [за исключением ConvA, ConvP,
 \    Neg.Conv (.Abl), Lim и PresPt чАн, согласно пр.25] + Indir
-\    TЫр + Affirm ЧЫК + Iter AдЫр + Dur1 и(р) + Dur₁.dial.kac Ат),
+\    TЫр + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + Dur₁.dial.kac Ат),
 \ б) пок-ля <Case2> или <Poss2>
 \ в) некоторых полей Person (1pl, Imp.3),
 \ г) чистой именной основы,
@@ -426,7 +426,7 @@ require khakas/slotnames.fs
 \    мында - Здесь имеется и несколько посаженных деревьев (ГХЯ)
 \ е) показателя Comit ЛЫГ.
 : constraint-21  ( -- f )
-  flag Iter flag-is?  slots( <Neg/Iter> <PredPl> )-empty?  AND
+  flag Gener flag-is?  slots( <Neg/Gener> <PredPl> )-empty?  AND
   || <Tense/Mood/Conv> slot-full?  slots( <Tense/Mood/Conv> <PredPl> )-empty?  AND
   || <Affirm> slot-full?  slots( <Affirm> <PredPl> )-empty?  AND
   || <Poss₂> slot-full?  slots( <Poss₂> <PredPl> )-empty?  AND
@@ -444,7 +444,7 @@ require khakas/slotnames.fs
 \ (имеющей значение Imp.2sg).
 : constraint-22  ( -- f )
   slots( <Person> <Ptcl₃> )-empty?  flag Imp  flag-is?  AND    ||
-  slots( <Neg/Iter> <Ptcl₃> )-empty?  flag Neg  flag-is?  AND  ||
+  slots( <Neg/Gener> <Ptcl₃> )-empty?  flag Neg  flag-is?  AND  ||
   slots( <Distr> <Ptcl₃> )-empty?  <Distr> slot-full?  AND  ||
   slots( <Voice> <Ptcl₃> )-empty?  <Voice> slot-full?  AND  ||
   slots( <Perf> <Ptcl₃> )-empty?  flag Perf  flag-is?  AND  ||
@@ -654,11 +654,11 @@ require khakas/slotnames.fs
   || n-slot form-slot-flags untransformed-fallout-VA>и AND
   ;
 : constraint-VA>и-fallout-<Tense/Mood/Conv>  <Tense/Mood/Conv> constraint-VA>и-fallout-with-slot ;
-: constraint-VA>и-fallout-<Neg/Iter>                <Neg/Iter> constraint-VA>и-fallout-with-slot ;
+: constraint-VA>и-fallout-<Neg/Gener>              <Neg/Gener> constraint-VA>и-fallout-with-slot ;
 : constraint-VA>и-fallout-<Prosp>                      <Prosp> constraint-VA>и-fallout-with-slot ;
 : constraint-VA>и-fallout  ( -- f )
   <Tense/Mood/Conv> => constraint-VA>и-fallout-<Tense/Mood/Conv>
-  <Neg/Iter>        => constraint-VA>и-fallout-<Neg/Iter>
+  <Neg/Gener>       => constraint-VA>и-fallout-<Neg/Gener>
   <Prosp>           => constraint-VA>и-fallout-<Prosp>
   TRUE ABORT" Invalid slot for constraint-VA>и-fallout
   ; IMMEDIATE

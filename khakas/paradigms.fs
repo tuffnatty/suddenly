@@ -142,7 +142,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
   ; slot-add
 
-<Neg/Iter> slot:  \ 8
+<Neg/Gener> slot:  \ 8
   <this> slot-empty!
   form" -noneg/iter "
 
@@ -156,9 +156,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   right-context( constraint-14 )
     filters( constraint-VA>и-fallout )
-      flag-with Iter@full     form" Iter АдЫр"
+      flag-with Gener@full     form" Gener АдЫр"
       right-context( constraint-14.1 )
-        flag-with Iter@short  form" Iter АдЫ"
+        flag-with Gener@short  form" Gener АдЫ"
       right-context-end
     filters-end
   right-context-end

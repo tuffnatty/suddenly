@@ -13,7 +13,7 @@ enum:
   +enum <Perf>
   +enum <Prosp>
   +enum <Dur>
-  +enum <Neg/Iter>
+  +enum <Neg/Gener>
   +enum <Tense/Mood/Conv>
   +enum <Pl₁>
   +enum <Poss₁>

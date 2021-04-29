@@ -22,13 +22,13 @@ flagenum:
   flag: Fut@short
   flag: Gen₁
   flag: Gen.3pos
+  flag: Gener@full
+  flag: Gener@short
   flag: Hab@full
   flag: Hab@short
   flag: Imp
   flag: Imp.3
   flag: Indir
-  flag: Iter@full
-  flag: Iter@short
   flag: Neg
   flag: Neg7
   flag: Neg.Fut
@@ -67,7 +67,7 @@ flagenum:
   Dur1@full Dur1@short                     flag/OR  flag-mask: Dur1
   Fut@full Fut@short                       flag/OR  flag-mask: Fut
   Hab@full Hab@short                       flag/OR  flag-mask: Hab
-  Iter@full Iter@short                     flag/OR  flag-mask: Iter
+  Gener@full Gener@short                   flag/OR  flag-mask: Gener
   Pres.dial.kyz@full Pres.dial.kyz@short   flag/OR  flag-mask: Pres.dial.kyz
   Pres2@full Pres2@short                   flag/OR  flag-mask: Pres2
   Pres2.dial.kac@full Pres2.dial.kac@short flag/OR  flag-mask: Pres2.dial.kac
