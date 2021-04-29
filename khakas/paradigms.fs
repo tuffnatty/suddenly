@@ -270,7 +270,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -nopl1 "
 
-  right-context( constraint-16.1 constraint-16.5 constraint-27 )
+  right-context( constraint-16.1 constraint-16.5 constraint-16.7 constraint-27 )
     <this> slot-full!
     form" Pl₁ ЛАр"
   right-context-end

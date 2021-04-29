@@ -35,6 +35,7 @@ T{ S" истерге"	headword?	S" искен"		parse-test -> TRUE }T
 T{ S" ис+кен"			S" искен"		parse-test -> TRUE }T
 T{ S" изерге"	headword?	S" исткен"		parse-test -> FALSE }T
 T{ S" истерге"	headword?	S" исткен"		parse-test -> TRUE }T
+T{ S" ис+тер+лер"		S" истерлер"		parse-test -> FALSE }T  \ #191
 T{ S" ист+кен"			S" исткен"		parse-test -> TRUE }T
 T{ S" ит+ті+ни+м"		S" иттіним"		parse-test -> TRUE }T
 T{ S" ізі+гелек"		S" ізеелек"		parse-test -> TRUE }T
