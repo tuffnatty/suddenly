@@ -224,10 +224,11 @@ require khakas/slotnames.fs
   flag Cunc  flag-empty? ;
 
 \ 11. Показатели Fut А(р), Neg.Fut ПАС, Neg.Conv Пин,
-\ Neg.Сonv.Abl Пин.Аң не могут быть в одной словоформе с
-\ пок-лем Neg ПА.
+\ Neg.Сonv.Abl Пин.Аң, Foc ТЫр (чтобы формы типа полбаандыр не
+\ получали паразитический разбор через Foc)
+\ не могут быть в одной словоформе с пок-лем Neg ПА.
 : constraint-11  ( -- f )
-  flags( Fut Neg7 )  flag-empty? ;
+  flags( Fut Neg7 Foc )  flag-empty? ;
 
 \ 11.1. Показатель NF.Neg исключает заполнение Neg в поз. 6.
 : constraint-11.1  ( -- f )
@@ -386,15 +387,16 @@ require khakas/slotnames.fs
 \ Fut А (+ в диалектах также Ар: килерім ‘я приду’);
 \ для кратких форм: Cond СА, Rpast ТЫ.
 : constraint-20-full-person  ( -- f )
-  nomen? ||
-  verb? &&
-    flag Comp  flag-is? ||
-    slots[ <Pl₁> <Case₂> ]-empty? &&
-      flags( Affirm Opt Assum Indir Cunc Neg.Fut
-             Iter@full Pres2@full Pres2.dial.kac@full
-             Pres.dial.kyz@full Dur1@full Dur₁.dial.kac
-             Hab@full Fut@full
-             Past Pres ) flag-is?
+  nomen?
+  || verb?
+     && flag Comp  flag-is?
+        || slots[ <Pl₁> <Case₂> ]-empty?
+           && flags( Opt Assum Indir Cunc Neg.Fut
+                     Iter@full Pres2@full Pres2.dial.kac@full
+                     Pres.dial.kyz@full Dur1@full Dur₁.dial.kac
+                     Hab@full Fut@full
+                     Past Pres ) flag-is?
+              || <Affirm> slot-full?
   ;
 : constraint-20-mix-person  ( -- f )
   verb?  &&

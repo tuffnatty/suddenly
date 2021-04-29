@@ -2,7 +2,6 @@
 flagenum:
   flag: Add|Cont
   flag: All₁
-  flag: Affirm
   flag: Ass₁
   flag: Ass₂
   flag: Ass₃
@@ -18,6 +17,7 @@ flagenum:
   flag: Dur₁.dial.kac
   flag: Dur1@full
   flag: Dur1@short
+  flag: Foc
   flag: Fut@full
   flag: Fut@short
   flag: Gen₁
