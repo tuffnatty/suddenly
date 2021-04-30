@@ -245,18 +245,20 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
 
   right-context( constraint-25 )
-    form" Lim ГАли"
+    flag converbs  flag-set \ деепричастия
+      form" Lim ГАли"
 
-    flag Neg7  flag-set
-      form" Neg.Conv Пин"
-      form" Neg.Conv.Abl ПинАң"
-    flag Neg7  flag-clear
+      flag Neg7  flag-set
+        form" Neg.Conv Пин"
+        form" Neg.Conv.Abl ПинАң"
+      flag Neg7  flag-clear
 
-    form" Convₚ (Ы)п"
-    filters( constraint-VA>и-fallout )
-      form" Conv.pas.dial АбАс"
-      form" Conv.a А"
-    filters-end
+      form" Convₚ (Ы)п"
+      filters( constraint-VA>и-fallout )
+        form" Conv.pas.dial АбАс"
+        form" Conv.a А"
+      filters-end
+    flag converbs flag-clear
   right-context-end
 
   filters( constraint-26+paan )
@@ -455,14 +457,14 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  right-context( constraint-27 )
+  right-context( constraint-27 constraint-34 )
     form" Ass₂ ОК"
     flag-with Cont  form" Cont₂ LА"
     flag-with Add   form" Add₂ ТАА"
+    filters( constraint-32 )
+      form" Part ни"
+    filters-end
   right-context-end
-  filters( constraint-32 )
-    form" Part ни"
-  filters-end
   ; slot-add
 
 <Affirm> slot:  \ 18

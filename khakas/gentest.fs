@@ -167,7 +167,7 @@ T{ S" пол+бас+пыс"		S" полбаспыс"		parse-test -> TRUE }T
 T{ S" пол+бин+ыбыс+хан"		S" полбиныбысхан"	parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат"		S" полдаачат"		parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат+са"		S" полдаачатса"		parse-test -> TRUE }T
-T{ S" пол+ды+ни"		S" полдыни"		parse-test -> TRUE }T
+T{ S" пол+ды+ни"		S" полдыни"		parse-test -> FALSE }T  \ #193
 T{ S" пол+ды+ни+м"		S" полдыним"		parse-test -> TRUE }T
 T{ S" пол+0̸+тыр+ох+чых"		S" полтырохчых"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧриим"		parse-test -> TRUE }T
@@ -329,6 +329,7 @@ T{ S" чілің+і"			S" чілии"		parse-test -> TRUE }T
 T{ S" чі+п+ле+іс+еді"		S" чіплеізеді"		parse-test -> TRUE }T
 T{ S" чоохта+ды+ңар"            S" чоохтадар"           parse-test -> TRUE }T
 T{ S" чоохта+ған+ох+пын"	S" чоохтаанохпын"       parse-test -> TRUE }T
+T{ S" чох+ы+ла+ох"		S" чоғылох"		parse-test -> FALSE }T
 T{ S" чӧгіг+і"			S" чӧгии"		parse-test -> TRUE }T
 T{ S" чӧлег+і"			S" чӧлее"		parse-test -> TRUE }T
 T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T

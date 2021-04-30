@@ -514,8 +514,7 @@ require khakas/slotnames.fs
   ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
-\ последними заполненными позициями в словоформe, за исключением
-\ Part ни.
+\ последними заполненными позициями в словоформe.
 : constraint-27-<Ptcl1>  ( -- f )  slots( <Ptcl1> <Ptcl₃> ]-full? ;
 : constraint-27-<Pl₁>    ( -- f )  slots( <Pl₁>   <Ptcl₃> ]-full? ;
 : constraint-27-<Poss₁>  ( -- f )  slots( <Poss₁> <Ptcl₃> ]-full? ;

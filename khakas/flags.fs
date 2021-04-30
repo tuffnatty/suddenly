@@ -61,6 +61,7 @@ flagenum:
   flag: 2pl.br
   flag: 2pos.pl
   flag: 3pos₁
+  flag: converbs
   flag: participles
 
   Dur1@full Dur1@short                     flag/OR  flag-mask: Dur1
