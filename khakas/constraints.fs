@@ -291,16 +291,6 @@ require khakas/slotnames.fs
 : constraint-16.2  ( -- f )
   <Case₁> slot-full? ;
 
-\ 16.3. Pl2 может следовать непосредственно за Case1, только
-\ если Case1 выражен генитивом: пістіңнер ‘наши’ (см. также
-\ 1.25). В прочих случаях перед нами не Pl2, а PredPl: ибделер
-\ ‘они дома’.
-: constraint-16.3  ( -- f )
-  <Case₁> slot-empty?
-  || <Transp> slot-full?
-  || flag Gen₁  flag-is?
-  ;
-
 \ 16.4. Pl₂ может следовать непосредственно за Poss₁ только при
 \ наличии Poss₂: чӱс-паз-ы-лар-ы-ның ікізін ‘двоих из сотников’.
 \ В прочих случаях это не Pl₂, а PredPl: олар хызыбыстар ‘они –
@@ -343,7 +333,7 @@ require khakas/slotnames.fs
   flag Gen.3pos  flag-empty? ;
 
 \ 16.7. <Poss₂>, исключая Gen.3pos, не может следовать непосредственно
-\ за <Pl₁>, Gen₁, All₁ и за <Poss₁>.
+\ за <Pl₁>, All₁ и за <Poss₁>.
 : constraint-16.7-<Pl₁>  ( -- f )
   slots( <Pl₁> <Poss₂> )-full?
   || <Poss₂> slot-empty?

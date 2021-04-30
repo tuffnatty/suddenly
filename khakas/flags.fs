@@ -21,7 +21,6 @@ flagenum:
   flag: Foc
   flag: Fut@full
   flag: Fut@short
-  flag: Gen₁
   flag: Gen.3pos
   flag: Gener@full
   flag: Gener@short
