@@ -399,7 +399,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Instr.dial ПлАң"
     right-context-end
     form" Loc ТА"
-    form" Abl₁ ДАң"
+    form" Abl ДАң"
     form" All САр"
     form" All.dial САрЫ"
     form" All.dial СА"
@@ -408,7 +408,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" Delib.dial ДАңАрЫ"
     form" Comp ТАГ"
     filters( constraint-30 )
-      form" Abl₂ тЫн"
+      form" Abl.arch тЫн"
     filters-end
   filter-else
     right-context( constraint-29 )
