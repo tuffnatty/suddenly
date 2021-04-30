@@ -99,30 +99,36 @@ require khakas/slotnames.fs
 : constraint-4.1₀-right  ( -- f )
   flag Ass₁  flag-empty? ;
 
-\ 5. Показатели поз. 3 (внутренние частицы) допускаются только
-\ а) при Perf Ыс и ЫбЫс (чіплеізеді ‘всё время съедает’,
-\ сығыбоғысчых ‘так же вылезла’, тоозыптаабыстылар ‘почти
-\ закончили’),
-\ б) при обычном дуративе Dur чАт (хараплачатхан ‘все время
-\ всматривался)’,
-\ в) при показателях времени Indir ТЫр и презенсах на ч (Pres
-\ чА, Pres.dial ча, Pres2 чАдЫ(р), PresPt чАн, Pres.dial.sh
-\ чАр(Ы), Pres2.dial.kac чады(р)): муханначадарзың ‘всё время
-\ мучаешься’.
-\ Примеров с Dur1 не попадалось.
+\ 5. Показатели Ptcl₁ (внутренние частицы) допускаются только
+\ при наличии показателя NF (NF, NF₀, NF.Neg. NF.Neg.sh) и
+\ любых из следующих показателей:
+\ а) Perf Ыс для всех частиц (чіплеізеді ‘всё время съедает’,
+\ сығыбоғысчых ‘так же вылезла’) и Perf ЫбЫс для Add ТАА
+\ (тоозыптаабыстылар ‘почти закончили’),
+\ б) Dur чАт, чат (хараплачатхан ‘все время всматривался)’,
+\ в) Indir ТЫр и презенсы на ч (Pres чА, Pres.dial ча, Pres2
+\ чАдЫ(р), PresPt чАн, Pres.dial.sh чАр(Ы), Pres2.dial.kac
+\ чады(р)): муханначадарзың ‘всё время мучаешься’.
 : constraint-5  ( -- f )
-  <Perf> slot-full?
-  || flags( Dur
-            Indir Pres Pres.dial Pres.dial.sh Pres2
-                  Pres2.dial.kac PresPt.dial ) flag-is?
+  flags( NF NF₀ NF.Neg NF.Neg.sh ) flag-is?
+  && flag Perf0  flag-is?
+     || flag Perf flag-is?  flag Add flag-is?  AND
+     || <Dur> slot-full?
+     || flags( Indir Pres Pres.dial Pres.dial.sh Pres2
+                     Pres2.dial.kac PresPt.dial ) flag-is?
   ;
 
-\ 5.1. Показатель Perf0 Ыс возможен [пока встретился] только
-\ при наличии Ptcl1, а также при диалектном показателе
-\ NF.Neg.sh ПААн.
+\ 5.1. Показатель Perf0 Ыс возможен [пока встретился]:
+\ a) при наличии Ptcl1 и любого пок-ля времени (позиции
+\ <Tense/Mood/Conv> + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) +
+\ Dur₁.dial.kac Ат):
+\ б) при диалектном показателе NF.Neg.sh ПААн.
 : constraint-5.1  ( -- f )
-  <Ptcl1> slot-full?  ||
   flag NF.Neg.sh  flag-is?
+  || <Ptcl1> slot-full?
+     && <Tense/Mood/Conv> slot-full?
+        || <Affirm> slot-full?
+        || flags( Gener Dur1 Dur₁.dial.kac ) flag-is?
   ;
 
 \ 6. Показатель Prosp АК встречается только перед

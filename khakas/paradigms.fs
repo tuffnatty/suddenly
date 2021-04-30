@@ -94,11 +94,13 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -noptcl1 "
 
-  right-context( constraint-27 constraint-5 )
-    <this> slot-full!
-    flag-with Add   form" Add₁ ТАА"
-    flag-with Cont  form" Cont₁ LА"
-    form" Ass₁ ОК"
+  right-context( constraint-27 )
+    filters( constraint-5 )
+      <this> slot-full!
+      flag-with Add   form" Add₁ ТАА"
+      flag-with Cont  form" Cont₁ LА"
+      form" Ass₁ ОК"
+    filters-end
   right-context-end
   ; slot-add
 

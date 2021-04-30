@@ -34,6 +34,7 @@ flagenum:
   flag: Loc₁
   flag: Neg
   flag: Neg7
+  flag: NF
   flag: NF₀
   flag: NF.Neg
   flag: NF.Neg.sh

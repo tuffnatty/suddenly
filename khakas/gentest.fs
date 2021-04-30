@@ -97,6 +97,8 @@ T{ S" оолғы+м+ай"		S" оолғымай"		parse-test -> TRUE }T
 T{ S" орын+ы"			S" орны"		parse-test -> TRUE }T
 T{ S" орын+ы+лар+ы"		S" орнылары"		parse-test -> TRUE }T
 T{ S" ӧдір+бе+ек"		S" ӧдірбеек"		parse-test -> TRUE }T
+T{ S" ӧзе+ӧк+іс"		S" ӧзӧгіс"		parse-test -> FALSE }T  \ #184
+T{ S" ӧс+ӧк+іс"			S" ӧзӧгіс"		parse-test -> FALSE }T  \ #184
 T{ S" ӧң+і"			S" ӧӧ"			parse-test -> TRUE }T
 T{ S" паба+м+ни"		S" пабамни"		parse-test -> TRUE }T
 T{ S" пағ+ы"			S" паа"			parse-test -> TRUE }T
