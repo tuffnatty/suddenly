@@ -385,7 +385,6 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-full!
 
   right-context( constraint-29 )
-    form" Gen НЫң"
     form" Gen.dial ТЫң"
     form" Instr нАң"
     form" Instr.dial мАң"
@@ -394,12 +393,14 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
 
   filters( constraint-17-<Case₂> )
+    \ Simple declension
     right-context( constraint-29 )
+      form" Gen НЫң"
       right-context( constraint-OK-fallout-<Case₂> )
         form" Dat ГА"
       right-context-end
       form" Acc НЫ"
-      form" Acc.dial ТЫ"
+      form" Acc.dial ДЫ"
       form" Instr.dial ПАң"
       form" Instr.dial ПлАң"
     right-context-end
@@ -416,18 +417,19 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Abl.arch тЫн"
     filters-end
   filter-else
+    \ Possessive declension
     right-context( constraint-29 )
+      form" Gen нЫң"
       right-context( constraint-OK-fallout-<Case₂> )
         form" Dat (н)А"
         form" Dat.dial (н)ГА"
       right-context-end
       filters( constraint-V+Acc )
-        form" Acc₂ Н"
-        form" Acc.dial₂ Т"
+        form" Acc н"
       filter-else
-        form" Acc₁ НЫ"
-        form" Acc.dial₁ ТЫ"
+        form" Acc нЫ"
       filters-end
+      form" Acc.dial дЫ"
       form" Instr.dial (н)мАң"
       form" Instr.dial (н)млАң"
       form" Instr.dial бАң"
