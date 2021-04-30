@@ -291,6 +291,12 @@ require khakas/slotnames.fs
 : constraint-16.2  ( -- f )
   <Case₁> slot-full? ;
 
+\ 16.3. Pl2 не может следовать непосредственно за Case1.
+: constraint-16.3  ( -- f )
+  <Case₁> slot-empty?
+  || <Transp> slot-full?
+  ;
+
 \ 16.4. Pl₂ может следовать непосредственно за Poss₁ только при
 \ наличии Poss₂: чӱс-паз-ы-лар-ы-ның ікізін ‘двоих из сотников’.
 \ В прочих случаях это не Pl₂, а PredPl: олар хызыбыстар ‘они –
@@ -543,6 +549,20 @@ require khakas/slotnames.fs
 \ 33. Voc Ай возможен только на конце словоформы.
 : constraint-33  ( -- f )
   slots( <Case₂> <Ptcl₃> ]-empty? ;
+
+\ 34. При присоединении Ptcl2 к основе глагола (Verbum)
+\ обязательно также наличие показателя времени (позиции
+\ Tense/Mood (за исключением деепричастий и PresPt чАн) +
+\ Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + Dur.dial.kac Ат).
+\ Ptcl2 не может встретиться в словоформе без показателей Person
+\ или PredPl, если непосредственно после нее не стоит
+\ Affirm ЧЫК: Аӌа іди полтырохчых. - Дядя так же был. (Чиланы)
+: constraint-34  ( -- f )
+  slots[ <Affirm> <PredPl> ]-full?
+  && <Tense/Mood/Conv> slot-full?  flags( converbs PresPt.dial ) flag-empty?  AND
+     || <Affirm> slot-full?
+     || flags( Gener Dur1 Dur₁.dial.kac ) flag-is?
+  ;
 
 
 \ Неозвончаемые основы
