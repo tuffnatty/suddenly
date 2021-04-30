@@ -96,8 +96,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   right-context( constraint-27 constraint-5 )
     <this> slot-full!
-    flag-with Add|Cont  form" Add₁ ТАА"
-    flag-with Add|Cont  form" Cont₁ LА"
+    flag-with Add   form" Add₁ ТАА"
+    flag-with Cont  form" Cont₁ LА"
     form" Ass₁ ОК"
   right-context-end
   ; slot-add
@@ -200,9 +200,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   flag participles  flag-set  \ причастные показатели
     right-context( constraint-9.1 )
-      flag-with Past@short     form" Past ГА"
+      form" Past ГА"
     right-context-else
-      ( flag-with Past@full )  form" Past ГАн"
+      form" Past ГАн"
     right-context-end
 
     filters( constraint-VA>и-fallout )
@@ -363,13 +363,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   flag Poss2.nonpl  flag-set
     form" 1pos.sg (Ы)м"
     form" 2pos.sg (Ы)ң"
-    flag Poss2.3pos  flag-set
-      filters( constraint-OK-fallout-<Poss₂> )
-        form" 3pos (з)Ы"
-      filters-end
-      form" Gen.3pos Ни"
-      flag-with Gen.3pos  form" Gen.3pos.dial Ди"
-    flag Poss2.3pos  flag-clear
+    filters( constraint-OK-fallout-<Poss₂> )
+      form" 3pos (з)Ы"
+    filters-end
+    form" Gen.3pos Ни"
+    flag-with Gen.3pos  form" Gen.3pos.dial Ди"
   flag Poss2.nonpl  flag-clear
   form" 1pos.pl (Ы)бЫс"
   form" 2pos.pl (Ы)ңАр"
@@ -452,8 +450,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   right-context( constraint-27 )
     form" Ass₂ ОК"
-    flag-with Add|Cont  form" Cont₂ LА"
-    flag-with Add|Cont  form" Add₂ ТАА"
+    flag-with Cont  form" Cont₂ LА"
+    flag-with Add   form" Add₂ ТАА"
   right-context-end
   filters( constraint-32 )
     form" Part ни"

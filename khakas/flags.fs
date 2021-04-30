@@ -1,15 +1,15 @@
 \ flags in different slots must be distinct!
 flagenum:
-  flag: Add|Cont
+  flag: Add
   flag: All₁
   flag: Ass₁
-  flag: Ass₂
   flag: Ass₃
   flag: Assum
   flag: Attr
   flag: Comit
   flag: Comp
   flag: Cond
+  flag: Cont
   flag: Conv.a
   flag: Convₚ
   flag: Cunc
@@ -37,13 +37,11 @@ flagenum:
   flag: NF.Neg.sh
   flag: Opt
   flag: Past
-  flag: Past@short
   flag: Perf
   flag: Perf0
   flag: Person.br
   flag: Poss1.nonpl
   flag: Poss2.nonpl
-  flag: Poss2.3pos
   flag: Pres
   flag: Pres.dial
   flag: Pres.dial.kyz@full

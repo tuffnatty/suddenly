@@ -89,7 +89,7 @@ require khakas/slotnames.fs
 : constraint-4.1ₚ  ( -- f )
   <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND
   || <NF,Dur₁> form-slot-vowel-at-left?
-  || flags( Add|Cont Ass₁ ) flag-is?
+  || flags( Add Cont Ass₁ ) flag-is?
   || <NF,Dur₁> form-slot-xc-at-left consonant?
   ;
 : constraint-4.1₀  ( -- f )
