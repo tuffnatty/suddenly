@@ -308,10 +308,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
     filters( constraint-16.5 )
       right-context( constraint-16.7 )
-        form" Gen₁ НЫң"
         filters( constraint-17-<Case₁> )
+          \ form" Gen₁ НЫң"
           form" All₁ САр"
         filter-else
+          \ form" Gen₁ нЫң"
           form" All₁ (н)САр"
         filters-end
       right-context-end

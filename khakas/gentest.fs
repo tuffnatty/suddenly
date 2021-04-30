@@ -151,7 +151,7 @@ T{ S" пасты+ңар"		S" пастар"		parse-test -> FALSE }T
 T{ S" пасха+лар+ы+ни+наң"	S" пасхаларынинаң"	parse-test -> TRUE }T
 T{ S" піл+бин+чат+хан"		S" пілбинчатхан"	parse-test -> TRUE }T
 T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T
-T{ S" піс+тің+нер"		S" пістіңнер"		parse-test -> TRUE }T
+T{ S" піс+тің+нер"		S" пістіңнер"		parse-test -> FALSE }T  \ #186
 T{ S" пир+бе+дек"		S" пирбедек"		parse-test -> TRUE }T
 T{ S" пир+бин+ібіс+ер+ӌік"	S" пирбинібізерӌік"	parse-test -> TRUE }T
 T{ S" пир+дек"			S" пирдек"		parse-test -> TRUE }T
