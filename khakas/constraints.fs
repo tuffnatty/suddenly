@@ -336,9 +336,9 @@ require khakas/slotnames.fs
 : constraint-16.6  ( -- f )
   flag Gen.3pos  flag-empty? ;
 
-\ 16.7. Pl2 не может непосредственно следовать за Pl1 (ислючаем
+\ 16.8. Pl2 не может непосредственно следовать за Pl1 (ислючаем
 \ паразитические разборы форм типа истерлер ‘будут слышать’).
-: constraint-16.7  ( -- f )
+: constraint-16.8  ( -- f )
   <Pl₂> slot-empty?
   || slots( <Pl₁> <Pl₂> )-full?
   ;
