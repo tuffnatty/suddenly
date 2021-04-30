@@ -306,28 +306,28 @@ require khakas/slotnames.fs
   ;
 
 \ 16.5. <Case₂> не может следовать непосредственно за <Pl₁> или
-\ <Poss₁>.
-\ <Poss₂>, исключая Gen.3pos, не может следовать непосредственно
-\ за <Pl₁>, Gen₁, All₁ и за <Poss₁>.
+\ <Poss₁>. <Case₂> не может следовать непосредственно за
+\ <Case₁>, за исключением последовательностей All1+Abl.arch тЫн,
+\ Loc1+Loc2 (пока не нашлось убедительных примеров, см.
+\ рекламацию #187).
 : constraint-16.5-<Pl₁>  ( -- f )
-  [: slots( <Pl₁> <Poss₂> )-full? ||
-     <Poss₂> slot-empty? ;] EXECUTE &&
-  [: slots( <Pl₁> <Case₂> )-full? ||
-     <Case₂> slot-empty? ;] EXECUTE ;
+  slots( <Pl₁> <Case₂> )-full?
+  || <Case₂> slot-empty?
+  ;
 : constraint-16.5-<Poss₁>  ( -- f )
-  [: slots( <Poss₁> <Case₂> )-full? ||
-     <Case₂> slot-empty? ;] EXECUTE &&
-  [: slots( <Poss₁> <Poss₂> )-full?
-     || <Poss₂> slot-empty?
-     || flag Gen.3pos flag-is?
-  ;] EXECUTE ;
+  slots( <Poss₁> <Case₂> )-full?
+  || <Case₂> slot-empty?
+  ;
 : constraint-16.5-<Case₁>  ( -- f )
-  slots( <Case₁> <Poss₂> )-full?
-  || <Poss₂> slot-empty? ;
+  slots( <Case₁> <Case₂> )-full?
+  || <Case₂> slot-empty?
+  || [: flag All₁ flag-is? && flag Abl.arch flag-is? ;] EXECUTE
+  || flag Loc₁ flag-is? && flag Loc flag-is?
+  ;
 : constraint-16.5  ( -- f )
   <Pl₁> => constraint-16.5-<Pl₁>      \ right-context
-  <Poss₁> => constraint-16.5-<Poss₁>  \ can't work as right-context
-  <Case₁> => constraint-16.5-<Case₁>  \ right-context
+  <Poss₁> => constraint-16.5-<Poss₁>  \ right-context
+  <Case₁> => constraint-16.5-<Case₁>  \ can't work as right context
   TRUE ABORT" Invalid slot for constraint-16.5!"
   ; IMMEDIATE
 
@@ -335,6 +335,27 @@ require khakas/slotnames.fs
 \ словоформе одновременно с Case1.
 : constraint-16.6  ( -- f )
   flag Gen.3pos  flag-empty? ;
+
+\ 16.7. <Poss₂>, исключая Gen.3pos, не может следовать непосредственно
+\ за <Pl₁>, Gen₁, All₁ и за <Poss₁>.
+: constraint-16.7-<Pl₁>  ( -- f )
+  slots( <Pl₁> <Poss₂> )-full?
+  || <Poss₂> slot-empty?
+  ;
+: constraint-16.7-<Poss₁>  ( -- f )
+  slots( <Poss₁> <Poss₂> )-full?
+  || <Poss₂> slot-empty?
+  || flag Gen.3pos flag-is?
+  ;
+: constraint-16.7-<Case₁>  ( -- f )
+  slots( <Case₁> <Poss₂> )-full?
+  || <Poss₂> slot-empty? ;
+: constraint-16.7  ( -- f )
+  <Pl₁> => constraint-16.7-<Pl₁>      \ right-context
+  <Poss₁> => constraint-16.7-<Poss₁>  \ can't work as right-context
+  <Case₁> => constraint-16.7-<Case₁>  \ right-context
+  TRUE ABORT" Invalid slot for constraint-16.7!"
+  ; IMMEDIATE
 
 \ 16.8. Pl2 не может непосредственно следовать за Pl1 (ислючаем
 \ паразитические разборы форм типа истерлер ‘будут слышать’).
@@ -398,7 +419,7 @@ require khakas/slotnames.fs
   || verb?
      && flag Comp  flag-is?
         || slots[ <Pl₁> <Case₂> ]-empty?
-           && flags( Opt Assum Indir Cunc Neg.Fut
+           && flags( Assum|Neg.Fut|Opt Indir Cunc
                      Gener@full Pres2@full Pres2.dial.kac@full
                      Pres.dial.kyz@full Dur1@full Dur₁.dial.kac
                      Hab@full Fut@full

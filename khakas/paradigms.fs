@@ -213,7 +213,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
 
     flag Neg7  flag-set
-      form" Neg.Fut ПАс"
+      flag-with Assum|Neg.Fut|Opt  form" Neg.Fut ПАс"
     flag Neg7  flag-clear
 
     right-context( constraint-9.2 )
@@ -221,7 +221,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     right-context-end
     flag-with Hab@full     form" Hab ЧАң"
 
-    form" Assum ГАдАГ"
+    flag-with Assum|Neg.Fut|Opt  form" Assum ГАдАГ"
 
     form" Cunc ГАлАК"
 
@@ -231,7 +231,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" PresPt.dial чАн"
     filters-end
 
-    form" Opt ГАй"
+    flag-with Assum|Neg.Fut|Opt  form" Opt ГАй"
   flag participles  flag-clear
 
   right-context( constraint-12 )
@@ -270,7 +270,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -nopl1 "
 
-  right-context( constraint-16.1 constraint-16.5 constraint-16.8 constraint-27 )
+  right-context( constraint-16.1 constraint-16.5 constraint-16.7 constraint-16.8 constraint-27 )
     <this> slot-full!
     form" Pl₁ ЛАр"
   right-context-end
@@ -280,8 +280,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -noposs1 "
 
-  right-context( constraint-16.1 constraint-27 )
-    filters( constraint-16.5 )
+  right-context( constraint-16.1 constraint-16.5 constraint-27 )
+    filters( constraint-16.7 )
       <this> slot-full!
 
       flag Poss1.nonpl  flag-set
@@ -304,22 +304,24 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-16.1 constraint-27 )
     <this> slot-full!
 
-    right-context( constraint-16.5 )
-      form" Gen₁ НЫң"
-      filters( constraint-17-<Case₁> )
-        form" All₁ САр"
-      filter-else
-        form" All₁ (н)САр"
-      filters-end
-    right-context-end
+    filters( constraint-16.5 )
+      right-context( constraint-16.7 )
+        form" Gen₁ НЫң"
+        filters( constraint-17-<Case₁> )
+          form" All₁ САр"
+        filter-else
+          form" All₁ (н)САр"
+        filters-end
+      right-context-end
 
-    right-context( constraint-16.6 )
-      filters( constraint-17-<Case₁> )
-        form" Loc₁ ТА"
-      filter-else
-        form" Loc₁ (н)ТА"
-      filters-end
-    right-context-end
+      right-context( constraint-16.6 )
+        filters( constraint-17-<Case₁> )
+          form" Loc₁ ТА"
+        filter-else
+          form" Loc₁ (н)ТА"
+        filters-end
+      right-context-end
+    filters-end
 
   right-context-end
   ; slot-add

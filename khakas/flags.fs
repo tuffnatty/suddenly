@@ -1,10 +1,11 @@
 \ flags in different slots must be distinct!
 flagenum:
+  flag: Abl.arch
   flag: Add
   flag: All₁
   flag: Ass₁
   flag: Ass₃
-  flag: Assum
+  flag: Assum|Neg.Fut|Opt
   flag: Attr
   flag: Comit
   flag: Comp
@@ -29,13 +30,13 @@ flagenum:
   flag: Imp
   flag: Imp.3
   flag: Indir
+  flag: Loc
+  flag: Loc₁
   flag: Neg
   flag: Neg7
-  flag: Neg.Fut
   flag: NF₀
   flag: NF.Neg
   flag: NF.Neg.sh
-  flag: Opt
   flag: Past
   flag: Perf
   flag: Perf0
