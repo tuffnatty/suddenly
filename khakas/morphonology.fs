@@ -25,6 +25,7 @@ S" дтн" rule-nvu morphoneme Д
 S" 0з" rule-cv morphoneme (з)
 \ S" хк" rule-fb morphoneme К
 S" ғгхкхк00" rule-cv-vu-fb morphoneme К
+S" 00ғг00ғг" rule-cv-vu-fb morphoneme (К)  \ vCb vCf vVb vVf uCb uCf uVb uVf
 S" лтн" rule-nvu morphoneme Л
 S" ллн" rule-nvu morphoneme L
 S" нт" rule-vu morphoneme Н

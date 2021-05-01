@@ -249,6 +249,7 @@ T{ S" теп+ібіс"			S" теебіс"		parse-test -> TRUE }T
 T{ S" ті+ген"			S" теен"		parse-test -> TRUE }T
 T{ S" ті+ер"			S" тир"			parse-test -> TRUE }T
 T{ S" тік+ер"			S" тігер"		parse-test -> TRUE }T
+T{ S" ті+ле"			S" тіле"		parse-test -> FALSE }T  \ #196
 T{ S" тіле+п+чат"		S" тілепчат"		parse-test -> TRUE }T
 T{ S" ті+п+чен"			S" тіпчен"		parse-test -> TRUE }T
 T{ S" тоғыс+ы+наңар"		S" тоғызынаңар"		parse-test -> TRUE }T
@@ -258,7 +259,7 @@ T{ S" тоң+ар"			S" тоор"		parse-test -> TRUE }T
 T{ S" тоң+ған"			S" тоңан"		parse-test -> TRUE }T
 T{ S" тоң+ып"			S" тооп"		parse-test -> TRUE }T
 T{ S" тоос+ып+таа+быс+ты+лар"	S" тоозыптаабыстылар"	parse-test -> TRUE }T
-T{ S" тохта+хла+п+ох+ыс+хан+нар" S" тохтағлабоғысханнар" parse-test -> TRUE }T
+T{ S" тохта+ғла+п+ох+ыс+хан+нар" S" тохтағлабоғысханнар" parse-test -> TRUE }T
 T{ S" тох+ы+нға+быс"		S" тоғынғабыс"		parse-test -> FALSE }T
 T{ S" тӱк+і"			S" тӱгі"		parse-test -> TRUE }T
 T{ S" тӱлгӱ+ге"			S" тӱлгее"		parse-test -> TRUE }T
