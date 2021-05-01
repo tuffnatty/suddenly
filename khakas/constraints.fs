@@ -558,7 +558,8 @@ require khakas/slotnames.fs
 \ Affirm ЧЫК: Аӌа іди полтырохчых. - Дядя так же был. (Чиланы)
 : constraint-34  ( -- f )
   slots[ <Affirm> <PredPl> ]-full?
-  && <Tense/Mood/Conv> slot-full?  flags( converbs PresPt.dial ) flag-empty?  AND
+  && verb? NOT
+     || <Tense/Mood/Conv> slot-full?  flags( converbs PresPt.dial ) flag-empty?  AND
      || <Affirm> slot-full?
      || flags( Gener Dur1 Dur₁.dial.kac ) flag-is?
   ;

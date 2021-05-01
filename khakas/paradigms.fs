@@ -456,12 +456,14 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  right-context( constraint-27 constraint-34 )
-    form" Ass₂ ОК"
-    flag-with Cont  form" Cont₂ LА"
-    flag-with Add   form" Add₂ ТАА"
-    filters( constraint-32 )
-      form" Part ни"
+  right-context( constraint-27 )
+    filters( constraint-34 )
+      form" Ass₂ ОК"
+      flag-with Cont  form" Cont₂ LА"
+      flag-with Add   form" Add₂ ТАА"
+      filters( constraint-32 )
+        form" Part ни"
+      filters-end
     filters-end
   right-context-end
   ; slot-add

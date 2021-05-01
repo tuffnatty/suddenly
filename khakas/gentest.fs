@@ -232,6 +232,7 @@ T{ S" сых+ар+ға"	        S" сығарға"		parse-test -> TRUE }T
 T{ S" сых+ып+ох+ыс+чых"		S" сығыбоғысчых"	parse-test -> TRUE }T
 T{ S" сых+лағла+п"		S" сыхлағлап"		parse-test -> TRUE }T
 T{ S" сых+паан+чат+хан"		S" сыхпаанчатхан"	parse-test -> TRUE }T
+T{ S" сых+таа+лар"		S" сыхтаалар"		parse-test DROP expected-found -> 1 }T  \ #197
 T{ S" тағ+ы"			S" таа"			parse-test -> TRUE }T
 T{ S" тайға+за"			S" тайғаза"		parse-test -> TRUE }T
 T{ S" тайға+зары"		S" тайғазары"		parse-test -> TRUE }T
