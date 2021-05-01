@@ -11,11 +11,11 @@ flagenum:
   flag: Comp
   flag: Cond
   flag: Cont
-  flag: Conv.a
-  flag: Convₚ
+  flag: Cv.а
+  flag: Cv.п
   flag: Cunc
   flag: Dur
-  flag: Dur₁.dial.kac
+  flag: Dur1.kac
   flag: Dur1@full
   flag: Dur1@short
   flag: Foc
@@ -45,13 +45,13 @@ flagenum:
   flag: Poss2.nonpl
   flag: Pres
   flag: Pres.dial
-  flag: Pres.dial.kyz@full
-  flag: Pres.dial.kyz@short
-  flag: Pres.dial.sh
+  flag: Pres.kyz@full
+  flag: Pres.kyz@short
+  flag: Pres.sh
   flag: Pres2@full
   flag: Pres2@short
-  flag: Pres2.dial.kac@full
-  flag: Pres2.dial.kac@short
+  flag: Pres2.kac@full
+  flag: Pres2.kac@short
   flag: PresPt.dial
   flag: Prosp.dial
   flag: RPast
@@ -64,11 +64,11 @@ flagenum:
   flag: converbs
   flag: participles
 
-  Dur1@full Dur1@short                     flag/OR  flag-mask: Dur1
-  Fut@full Fut@short                       flag/OR  flag-mask: Fut
-  Hab@full Hab@short                       flag/OR  flag-mask: Hab
-  Gener@full Gener@short                   flag/OR  flag-mask: Gener
-  Pres.dial.kyz@full Pres.dial.kyz@short   flag/OR  flag-mask: Pres.dial.kyz
-  Pres2@full Pres2@short                   flag/OR  flag-mask: Pres2
-  Pres2.dial.kac@full Pres2.dial.kac@short flag/OR  flag-mask: Pres2.dial.kac
+  Dur1@full Dur1@short           flag/OR  flag-mask: Dur1
+  Fut@full Fut@short             flag/OR  flag-mask: Fut
+  Hab@full Hab@short             flag/OR  flag-mask: Hab
+  Gener@full Gener@short         flag/OR  flag-mask: Gener
+  Pres.kyz@full Pres.kyz@short   flag/OR  flag-mask: Pres.kyz
+  Pres2@full Pres2@short         flag/OR  flag-mask: Pres2
+  Pres2.kac@full Pres2.kac@short flag/OR  flag-mask: Pres2.kac
 flagenum;

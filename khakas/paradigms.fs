@@ -49,7 +49,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" Caus ТЫр"
   ; slot-add
 
-<NF,Dur₁> slot:  \ 3
+<NF,Dur1> slot:  \ 3
   <this> slot-empty!
   form" -noconv1 "
 
@@ -75,15 +75,15 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters( constraint-7 )
     right-context( constraint-8 )
       right-context( constraint-8.1ᵢ )
-        flag-with Dur1@short  form" Dur1ᵢ и"
+        flag-with Dur1@short  form" Dur1 и"
       right-context-end
       right-context( constraint-8.1ᵢᵣ )
-        flag-with Dur1@full   form" Dur1ᵢᵣ ир"
+        flag-with Dur1@full   form" Dur1 ир"
       right-context-end
-      form" Dur₁.dial.kac Ат"
+      form" Dur1.kac Ат"
     right-context-end
     right-context( constraint-8sag )
-      form" Dur₁.dial.sag ит"
+      form" Dur1.sag ит"
     right-context-end
   filters-end
 
@@ -145,7 +145,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
 <Neg/Gener> slot:  \ 8
   <this> slot-empty!
-  form" -noneg/iter "
+  form" -noneg/gener "
 
   right-context( constraint-11 )
     <this> slot-full!
@@ -179,24 +179,24 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
 
     right-context( constraint-9.5 )
-      ( flag-with Pres.dial.sh@short )  form" Pres.dial.sh чар"
+      ( flag-with Pres.sh@short )  form" Pres.sh чар"
     right-context-end
-    ( flag-with Pres.dial.sh@full )     form" Pres.dial.sh чары"
+    ( flag-with Pres.sh@full )     form" Pres.sh чары"
   filters-end
 
   filters( constraint-26 )
-    flag-with Pres.dial.kyz@full     form" Pres.dial.kyz тур"
+    flag-with Pres.kyz@full     form" Pres.kyz тур"
     right-context( constraint-9.4 )
-      flag-with Pres.dial.kyz@short  form" Pres.dial.kyz ту"
+      flag-with Pres.kyz@short  form" Pres.kyz ту"
     right-context-end
 
     flag-with Pres2@full   form" Pres2 чАдЫр"
     flag-with Pres2@short  form" Pres2 чАдЫ"
 
     filters( constraint-frontstem )
-      flag-with Pres2.dial.kac@full  form" Pres2.dial.kac чадыр"
+      flag-with Pres2.kac@full  form" Pres2.kac чадыр"
     filters-end
-    flag-with Pres2.dial.kac@short   form" Pres2.dial.kac чады"
+    flag-with Pres2.kac@short   form" Pres2.kac чады"
   filters-end
 
   flag participles  flag-set  \ причастные показатели
@@ -252,10 +252,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" Neg.Conv.Abl ПинАң"
       flag Neg7  flag-clear
 
-      form" Convₚ (Ы)п"
+      form" Cv.п (Ы)п"
       filters( constraint-VA>и-fallout )
-        form" Conv.pas.dial АбАс"
-        form" Conv.a А"
+        form" Cv.kac АбАс"
+        form" Cv.а А"
       filters-end
     flag converbs flag-clear
   right-context-end
@@ -438,8 +438,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" Loc (н)ТА"
     form" Abl нАң"
     form" All (н)САр"
-    form" All.dial₁ (н)САрЫ"
-    form" All.dial₂ (н)СА"
+    form" All.dial1 (н)САрЫ"
+    form" All.dial2 (н)СА"
     form" Prol (н)ЧА"
     form" Delib нАңАр"
     form" Delib.dial нАңАрЫ"
