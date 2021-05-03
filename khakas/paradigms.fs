@@ -61,7 +61,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
     right-context( constraint-4.1₀-right )
       filters( constraint-4.1₀ )
-        form" NF₀ 0̸"
+        flag-with NF₀ form" NF 0̸"
       filters-end
     right-context-end
     right-context( constraint-11.1 constraint-10 )
@@ -252,10 +252,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" Neg.Conv.Abl ПинАң"
       flag Neg7  flag-clear
 
-      form" Cv.п (Ы)п"
+      form" Cv.p (Ы)п"
       filters( constraint-VA>и-fallout )
         form" Cv.kac АбАс"
-        form" Cv.а А"
+        form" Cv.a А"
       filters-end
     flag converbs flag-clear
   right-context-end

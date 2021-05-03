@@ -150,7 +150,7 @@ require khakas/slotnames.fs
 \ 8. Показатели Dur1 и(р) и Dur1.kac Ат могут стоять:
 \ 1) либо непосредственно в конце словоформы,
 \ 2) либо непосредственно перед <Person> или <PredPl>,
-\ 3) либо непосредственно перед показателями Past ГА(н), Cv.п,
+\ 3) либо непосредственно перед показателями Past ГА(н), Cv.p,
 \    Cond СА (позиция <Tense/Mood>).
 \ Показатель Dur1.sag ит может стоять перед Dur чАт,
 \ Past ГА(н), Cond СА и PresPt.dial чАн.
@@ -158,7 +158,7 @@ require khakas/slotnames.fs
   slots( <NF,Dur1> <Ptcl₃> ]-empty?
   || slots( <NF,Dur1> <Person> )-empty?  <Person> slot-full?  AND
   || slots( <NF,Dur1> <PredPl> )-empty?  <PredPl> slot-full?  AND
-  || flags( Past Cond Cv.п ) flag-is?  <Neg/Gener> slot-empty?  AND
+  || flags( Past Cond Cv.p ) flag-is?  <Neg/Gener> slot-empty?  AND
   ;
 : constraint-8sag  ( -- f )
   slots( <NF,Dur1> <Dur> )-empty?  <Dur> slot-full?  AND
@@ -167,12 +167,12 @@ require khakas/slotnames.fs
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
 \ распределен: перед Past ГА(н) и перед Cond СА может
-\ принять только форму и, перед Cv.п - только форму ир;
+\ принять только форму и, перед Cv.p - только форму ир;
 \ в роли показателя времени (т.е. перед Person, PredPl и
 \ концом словоформы) варианты и и ир находятся в
 \ свободном (точнее, диалектном) варьировании.
 : constraint-8.1ᵢ  ( -- f )
-  flag Cv.п  flag-empty? ;
+  flag Cv.p  flag-empty? ;
 : constraint-8.1ᵢᵣ
   flags( Past Cond ) flag-empty? ;
 
@@ -264,7 +264,7 @@ require khakas/slotnames.fs
 \ словоформы [(обрабатывается правилом 27),] Past ГА(н),
 \ ConvA, ConvП, <Ptcl₂>, <Person>, <PredPl> или <Ptcl₃>.
 : constraint-14  ( -- f )
-  flags( Past Cv.п Cv.а ) flag-is?
+  flags( Past Cv.p Cv.a ) flag-is?
   || slots( <Neg/Gener> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
   || slots( <Neg/Gener> <Person> )-empty?
   ;
@@ -446,7 +446,7 @@ require khakas/slotnames.fs
 
 
 \ 21. Показатель PredPl ЛАр может стоять после:
-\ а) пок-ля времени (позиции <Tense/Mood> [за исключением Cv.a, Cv.п,
+\ а) пок-ля времени (позиции <Tense/Mood> [за исключением Cv.a, Cv.p,
 \    Neg.Conv (.Abl), Lim и PresPt чАн, согласно пр.25] + Indir
 \    TЫр + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + Dur1.kac Ат),
 \ б) пок-ля <Case2> или <Poss2>
@@ -491,7 +491,7 @@ require khakas/slotnames.fs
   ;
 
 \ 25. После деепричастных показателей позиции <Tense/Mood> (Lim ГАли,
-\ Cv.п (Ы)П, Cv.а; Cv.kac; Neg.Conv и Neg.Conv.Abl) может
+\ Cv.p (Ы)П, Cv.a; Cv.kac; Neg.Conv и Neg.Conv.Abl) может
 \ стоять только показатель Ass ОК из позиции Ptcl3.
 : constraint-25  ( -- f )
   slots( <Tense/Mood/Conv> <Ptcl₃> ]-empty?  ||

@@ -11,8 +11,8 @@ flagenum:
   flag: Comp
   flag: Cond
   flag: Cont
-  flag: Cv.а
-  flag: Cv.п
+  flag: Cv.a
+  flag: Cv.p
   flag: Cunc
   flag: Dur
   flag: Dur1.kac
