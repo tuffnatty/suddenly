@@ -407,6 +407,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     right-context-end
     form" Loc ТА"
     form" Abl ДАң"
+    form" Abl.dial нАң"
     form" All САр"
     form" All.dial САрЫ"
     form" All.dial СА"
