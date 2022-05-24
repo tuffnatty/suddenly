@@ -1,6 +1,6 @@
 \ flags in different slots must be distinct!
 flagenum:
-  flag: Abl.arch
+  flag: AblArch
   flag: Add
   flag: All₁
   flag: Ass₁
@@ -11,11 +11,11 @@ flagenum:
   flag: Comp
   flag: Cond
   flag: Cont
-  flag: Cv.a
-  flag: Cv.p
+  flag: CvA
+  flag: CvP
   flag: Cunc
   flag: Dur
-  flag: Dur1.kac
+  flag: Dur1Kac
   flag: Dur1@full
   flag: Dur1@short
   flag: Foc
@@ -35,25 +35,25 @@ flagenum:
   flag: Neg7
   flag: NF
   flag: NF₀
-  flag: NF.Neg
-  flag: NF.Neg.sh
+  flag: Neg.NF
+  flag: Neg.NFSh
   flag: Past
   flag: Perf
-  flag: Perf0
+  flag: Perf1
   flag: Person.br
   flag: Poss1.nonpl
   flag: Poss2.nonpl
   flag: Pres
-  flag: Pres.dial
-  flag: Pres.kyz@full
-  flag: Pres.kyz@short
-  flag: Pres.sh
-  flag: Pres2@full
-  flag: Pres2@short
-  flag: Pres2.kac@full
-  flag: Pres2.kac@short
-  flag: PresPt.dial
-  flag: Prosp.dial
+  flag: PresDial
+  flag: PresKyz@full
+  flag: PresKyz@short
+  flag: PresSh
+  flag: Pres1@full
+  flag: Pres1@short
+  flag: Pres1Kac@full
+  flag: Pres1Kac@short
+  flag: PresPtDial
+  flag: ProspDial
   flag: RPast
   flag: 1sg.br
   flag: 2sg.br
@@ -64,11 +64,11 @@ flagenum:
   flag: converbs
   flag: participles
 
-  Dur1@full Dur1@short           flag/OR  flag-mask: Dur1
-  Fut@full Fut@short             flag/OR  flag-mask: Fut
-  Hab@full Hab@short             flag/OR  flag-mask: Hab
-  Gener@full Gener@short         flag/OR  flag-mask: Gener
-  Pres.kyz@full Pres.kyz@short   flag/OR  flag-mask: Pres.kyz
-  Pres2@full Pres2@short         flag/OR  flag-mask: Pres2
-  Pres2.kac@full Pres2.kac@short flag/OR  flag-mask: Pres2.kac
+  Dur1@full Dur1@short          flag/OR  flag-mask: Dur1
+  Fut@full Fut@short            flag/OR  flag-mask: Fut
+  Hab@full Hab@short            flag/OR  flag-mask: Hab
+  Gener@full Gener@short        flag/OR  flag-mask: Gener
+  PresKyz@full PresKyz@short    flag/OR  flag-mask: PresKyz
+  Pres1@full Pres1@short        flag/OR  flag-mask: Pres1
+  Pres1Kac@full Pres1Kac@short  flag/OR  flag-mask: Pres1Kac
 flagenum;

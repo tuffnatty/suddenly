@@ -39,38 +39,38 @@ require khakas/slotnames.fs
 \ 3. Показатели позиции 2 (NF) и показатель Perf (Ы)бЫС
 \ в пределах одной словоформы встречаются только в
 \ случае заполнения позиции 2 кумулятивным показателем
-\ NF.Neg или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
+\ Neg.NF или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
 \ – (кончить-NF-Add-Perf-RPast-Pl) ‘почти закончили’].
 : constraint-3  ( -- f )
   <NF,Dur1> slot-empty?
-  || flag NF.Neg  flag-is?
+  || flag Neg.NF  flag-is?
   || <Ptcl1> slot-full?
   ;
 
-\ 4. Показатели NF, NF.Neg могут встретиться только в
+\ 4. Показатели NF, Neg.NF могут встретиться только в
 \ словоформе, где есть один или несколько из показателей:
 \ 1) позиции 3 <Ptcl1>,
-\ 2) позиции 6 <Dur> Dur чАТ, Dur.dial чаТ,
-\ 3) Perf (Ы)бЫс, Perf0 Ыc,
-\ 4) Pres2 чАдЫр, чады(р), Pres.kyz ту(р),
+\ 2) позиции 6 <Dur> Dur чАТ, DurDial чаТ,
+\ 3) Perf (Ы)бЫс, Perf1 Ыc,
+\ 4) Pres1 чАдЫр, чады(р), PresKyz ту(р),
 \ 5) прочие Pres (чА, ча, чАр(Ы)),
 \ 6) Indir ТЫр,
 \ 7) PresPt чАн
 \ - или на конце словоформы.
-\ Показатель NF.Neg.sh ПААн допустим в тех же случаях,
+\ Показатель Neg.NFSh ПААн допустим в тех же случаях,
 \ исключая 4) и 7)
 : constraint-4sh  ( -- f )
   <Ptcl1> slot-full?
   || <Dur> slot-full?
-  || flags( Perf Perf0
-            Pres Pres.dial Pres.sh
+  || flags( Perf Perf1
+            Pres PresDial PresSh
             Indir ) flag-is?
   || slots( <NF,Dur1> <Ptcl₃> ]-empty?
   ;
 : constraint-4  ( -- f )
   constraint-4sh
-  || flags( Pres2 Pres2.kac Pres.kyz
-            PresPt.dial ) flag-is? ;
+  || flags( Pres1 Pres1Kac PresKyz
+            PresPtDial ) flag-is? ;
 
 \ 4.1. NF выбирает алломорф (Ы)п, если:
 \ 1) он непосредственно следует за основой, которая оканчивается
@@ -100,35 +100,35 @@ require khakas/slotnames.fs
   flag Ass₁  flag-empty? ;
 
 \ 5. Показатели Ptcl₁ (внутренние частицы) допускаются только
-\ при наличии показателя NF (NF, NF₀, NF.Neg. NF.Neg.sh) и
+\ при наличии показателя NF (NF, NF₀, Neg.NF. Neg.NFSh) и
 \ любых из следующих показателей:
 \ а) Perf Ыс для всех частиц (чіплеізеді ‘всё время съедает’,
 \ сығыбоғысчых ‘так же вылезла’) и Perf ЫбЫс для Add ТАА
 \ (тоозыптаабыстылар ‘почти закончили’),
 \ б) Dur чАт, чат (хараплачатхан ‘все время всматривался)’,
-\ в) Indir ТЫр и презенсы на ч (Pres чА, Pres.dial ча, Pres2
-\ чАдЫ(р), PresPt чАн, Pres.sh чАр(Ы), Pres2.kac
+\ в) Indir ТЫр и презенсы на ч (Pres чА, PresDial ча, Pres1
+\ чАдЫ(р), PresPt чАн, PresSh чАр(Ы), Pres1Kac
 \ чады(р)): муханначадарзың ‘всё время мучаешься’.
 : constraint-5  ( -- f )
-  flags( NF NF₀ NF.Neg NF.Neg.sh ) flag-is?
-  && flag Perf0  flag-is?
+  flags( NF NF₀ Neg.NF Neg.NFSh ) flag-is?
+  && flag Perf1  flag-is?
      || flag Perf flag-is?  flag Add flag-is?  AND
      || <Dur> slot-full?
-     || flags( Indir Pres Pres.dial Pres.sh Pres2
-                     Pres2.kac PresPt.dial ) flag-is?
+     || flags( Indir Pres PresDial PresSh Pres1
+                     Pres1Kac PresPtDial ) flag-is?
   ;
 
-\ 5.1. Показатель Perf0 Ыс возможен [пока встретился]:
+\ 5.1. Показатель Perf1 Ыс возможен [пока встретился]:
 \ a) при наличии Ptcl1 и любого пок-ля времени (позиции
 \ <Tense/Mood/Conv> + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) +
-\ Dur1.kac Ат):
-\ б) при диалектном показателе NF.Neg.sh ПААн.
+\ Dur1Kac Ат):
+\ б) при диалектном показателе Neg.NFSh ПААн.
 : constraint-5.1  ( -- f )
-  flag NF.Neg.sh  flag-is?
+  flag Neg.NFSh  flag-is?
   || <Ptcl1> slot-full?
      && <Tense/Mood/Conv> slot-full?
         || <Affirm> slot-full?
-        || flags( Gener Dur1 Dur1.kac ) flag-is?
+        || flags( Gener Dur1 Dur1Kac ) flag-is?
   ;
 
 \ 6. Показатель Prosp АК встречается только перед
@@ -137,9 +137,9 @@ require khakas/slotnames.fs
 : constraint-6  ( -- f )
   <NF,Dur1> slot-empty? ;
 : constraint-6-right  ( -- f )
-  flags( Dur Pres PresPt.dial ) flag-is? ;
+  flags( Dur Pres PresPtDial ) flag-is? ;
 
-\ 7. Показатели Dur1 и(р), Dur1.kac Ат, Dur1.sag ит
+\ 7. Показатели Dur1 и(р), Dur1Kac Ат, Dur1Sag ит
 \ заполняются только, если основой является лемма пар-, апар-
 \ или кил- (но при этих основах может выбираться с тем же
 \ успехом и показатель Dur чАТ, свободное варьирование).
@@ -147,32 +147,32 @@ require khakas/slotnames.fs
   is-пар/кил?
   ;
 
-\ 8. Показатели Dur1 и(р) и Dur1.kac Ат могут стоять:
+\ 8. Показатели Dur1 и(р) и Dur1Kac Ат могут стоять:
 \ 1) либо непосредственно в конце словоформы,
 \ 2) либо непосредственно перед <Person> или <PredPl>,
-\ 3) либо непосредственно перед показателями Past ГА(н), Cv.p,
+\ 3) либо непосредственно перед показателями Past ГА(н), CvP,
 \    Cond СА (позиция <Tense/Mood>).
-\ Показатель Dur1.sag ит может стоять перед Dur чАт,
-\ Past ГА(н), Cond СА и PresPt.dial чАн.
+\ Показатель Dur1Sag ит может стоять перед Dur чАт,
+\ Past ГА(н), Cond СА и PresPtDial чАн.
 : constraint-8  ( -- f )
   slots( <NF,Dur1> <Ptcl₃> ]-empty?
   || slots( <NF,Dur1> <Person> )-empty?  <Person> slot-full?  AND
   || slots( <NF,Dur1> <PredPl> )-empty?  <PredPl> slot-full?  AND
-  || flags( Past Cond Cv.p ) flag-is?  <Neg/Gener> slot-empty?  AND
+  || flags( Past Cond CvP ) flag-is?  <Neg/Gener> slot-empty?  AND
   ;
 : constraint-8sag  ( -- f )
   slots( <NF,Dur1> <Dur> )-empty?  <Dur> slot-full?  AND
-  || slots( <NF,Dur1> <Tense/Mood/Conv> )-empty?  flags( Past Cond PresPt.dial ) flag-is? AND
+  || slots( <NF,Dur1> <Tense/Mood/Conv> )-empty?  flags( Past Cond PresPtDial ) flag-is? AND
   ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
 \ распределен: перед Past ГА(н) и перед Cond СА может
-\ принять только форму и, перед Cv.p - только форму ир;
+\ принять только форму и, перед CvP - только форму ир;
 \ в роли показателя времени (т.е. перед Person, PredPl и
 \ концом словоформы) варианты и и ир находятся в
 \ свободном (точнее, диалектном) варьировании.
 : constraint-8.1ᵢ  ( -- f )
-  flag Cv.p  flag-empty? ;
+  flag CvP  flag-empty? ;
 : constraint-8.1ᵢᵣ
   flags( Past Cond ) flag-empty? ;
 
@@ -207,7 +207,7 @@ require khakas/slotnames.fs
   <Person>  slot-full?
   ;
 
-\ 9.4 Pres.kyz ту(р) может принимать форму ту
+\ 9.4 PresKyz ту(р) может принимать форму ту
 \ непосредственно перед Person или PredPl. Форма тур возможна в
 \ любых контекстах.
 : constraint-9.4  ( -- f )
@@ -215,7 +215,7 @@ require khakas/slotnames.fs
   slots[ <Person> <PredPl> ]-full?
   ;
 
-\ 9.5. Pres.sh чАр(Ы) перед показателями 1sg и 2sg
+\ 9.5. PresSh чАр(Ы) перед показателями 1sg и 2sg
 \ принимает форму чАрЫ. (Это нужно, чтобы не было омонимичных
 \ разборов чар-ым / чары-м). В остальных контекстах показатели
 \ не распределены.
@@ -236,7 +236,7 @@ require khakas/slotnames.fs
 : constraint-11  ( -- f )
   flags( Fut Neg7 Foc )  flag-empty? ;
 
-\ 11.1. Показатель NF.Neg исключает заполнение Neg в поз. 6.
+\ 11.1. Показатель Neg.NF исключает заполнение Neg в поз. 6.
 : constraint-11.1  ( -- f )
   flag Neg  flag-empty? ;
 
@@ -264,7 +264,7 @@ require khakas/slotnames.fs
 \ словоформы [(обрабатывается правилом 27),] Past ГА(н),
 \ ConvA, ConvП, <Ptcl₂>, <Person>, <PredPl> или <Ptcl₃>.
 : constraint-14  ( -- f )
-  flags( Past Cv.p Cv.a ) flag-is?
+  flags( Past CvP CvA ) flag-is?
   || slots( <Neg/Gener> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
   || slots( <Neg/Gener> <Person> )-empty?
   ;
@@ -309,7 +309,7 @@ require khakas/slotnames.fs
 
 \ 16.5. <Case₂> не может следовать непосредственно за <Pl₁> или
 \ <Poss₁>. <Case₂> не может следовать непосредственно за
-\ <Case₁>, за исключением последовательностей All1+Abl.arch тЫн,
+\ <Case₁>, за исключением последовательностей All1+AblArch тЫн,
 \ Loc1+Loc2 (пока не нашлось убедительных примеров, см.
 \ рекламацию #187).
 : constraint-16.5-<Pl₁>  ( -- f )
@@ -323,7 +323,7 @@ require khakas/slotnames.fs
 : constraint-16.5-<Case₁>  ( -- f )
   slots( <Case₁> <Case₂> )-full?
   || <Case₂> slot-empty?
-  || [: flag All₁ flag-is? && flag Abl.arch flag-is? ;] EXECUTE
+  || [: flag All₁ flag-is? && flag AblArch flag-is? ;] EXECUTE
   || flag Loc₁ flag-is? && flag Loc flag-is?
   ;
 : constraint-16.5  ( -- f )
@@ -333,7 +333,7 @@ require khakas/slotnames.fs
   TRUE ABORT" Invalid slot for constraint-16.5!"
   ; IMMEDIATE
 
-\ 16.6. Показатель Gen.3pos(.dial) не может присутствовать в
+\ 16.6. Показатель Gen.3pos(Dial) не может присутствовать в
 \ словоформе одновременно с Case1.
 : constraint-16.6  ( -- f )
   flag Gen.3pos  flag-empty? ;
@@ -405,15 +405,15 @@ require khakas/slotnames.fs
 \ могут следовать после любых морфем. У глаголов заполнение
 \ Person возможно только при незаполненных позициях с 11 по 17
 \ (за исключением Comp ТАГ) и при наличии показателей:
-\ для полных форм: Dur1.kac Ат, Irr ЧЫК, Opt ГАй, Assum
+\ для полных форм: Dur1Kac Ат, Irr ЧЫК, Opt ГАй, Assum
 \ ГАдАГ, Indir ТЫр, Cunc ГАлАК, Neg.Fut ПАс, полные формы
-\ аффиксов Gener А.дЫр, Pres2 чАдЫр, Pres2.kac чадыр,
-\ Pres.kyz тур, Dur1 ир, Dur1.kac Ат, Hab ҶАң, Fut Ар,
+\ аффиксов Gener А.дЫр, Pres1 чАдЫр, Pres1Kac чадыр,
+\ PresKyz тур, Dur1 ир, Dur1Kac Ат, Hab ҶАң, Fut Ар,
 \ в качинском также Pres чА (тоғынчабын ‘я работаю’) и Past
 \ ГА(н) (парғабын ‘я шел’, чоохтаанохпын ‘я тоже говорил’);
-\ для смешанных форм: Pres чА, Pres.dial ча, Pres.sh
-\ чАр(Ы), Past ГА(н), краткие формы аффиксов Gener А.дЫ, Pres2
-\ чАдЫ, Pres2.kac чады, Pres.kyz ту, Dur1 и, Hab ҶА,
+\ для смешанных форм: Pres чА, PresDial ча, PresSh
+\ чАр(Ы), Past ГА(н), краткие формы аффиксов Gener А.дЫ, Pres1
+\ чАдЫ, Pres1Kac чады, PresKyz ту, Dur1 и, Hab ҶА,
 \ Fut А (+ в диалектах также Ар: килерім ‘я приду’);
 \ для кратких форм: Cond СА, Rpast ТЫ.
 : constraint-20-full-person  ( -- f )
@@ -422,8 +422,8 @@ require khakas/slotnames.fs
      && flag Comp  flag-is?
         || slots[ <Pl₁> <Case₂> ]-empty?
            && flags( Assum|Neg.Fut|Opt Indir Cunc
-                     Gener@full Pres2@full Pres2.kac@full
-                     Pres.kyz@full Dur1@full Dur1.kac
+                     Gener@full Pres1@full Pres1Kac@full
+                     PresKyz@full Dur1@full Dur1Kac
                      Hab@full Fut@full
                      Past Pres ) flag-is?
               || <Affirm> slot-full?
@@ -432,10 +432,10 @@ require khakas/slotnames.fs
   verb?  &&
     flag Comp  flag-is? ||
     slots[ <Pl₂> <Case₂> ]-empty?  &&
-      flags( Pres Pres.dial Pres.sh Past
+      flags( Pres PresDial PresSh Past
              Gener@short
-             Pres2@short Pres2.kac@short
-             Pres.kyz@short
+             Pres1@short Pres1Kac@short
+             PresKyz@short
              Dur1@short Hab@short Fut ) flag-is?
   ;
 : constraint-20-short-person  ( -- f )
@@ -446,9 +446,9 @@ require khakas/slotnames.fs
 
 
 \ 21. Показатель PredPl ЛАр может стоять после:
-\ а) пок-ля времени (позиции <Tense/Mood> [за исключением Cv.a, Cv.p,
+\ а) пок-ля времени (позиции <Tense/Mood> [за исключением CvA, CvP,
 \    Neg.Conv (.Abl), Lim и PresPt чАн, согласно пр.25] + Indir
-\    TЫр + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + Dur1.kac Ат),
+\    TЫр + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + Dur1Kac Ат),
 \ б) пок-ля <Case2> или <Poss2>
 \ в) некоторых полей Person (1pl, Imp.3),
 \ г) чистой именной основы,
@@ -462,7 +462,7 @@ require khakas/slotnames.fs
   || <Poss₂> slot-full?  slots( <Poss₂> <PredPl> )-empty?  AND
   || <Case₂> slot-full?  slots( <Case₂> <PredPl> )-empty?  AND
   || <Ptcl₂> slot-full?  slots( <Ptcl₂> <PredPl> )-empty?  AND
-  || flags( Dur1 Dur1.kac 1.pl Imp.3 ) flag-is?
+  || flags( Dur1 Dur1Kac 1.pl Imp.3 ) flag-is?
   || slots[ 1 <PredPl> )-empty?  nomen?  AND
   || flag Comit  flag-is?  slots( <Transp> <PredPl> )-empty?  AND
   ;
@@ -491,26 +491,26 @@ require khakas/slotnames.fs
   ;
 
 \ 25. После деепричастных показателей позиции <Tense/Mood> (Lim ГАли,
-\ Cv.p (Ы)П, Cv.a; Cv.kac; Neg.Conv и Neg.Conv.Abl) может
+\ CvP (Ы)П, CvA; CvKac; Neg.Conv и Neg.Conv.Abl) может
 \ стоять только показатель Ass ОК из позиции Ptcl3.
 : constraint-25  ( -- f )
   slots( <Tense/Mood/Conv> <Ptcl₃> ]-empty?  ||
   flag Ass₃  flag-is?
   ;
 
-\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, Dur.dial чаТ,
-\ Pres2 чАдЫр, Pres2.kac чадыр, Pres.kyz тур,
-\ Pres.dial ча, Pres.sh чАр(Ы), Indir тЫр возможны только
-\ при наличии показателей NF / NF.Neg / Perf / Prosp / Dur₁.
-\ Pres чА, Pres.dial ча, Pres.sh чАр(Ы), Dur чАТ, Dur.dial
-\ чаТ, Indir тЫр возможны также при NF.Neg.sh ПААн
+\ 26. Показатели Pres чА, PresPt чАн, Dur чАТ, DurDial чаТ,
+\ Pres1 чАдЫр, Pres1Kac чадыр, PresKyz тур,
+\ PresDial ча, PresSh чАр(Ы), Indir тЫр возможны только
+\ при наличии показателей NF / Neg.NF / Perf / Prosp / Dur₁.
+\ Pres чА, PresDial ча, PresSh чАр(Ы), Dur чАТ, DurDial
+\ чаТ, Indir тЫр возможны также при Neg.NFSh ПААн
 : constraint-26  ( -- f )
-  <NF,Dur1> slot-full?  flag NF.Neg.sh flag-empty?  AND
-  || flags( Perf Prosp.dial ) flag-is?
+  <NF,Dur1> slot-full?  flag Neg.NFSh flag-empty?  AND
+  || flags( Perf ProspDial ) flag-is?
   ;
 : constraint-26+paan  ( -- f )
   <NF,Dur1> slot-full?
-  || flags( Perf Prosp.dial ) flag-is?
+  || flags( Perf ProspDial ) flag-is?
   ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
@@ -531,8 +531,8 @@ require khakas/slotnames.fs
 
 \ 29. Предикативные показатели (Person, PredPl) невозможны в
 \ сочетании с падежами: Gen2, Acc2, Instr2, Dat (а также их
-\ диалектными вариантами Gen2.dial, Acc.dial, Instr.dial,
-\ Dat.dial).
+\ диалектными вариантами Gen2Dial, AccDial, InstrDial,
+\ DatDial).
 : constraint-29  ( -- f )
   slots[ <Person> <PredPl> ]-empty? ;
 
@@ -552,16 +552,16 @@ require khakas/slotnames.fs
 \ 34. При присоединении Ptcl2 к основе глагола (Verbum)
 \ обязательно также наличие показателя времени (позиции
 \ Tense/Mood (за исключением деепричастий и PresPt чАн) +
-\ Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + Dur.dial.kac Ат).
+\ Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + DurDialKac Ат).
 \ Ptcl2 не может встретиться в словоформе без показателей Person
 \ или PredPl, если непосредственно после нее не стоит
 \ Affirm ЧЫК: Аӌа іди полтырохчых. - Дядя так же был. (Чиланы)
 : constraint-34  ( -- f )
   slots[ <Affirm> <PredPl> ]-full?
   && verb? NOT
-     || <Tense/Mood/Conv> slot-full?  flags( converbs PresPt.dial ) flag-empty?  AND
+     || <Tense/Mood/Conv> slot-full?  flags( converbs PresPtDial ) flag-empty?  AND
      || <Affirm> slot-full?
-     || flags( Gener Dur1 Dur1.kac ) flag-is?
+     || flags( Gener Dur1 Dur1Kac ) flag-is?
   ;
 
 \ 35. All САр (также диалектные формы СА, САрЫ) невозможен
@@ -658,7 +658,7 @@ require khakas/slotnames.fs
   \ AND AND
   ;
 
-\ Pres.dial ча, Pres2.kac чадыр только после переднерядных основ
+\ PresDial ча, Pres1Kac чадыр только после переднерядных основ
 : constraint-frontstem  ( -- f )
   stem-last-char-vowel-row front-vowel =
   ;
