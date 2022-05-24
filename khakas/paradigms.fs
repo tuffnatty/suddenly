@@ -404,15 +404,15 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" AccDial ДЫ"
       form" InstrDial ПАң"
       form" InstrDial ПлАң"
+      filters( constraint-35 )
+        form" All САр"
+        form" AllDial1 СА"
+        form" AllDial2 САрЫ"
+      filters-end
     right-context-end
     form" Loc ТА"
     form" Abl ДАң"
     form" AblDial нАң"
-    filters( constraint-35 )
-      form" All САр"
-      form" AllDial1 СА"
-      form" AllDial2 САрЫ"
-    filters-end
     form" Prol ЧА"
     form" Delib ДАңАр"
     form" DelibDial ДАңАрЫ"
@@ -437,14 +437,14 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" InstrDial (н)мАң"
       form" InstrDial (н)млАң"
       form" InstrDial бАң"
+      filters( constraint-35 )
+        form" All (н)САр"
+        form" AllDial1 (н)СА"
+        form" AllDial2 (н)САрЫ"
+      filters-end
     right-context-end
     form" Loc (н)ТА"
     form" Abl нАң"
-    filters( constraint-35 )
-      form" All (н)САр"
-      form" AllDial1 (н)СА"
-      form" AllDial2 (н)САрЫ"
-    filters-end
     form" Prol (н)ЧА"
     form" Delib нАңАр"
     form" DelibDial нАңАрЫ"
