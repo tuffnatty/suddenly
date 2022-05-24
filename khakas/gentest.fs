@@ -203,6 +203,7 @@ T{ S" сап+ып"			S" саап"		parse-test -> TRUE }T
 T{ S" сап+ып+чадыр"		S" саапчадыр"		parse-test -> TRUE }T
 T{ S" семья+лар+ы+наңар"	S" семьяларынаңар"	parse-test DROP expected-found -> 1 }T
 T{ S" сенек+і"                  S" сенее"               parse-test -> FALSE }T
+T{ S" си+ң+е"			S" сии"			parse-test -> FALSE }T  \ #206
 T{ S" сиг+ер"			S" сиир"		parse-test -> TRUE }T
 T{ S" сиг+і"			S" сии"			parse-test -> TRUE }T
 T{ S" сиг+іп"			S" сиип"		parse-test -> TRUE }T

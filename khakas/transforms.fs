@@ -564,7 +564,9 @@ end-public-class Untransformer
       \ гласная, идентичная корневой.
       vowels sound-each-str { D: V2 }
         V1  C   V2 unfallout-add-vcv
+        untransformed-fallout-VңV TO flags
         V1  "ң" V2 unfallout-add-vcv
+        untransformed-fallout TO flags
 
         \ 3.3. Выпадение конечной губной -п односложной
         \ глагольной основы при прибавлении афф. NF, Convп (I)П
