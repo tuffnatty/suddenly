@@ -262,16 +262,19 @@ require khakas/slotnames.fs
 
 \ 14. Непосредственно после Gener возможны только: конец
 \ словоформы [(обрабатывается правилом 27),] Past ГА(н),
-\ ConvA, ConvП, <Ptcl₂>, <Person>, <PredPl> или <Ptcl₃>.
+\ CvA, CvP, <Ptcl₂>, <Person>, <PredPl> или <Ptcl₃>.
 : constraint-14  ( -- f )
   flags( Past CvP CvA ) flag-is?
   || slots( <Neg/Gener> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
   || slots( <Neg/Gener> <Person> )-empty?
   ;
 
-\ 14.1. Gener: Перед Past ГА(н) и Ptcl3 возможна только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
+\ 14.1. Gener: Перед Past ГА(н), CvP, CvA и Ptcl3 возможна
+\ только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
 : constraint-14.1  ( -- f )
   flag Past  flag-empty?  &&
+  flag CvP   flag-empty?  &&
+  flag CvA   flag-empty?  &&
   slots( <Neg/Gener> <Ptcl₃> )-empty?  <Ptcl₃> slot-full?  AND NOT
   ;
 
