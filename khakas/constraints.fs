@@ -564,7 +564,19 @@ require khakas/slotnames.fs
      || flags( Gener Dur1 Dur1.kac ) flag-is?
   ;
 
-
+\ 35. All САр (также диалектные формы СА, САрЫ) невозможен
+\ непосредственно после (причастных) аффиксов из позиции
+\ Tense/Mood. [Ограничение нужно для отсечения неверных
+\ разборов слов типа хараанзар (глаз.3pos-All,
+\ *всматриваться-Past-All), поларзар (быть-Fut-2pl,
+\ *быть-Fut-All)]. Если причастие субстантивировано, то это
+\ сочетание возможно: Оринаның орнына — інек сағӌаңнарзар
+\ ‘Вместо Орины — к дояркам.’ (сағ-ӌаң-нар-зар –
+\ доить-Hab-Pl-All) (ГХЯ, М. Кильчичакова)
+: constraint-35  ( -- f )
+  flag participles  flag-empty?
+  || slots( <Tense/Mood/Conv> <Case₂> )-full?
+  ;
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT  ||
