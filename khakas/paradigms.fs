@@ -356,7 +356,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   filters( constraint-16.3 constraint-16.4 )
     <this> slot-full!
-    form" Pl₂ ЛАр"
+    form" Pl ЛАр"
   filters-end
   ; slot-add
 
