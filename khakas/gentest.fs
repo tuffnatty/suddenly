@@ -294,6 +294,7 @@ T{ S" хара+ған+зар"		S" хараанзар"		parse-test -> FALSE }T  \
 T{ S" харах+ым"			S" хараам"		parse-test -> TRUE }T
 T{ S" харах+ым"			S" харағым"		parse-test -> TRUE }T
 T{ S" харах+тың+ы+н"		S" харахтиин"		parse-test -> FALSE }T  \ #150
+T{ S" хар+бас+ыбыс+са+лар"	S" харбазыбыссалар"	parse-test -> FALSE }T  \ #211
 T{ S" харын+ы"			S" харны"		parse-test -> TRUE }T
 T{ S" хариб+де"			S" харибде"		parse-test -> TRUE }T  \ #127
 T{ S" хас+та+ди"		S" хастади"		parse-test -> FALSE }T  \ #152
