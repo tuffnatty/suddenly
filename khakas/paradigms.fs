@@ -47,6 +47,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" Refl (Ы)н"
   form" Rec (Ы)с"
   form" Caus ТЫр"
+  form" Caus т"  \ FIXME: FAILING TESTS
   ; slot-add
 
 <NF,Dur1> slot:  \ 3
