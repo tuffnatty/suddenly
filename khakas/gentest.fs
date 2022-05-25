@@ -86,6 +86,7 @@ T{ S" меню+ға"			S" менюға"		parse-test -> TRUE }T
 T{ S" меню+ге"			S" менюге"		parse-test -> FALSE }T
 T{ S" мойын+ы"			S" мойны"		parse-test -> TRUE }T
 T{ S" мында+ох"			S" мындох"		parse-test DROP expected-found -> 1 }T
+T{ S" нан+адыр+ым"		S" нанадырым"		parse-test -> TRUE }T  \ #207
 T{ S" ник+тер+ім+ді"		S" никтерімді"		parse-test -> TRUE }T
 T{ S" ниң+ӧк"			S" ниик"		parse-test -> FALSE }T
 T{ S" нуғ+ар"			S" нуур"		parse-test -> TRUE }T

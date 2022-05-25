@@ -500,6 +500,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
 
   filters( constraint-20-mix-person )
+    form" 1sg.mix ым"
     flag-with 1sg.br  form" 1sg.mix м"
 
     form" 2sg.mix СЫң"

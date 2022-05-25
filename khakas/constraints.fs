@@ -417,7 +417,9 @@ require khakas/slotnames.fs
 \ для смешанных форм: Pres чА, PresDial ча, PresSh
 \ чАр(Ы), Past ГА(н), краткие формы аффиксов Gener А.дЫ, Pres1
 \ чАдЫ, Pres1Kac чады, PresKyz ту, Dur1 и, Hab ҶА,
-\ Fut А (+ в диалектах также Ар: килерім ‘я приду’);
+\ Fut А (+ в диалектах также Fut Ар: килерім ‘я приду’, PresKyz
+\ тур: сағынтурым ‘я думаю’, Pres1 чАдЫр: полчадырым ‘я
+\ существую’, Gener АдЫр: нанадырым ‘я возвращаюсь’);
 \ для кратких форм: Cond СА, Rpast ТЫ.
 : constraint-20-full-person  ( -- f )
   nomen?
@@ -436,9 +438,9 @@ require khakas/slotnames.fs
     flag Comp  flag-is? ||
     slots[ <Pl₂> <Case₂> ]-empty?  &&
       flags( Pres PresDial PresSh Past
-             Gener@short
-             Pres1@short Pres1Kac@short
-             PresKyz@short
+             Gener
+             Pres1 Pres1Kac@short
+             PresKyz
              Dur1@short Hab@short Fut ) flag-is?
   ;
 : constraint-20-short-person  ( -- f )
