@@ -325,6 +325,7 @@ T{ S" чазы+ға"			S" чазаа"		parse-test -> TRUE }T
 T{ S" чайлағ+ы"			S" чайлаа"		parse-test -> TRUE }T
 T{ S" чарын+ы"			S" чарны"		parse-test -> TRUE }T
 T{ S" часка+лығ+ға"		S" часкалыға"		parse-test -> TRUE }T
+T{ S" чі+еді+ңер"		S" чидер"		parse-test -> FALSE }T  \ #212
 T{ S" чі+еді+п"			S" чидіп"		parse-test -> FALSE }T  \ #209
 T{ S" чит+іп"			S" чидіп"		parse-test -> TRUE }T  \ #209
 T{ S" чі+гелек"			S" чеелек"		parse-test -> TRUE }T

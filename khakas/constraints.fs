@@ -617,7 +617,10 @@ require khakas/slotnames.fs
     AND NOT &&
       <Poss₁> form-slot-flags untransformed-fallout-(СА|ТЫ)ңАр AND
       flag 2pos.pl  flag-is?
-      AND NOT
+      AND NOT &&
+        <Person> form-slot-flags untransformed-fallout-(СА|ТЫ)ңАр AND
+        flag Imp  flag-is?
+        AND NOT
   ;
 
 \ Запрещенные контексты для выпадения одной из трех одинаковых согласных
