@@ -467,9 +467,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Ass₂ ОК"
       flag-with Cont  form" Cont₂ LА"
       flag-with Add   form" Add₂ ТАА"
-      filters( constraint-32 )
-        form" Part ни"
-      filters-end
+      \ FIXME: FAILING TESTS
+      \ filters( constraint-32 )
+      \   form" Part ни"
+      \ filters-end
     filters-end
   right-context-end
   ; slot-add
