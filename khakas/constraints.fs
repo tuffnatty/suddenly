@@ -119,16 +119,16 @@ require khakas/slotnames.fs
   ;
 
 \ 5.1. Показатель Perf1 Ыс возможен [пока встретился]:
-\ a) при наличии Ptcl1 и любого пок-ля времени (позиции
+\ a) при наличии Ptcl1 [зачеркнуто: и любого пок-ля времени (позиции
 \ <Tense/Mood/Conv> + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) +
-\ Dur1Kac Ат):
+\ Dur1Kac Ат)]:
 \ б) при диалектном показателе Neg.NFSh ПААн.
 : constraint-5.1  ( -- f )
   flag Neg.NFSh  flag-is?
   || <Ptcl1> slot-full?
-     && <Tense/Mood/Conv> slot-full?
-        || <Affirm> slot-full?
-        || flags( Gener Dur1 Dur1Kac ) flag-is?
+     \ && <Tense/Mood/Conv> slot-full?
+     \    || <Affirm> slot-full?
+     \    || flags( Gener Dur1 Dur1Kac ) flag-is?
   ;
 
 \ 6. Показатель Prosp АК встречается только перед
