@@ -478,12 +478,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context-end
   ; slot-add
 
-<Affirm> slot:  \ 18
+<Vis> slot:  \ 18
   <this> slot-empty!
   form" -noaffirm "
 
   <this> slot-full!
-  form" Affirm ЧЫК"
+  form" Vis ЧЫК"
   ; slot-add
 
 <Person> slot:  \ 19
@@ -505,22 +505,16 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
 
   filters( constraint-20-mix-person )
-    form" 1sg.mix ым"
-    flag-with 1sg.br  form" 1sg.mix м"
-
-    form" 2sg.mix СЫң"
-
-    flag-with 1.pl  form" 1pl.mix ПЫс"
-
-    form" 2pl.mix САр"
+    form" 1sg.br (Ы)м"
+    form" 2sg СЫң"
+    form" 1pl ПЫс"
+    form" 2pl САр"
   filters-end
 
   filters( constraint-20-short-person )
     flag Person.br  flag-set
-      form" 1sg.br м"
+      form" 1sg.br (Ы)м"
       form" 2sg.br ң"
-
-      flag-with 1.pl  form" 1pl.br ПЫс"
 
       form" 2pl.br (Ы)ңАр"
     flag Person.br  flag-clear
@@ -531,10 +525,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Imp.1sg им"
       form" Imp.1pl ибЫс"
       form" Imp.1plDial АлЫс"
-      form" Imp.1.Incl Аң"
-      form" Imp.1.InclDial АК"
-      form" Imp.1pl.Incl АңАр"
-      form" Imp.1pl.InclDial АлАр"
+      form" ImpIncl Аң"
+      form" ImpInclDial АК"
+      form" ImpInclPl АңАр"
+      form" ImpInclPlDial АлАр"
       form" Imp.2pl (Ы)ңАр"
       form" Imp.3 СЫн"
     flag Imp  flag-clear

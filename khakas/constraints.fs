@@ -120,14 +120,14 @@ require khakas/slotnames.fs
 
 \ 5.1. Показатель Perf1 Ыс возможен [пока встретился]:
 \ a) при наличии Ptcl1 [зачеркнуто: и любого пок-ля времени (позиции
-\ <Tense/Mood/Conv> + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) +
+\ <Tense/Mood/Conv> + Vis ЧЫК + Gener AдЫр + Dur1 и(р) +
 \ Dur1Kac Ат)]:
 \ б) при диалектном показателе Neg.NFSh ПААн.
 : constraint-5.1  ( -- f )
   flag Neg.NFSh  flag-is?
   || <Ptcl1> slot-full?
      \ && <Tense/Mood/Conv> slot-full?
-     \    || <Affirm> slot-full?
+     \    || <Vis> slot-full?
      \    || flags( Gener Dur1 Dur1Kac ) flag-is?
   ;
 
@@ -243,12 +243,12 @@ require khakas/slotnames.fs
 \ 12. Непосредственно после показателя недавно прошедшего
 \ времени (RPast) может следовать только краткий
 \ лично-числовой показатель (Person), число предиката
-\ (PredPl), показатель аффирматива (Affirm), <Ptcl₂> или <Ptcl₃>
+\ (PredPl), показатель аффирматива (Vis), <Ptcl₂> или <Ptcl₃>
 : constraint-12  ( -- f )
   slots( <Tense/Mood/Conv> <PredPl> )-empty?
   || slots( <Tense/Mood/Conv> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
   || slots( <Tense/Mood/Conv> <Person> )-empty?  flag Person.br  flag-is?  AND
-  || slots( <Tense/Mood/Conv> <Affirm> )-empty?  <Affirm> slot-full?  AND
+  || slots( <Tense/Mood/Conv> <Vis> )-empty?  <Vis> slot-full?  AND
   ;
 
 \ 13. Непосредственно после показателя условного наклонения
@@ -411,16 +411,18 @@ require khakas/slotnames.fs
 \ для полных форм: Dur1Kac Ат, Irr ЧЫК, Opt ГАй, Assum
 \ ГАдАГ, Indir ТЫр, Cunc ГАлАК, Neg.Fut ПАс, полные формы
 \ аффиксов Gener А.дЫр, Pres1 чАдЫр, Pres1Kac чадыр,
-\ PresKyz тур, Dur1 ир, Dur1Kac Ат, Hab ҶАң, Fut Ар,
-\ в качинском также Pres чА (тоғынчабын ‘я работаю’) и Past
-\ ГА(н) (парғабын ‘я шел’, чоохтаанохпын ‘я тоже говорил’);
-\ для смешанных форм: Pres чА, PresDial ча, PresSh
-\ чАр(Ы), Past ГА(н), краткие формы аффиксов Gener А.дЫ, Pres1
-\ чАдЫ, Pres1Kac чады, PresKyz ту, Dur1 и, Hab ҶА,
-\ Fut А (+ в диалектах также Fut Ар: килерім ‘я приду’, PresKyz
-\ тур: сағынтурым ‘я думаю’, Pres1 чАдЫр: полчадырым ‘я
-\ существую’, Gener АдЫр: нанадырым ‘я возвращаюсь’);
+\ PresKyz тур, Dur1 ир, Hab ҶАң, Fut Ар, в качинском также Pres
+\ чА (тоғынчабын ‘я работаю’) и Past ГА(н) (парғабын ‘я шел’,
+\ чоохтаанохпын ‘я тоже говорил’);
 \ для кратких форм: Cond СА, Rpast ТЫ.
+\ Cмешанный набор форм (1sg.br + др.лица в полных формах)
+\ присоединяется к аффиксам: Pres чА, PresDial ча, PresSh
+\ чАр(Ы), Past ГА(н), кратким формам аффиксов Gener А.дЫ, Pres1
+\ чАдЫ, Pres1Kac чады, PresKyz ту,  Dur1 и, Hab ҶА, Fut А (+ в
+\ диалектах также Ар: килерім ‘я приду’, тур: сағынтурым ‘я
+\ думаю’, чАдЫр: полчадырым ‘я существую’, АдЫр: нанадырым ‘я
+\ возвращаюсь’).
+
 : constraint-20-full-person  ( -- f )
   nomen?
   || verb?
@@ -431,7 +433,7 @@ require khakas/slotnames.fs
                      PresKyz@full Dur1@full Dur1Kac
                      Hab@full Fut@full
                      Past Pres ) flag-is?
-              || <Affirm> slot-full?
+              || <Vis> slot-full?
   ;
 : constraint-20-mix-person  ( -- f )
   verb?  &&
@@ -453,7 +455,7 @@ require khakas/slotnames.fs
 \ 21. Показатель PredPl ЛАр может стоять после:
 \ а) пок-ля времени (позиции <Tense/Mood> [за исключением CvA, CvP,
 \    Neg.Conv (.Abl), Lim и PresPt чАн, согласно пр.25] + Indir
-\    TЫр + Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + Dur1Kac Ат),
+\    TЫр + Vis ЧЫК + Gener AдЫр + Dur1 и(р) + Dur1Kac Ат),
 \ б) пок-ля <Case2> или <Poss2>
 \ в) некоторых полей Person (1pl, Imp.3),
 \ г) чистой именной основы,
@@ -463,7 +465,7 @@ require khakas/slotnames.fs
 : constraint-21  ( -- f )
   flag Gener flag-is?  slots( <Neg/Gener> <PredPl> )-empty?  AND
   || <Tense/Mood/Conv> slot-full?  slots( <Tense/Mood/Conv> <PredPl> )-empty?  AND
-  || <Affirm> slot-full?  slots( <Affirm> <PredPl> )-empty?  AND
+  || <Vis> slot-full?  slots( <Vis> <PredPl> )-empty?  AND
   || <Poss₂> slot-full?  slots( <Poss₂> <PredPl> )-empty?  AND
   || <Case₂> slot-full?  slots( <Case₂> <PredPl> )-empty?  AND
   || <Ptcl₂> slot-full?  slots( <Ptcl₂> <PredPl> )-empty?  AND
@@ -557,15 +559,15 @@ require khakas/slotnames.fs
 \ 34. При присоединении Ptcl2 к основе глагола (Verbum)
 \ обязательно также наличие показателя времени (позиции
 \ Tense/Mood (за исключением деепричастий и PresPt чАн) +
-\ Affirm ЧЫК + Gener AдЫр + Dur1 и(р) + DurDialKac Ат).
+\ Vis ЧЫК + Gener AдЫр + Dur1 и(р) + DurDialKac Ат).
 \ Ptcl2 не может встретиться в словоформе без показателей Person
 \ или PredPl, если непосредственно после нее не стоит
-\ Affirm ЧЫК: Аӌа іди полтырохчых. - Дядя так же был. (Чиланы)
+\ Vis ЧЫК: Аӌа іди полтырохчых. - Дядя так же был. (Чиланы)
 : constraint-34  ( -- f )
-  slots[ <Affirm> <PredPl> ]-full?
+  slots[ <Vis> <PredPl> ]-full?
   && verb? NOT
      || <Tense/Mood/Conv> slot-full?  flags( converbs PresPtDial ) flag-empty?  AND
-     || <Affirm> slot-full?
+     || <Vis> slot-full?
      || flags( Gener Dur1 Dur1Kac ) flag-is?
   ;
 

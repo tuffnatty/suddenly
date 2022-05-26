@@ -23,7 +23,7 @@ enum:
   +enum <Poss₂>
   +enum <Case₂>
   +enum <Ptcl₂>
-  +enum <Affirm>
+  +enum <Vis>
   +enum <Person>
   +enum <PredPl>
   +enum <Ptcl₃>
