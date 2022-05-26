@@ -582,6 +582,7 @@ require khakas/slotnames.fs
   flag participles  flag-empty?
   || slots( <Tense/Mood/Conv> <Case₂> )-full?
   ;
+
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT  ||
@@ -703,6 +704,9 @@ require khakas/slotnames.fs
 
 : constraint-V+Acc  ( -- f )
   <Case₂> form-slot-vowel-at-left? ;
+
+: constraint-Distr-short  ( -- f )
+  <Distr> form-slot-vowel-at-left? NOT ;
 
 : constraint-broken-harmony  ( -- f )
   [: harmony-vu-broken any-form-flag-is? NOT  ||

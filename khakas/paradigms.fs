@@ -32,7 +32,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" -nodistr "
 
       <this> slot-full!
-      form" Distr (К)лА"
+      filters( constraint-Distr-short )
+        form" Distr лА"
+      filters-end
+      form" Distr ГлА"
       form" DistrDial лАGлА"
     filters-end
   right-context-end
