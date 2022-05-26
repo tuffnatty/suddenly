@@ -38,6 +38,7 @@ T{ S" истерге"	headword?	S" исткен"		parse-test -> TRUE }T
 T{ S" ис+тер+лер"		S" истерлер"		parse-test -> FALSE }T  \ #191
 T{ S" ист+кен"			S" исткен"		parse-test -> TRUE }T
 T{ S" ит+ті+ни+м"		S" иттіним"		parse-test -> TRUE }T
+T{ S" іт+е+ӧк"			S" ідӧк"		parse-test -> FALSE }T  \ #210
 T{ S" ізі+гелек"		S" ізеелек"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізиим"		parse-test -> TRUE }T
 T{ S" ізік+ім"			S" ізігім"		parse-test -> TRUE }T
@@ -103,6 +104,7 @@ T{ S" ӧс+ӧк+іс"			S" ӧзӧгіс"		parse-test -> FALSE }T  \ #184
 T{ S" ӧң+і"			S" ӧӧ"			parse-test -> TRUE }T
 T{ S" паба+м+ни"		S" пабамни"		parse-test -> TRUE }T
 T{ S" пағ+ы"			S" паа"			parse-test -> TRUE }T
+T{ S" пас+а+ох"			S" пазох"		parse-test -> FALSE }T  \ #210
 T{ S" пала+баң"			S" палабаң"		parse-test -> TRUE }T
 T{ S" пала+блаң"		S" палаблаң"		parse-test -> TRUE }T
 T{ S" пала+маң"			S" паламаң"		parse-test -> TRUE }T

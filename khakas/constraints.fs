@@ -676,8 +676,17 @@ require khakas/slotnames.fs
 
 \ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не
 \ стягивается: хызох < хыс+ох, но не < хыс-ы-ох. Гласная
-\ дательного падежа не стягивается: суғ+ға+ох > суғаох ‘в воду
-\ же’.
+\ дательного падежа и деепричастия на гласную не стягивается:
+\ суғ+ға+ох > суғаох ‘в воду же’.
+: constraint-OK-fallout-<Tense/Mood/Conv>  ( -- f )
+  slots( <Tense/Mood/Conv> <Ptcl₂> )-full?
+  <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT
+  OR
+  slots( <Tense/Mood/Conv> <Ptcl₃> )-full?
+  <Ptcl₃> form-slot-flags untransformed-fallout-OK AND NOT
+  OR
+  AND
+  ;
 : constraint-OK-fallout-<Poss₁>  ( -- f )
   slots( <Poss₁> <Ptcl₂> )-full?
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT

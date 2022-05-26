@@ -259,7 +259,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" CvP (Ы)п"
       filters( constraint-VA>и-fallout )
         form" CvKac АбАс"
-        form" CvA А"
+        right-context( constraint-OK-fallout-<Tense/Mood/Conv> )
+          form" CvA А"
+        right-context-end
       filters-end
     flag converbs flag-clear
   right-context-end
