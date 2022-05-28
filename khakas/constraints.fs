@@ -741,3 +741,8 @@ require khakas/slotnames.fs
   <Prosp>           => constraint-VA>и-fallout-<Prosp>
   TRUE ABORT" Invalid slot for constraint-VA>и-fallout
   ; IMMEDIATE
+
+: constraint-reduplication  ( -- f )
+  dict-reduplication @ NOT
+  || nomen?
+  ;

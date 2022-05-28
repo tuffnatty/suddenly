@@ -3,6 +3,7 @@ REQUIRE dstack.fs
 REQUIRE slot-stack.fs
 REQUIRE grammar.fs
 REQUIRE strings.fs
+language-require morphology.fs
 
 0 VALUE n-slots
 
@@ -18,6 +19,8 @@ dstack: formname
 dstack: formform
 dstack: formform-morphonemic
 dstack: formflag
+
+VARIABLE reduplication-len
 
 : formstack-slot  ( n dstack -- addr u )
   ]] >O n-slots dstack-depth 1+ - - 1- O dstack-pick O> [[
@@ -119,9 +122,13 @@ TIMER: +form-prolog
 language-require rules.fs
 REQUIRE loaddefs.fs
 
-DEFER yield-stem  ( stem -- )
-:noname  ( stem -- )
-  ." FOUND STEM: " formname .dstack SPACE formform-morphonemic .dstack CR .stem-single CR  ( )
+DEFER yield-stem  ( addr u stem -- addr u )
+:noname  ( addr u stem -- addr u )
+  ." FOUND STEM: " formname .dstack SPACE formform-morphonemic .dstack
+  dict-reduplication @ IF
+    SPACE .reduplication ." -" SPACE  >R  OVER reduplication-len @ TYPE  R>
+  THEN
+  CR .stem-single CR  ( addr u )
   1 n-forms +! ; IS yield-stem
 
 : check-stem  ( addr u stem -- addr u )
@@ -141,7 +148,7 @@ DEFER yield-stem  ( stem -- )
       \." indeclinate stem but there are affixes: " stem .stem-single CR
     THEN
   ELSE
-    stem filters-check IF  ( stem )
+    stem filters-check IF  ( addr u stem )
       \\." yielding" CR
       yield-stem  ( addr u )
     ELSE DROP THEN  ( addr u )
@@ -162,7 +169,18 @@ DEFER yield-stem  ( stem -- )
   \stack-mark
     \\." " indent ." stack.done!" .s s type cr
     s string-addr 0= IF ABORT" Corrupt stem?" THEN
-    s stem-find ?DUP-IF  { stem }
+    FALSE dict-reduplication !
+    0 reduplication-len !
+    s stem-find ?DUP-0=-IF
+      s is-reduplication? IF
+	s skip-reduplication  { D: origin }
+        origin stem-find ?DUP-IF  ( stem )
+	  TRUE dict-reduplication !
+	  origin string-addr  s string-addr  -  reduplication-len !
+	ELSE 0 THEN
+      ELSE 0 THEN
+    THEN { stem }  ( )
+    stem IF
       s  stem  ['] check-stem  list-map  2DROP
       \." ~~~~~~~~~" cr
     ELSE

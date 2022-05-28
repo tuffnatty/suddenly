@@ -27,7 +27,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
              constraint-V[кх]V-fallout
              constraint-VVГV-fallout
              constraint-CCC-fallout
-             constraint-broken-harmony )
+             constraint-broken-harmony
+	     constraint-reduplication )
       <this> slot-empty!
       form" -nodistr "
 

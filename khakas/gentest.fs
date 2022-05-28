@@ -292,6 +292,7 @@ T{ S" фамилия+ы"		S" фамилияы"		parse-test -> FALSE }T
 T{ S" финн+нең"			S" финнең"		parse-test -> TRUE }T
 T{ S" финн+нең"			S" финннең"		parse-test -> FALSE }T
 \ T{ S" хан-пиг+і"		S" хан-пигі"		parse-test -> TRUE }T
+T{ S" хатығ"			S" хап-хатығ"		parse-test -> TRUE }T  \ #215
 T{ S" хаптыр+алыс"		S" хаптыралыс"		parse-test -> TRUE }T
 T{ S" хара+ған+зар"		S" хараанзар"		parse-test -> FALSE }T  \ #198
 T{ S" харах+ым"			S" хараам"		parse-test -> TRUE }T

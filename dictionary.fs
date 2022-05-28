@@ -12,6 +12,7 @@ REQUIRE util.fs
 
 64 CHARS  CONSTANT max-headword
 128 CHARS CONSTANT max-semgloss
+VARIABLE dict-reduplication
 
 STRUCT
   CELL%                FIELD dict-id

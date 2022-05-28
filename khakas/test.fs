@@ -31,9 +31,13 @@ FALSE VALUE expect-headword?
     expected-found 1+ TO expected-found
   THEN
   ;
+
 : check-result  { stem -- }
   expected-str expected-len { D: pattern }
-  \." check-result:" stem .stem-single ." gloss:" guessed-stem TYPE  formform .dstack ."  dict:" paradigm-stems @ .strlist  ."  expected pattern:" pattern TYPE CR
+  \." check-result:" stem .stem-single
+  \." gloss:" guessed-stem TYPE  formform .dstack
+  \."  dict: [" paradigm-stems @ .strlist  \." ] expected pattern:" pattern TYPE CR
+
   guessed-stem paradigm-stems @ strlist-in? IF
     guessed-stem
   ELSE
