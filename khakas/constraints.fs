@@ -716,7 +716,7 @@ require khakas/slotnames.fs
 : constraint-V+Acc  ( -- f )
   <Case₂> form-slot-vowel-at-left? ;
 
-: constraint-Distr-short  ( -- f )
+: constraint-DistrDial-short  ( -- f )
   <Distr> form-slot-vowel-at-left? NOT ;
 
 : constraint-broken-harmony  ( -- f )
