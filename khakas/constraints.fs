@@ -636,10 +636,19 @@ require khakas/slotnames.fs
 
 \ Запрещенные контексты для выпадения одной из трех одинаковых согласных
 : constraint-CCC-fallout  ( -- f )
-  stem-last-sound-ptr cyr  stem-prev-sound-ptr cyr COMPARE                            ||
-  stem-last-sound first-affix-starts-with? NOT                                        ||
-  dictflag-rus dictflag-is?  first-form-flag untransformed-fallout-CCC  AND  0<> AND  ||
-  dictflag-rus dictflag-empty?  first-form-flag untransformed-fallout-CCC AND NOT  AND
+  dictflag-rus dictflag-is? IF
+    \ For rus. loanwords, either:
+    \ the stem ends with CC, first affix starts with C and has untransformed-fallout-CCC flag;
+    \ or: the stem does not end with CC or first affix does not start with C, and first affix has no untransformed-fallout-CCC flag.
+    stem-last-sound-ptr cyr  stem-prev-sound-ptr cyr COMPARE
+    stem-last-sound first-affix-starts-with? NOT
+    OR
+    first-form-flag untransformed-fallout-CCC  AND  0<>
+    <>
+  ELSE
+    \ For non-loanwords, the untransform is disallowed.
+    untransformed-fallout-CCC any-form-flag-is? NOT
+  THEN
   ;
 
 \ Запрещенные контексты для выпадения после долгой гласной
