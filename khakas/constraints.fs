@@ -58,17 +58,17 @@ require khakas/slotnames.fs
 \ 7) PresPt чАн
 \ - или на конце словоформы.
 \ Показатель Neg.NFSh ПААн допустим в тех же случаях,
-\ исключая 4) и 7)
+\ кроме 4), 7) и конца словоформы
 : constraint-4sh  ( -- f )
   <Ptcl1> slot-full?
   || <Dur> slot-full?
   || flags( Perf Perf1
             Pres PresDial PresSh
             Indir ) flag-is?
-  || slots( <NF,Dur1> <Ptcl₃> ]-empty?
   ;
 : constraint-4  ( -- f )
   constraint-4sh
+  || slots( <NF,Dur1> <Ptcl₃> ]-empty?
   || flags( Pres1 Pres1Kac PresKyz
             PresPtDial ) flag-is? ;
 
