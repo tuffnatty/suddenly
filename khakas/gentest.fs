@@ -237,7 +237,7 @@ T{ S" сых+ар+ға"	        S" сығарға"		parse-test -> TRUE }T
 T{ S" сых+ып+ох+ыс+чых"		S" сығыбоғысчых"	parse-test -> TRUE }T
 T{ S" сых+лағла+п"		S" сыхлағлап"		parse-test -> TRUE }T
 T{ S" сых+паан+чат+хан"		S" сыхпаанчатхан"	parse-test -> TRUE }T
-T{ S" сых+таа+лар"		S" сыхтаалар"		parse-test DROP expected-found -> 1 }T  \ #197
+T{ S" сых+таа+лар"		S" сыхтаалар"		parse-test DROP expected-found -> 0 }T  \ #197
 T{ S" тағ+ы"			S" таа"			parse-test -> TRUE }T
 T{ S" тайға+за"			S" тайғаза"		parse-test -> TRUE }T
 T{ S" тайға+зары"		S" тайғазары"		parse-test -> TRUE }T
@@ -348,6 +348,7 @@ T{ S" чох+ы+ла+ох"		S" чоғылох"		parse-test -> FALSE }T
 T{ S" чӧгіг+і"			S" чӧгии"		parse-test -> TRUE }T
 T{ S" чӧлег+і"			S" чӧлее"		parse-test -> TRUE }T
 T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T
+T{ S" чӧп+тее+біс"		S" чӧптеебіс"		parse-test -> FALSE }T  \ #197
 T{ S" чӧр+беен+іс+тір"		S" чӧрбееністір"	parse-test -> TRUE }T
 T{ S" чӧр+ӌең+і"		S" чӧрӌее"		parse-test -> TRUE }T
 T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 2 }T
