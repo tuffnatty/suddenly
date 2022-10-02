@@ -17,7 +17,7 @@ T{ S" аннаңар+ох"		S" аннаңарох"		parse-test -> TRUE }T
 T{ S" аң+ы"			S" аңы"			parse-test -> TRUE }T
 T{ S" аң+ы"			S" аа"			parse-test -> TRUE }T  \ #92
 T{ S" ат+ар"			S" атар"		parse-test -> TRUE }T
-T{ S" ат+т+тар"			S" аттар"		parse-test -> FALSE }T \ #216
+T{ S" ат+т+ты+ңар"		S" аттар"		parse-test -> FALSE }T \ #216
 T{ S" ат+ыбыс+ах+ча+лар"        S" атыбызахчалар"       parse-test -> TRUE }T  \ #126
 T{ S" ат+ың+а"			S" адаа"		parse-test -> FALSE }T
 T{ S" ватт+ты"			S" ватты"		parse-test -> TRUE }T
