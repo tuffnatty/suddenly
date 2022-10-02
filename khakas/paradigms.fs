@@ -218,9 +218,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       flag-with Fut@full     form" Fut Ар"
     filters-end
 
-    flag Neg7  flag-set
+    flag Neg7|Foc  flag-set
       flag-with Assum|Neg.Fut|Opt  form" Neg.Fut ПАс"
-    flag Neg7  flag-clear
+    flag Neg7|Foc  flag-clear
 
     right-context( constraint-9.2 )
       flag-with Hab@short  form" Hab ЧА"
@@ -252,10 +252,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     flag converbs  flag-set \ деепричастия
       form" Lim ГАли"
 
-      flag Neg7  flag-set
+      flag Neg7|Foc  flag-set
         form" Neg.Conv Пин"
         form" Neg.Conv.Abl ПинАң"
-      flag Neg7  flag-clear
+      flag Neg7|Foc  flag-clear
 
       form" CvP (Ы)п"
       filters( constraint-VA>и-fallout )
@@ -311,7 +311,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -nocase1 "
 
-  right-context( constraint-16.1 constraint-27 )
+  right-context( constraint-16.1 constraint-16.9 constraint-27 )
     <this> slot-full!
 
     filters( constraint-16.5 )
@@ -355,6 +355,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Adv Ли"
     filters-end
   right-context-end
+
+  form" All₁.Attr Сархы"
   ; slot-add
 
 <Pl₂> slot:  \ 14
@@ -557,7 +559,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   flag-with Ass₃  form" Ass ОК"
 
   filters( constraint-23 )
-    form" Foc ТЫр"
+    flag-with Neg7|Foc  form" Foc ТЫр"
   filters-end
 
   filters( constraint-22 )

@@ -2,11 +2,12 @@
 flagenum:
   flag: AblArch
   flag: Add
+  flag: Adv
   flag: All₁
+  flag: All₁.Attr
   flag: Ass₁
   flag: Ass₃
   flag: Assum|Neg.Fut|Opt
-  flag: Attr
   flag: Comit
   flag: Comp
   flag: Cond
@@ -18,7 +19,6 @@ flagenum:
   flag: Dur1Kac
   flag: Dur1@full
   flag: Dur1@short
-  flag: Foc
   flag: Fut@full
   flag: Fut@short
   flag: Gen.3pos
@@ -32,7 +32,7 @@ flagenum:
   flag: Loc
   flag: Loc₁
   flag: Neg
-  flag: Neg7
+  flag: Neg7|Foc
   flag: NF
   flag: NF₀
   flag: Neg.NF

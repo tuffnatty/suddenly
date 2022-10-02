@@ -234,7 +234,7 @@ require khakas/slotnames.fs
 \ получали паразитический разбор через Foc)
 \ не могут быть в одной словоформе с пок-лем Neg ПА.
 : constraint-11  ( -- f )
-  flags( Fut Neg7 Foc )  flag-empty? ;
+  flags( Fut Neg7|Foc )  flag-empty? ;
 
 \ 11.1. Показатель Neg.NF исключает заполнение Neg в поз. 6.
 : constraint-11.1  ( -- f )
@@ -280,10 +280,10 @@ require khakas/slotnames.fs
 
 \ 16.1. Показатели позиций <Pl₁>, <Poss₁>, <Case₁> возможны
 \ только при наличии в словоформе одного или нескольких аффиксов
-\ из позиций <Transp> (Attr, Comit), <Pl₂>, <Poss₂>, <Case₂>.
+\ из позиций <Transp> (Attr, Comit, All₁.Attr), <Pl₂>, <Poss₂>, <Case₂>.
 : constraint-16.1  ( -- f )
-  flags( Attr Comit ) flag-is?
-  || slots( <Transp> <Case₂> ]-full?
+  slots( <Transp> <Case₂> ]-full?
+  || <Transp> slot-full? && flags( Adv ) flag-empty?
   ;
 
 \ 16.2. Показатель Attr КЫ может присутствовать в
@@ -368,6 +368,10 @@ require khakas/slotnames.fs
   <Pl₂> slot-empty?
   || slots( <Pl₁> <Pl₂> )-full?
   ;
+
+\ 16.9. Показатель All1.Attr Сархы не может употребляться в одной словоформе с Case1.
+: constraint-16.9  ( -- f )
+  flag All₁.Attr  flag-empty? ;
 
 \ 17. В поз. <Case₁>/<Case₂> набор аффиксов посессивного
 \ склонения выбирается: а) в случае заполнения позиций
