@@ -502,20 +502,20 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters( constraint-20-full-person )
     form" 1sg ПЫн"
     form" 1sgDial СЫм"
-    form" 2sg СЫң"
 
-    flag-with 1.pl  form" 1pl ПЫс"
     flag-with 1.pl  form" 1plDial СЫбЫс"
 
-    form" 2pl САр"
     form" 2plDial СЫңАр"
+  filters-end
+
+  filters( constraint-20-full-or-mix-person )
+    form" 2sg СЫң"
+    flag-with 1.pl  form" 1pl ПЫс"
+    form" 2pl САр"
   filters-end
 
   filters( constraint-20-mix-person )
     form" 1sg.br (Ы)м"
-    form" 2sg СЫң"
-    form" 1pl ПЫс"
-    form" 2pl САр"
   filters-end
 
   filters( constraint-20-short-person )

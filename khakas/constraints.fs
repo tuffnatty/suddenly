@@ -454,7 +454,10 @@ require khakas/slotnames.fs
     flag Comp  flag-is? ||
     slots[ <Pl₂> <Case₂> ]-empty?  &&
       flags( RPast Cond ) flag-is? ;
-
+: constraint-20-full-or-mix-person  ( -- f )
+  constraint-20-full-person
+  || constraint-20-mix-person
+  ;
 
 \ 21. Показатель PredPl ЛАр может стоять после:
 \ а) пок-ля времени (позиции <Tense/Mood> [за исключением CvA, CvP,

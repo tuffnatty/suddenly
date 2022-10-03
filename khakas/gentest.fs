@@ -58,6 +58,7 @@ T{ S" кил+0̸+ча+м"		S" килчам"		parse-test -> TRUE }T
 T{ S" кил+0̸+чады"		S" килчады"		parse-test DROP expected-found -> 1 }T
 T{ S" кил+0̸+чады+м"		S" килчадым"		parse-test -> TRUE }T
 T{ S" кил+0̸+чадыр+бын"		S" килчадырбын"		parse-test -> TRUE }T
+T{ S" кил+0̸+че+біс"		S" килчебіс"		parse-test DROP expected-found -> 1 }T  \ #201
 T{ S" кил+0̸+чен"		S" килчен"		parse-test -> TRUE }T
 T{ S" киме+ге"			S" кимее"		parse-test -> TRUE }T
 T{ S" кип-азах+ы"		S" кип-азаа"		parse-test -> TRUE }T
@@ -353,7 +354,7 @@ T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T
 T{ S" чӧп+тее+біс"		S" чӧптеебіс"		parse-test -> FALSE }T  \ #197
 T{ S" чӧр+беен+іс+тір"		S" чӧрбееністір"	parse-test -> TRUE }T
 T{ S" чӧр+ӌең+і"		S" чӧрӌее"		parse-test -> TRUE }T
-T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 2 }T
+T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 1 }T  \ #111
 T{ S" чурта+п+чадыр"		S" чуртапчадыр"		parse-test -> TRUE }T
 T{ S" чӱг+і"			S" чӱгі"		parse-test -> TRUE }T
 T{ S" чӱгӱрт+ібіс+пе+гей+і+н"	S" чӱгӱртібіспеейін"	parse-test -> TRUE }T  \ #145
