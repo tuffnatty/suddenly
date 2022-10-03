@@ -596,6 +596,15 @@ require khakas/slotnames.fs
   || slots( <Tense/Mood/Conv> <Case₂> )-full?
   ;
 
+\ 36. Caus т может присоединяться только к основам,
+\ кончающимся на гласную или на неносовые сонорные р, л, й. 
+: constraint-36 ( -- f )
+  <Distr> slot-empty?
+  && stem-last-sound vowel?
+     || stem-last-sound glide?
+  ;
+
+
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT  ||
