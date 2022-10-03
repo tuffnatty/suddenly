@@ -399,7 +399,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-full!
 
   right-context( constraint-29 )
-    form" GenDial ТЫң"
+    form" GenDial ДЫң"
     form" Instr нАң"
     form" InstrDial мАң"
     form" InstrDial мнаң"
