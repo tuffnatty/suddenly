@@ -527,7 +527,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" 1sg.br (Ы)м"
       form" 2sg.br ң"
 
-      form" 2pl.br (Ы)ңАр"
+      form" 2pl.br ңАр"
     flag Person.br  flag-clear
   filters-end
 
