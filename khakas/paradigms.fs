@@ -356,8 +356,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
   right-context-end
 
-  form" All₁.Attr Сархы"
   filters( constraint-17-<Case₁> )
+    form" All₁.Attr Сархы"
+  filter-else
     form" All₁.Attr (н)Сархы"
   filters-end
   ; slot-add
