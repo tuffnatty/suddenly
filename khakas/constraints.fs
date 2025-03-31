@@ -681,6 +681,9 @@ require khakas/slotnames.fs
 \ Запрещенные контексты для выпадения конечного к, х
 : constraint-V[кх]V-fallout  ( -- f )
   first-form-flag untransformed-fallout-V[кх]V AND NOT  ||
+  verb? NOT &&
+  slots[ 1 <Poss₁> )-empty?  <Poss₁> slot-full?  AND
+  slots[ 1 <Poss₂> )-empty?  <Poss₂> slot-full?  AND  OR  &&
   dictflag-rus dictflag-empty?
   ;
 

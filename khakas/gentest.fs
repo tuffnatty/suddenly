@@ -280,6 +280,7 @@ T{ S" тура+да+хы+лар+ы"		S" турадағылары"	parse-test -> 
 T{ S" тура+зархы"		S" туразархы"		parse-test -> TRUE }T  \ #194
 T{ S" тура+зы+нзархы"		S" туразынзархы"	parse-test -> TRUE }T  \ #194
 T{ S" тура+ох"			S" турох"		parse-test -> TRUE }T
+T{ S" турлах+а"			S" турлаа"		parse-test -> FALSE }T  \ #213
 T{ S" туза+лығ+лар"		S" тузалығлар"		parse-test DROP expected-found -> 2 }T
 T{ S" тус+ы"			S" тузы"		parse-test -> TRUE }T
 T{ S" тут+ар+ға"		S" тударға"		parse-test -> TRUE }T
