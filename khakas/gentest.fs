@@ -66,6 +66,7 @@ T{ S" кип-азах+ым"		S" кип-азаам"		parse-test -> TRUE }T
 T{ S" кис+0̸+чет+кен"		S" кисчеткен"		parse-test -> TRUE }T
 T{ S" кис+0̸+чет+ер+ге"		S" кисчедерге"		parse-test -> TRUE }T
 T{ S" кізі+ге"			S" кізее"		parse-test -> TRUE }T
+T{ S" кізі+мнең"		S" кізімнең"		parse-test -> TRUE }T  \ #227
 T{ S" кіріс+і+нзер+тін"		S" кірізінзертін"	parse-test -> TRUE }T
 T{ S" кіртӧң+ге+ӧк"		S" кіртӧңеӧк"		parse-test -> TRUE }T
 T{ S" кіртӧң+ӧк"		S" кіртӧңӧк"		parse-test -> TRUE }T

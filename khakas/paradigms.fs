@@ -404,7 +404,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" GenDial ДЫң"
     form" Instr нАң"
     form" InstrDial мАң"
-    form" InstrDial мнаң"
+    form" InstrDial мнАң"
     form" InstrDial ПЫнАң"
   right-context-end
 
