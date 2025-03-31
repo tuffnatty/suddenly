@@ -31,6 +31,8 @@ T{ S" ин+еліс"			S" инеліс"		parse-test -> TRUE }T
 T{ S" ит+і+бең"			S" идібең"		parse-test -> TRUE }T
 T{ S" ирке+м+ей"		S" иркемей"		parse-test -> TRUE }T
 T{ S" ирін+і"			S" ирні"		parse-test -> TRUE }T
+T{ S" ис+пе+ді+біс"		S" испедібіс"		parse-test -> TRUE }T  \ #224
+T{ S" ис+пе+зе+біс"		S" испезебіс"		parse-test -> TRUE }T  \ #224
 T{ S" изерге"	headword?	S" искен"		parse-test -> TRUE }T
 T{ S" истерге"	headword?	S" искен"		parse-test -> TRUE }T
 T{ S" ис+кен"			S" искен"		parse-test -> TRUE }T

@@ -241,23 +241,18 @@ require khakas/slotnames.fs
   flag Neg  flag-empty? ;
 
 \ 12. Непосредственно после показателя недавно прошедшего
-\ времени (RPast) может следовать только краткий
+\ времени (RPast) может следовать только
 \ лично-числовой показатель (Person), число предиката
 \ (PredPl), показатель аффирматива (Vis), <Ptcl₂> или <Ptcl₃>
 : constraint-12  ( -- f )
-  slots( <Tense/Mood/Conv> <PredPl> )-empty?
-  || slots( <Tense/Mood/Conv> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
-  || slots( <Tense/Mood/Conv> <Person> )-empty?  flag Person.br  flag-is?  AND
-  || slots( <Tense/Mood/Conv> <Vis> )-empty?  <Vis> slot-full?  AND
+  slots( <Tense/Mood/Conv> <Ptcl₂> )-empty?
   ;
 
 \ 13. Непосредственно после показателя условного наклонения
-\ (Cond) может следовать только краткий лично-числовой
+\ (Cond) может следовать только лично-числовой
 \ показатель (Person) или число предиката (PredPl) или Ptcl3
 : constraint-13  ( -- f )
-  slots( <Tense/Mood/Conv> <PredPl> )-empty?  ||
-  slots( <Tense/Mood/Conv> <Person> )-empty?  &&
-    flag Person.br  flag-is?
+  slots( <Tense/Mood/Conv> <Person> )-empty?
   ;
 
 \ 14. Непосредственно после Gener возможны только: конец
