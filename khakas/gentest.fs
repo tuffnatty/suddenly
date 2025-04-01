@@ -361,6 +361,7 @@ T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T
 T{ S" чӧп+тее+біс"		S" чӧптеебіс"		parse-test -> FALSE }T  \ #197
 T{ S" чӧр+беен+іс+тір"		S" чӧрбееністір"	parse-test -> TRUE }T
 T{ S" чӧр+ӌең+і"		S" чӧрӌее"		parse-test -> TRUE }T
+T{ S" чубан+зын+нар+дах"	S" чубанзыннардах"	parse-test -> TRUE }T  \ #226
 T{ S" чуғ+ын+ар+ға"		S" чуунарға"		parse-test -> TRUE }T  \ #213
 T{ S" чуғ+ын+ар+ға"		S" чуғынарға"		parse-test -> FALSE }T  \ #213
 T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 1 }T  \ #111
