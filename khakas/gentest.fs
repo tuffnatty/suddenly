@@ -178,6 +178,7 @@ T{ S" пол+ах+ча"		S" полахча"		parse-test -> TRUE }T
 T{ S" пол+баан"			S" полбаан"		parse-test -> FALSE }T  \ #218
 T{ S" пол+баан+дыр"		S" полбаандыр"		parse-test -> TRUE }T
 T{ S" пол+ба+ған+дыр"		S" полбаандыр"		parse-test -> FALSE }T  \ #188
+T{ S" полбах+ы+н+дыр"		S" полбаандыр"		parse-test -> FALSE }T  \ #220
 T{ S" пол+бас+пыс"		S" полбаспыс"		parse-test -> TRUE }T
 T{ S" пол+бин+ыбыс+хан"		S" полбиныбысхан"	parse-test -> TRUE }T
 T{ S" пол+0̸+даа+чат"		S" полдаачат"		parse-test -> TRUE }T

@@ -19,6 +19,7 @@ flagenum:
   flag: Dur1Kyz
   flag: Dur1@full
   flag: Dur1@short
+  flag: Foc
   flag: Fut@full
   flag: Fut@short
   flag: Gen.3pos

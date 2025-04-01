@@ -546,12 +546,14 @@ require khakas/slotnames.fs
   TRUE ABORT" Invalid slot for constraint-27!"
   ; IMMEDIATE
 
-\ 29. Предикативные показатели (Person, PredPl) невозможны в
+\ 29. Предикативные показатели (Person, PredPl, Foc) невозможны в
 \ сочетании с падежами: Gen2, Acc2, Instr2, Dat, All (а также их
 \ диалектными вариантами Gen2Dial, AccDial, InstrDial,
 \ DatDial, AllDial1, AllDial2).
 : constraint-29  ( -- f )
-  slots[ <Person> <PredPl> ]-empty? ;
+  slots[ <Person> <PredPl> ]-empty?  &&
+  flag Foc  flag-empty?
+  ;
 
 \ 30. Алломорф Abl -тЫн возможен в словоформе только при наличии All₁.
 : constraint-30  ( -- f )
