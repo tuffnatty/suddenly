@@ -63,6 +63,7 @@ T{ S" кил+0̸+чады+м"		S" килчадым"		parse-test -> TRUE }T
 T{ S" кил+0̸+чадыр+бын"		S" килчадырбын"		parse-test -> TRUE }T
 T{ S" кил+0̸+че+біс"		S" килчебіс"		parse-test DROP expected-found -> 1 }T  \ #201
 T{ S" кил+0̸+чен"		S" килчен"		parse-test -> TRUE }T
+T{ S" кил+ир+ебес"		S" килиребес"		parse-test -> TRUE }T  \ #229
 T{ S" киме+ге"			S" кимее"		parse-test -> TRUE }T
 T{ S" кип-азах+ы"		S" кип-азаа"		parse-test -> TRUE }T
 T{ S" кип-азах+ым"		S" кип-азаам"		parse-test -> TRUE }T

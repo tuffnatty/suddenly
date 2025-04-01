@@ -266,11 +266,16 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" Neg.Conv.Abl ПинАң"
       flag Neg7|Foc  flag-clear
 
-      form" CvP (Ы)п"
+      flag CvA|CvP  flag-set
+        flag CvKac|CvP flag-set
+          form" CvP (Ы)п"
+        flag CvKac|CvP  flag-clear
+      flag CvA|CvP  flag-clear
+
       filters( constraint-VA>и-fallout )
-        form" CvKac АбАс"
+        flag-with CvKac|CvP  form" CvKac АбАс"
         right-context( constraint-OK-fallout-<Tense/Mood/Conv> )
-          form" CvA А"
+          flag-with CvA|CvP  form" CvA А"
         right-context-end
       filters-end
     flag converbs flag-clear

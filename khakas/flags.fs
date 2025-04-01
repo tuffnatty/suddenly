@@ -12,8 +12,8 @@ flagenum:
   flag: Comp
   flag: Cond
   flag: Cont
-  flag: CvA
-  flag: CvP
+  flag: CvA|CvP
+  flag: CvKac|CvP
   flag: Cunc
   flag: Dur
   flag: Dur1Kyz
