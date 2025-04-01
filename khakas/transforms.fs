@@ -566,12 +566,14 @@ end-public-class Untransformer
       \ многосложные: теен ‘сказал’ < тi ‘сказать’ + ған Past,
       \ чеелек ‘еще не поел’ < чi ‘есть’ + гелек Cunc.
       affix t~/ г|ғ IF
+        untransformed-fallout-VГV TO flags
         "і" C   V1 unfallout-add-vcv
       THEN
 
       \ В прочих случаях на месте стяжения образуется длинная
       \ гласная, идентичная корневой.
       vowels sound-each-str { D: V2 }
+        untransformed-fallout-VГV TO flags
         V1  C   V2 unfallout-add-vcv
         untransformed-fallout-VңV TO flags
         V1  "ң" V2 unfallout-add-vcv

@@ -47,12 +47,14 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" -novoice "
 
   <this> slot-full!
-  form" Pass (Ы)л"
-  form" Refl (Ы)н"
-  form" Rec (Ы)с"
-  form" Caus ТЫр"
-  filters( constraint-36 )
-    form" Caus т"
+  filters( constraint-Voice-VГV-fallout )
+    form" Pass (Ы)л"
+    form" Refl (Ы)н"
+    form" Rec (Ы)с"
+    form" Caus ТЫр"
+    filters( constraint-36 )
+      form" Caus т"
+    filters-end
   filters-end
   ; slot-add
 

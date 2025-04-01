@@ -100,6 +100,8 @@ T{ S" ойла+а+м"			S" ойлаам"		parse-test -> FALSE }T
 T{ S" ойна+а+быс"		S" ойнаабыс"		parse-test -> FALSE }T
 T{ S" олар+дың"			S" олардың"		parse-test -> TRUE }T
 T{ S" ол+ох"			S" олох"		parse-test -> TRUE }T
+T{ S" оғ+ыл"			S" оол"			parse-test -> FALSE }T  \ #213
+T{ S" оң+ыл"			S" оол"			parse-test -> FALSE }T  \ #213
 T{ S" оолғы+м+ай"		S" оолғымай"		parse-test -> TRUE }T
 T{ S" орын+ы"			S" орны"		parse-test -> TRUE }T
 T{ S" орын+ы+лар+ы"		S" орнылары"		parse-test -> TRUE }T
@@ -359,6 +361,8 @@ T{ S" чӧлег+ім"			S" чӧлеем"		parse-test -> TRUE }T
 T{ S" чӧп+тее+біс"		S" чӧптеебіс"		parse-test -> FALSE }T  \ #197
 T{ S" чӧр+беен+іс+тір"		S" чӧрбееністір"	parse-test -> TRUE }T
 T{ S" чӧр+ӌең+і"		S" чӧрӌее"		parse-test -> TRUE }T
+T{ S" чуғ+ын+ар+ға"		S" чуунарға"		parse-test -> TRUE }T  \ #213
+T{ S" чуғ+ын+ар+ға"		S" чуғынарға"		parse-test -> FALSE }T  \ #213
 T{ S" чурта+п+ох+ча+быс"	S" чуртабохчабыс"	parse-test DROP expected-found -> 1 }T  \ #111
 T{ S" чурта+п+чадыр"		S" чуртапчадыр"		parse-test -> TRUE }T
 T{ S" чӱг+і"			S" чӱгі"		parse-test -> TRUE }T

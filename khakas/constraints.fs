@@ -678,6 +678,18 @@ require khakas/slotnames.fs
   first-affix t~/ {short-vowel} NOT
   ;
 
+\ 3.1. ...
+\ С залоговыми показателями невозможно стяжение от основ вида
+\ VC, ср. оол ‘мальчик’, но не #оғ- /оң- + (Ы)л.
+\ С основами CVC стяжение обязательно: чуунарға ‘мыться’ < чуғ
+\ ‘мыть’. 
+: constraint-Voice-VГV-fallout  ( -- f )
+  stem-polysyllabic? ||
+  guessed-stem first-sound vowel?
+  first-form-flag untransformed-fallout-VГV untransformed-fallout-VңV OR AND
+  logical-xor
+  ;
+
 \ Запрещенные контексты для выпадения конечного к, х
 : constraint-V[кх]V-fallout  ( -- f )
   first-form-flag untransformed-fallout-V[кх]V AND NOT  ||

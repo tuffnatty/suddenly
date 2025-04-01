@@ -197,6 +197,9 @@ DEFER xemit
 : &&  ( f R: x r -- false R: x PC: r | R: x r )  \ AND with boolean shortcircuiting
   ]] ?DUP-0=-IF FALSE EXIT ELSE DROP THEN [[ ; IMMEDIATE COMPILE-ONLY
 
+: logical-xor  ( f f -- f )
+  0<> SWAP 0<> XOR ;
+
 : array-reverse  ( arr len -- )
   1- CELLS OVER + BEGIN 2DUP < WHILE  ( a1 a2 )
     2DUP 2DUP @ SWAP @ ROT ! SWAP !
