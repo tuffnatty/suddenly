@@ -55,8 +55,7 @@ flagenum:
   flag: PresPtDial
   flag: ProspDial
   flag: RPast
-  flag: 1sg.br
-  flag: 2sg.br
+  flag: 1-2sg.br
   flag: 1.pl
   flag: 2pl.br
   flag: 2pos.pl

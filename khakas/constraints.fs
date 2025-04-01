@@ -225,7 +225,7 @@ require khakas/slotnames.fs
 \ не распределены.
 : constraint-9.5  ( -- f )
   slots( <Tense/Mood/Conv> <Person> )-full?  ||
-  flags( 1sg.br 2sg.br ) flag-empty? ;
+  flag 1-2sg.br flag-empty? ;
 
 \ 10. Показатель Cunc не встречается в одной
 \ словоформе с показателями Perf или отрицательными
