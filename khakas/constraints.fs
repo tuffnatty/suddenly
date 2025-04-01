@@ -623,6 +623,12 @@ require khakas/slotnames.fs
   || flag Imp.Incl flag-empty?
   ;
 
+\ 39. Vis ЧЫК не сочетается с показателями падежа (контрпример:
+\ чоохтаӌых (+ чоохта-ӌых говорить-Vis ‘сказал’, # чоох-та-ӌых
+\ разговор-Loc-Vis). 
+: constraint-39  ( -- f )
+  <Vis> slot-empty? ;
+
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT  ||

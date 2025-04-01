@@ -320,7 +320,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-empty!
   form" -nocase1 "
 
-  right-context( constraint-16.1 constraint-16.9 constraint-27 )
+  right-context( constraint-16.1 constraint-16.9 constraint-27 constraint-39 )
     <this> slot-full!
 
     filters( constraint-16.5 )
@@ -407,74 +407,76 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   <this> slot-full!
 
-  right-context( constraint-29 )
-    form" GenDial ДЫң"
-    form" Instr нАң"
-    form" InstrDial мАң"
-    form" InstrDial мнАң"
-    form" InstrDial ПЫнАң"
-  right-context-end
+  right-context( constraint-39 )
+    right-context( constraint-29 )
+      form" GenDial ДЫң"
+      form" Instr нАң"
+      form" InstrDial мАң"
+      form" InstrDial мнАң"
+      form" InstrDial ПЫнАң"
+    right-context-end
 
-  filters( constraint-17-<Case₂> )
-    \ Simple declension
-    right-context( constraint-29 )
-      form" Gen НЫң"
-      right-context( constraint-OK-fallout-<Case₂> )
-        form" Dat ГА"
+    filters( constraint-17-<Case₂> )
+      \ Simple declension
+      right-context( constraint-29 )
+        form" Gen НЫң"
+        right-context( constraint-OK-fallout-<Case₂> )
+          form" Dat ГА"
+        right-context-end
+        form" Acc НЫ"
+        form" AccDial ДЫ"
+        form" InstrDial ПАң"
+        form" InstrDial ПлАң"
+        filters( constraint-35 )
+          form" All САр"
+          form" AllDial1 СА"
+          form" AllDial2 САрЫ"
+        filters-end
       right-context-end
-      form" Acc НЫ"
-      form" AccDial ДЫ"
-      form" InstrDial ПАң"
-      form" InstrDial ПлАң"
-      filters( constraint-35 )
-        form" All САр"
-        form" AllDial1 СА"
-        form" AllDial2 САрЫ"
+      form" Loc ТА"
+      form" Abl ДАң"
+      form" AblDial нАң"
+      form" Prol ЧА"
+      form" Delib ДАңАр"
+      form" DelibDial ДАңАрЫ"
+      form" Comp ТАГ"
+      filters( constraint-30 )
+        form" AblArch тЫн"
       filters-end
-    right-context-end
-    form" Loc ТА"
-    form" Abl ДАң"
-    form" AblDial нАң"
-    form" Prol ЧА"
-    form" Delib ДАңАр"
-    form" DelibDial ДАңАрЫ"
-    form" Comp ТАГ"
-    filters( constraint-30 )
-      form" AblArch тЫн"
+    filter-else
+      \ Possessive declension
+      right-context( constraint-29 )
+        form" Gen нЫң"
+        right-context( constraint-OK-fallout-<Case₂> )
+          form" Dat (н)А"
+          form" DatDial (н)ГА"
+        right-context-end
+        filters( constraint-V+Acc )
+          form" Acc н"
+        filter-else
+          form" Acc нЫ"
+        filters-end
+        form" AccDial дЫ"
+        form" InstrDial (н)мАң"
+        form" InstrDial (н)млАң"
+        form" InstrDial бАң"
+        filters( constraint-35 )
+          form" All (н)САр"
+          form" AllDial1 (н)СА"
+          form" AllDial2 (н)САрЫ"
+        filters-end
+      right-context-end
+      form" Loc (н)ТА"
+      form" Abl нАң"
+      form" Prol (н)ЧА"
+      form" Delib нАңАр"
+      form" DelibDial нАңАрЫ"
+      form" Comp (н)ТАГ"
+      right-context( constraint-33 )
+        form" Voc Ай"
+      right-context-end
     filters-end
-  filter-else
-    \ Possessive declension
-    right-context( constraint-29 )
-      form" Gen нЫң"
-      right-context( constraint-OK-fallout-<Case₂> )
-        form" Dat (н)А"
-        form" DatDial (н)ГА"
-      right-context-end
-      filters( constraint-V+Acc )
-        form" Acc н"
-      filter-else
-        form" Acc нЫ"
-      filters-end
-      form" AccDial дЫ"
-      form" InstrDial (н)мАң"
-      form" InstrDial (н)млАң"
-      form" InstrDial бАң"
-      filters( constraint-35 )
-        form" All (н)САр"
-        form" AllDial1 (н)СА"
-        form" AllDial2 (н)САрЫ"
-      filters-end
-    right-context-end
-    form" Loc (н)ТА"
-    form" Abl нАң"
-    form" Prol (н)ЧА"
-    form" Delib нАңАр"
-    form" DelibDial нАңАрЫ"
-    form" Comp (н)ТАГ"
-    right-context( constraint-33 )
-      form" Voc Ай"
-    right-context-end
-  filters-end
+  right-context-end
   ; slot-add
 
 <Ptcl₂> slot:  \ 17

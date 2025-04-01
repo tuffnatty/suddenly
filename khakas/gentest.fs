@@ -357,6 +357,8 @@ T{ S" чиң+іп"			S" чиип"		parse-test -> TRUE }T
 T{ S" чир-суғ+ы+н"		S" чир-суун"		parse-test -> TRUE }T
 T{ S" чілің+і"			S" чілии"		parse-test -> TRUE }T
 T{ S" чі+п+ле+іс+еді"		S" чіплеізеді"		parse-test -> TRUE }T
+T{ S" чоохта+ӌых"		S" чоохтаӌых"		parse-test -> TRUE }T  \ #204
+T{ S" чоох+та+ӌых"		S" чоохтаӌых"		parse-test -> FALSE }T  \ #204
 T{ S" чоохта+ды+ңар"            S" чоохтадар"           parse-test -> TRUE }T
 T{ S" чоохта+ған+ох+пын"	S" чоохтаанохпын"       parse-test -> TRUE }T
 T{ S" чох+ы+ла+ох"		S" чоғылох"		parse-test -> FALSE }T
