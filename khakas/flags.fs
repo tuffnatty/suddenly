@@ -28,6 +28,7 @@ flagenum:
   flag: Hab@short
   flag: Imp
   flag: Imp.3
+  flag: Imp.Incl
   flag: Indir
   flag: Loc
   flag: Loc₁

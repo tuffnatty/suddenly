@@ -605,6 +605,21 @@ require khakas/slotnames.fs
      || stem-last-sound glide?
   ;
 
+\ 38. Показатели инклюзивного императива ImpIncl Аң,
+\ ImpInclDial АК, ImpInclPl АңАр, ImpInclPlDial АлАр не могут
+\ присоединяться к показателям дуратива (Dur чАт, DurDial чат,
+\ Dur1 ир | и, Dur1Kyz Ат, Dur1Sag ит). Контрпримеры:
+\ ахчадаңар (#ах-чат-аңар течь-Dur-ImpInclPl), тӱрчедең
+\ (#тӱр-чед-ең сворачивать-Dur-ImpIncl), парадаң (#пар-ад-аң
+\ идти-Dur1Kyz-ImpIncl).
+: constraint-38-Dur1  ( -- f )
+  slots( <NF,Dur1> <Person> )-full?
+  || flag Imp.Incl flag-empty?
+  ;
+: constraint-38-Dur  ( -- f )
+  slots( <Dur> <Person> )-full?
+  || flag Imp.Incl flag-empty?
+  ;
 
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )

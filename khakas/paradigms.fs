@@ -82,20 +82,22 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" Neg.NFSh ПААн"
   right-context-end
 
-  filters( constraint-7 )
-    right-context( constraint-8 )
-      right-context( constraint-8.1ᵢ )
-        flag-with Dur1@short  form" Dur1 и"
+  right-context( constraint-38-Dur1 )
+    filters( constraint-7 )
+      right-context( constraint-8 )
+        right-context( constraint-8.1ᵢ )
+          flag-with Dur1@short  form" Dur1 и"
+        right-context-end
+        right-context( constraint-8.1ᵢᵣ )
+          flag-with Dur1@full   form" Dur1 ир"
+        right-context-end
+        form" Dur1Kyz Ат"
       right-context-end
-      right-context( constraint-8.1ᵢᵣ )
-        flag-with Dur1@full   form" Dur1 ир"
+      right-context( constraint-8sag )
+        form" Dur1Sag ит"
       right-context-end
-      form" Dur1Kyz Ат"
-    right-context-end
-    right-context( constraint-8sag )
-      form" Dur1Sag ит"
-    right-context-end
-  filters-end
+    filters-end
+  right-context-end
 
   ; slot-add
 
@@ -147,10 +149,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" -nodur "
 
   <this> slot-full!
-  filters( constraint-26+paan )
-    form" Dur чАт"
-    form" DurDial чат"
-  filters-end
+  right-context( constraint-38-Dur )
+    filters( constraint-26+paan )
+      form" Dur чАт"
+      form" DurDial чат"
+    filters-end
+  right-context-end
   ; slot-add
 
 <Neg/Gener> slot:  \ 8
@@ -541,10 +545,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Imp.1sg им"
       form" Imp.1pl ибЫс"
       form" Imp.1plDial АлЫс"
-      form" ImpIncl Аң"
-      form" ImpInclDial АК"
-      form" ImpInclPl АңАр"
-      form" ImpInclPlDial АлАр"
+      flag Imp.Incl  flag-set
+        form" ImpIncl Аң"
+        form" ImpInclDial АК"
+        form" ImpInclPl АңАр"
+        form" ImpInclPlDial АлАр"
+      flag Imp.Incl  flag-clear
       form" Imp.2pl (Ы)ңАр"
       form" Imp.3 СЫн"
     flag Imp  flag-clear

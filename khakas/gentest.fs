@@ -20,6 +20,7 @@ T{ S" ат+ар"			S" атар"		parse-test -> TRUE }T
 T{ S" ат+т+ты+ңар"		S" аттар"		parse-test -> FALSE }T \ #216
 T{ S" ат+ыбыс+ах+ча+лар"        S" атыбызахчалар"       parse-test -> TRUE }T  \ #126
 T{ S" ат+ың+а"			S" адаа"		parse-test -> FALSE }T
+T{ S" ах+0̸+чат+аңар"		S" ахчадаңар"		parse-test -> FALSE }T  \ #228
 T{ S" ватт+ты"			S" ватты"		parse-test -> TRUE }T
 T{ S" ватт+ы"			S" ватты"		parse-test -> TRUE }T
 T{ S" грузчик+тер"		S" грузчиктер"		parse-test -> TRUE }T
@@ -119,6 +120,7 @@ T{ S" палты+мнаң"		S" палтымнаң"		parse-test -> TRUE }T
 T{ S" параан"			S" параан"		parse-test -> TRUE }T
 T{ S" пара+ң+ы+н"		S" параан"		parse-test -> FALSE }T
 T{ S" пар+и+ған"		S" параан"		parse-test -> FALSE }T
+T{ S" пар+ат+аң"		S" парадаң"		parse-test -> FALSE }T  \ #228
 T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
@@ -277,6 +279,7 @@ T{ S" тохта+ғла+п+ох+ыс+хан+нар" S" тохтағлабоғы�
 T{ S" тох+ы+нға+быс"		S" тоғынғабыс"		parse-test -> FALSE }T
 T{ S" тӱк+і"			S" тӱгі"		parse-test -> TRUE }T
 T{ S" тӱлгӱ+ге"			S" тӱлгее"		parse-test -> TRUE }T
+T{ S" тӱр+0̸+чет+ең"		S" тӱрчедең"		parse-test -> FALSE }T  \ #228
 T{ S" тура+ға"			S" тураа"		parse-test -> TRUE }T
 T{ S" тура+да+хы+лар+ы"		S" турадағылары"	parse-test -> TRUE }T
 T{ S" тура+зархы"		S" туразархы"		parse-test -> TRUE }T  \ #194
