@@ -795,7 +795,12 @@ require khakas/slotnames.fs
        first-form-flag harmony-vu-broken AND 0<> ;] EXECUTE &&
   [: harmony-fb-broken any-form-flag-is? NOT  ||
      dictflag-rus dictflag-composite OR  dictflag-is?  &&
-       first-form-flag harmony-fb-broken AND 0<> ;] EXECUTE
+       first-form-flag harmony-fb-broken AND 0<> ;] EXECUTE &&
+  [: harmony-fb-broken any-form-flag-is?  ||
+     dictflag-rus dictflag-is? NOT ||
+     stem-last-char-vowel-row front-vowel = ||
+     stem-last-vowel [CHAR] и <> ;] EXECUTE
+
   ;
 
 : constraint-VA>и-fallout-with-slot  { n-slot -- f }

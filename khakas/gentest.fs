@@ -90,8 +90,12 @@ T{ S" маң+ы"			S" маа"			parse-test -> TRUE }T
 T{ S" марығ+ы"			S" марии"		parse-test -> TRUE }T
 T{ S" марығ+ы"			S" марығы"		parse-test -> TRUE }T  \ #147
 T{ S" марығ+ды"			S" марығды"		parse-test -> TRUE }T
+T{ S" машинис+і"		S" машинизі"		parse-test -> TRUE }T  \ #225
+T{ S" машинис+ы"		S" машинизы"		parse-test -> FALSE }T  \ #225
 T{ S" меню+ға"			S" менюға"		parse-test -> TRUE }T
 T{ S" меню+ге"			S" менюге"		parse-test -> FALSE }T
+T{ S" механик+і"		S" механигі"		parse-test -> TRUE }T  \ #225
+T{ S" механик+ы"		S" механиғы"		parse-test -> FALSE }T  \ #225
 T{ S" мойын+ы"			S" мойны"		parse-test -> TRUE }T
 T{ S" мында+ох"			S" мындох"		parse-test DROP expected-found -> 1 }T
 T{ S" нан+адыр+ым"		S" нанадырым"		parse-test -> TRUE }T  \ #207
@@ -256,7 +260,7 @@ T{ S" тайға+зары"		S" тайғазары"		parse-test -> TRUE }T
 T{ S" тал+аачых"		S" талаачых"		parse-test -> TRUE }T
 T{ S" таны+ған"			S" танаан"		parse-test -> TRUE }T
 T{ S" тап+ып"			S" таап"		parse-test -> TRUE }T
-T{ S" тариф+ы"			S" тарифы"		parse-test -> TRUE }T
+T{ S" тариф+тер"		S" тарифтер"		parse-test -> TRUE }T  \ #225
 T{ S" тарт+лағла+п+ча"		S" тартлағлапча"	parse-test -> TRUE }T
 T{ S" тарт+ып+ла+ча+лар"        S" тартыплачалар"       parse-test -> TRUE }T
 T{ S" таста+ар+ға"		S" тастирға"		parse-test -> TRUE }T

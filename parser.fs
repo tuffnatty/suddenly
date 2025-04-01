@@ -57,6 +57,9 @@ VARIABLE reduplication-len
 : stem-last-char-vowel-row  ( -- wid )
   ]] guessed-stem last-char-vowel-row [[ ; IMMEDIATE
 
+: stem-last-vowel  ( -- xc )
+  ]] guessed-stem last-vowel [[ ; IMMEDIATE
+
 : form-slot  ( n -- addr u )
   ]] formform formstack-slot [[ ; IMMEDIATE
 
@@ -211,8 +214,10 @@ DEFER yield-stem  ( addr u stem -- addr u )
 :+ after-fallout-pair  { D: left-part  D: affix  slot-flag rule n-rule -- }
   \." " indent rule if ." Pair " left-part TYPE ." +" affix TYPE ."  harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
   left-part  n-rule rule rule-check { harmony-ok? }  2DROP
+  \." " indent ." harmony-ok? " harmony-ok? . cr
   harmony-ok? NOT IF
-    slot-flag 0= IF
+    \." " indent ." slot-flag " slot-flag . cr
+    \ slot-flag  AND  0= IF  \ what was it intendend for?
       PAD left-part string-length { D: buffer }
       left-part last-sound-except-ь-ptr cyr t~/ {voiced} IF
         left-part string-addr buffer CMOVE
@@ -239,7 +244,7 @@ DEFER yield-stem  ( addr u stem -- addr u )
           slot-flag harmony-fb-broken OR TO slot-flag
         THEN
       THEN
-    THEN
+    \ THEN
   THEN
   harmony-ok? IF
     \stack-mark \\." ENTERING PARSE-TRY" .s cr
