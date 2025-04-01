@@ -400,7 +400,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" 3pos (з)Ы"
     filters-end
     form" Gen.3pos Ни"
-    flag-with Gen.3pos  form" Gen.3posDial Ди"
+    flag-with Gen.3pos  form" Gen.3posDial ди"
   flag Poss2.nonpl  flag-clear
   form" 1pos.pl (Ы)бЫс"
   form" 2pos.pl (Ы)ңАр"
@@ -414,7 +414,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
 
   right-context( constraint-39 )
     right-context( constraint-29 )
-      form" GenDial ДЫң"
+      form" GenDial дЫң"
       form" Instr нАң"
       form" InstrDial мАң"
       form" InstrDial мнАң"
@@ -429,7 +429,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
           form" Dat ГА"
         right-context-end
         form" Acc НЫ"
-        form" AccDial ДЫ"
+        form" AccDial дЫ"
         form" InstrDial ПАң"
         form" InstrDial ПлАң"
         filters( constraint-35 )
