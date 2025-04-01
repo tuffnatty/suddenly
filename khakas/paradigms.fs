@@ -90,7 +90,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       right-context( constraint-8.1ᵢᵣ )
         flag-with Dur1@full   form" Dur1 ир"
       right-context-end
-      form" Dur1Kac Ат"
+      form" Dur1Kyz Ат"
     right-context-end
     right-context( constraint-8sag )
       form" Dur1Sag ит"

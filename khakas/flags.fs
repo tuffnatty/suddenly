@@ -16,7 +16,7 @@ flagenum:
   flag: CvP
   flag: Cunc
   flag: Dur
-  flag: Dur1Kac
+  flag: Dur1Kyz
   flag: Dur1@full
   flag: Dur1@short
   flag: Fut@full
