@@ -41,7 +41,6 @@ flagenum:
   flag: Past
   flag: Perf
   flag: Perf1
-  flag: Person.br
   flag: Poss1.nonpl
   flag: Poss2.nonpl
   flag: Pres

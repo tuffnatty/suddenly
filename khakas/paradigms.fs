@@ -538,13 +538,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters-end
 
   filters( constraint-20-short-person )
-    flag Person.br  flag-set
-      flag-with 1-2sg.br  form" 1sg.br (Ы)м"
-      flag-with 1-2sg.br  form" 2sg.br ң"
+    flag-with 1-2sg.br  form" 1sg.br (Ы)м"
+    flag-with 1-2sg.br  form" 2sg.br ң"
 
-      flag-with 1.pl  form" 1pl ПЫс"
-      form" 2pl.br ңАр"
-    flag Person.br  flag-clear
+    flag-with 1.pl  form" 1pl ПЫс"
+    form" 2pl.br ңАр"
   filters-end
 
   filters( constraint-19 )
