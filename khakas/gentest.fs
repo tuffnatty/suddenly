@@ -342,6 +342,8 @@ T{ S" хыс+ы+м"			S" хызым"		parse-test -> FALSE }T
 T{ S" хыс+ым"			S" хызым"		parse-test -> TRUE }T
 T{ S" чазы+ға"			S" чазаа"		parse-test -> TRUE }T
 T{ S" чайлағ+ы"			S" чайлаа"		parse-test -> TRUE }T
+T{ S" чарат+ыңар"		S" чарадыңар"		parse-test -> TRUE }T  \ #228
+T{ S" чар+ады+ңар"		S" чарадыңар"		parse-test -> FALSE }T  \ #228
 T{ S" чарын+ы"			S" чарны"		parse-test -> TRUE }T
 T{ S" часка+лығ+ға"		S" часкалыға"		parse-test -> TRUE }T
 T{ S" чі+еді+ңер"		S" чидер"		parse-test -> FALSE }T  \ #212
