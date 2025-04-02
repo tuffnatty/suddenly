@@ -172,6 +172,8 @@ T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T
 T{ S" піс+тің+нер"		S" пістіңнер"		parse-test -> FALSE }T  \ #186
 T{ S" пир+бе+дек"		S" пирбедек"		parse-test -> TRUE }T
 T{ S" пир+бин+ібіс+ер+ӌік"	S" пирбинібізерӌік"	parse-test -> TRUE }T
+T{ S" пир+ген+ніг+зің"		S" пиргеннігзің"	parse-test -> TRUE }T  \ #222
+T{ S" пир+ӌең+ніг+бін"		S" пирӌеңнігбін"	parse-test -> TRUE }T  \ #222
 T{ S" пир+дек"			S" пирдек"		parse-test -> TRUE }T
 T{ S" поғ+ып"			S" пооп"		parse-test -> TRUE }T
 \ T{ S" пол+аачых+тан+ча+зар"     S" полаачыхтанчазар"	parse-test -> TRUE }T

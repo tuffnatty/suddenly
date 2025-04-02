@@ -412,7 +412,8 @@ require khakas/slotnames.fs
 \ лично-числовые показатели (список внутри Person), которые
 \ могут следовать после любых морфем. У глаголов заполнение
 \ Person возможно только при незаполненных позициях с 11 по 17
-\ (за исключением Comp ТАГ) и при наличии показателей:
+\ (за исключением Comit ЛЫГ и Comp ТАГ) и при наличии
+\ показателей:
 \ для полных форм: Dur1Kyz Ат, Irr ЧЫК, Opt ГАй, Assum
 \ ГАдАГ, Indir ТЫр, Cunc ГАлАК, Neg.Fut ПАс, полные формы
 \ аффиксов Gener А.дЫр, Pres1 чАдЫр, Pres1Kac чадыр,
@@ -431,7 +432,7 @@ require khakas/slotnames.fs
 : constraint-20-full-person  ( -- f )
   nomen?
   || verb?
-     && flag Comp  flag-is?
+     && flags( Comit Comp )  flag-is?
         || slots[ <Pl₁> <Case₂> ]-empty?
            && flags( Assum|Neg.Fut|Opt Indir Cunc
                      Gener@full Pres1@full Pres1Kac@full
@@ -442,7 +443,7 @@ require khakas/slotnames.fs
   ;
 : constraint-20-mix-person  ( -- f )
   verb?  &&
-    flag Comp  flag-is? ||
+    flags( Comit Comp )  flag-is? ||
     slots[ <Pl₁> <Case₂> ]-empty?  &&
       flags( Pres PresDial PresSh Past
              Gener
@@ -452,7 +453,7 @@ require khakas/slotnames.fs
   ;
 : constraint-20-short-person  ( -- f )
   verb?  &&
-    flag Comp  flag-is? ||
+    flags( Comit Comp )  flag-is? ||
     slots[ <Pl₁> <Case₂> ]-empty?  &&
       flags( RPast Cond ) flag-is? ;
 : constraint-20-full-or-mix-person  ( -- f )
