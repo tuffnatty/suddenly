@@ -71,7 +71,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
     right-context( constraint-4.1₀-right )
       filters( constraint-4.1₀ )
-        flag-with NF₀ form" NF 0̸"
+        flag-with NF₀ form" NF 0︀"
       filters-end
     right-context-end
     right-context( constraint-11.1 constraint-10 )

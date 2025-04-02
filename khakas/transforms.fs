@@ -587,7 +587,7 @@ end-public-class Untransformer
         \ > саабыс ‘скоси!’, теп ‘толкать’ + -ібіс > теебіс
         \ ‘толкни!’.
         V2 t~/ ы|і IF
-          affix t~/ 0̸|ып|ыб|іп|іб  IF
+          affix t~/ 0︀|ып|ыб|іп|іб  IF
             V1 "п" V2 unfallout-add-vcv
         THEN THEN
       sound-next
