@@ -443,7 +443,7 @@ require khakas/slotnames.fs
 : constraint-20-mix-person  ( -- f )
   verb?  &&
     flag Comp  flag-is? ||
-    slots[ <Pl₂> <Case₂> ]-empty?  &&
+    slots[ <Pl₁> <Case₂> ]-empty?  &&
       flags( Pres PresDial PresSh Past
              Gener
              Pres1 Pres1Kac@short
@@ -453,7 +453,7 @@ require khakas/slotnames.fs
 : constraint-20-short-person  ( -- f )
   verb?  &&
     flag Comp  flag-is? ||
-    slots[ <Pl₂> <Case₂> ]-empty?  &&
+    slots[ <Pl₁> <Case₂> ]-empty?  &&
       flags( RPast Cond ) flag-is? ;
 : constraint-20-full-or-mix-person  ( -- f )
   constraint-20-full-person
