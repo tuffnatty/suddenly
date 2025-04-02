@@ -81,6 +81,8 @@ T{ S" кӧзӧ+ге"			S" кӧзӧге"		parse-test -> TRUE }T
 T{ S" кӧй+0︀+чары"		S" кӧйчары"		parse-test -> TRUE }T  \ #181
 T{ S" кӧр+бе+ген+дее+бін"	S" кӧрбеендеебін"	parse-test -> TRUE }T
 T{ S" кӧр+еліс"			S" кӧреліс"		parse-test -> TRUE }T
+T{ S" кӧр+іл"			S" кӧріл"		parse-test -> TRUE }T  \ #231
+T{ S" кӧр+іс+кен"		S" кӧріскен"		parse-test -> TRUE }T  \ #231
 T{ S" курс+ы"			S" курзы"		parse-test -> TRUE }T
 T{ S" курс+ы"			S" курсы"		parse-test -> TRUE }T
 T{ S" кӱн+і+нге"		S" кӱнінге"		parse-test -> TRUE }T
@@ -206,6 +208,7 @@ T{ S" сағыссырас+та+зар"	S" сағыссырастазар"	parse
 T{ S" сап+ыбыс"			S" саабыс"		parse-test -> TRUE }T
 T{ S" сап+ыбыс+хан"		S" саабысхан"		parse-test -> TRUE }T
 T{ S" сағ+ып"			S" саап"		parse-test -> TRUE }T
+T{ S" сал+ын+ған"		S" салынған"		parse-test -> TRUE }T  \ #231
 T{ S" салаа+ға"			S" салааға"		parse-test -> TRUE }T
 T{ S" самолёт+ы"		S" самолёды"		parse-test -> TRUE }T
 T{ S" сана"			S" сана"		parse-test -> TRUE }T
@@ -297,6 +300,7 @@ T{ S" турлах+а"			S" турлаа"		parse-test -> FALSE }T  \ #213
 T{ S" туза+лығ+лар"		S" тузалығлар"		parse-test DROP expected-found -> 2 }T
 T{ S" тус+ы"			S" тузы"		parse-test -> TRUE }T
 T{ S" тут+ар+ға"		S" тударға"		parse-test -> TRUE }T
+T{ S" тӱс+іс"			S" тӱзіс"		parse-test -> TRUE }T  \ #231
 T{ S" тыы+п+ла+ыс+хан"		S" тыыплаысхан"		parse-test -> TRUE }T
 T{ S" ӱг+ер"			S" ӱӱр"			parse-test -> TRUE }T
 T{ S" ӱг+іп"			S" ӱӱп"			parse-test -> TRUE }T
@@ -357,6 +361,7 @@ T{ S" часка+лығ+ға"		S" часкалыға"		parse-test -> TRUE }T
 T{ S" чі+еді+ңер"		S" чидер"		parse-test -> FALSE }T  \ #212
 T{ S" чі+еді+п"			S" чидіп"		parse-test -> FALSE }T  \ #209
 T{ S" чит+іп"			S" чидіп"		parse-test -> TRUE }T  \ #209
+T{ S" чіт+іс"			S" чідіс"		parse-test -> TRUE }T  \ #231
 T{ S" чі+гелек"			S" чеелек"		parse-test -> TRUE }T
 T{ S" чилін+і"			S" чилні"		parse-test -> TRUE }T
 T{ S" чі+е+м+дір"		S" чимдір"		parse-test -> TRUE }T

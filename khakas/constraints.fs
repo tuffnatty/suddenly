@@ -716,6 +716,7 @@ require khakas/slotnames.fs
 \ С основами CVC стяжение обязательно: чуунарға ‘мыться’ < чуғ
 \ ‘мыть’. 
 : constraint-Voice-VГV-fallout  ( -- f )
+  stem-last-sound gh-g-ng? NOT ||
   stem-polysyllabic? ||
   guessed-stem first-sound vowel?
   first-form-flag untransformed-fallout-VГV untransformed-fallout-VңV OR AND
