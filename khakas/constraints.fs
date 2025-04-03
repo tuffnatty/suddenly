@@ -399,13 +399,16 @@ require khakas/slotnames.fs
 
 \ 19. Показатели поз. <Person> с пометой Imp могут быть
 \ только у слов, имеющих помету Verbum; они следуют
-\ непосредственно после основы или аффиксов позиций,
-\ предшествующих <Tense/Mood>, за исключением Gener А.дЫр.
+\ непосредственно после основы или аффиксов ряда позиций,
+\ предшествующих <Tense/Mood>: позиций 1, 2, 5, 7 и Neg ПА из
+\ позиции 8.
 \ Пример с -чат: iчiпчатсын ‘пусть он пьет’ (кач.).
 : constraint-19  ( -- f )
   verb?  &&
-  slots[ <Tense/Mood/Conv> <Person> )-empty? &&
-  flag Gener flag-empty?
+  slots( <Voice> <Perf> )-empty? &&
+  <Prosp> slot-empty? &&
+  flag Gener  flag-empty? &&
+  slots[ <Tense/Mood/Conv> <Person> )-empty?
   ;
 
 \ 20. К словам с пометой Nomen присоединяются полные

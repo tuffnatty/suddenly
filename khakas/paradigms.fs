@@ -564,6 +564,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" ImpInclPl АңАр"
         form" ImpInclPlDial АлАр"
       flag Imp.Incl  flag-clear
+      form" Imp.2sg 0︀"
       form" Imp.2pl (Ы)ңАр"
       form" Imp.3 СЫн"
     flag Imp  flag-clear
