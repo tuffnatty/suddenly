@@ -401,6 +401,7 @@ T{ S" чығ+ыбыс+хан"		S" чыыбысхан"		parse-test -> TRUE }T
 \ lost from document T{ S" шаш+ы"			S" шашы"		parse-test -> TRUE }T
 T{ S" ырла+ибыс"		S" ырлибыс"		parse-test -> TRUE }T
 T{ S" ырла+им"			S" ырлим"		parse-test -> TRUE }T
+T{ S" ыырлас+ча+зар"		S" ыырласчазар"		parse-test DROP expected-found -> 1 }T  \ #232
 T{ S" эг+гей"			S" эгей"		parse-test -> TRUE }T
 T{ S" эг+ер"			S" ээр"			parse-test -> TRUE }T
 T{ S" ээзі+м"			S" ээзім"		parse-test -> TRUE }T

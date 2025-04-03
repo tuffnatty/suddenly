@@ -437,11 +437,11 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
           form" AllDial1 СА"
           form" AllDial2 САрЫ"
         filters-end
+        form" Prol ЧА"
       right-context-end
       form" Loc ТА"
       form" Abl ДАң"
       form" AblDial нАң"
-      form" Prol ЧА"
       form" Delib ДАңАр"
       form" DelibDial ДАңАрЫ"
       form" Comp ТАГ"
@@ -470,10 +470,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
           form" AllDial1 (н)СА"
           form" AllDial2 (н)САрЫ"
         filters-end
+        form" Prol (н)ЧА"
       right-context-end
       form" Loc (н)ТА"
       form" Abl нАң"
-      form" Prol (н)ЧА"
       form" Delib нАңАр"
       form" DelibDial нАңАрЫ"
       form" Comp (н)ТАГ"
