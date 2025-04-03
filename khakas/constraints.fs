@@ -404,11 +404,12 @@ require khakas/slotnames.fs
 \ позиции 8.
 \ Пример с -чат: iчiпчатсын ‘пусть он пьет’ (кач.).
 : constraint-19  ( -- f )
-  verb?  &&
-  slots( <Voice> <Perf> )-empty? &&
-  <Prosp> slot-empty? &&
-  flag Gener  flag-empty? &&
-  slots[ <Tense/Mood/Conv> <Person> )-empty?
+  verb? &&
+  slots[ <Tense/Mood/Conv> <Person> )-empty? &&
+  slots( <Voice> <Tense/Mood/Conv> )-empty?
+  || slots( <Perf> <Tense/Mood/Conv> )-empty?
+  || <Neg/Gener> slot-empty?
+  || flag Neg  flag-is?
   ;
 
 \ 20. К словам с пометой Nomen присоединяются полные

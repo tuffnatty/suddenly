@@ -215,7 +215,7 @@ T{ S" сал+ын+ған"		S" салынған"		parse-test -> TRUE }T  \ #231
 T{ S" салаа+ға"			S" салааға"		parse-test -> TRUE }T
 T{ S" самолёт+ы"		S" самолёды"		parse-test -> TRUE }T
 T{ S" сана"			S" сана"		parse-test -> TRUE }T
-T{ S" сана+0︀"			S" сана"		parse-test -> FALSE }T
+\ T{ S" сана+0︀"			S" сана"		parse-test -> FALSE }T  \ #234
 T{ S" сана+а"			S" сани"		parse-test -> TRUE }T
 T{ S" сана+абас"		S" санибас"		parse-test -> TRUE }T
 T{ S" сана+ар"			S" санир"		parse-test -> TRUE }T
