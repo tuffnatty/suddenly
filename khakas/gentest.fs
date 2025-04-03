@@ -194,6 +194,7 @@ T{ S" пол+0︀+даа+чат+са"		S" полдаачатса"		parse-test ->
 T{ S" пол+ды+ни"		S" полдыни"		parse-test -> FALSE }T  \ #193
 T{ S" пол+ды+ни+м"		S" полдыним"		parse-test -> TRUE }T
 T{ S" пол+0︀+тыр+ох+чых"		S" полтырохчых"		parse-test -> TRUE }T
+T{ S" пол+0︀+чат+сын"		S" полчатсын"		parse-test DROP expected-found -> 2 }T  \ #233
 T{ S" пӧрік+ім"			S" пӧриим"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧрігім"		parse-test -> TRUE }T
 T{ S" пуғ+ы"			S" пуу"			parse-test -> TRUE }T

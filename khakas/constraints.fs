@@ -632,6 +632,14 @@ require khakas/slotnames.fs
 : constraint-39  ( -- f )
   <Vis> slot-empty? ;
 
+\ 40. Негармонирующие показатели DurDial чат, PresDial ча,
+\ Pres1Kac чады(р) присоединяются только к переднерядным
+\ основам (т.к. сочетание с заднерядными основами получает
+\ аналогичный разбор с гармонирующим показателем).
+: constraint-40  ( -- f )
+  stem-last-char-vowel-row front-vowel =
+  ;
+
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT  ||
@@ -739,11 +747,6 @@ require khakas/slotnames.fs
   \ stem-last-sound consonant?
   \ stem-last-sound unvoiced? NOT
   \ AND AND
-  ;
-
-\ PresDial ча, Pres1Kac чадыр только после переднерядных основ
-: constraint-frontstem  ( -- f )
-  stem-last-char-vowel-row front-vowel =
   ;
 
 \ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не

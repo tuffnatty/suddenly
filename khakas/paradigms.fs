@@ -152,7 +152,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-38-Dur )
     filters( constraint-26+paan )
       form" Dur чАт"
-      form" DurDial чат"
+      filters( constraint-40 )
+        form" DurDial чат"
+      filters-end
     filters-end
   right-context-end
   ; slot-add
@@ -188,7 +190,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   filters( constraint-26+paan )
     form" Pres чА"
 
-    filters( constraint-frontstem )
+    filters( constraint-40 )
       form" PresDial ча"
     filters-end
 
@@ -207,10 +209,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     flag-with Pres1@full   form" Pres1 чАдЫр"
     flag-with Pres1@short  form" Pres1 чАдЫ"
 
-    filters( constraint-frontstem )
+    filters( constraint-40 )
       flag-with Pres1Kac@full  form" Pres1Kac чадыр"
+      flag-with Pres1Kac@short   form" Pres1Kac чады"
     filters-end
-    flag-with Pres1Kac@short   form" Pres1Kac чады"
   filters-end
 
   flag participles  flag-set  \ причастные показатели
