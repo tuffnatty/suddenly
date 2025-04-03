@@ -1,3 +1,4 @@
+T{ S" 196-199"			S" 196-199"		parse-test -> FALSE }T  \ a freeze test
 T{ S" аал+да+хы+лар"		S" аалдағылар"		parse-test -> TRUE }T
 T{ S" аар+лығ+ы"		S" аарлии"		parse-test -> TRUE }T
 T{ S" абылағ+ы"			S" абылаа"		parse-test -> TRUE }T

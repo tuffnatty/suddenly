@@ -670,11 +670,13 @@ end-public-class Untransformer
   \stack-mark
   affix /[ае]($|[бдркх])/ IF
     fallout-rslice { D: fallout }
-    \." affix: " affix type ."  fallout: " fallout type cr
-    fallout string-addr vowel-long-middle? IF
-      untransformed-fallout-VVА>VV TO flags
-      fallout t~/ {back-vowel} IF [CHAR] а ELSE [CHAR] е THEN  unfallout-add-c
-      untransformed-fallout TO flags
+    \\." affix: " affix type ."  fallout: " fallout type cr
+    fallout t~/ {vowel} IF
+      fallout string-addr vowel-long-middle? IF
+        untransformed-fallout-VVА>VV TO flags
+        fallout t~/ {back-vowel} IF [CHAR] а ELSE [CHAR] е THEN  unfallout-add-c
+        untransformed-fallout TO flags
+      THEN
     THEN
   THEN
   \stack-check
