@@ -314,7 +314,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" 1pos.sg₁ (Ы)м"
         form" 2pos.sg₁ (Ы)ң"
         filters( constraint-OK-fallout-<Poss₁> )
-          form" 3pos₁ (з)Ы"
+          right-context( constraint-37-right )
+            form" 3pos₁ (з)Ы"
+	  right-context-end
         filters-end
       flag Poss1.nonpl  flag-clear
       form" 1pos.pl₁ (Ы)бЫс"
@@ -399,7 +401,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     form" 1pos.sg (Ы)м"
     form" 2pos.sg (Ы)ң"
     filters( constraint-OK-fallout-<Poss₂> )
-      form" 3pos (з)Ы"
+      right-context( constraint-37-right )
+        form" 3pos (з)Ы"
+      right-context-end
     filters-end
     form" Gen.3pos Ни"
     flag-with Gen.3pos  form" Gen.3posDial ди"
@@ -463,7 +467,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         filter-else
           form" Acc нЫ"
         filters-end
-        form" AccDial дЫ"
+	filters( constraint-37-late )
+          flag-with AccDial.pos  form" AccDial дЫ"
+	filters-end
         form" InstrDial (н)мАң"
         form" InstrDial (н)млАң"
         form" InstrDial бАң"

@@ -1,6 +1,7 @@
 \ flags in different slots must be distinct!
 flagenum:
   flag: AblArch
+  flag: AccDial.pos
   flag: Add
   flag: Adv
   flag: All₁
@@ -60,7 +61,6 @@ flagenum:
   flag: 1.pl
   flag: 2pl.br
   flag: 2pos.pl
-  flag: 3pos₁
   flag: converbs
   flag: participles
 

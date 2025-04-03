@@ -10,6 +10,7 @@ T{ S" азыра+ах+чат+ха+м"	S" азырихчатхам"	parse-test ->
 T{ S" акел+ер+ге"		S" акелерге"		parse-test -> TRUE }T
 T{ S" алкоголик+ке"		S" алкоголикке"		parse-test -> TRUE }T
 T{ S" ал+алыс"			S" алалыс"		parse-test -> TRUE }T
+T{ S" алын+ды"			S" алынды"		parse-test DROP expected-found -> 2 }T  \ #221
 T{ S" анда+ох"			S" андох"		parse-test -> TRUE }T
 T{ S" аңмар+ли"			S" аңмарли"		parse-test -> TRUE }T
 T{ S" аннаң+ох"			S" аннаңох"		parse-test -> TRUE }T
@@ -168,6 +169,7 @@ T{ S" пас+са+ңар"		S" пассаар"		parse-test -> TRUE }T
 T{ S" пас+ты+ңар"		S" пастар"		parse-test -> TRUE }T
 T{ S" пас+ты+ңар"		S" пастаар"		parse-test -> TRUE }T
 T{ S" пасты+ңар"		S" пастар"		parse-test -> FALSE }T
+T{ S" пас+ы+ды"			S" пазыды"		parse-test -> FALSE }T  \ #221
 T{ S" пасха+лар+ы+ни+наң"	S" пасхаларынинаң"	parse-test -> TRUE }T
 T{ S" піл+бин+чат+хан"		S" пілбинчатхан"	parse-test -> TRUE }T
 T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T

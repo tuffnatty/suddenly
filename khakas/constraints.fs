@@ -610,6 +610,20 @@ require khakas/slotnames.fs
      || stem-last-sound glide?
   ;
 
+\ 37. Диалектный посессивный показатель аккузатива AccDial дЫ
+\ не сочетается с 3pos - в этом случае употребляется
+\ литературный вариант н: ср. пазымды/пазымны ‘мою голову’, но
+\ пазын ‘его голову’. Также он не присоединяется к словам с
+\ пометой poss, у которых отсутствует показатель посессивности
+\ (иначе алынды разбирается как основа алын ‘перед’ + AccDial).
+: constraint-37-right  ( -- f )
+  flag AccDial.pos  flag-empty? ;
+: constraint-37-late  ( -- f )
+  dictflag-poss dictflag-empty?
+  || <Poss₁> slot-full?
+  || <Poss₂> slot-full?
+  ;
+
 \ 38. Показатели инклюзивного императива ImpIncl Аң,
 \ ImpInclDial АК, ImpInclPl АңАр, ImpInclPlDial АлАр не могут
 \ присоединяться к показателям дуратива (Dur чАт, DurDial чат,
