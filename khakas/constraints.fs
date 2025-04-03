@@ -810,7 +810,9 @@ require khakas/slotnames.fs
 
 : constraint-VA>и-fallout-with-slot  { n-slot -- f }
   n-slot form-slot-vowel-at-left? NOT
-  || n-slot form-slot-flags untransformed-fallout-VA>и AND
+  || 1 n-slot 1- slot-range-empty?  stem-last-sound-ptr vowel-long-middle?  AND   ( VVA>VV? )
+     IF untransformed-fallout-VVА>VV ELSE untransformed-fallout-VA>и THEN  ( flag )
+     n-slot form-slot-flags  AND
   ;
 : constraint-VA>и-fallout-<Tense/Mood/Conv>  <Tense/Mood/Conv> constraint-VA>и-fallout-with-slot ;
 : constraint-VA>и-fallout-<Neg/Gener>              <Neg/Gener> constraint-VA>и-fallout-with-slot ;

@@ -17,21 +17,22 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
-%000000000000001 CONSTANT untransformed-cluster-envoice
-%000000000000010 CONSTANT untransformed-left-envoice
-%000000000000100 CONSTANT untransformed-left-envoice-missing
-%000000000001000 CONSTANT untransformed-fallout
-%000000000010000 CONSTANT untransformed-fallout-CCC
-%000000000100000 CONSTANT untransformed-fallout-VГV
-%000000001000000 CONSTANT untransformed-fallout-VVГV
-%000000010000000 CONSTANT untransformed-fallout-V[кх]V
-%000000100000000 CONSTANT untransformed-fallout-VңV
-%000001000000000 CONSTANT untransformed-fallout-confluence
-%000010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
-%000100000000000 CONSTANT untransformed-fallout-OK
-%001000000000000 CONSTANT untransformed-fallout-VA>и
-%010000000000000 CONSTANT harmony-fb-broken
-%100000000000000 CONSTANT harmony-vu-broken
+%0000000000000001 CONSTANT untransformed-cluster-envoice
+%0000000000000010 CONSTANT untransformed-left-envoice
+%0000000000000100 CONSTANT untransformed-left-envoice-missing
+%0000000000001000 CONSTANT untransformed-fallout
+%0000000000010000 CONSTANT untransformed-fallout-CCC
+%0000000000100000 CONSTANT untransformed-fallout-VГV
+%0000000001000000 CONSTANT untransformed-fallout-VVГV
+%0000000010000000 CONSTANT untransformed-fallout-V[кх]V
+%0000000100000000 CONSTANT untransformed-fallout-VңV
+%0000001000000000 CONSTANT untransformed-fallout-confluence
+%0000010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
+%0000100000000000 CONSTANT untransformed-fallout-OK
+%0001000000000000 CONSTANT untransformed-fallout-VA>и
+%0010000000000000 CONSTANT untransformed-fallout-VVА>VV
+%0100000000000000 CONSTANT harmony-fb-broken
+%1000000000000000 CONSTANT harmony-vu-broken
 
 
 : /[ае]($|[бдркх])/  ( D: s -- f )
@@ -471,6 +472,19 @@ end-public-class Untransformer
   guess-fallout guess-check
   ;
 
+: unfallout-add-vc  ( D: V  D: C -- )
+  unfallout-guess-make cyr+ ['] s/(.*)$/$1$2\1/
+                            [: guess-size cyr+ TO guess-size
+                               guess-check ;]
+                            2bi
+  ;
+
+: unfallout-add-c  ( C -- )
+  unfallout-guess-make cyr /STRING  ['] s/(.*)$/$1\1/
+                                    ['] guess-check
+                                    2bi
+  ;
+
 : unfallout-aa/ee  { D: v1  D: c  vowels -- }
   vowels sound-each-str { D: v2 }
     v1 c v2 unfallout-add-vcv
@@ -652,6 +666,20 @@ end-public-class Untransformer
   \stack-check
   ;
 
+:+ unfallout-VVА>VV  ( -- )
+  \stack-mark
+  affix /[ае]($|[бдркх])/ IF
+    fallout-rslice { D: fallout }
+    \." affix: " affix type ."  fallout: " fallout type cr
+    fallout string-addr vowel-long-middle? IF
+      untransformed-fallout-VVА>VV TO flags
+      fallout t~/ {back-vowel} IF [CHAR] а ELSE [CHAR] е THEN  unfallout-add-c
+      untransformed-fallout TO flags
+    THEN
+  THEN
+  \stack-check
+  ;
+
 :+ unfallout-OK  ( -- )
   \stack-mark
   affix t~/ ох|ӧк IF
@@ -669,19 +697,6 @@ end-public-class Untransformer
     THEN
   THEN
   \stack-check
-  ;
-
-: unfallout-add-vc  ( D: V  D: C -- )
-  unfallout-guess-make cyr+ ['] s/(.*)$/$1$2\1/
-                            [: guess-size cyr+ TO guess-size
-                               guess-check ;]
-                            2bi
-  ;
-
-: unfallout-add-c  ( C -- )
-  unfallout-guess-make cyr /STRING  ['] s/(.*)$/$1\1/
-                                    ['] guess-check
-                                    2bi
   ;
 
 :+ unfallout-(СА|ТЫ)ңАр  ( -- )
@@ -752,9 +767,9 @@ end-public-class Untransformer
     \ фонетическими преобразованиями для афф. Fut -Ар, Convа
     \ -А, Convпас A.бАс (диал.), Prosp АК, Iter АдIр. Эти
     \ аффиксы не имеют вариантов, начинающихся на согласную.
-    \ При присоединении их к основе на гласную происходит
-    \ стяжение двух кратких гласных в нейтральную и без
-    \ долготы [всегда]
+    \ При присоединении их к основе на краткую гласную
+    \ происходит стяжение двух кратких гласных в нейтральную и
+    \ без долготы [всегда]
     \\." VА>и? " s TYPE ." +" affix TYPE ." |" \.s
     unfallout-VА>и
 
@@ -773,6 +788,13 @@ end-public-class Untransformer
     \ стягивается: суғ+ға+ох > суғаох ‘в воду же’.
     \\." OK? " s TYPE ." +" affix TYPE ." |" \.s
     unfallout-OK
+
+    ofs-into-affix ?DUP-IF  cyr -  TO ofs-into-affix  THEN
+
+    \ II.3. ... При присоединении к основе на долгую гласную А
+    \ в аффиксе выпадает: тыы + Ар > тыыр.
+    \\." VVА>VV? " s TYPE ." +" affix TYPE ." |" \.s
+    unfallout-VVА>VV
   \stack-check ;
 
 :+ unfallout-consonantaffix  ( -- )

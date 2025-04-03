@@ -302,6 +302,7 @@ T{ S" туза+лығ+лар"		S" тузалығлар"		parse-test DROP expecte
 T{ S" тус+ы"			S" тузы"		parse-test -> TRUE }T
 T{ S" тут+ар+ға"		S" тударға"		parse-test -> TRUE }T
 T{ S" тӱс+іс"			S" тӱзіс"		parse-test -> TRUE }T  \ #231
+T{ S" тыы+ар"			S" тыыр"		parse-test -> TRUE }T  \ #205
 T{ S" тыы+п+ла+ыс+хан"		S" тыыплаысхан"		parse-test -> TRUE }T
 T{ S" ӱг+ер"			S" ӱӱр"			parse-test -> TRUE }T
 T{ S" ӱг+іп"			S" ӱӱп"			parse-test -> TRUE }T
