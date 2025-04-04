@@ -21,6 +21,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters( constraint-0
              constraint-1
              constraint-2
+             constraint-27-stem
              constraint-cluster-envoice
              constraint-non-envoiceable-stem
              constraint-non-envoiced-rus
@@ -28,17 +29,19 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
              constraint-VVГV-fallout
              constraint-CCC-fallout
              constraint-broken-harmony
-	     constraint-reduplication
-	     constraint-ist )
+             constraint-reduplication
+             constraint-ist )
       <this> slot-empty!
       form" -nodistr "
 
-      <this> slot-full!
-      form" Distr ГлА"
-      filters( constraint-DistrDial-short )
-        form" DistrDial лА"
-      filters-end
-      form" DistrDial лАGлА"
+      right-context( constraint-27 )
+        <this> slot-full!
+        form" Distr ГлА"
+        filters( constraint-DistrDial-short )
+          form" DistrDial лА"
+        filters-end
+        form" DistrDial лАGлА"
+      right-context-end
     filters-end
   right-context-end
   ; slot-add
@@ -48,15 +51,17 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" -novoice "
 
   <this> slot-full!
-  filters( constraint-Voice-VГV-fallout )
-    form" Pass (Ы)л"
-    form" Refl (Ы)н"
-    form" Rec (Ы)с"
-    form" Caus ТЫр"
-    filters( constraint-36 )
-      form" Caus т"
+  right-context( constraint-27 )
+    filters( constraint-Voice-VГV-fallout )
+      form" Pass (Ы)л"
+      form" Refl (Ы)н"
+      form" Rec (Ы)с"
+      form" Caus ТЫр"
+      filters( constraint-36 )
+        form" Caus т"
+      filters-end
     filters-end
-  filters-end
+  right-context-end
   ; slot-add
 
 <NF,Dur1> slot:  \ 3
@@ -149,7 +154,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   form" -nodur "
 
   <this> slot-full!
-  right-context( constraint-38-Dur )
+  right-context( constraint-27 constraint-38-Dur )
     filters( constraint-26+paan )
       form" Dur чАт"
       filters( constraint-40 )
@@ -166,7 +171,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-11 )
     <this> slot-full!
 
-    right-context( constraint-10 )
+    right-context( constraint-10 constraint-27 )
       form" Neg ПА"
     right-context-end
   right-context-end
@@ -316,7 +321,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         filters( constraint-OK-fallout-<Poss₁> )
           right-context( constraint-37-right )
             form" 3pos₁ (з)Ы"
-	  right-context-end
+          right-context-end
         filters-end
       flag Poss1.nonpl  flag-clear
       form" 1pos.pl₁ (Ы)бЫс"
@@ -467,9 +472,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         filter-else
           form" Acc нЫ"
         filters-end
-	filters( constraint-37-late )
+        filters( constraint-37-late )
           flag-with AccDial.pos  form" AccDial дЫ"
-	filters-end
+        filters-end
         form" InstrDial (н)мАң"
         form" InstrDial (н)млАң"
         form" InstrDial бАң"

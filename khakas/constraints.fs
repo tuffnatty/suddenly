@@ -536,18 +536,32 @@ require khakas/slotnames.fs
   ;
 
 \ 27. Позиции Ptcl1, Pl1, Poss1, Case1, Ptcl2 не могут быть
-\ последними заполненными позициями в словоформe.
-: constraint-27-<Ptcl1>  ( -- f )  slots( <Ptcl1> <Ptcl₃> ]-full? ;
-: constraint-27-<Pl₁>    ( -- f )  slots( <Pl₁>   <Ptcl₃> ]-full? ;
-: constraint-27-<Poss₁>  ( -- f )  slots( <Poss₁> <Ptcl₃> ]-full? ;
-: constraint-27-<Case₁>  ( -- f )  slots( <Case₁> <Ptcl₃> ]-full? ;
-: constraint-27-<Ptcl₂>  ( -- f )  slots( <Ptcl₂> <Ptcl₃> ]-full? ;
+\ последними заполненными позициями в словоформe. Также не могут
+\ ими быть позиции 1 Distr, 2 Voice, 7 Dur, отрицание Neg ПА и
+\ чистая основа глагола (в этом случае форма трактуется как
+\ императив 2 л. ед. ч. с нулевым окончанием или NF (если это
+\ возможно)).  
+
+: constraint-27-stem         ( -- f )  slots[ 1           <Ptcl₃> ]-full? || verb? NOT ;
+: constraint-27-<Distr>      ( -- f )  slots( <Distr>     <Ptcl₃> ]-full? ;
+: constraint-27-<Voice>      ( -- f )  slots( <Voice>     <Ptcl₃> ]-full? ;
+: constraint-27-<Ptcl1>      ( -- f )  slots( <Ptcl1>     <Ptcl₃> ]-full? ;
+: constraint-27-<Dur>        ( -- f )  slots( <Dur>       <Ptcl₃> ]-full? ;
+: constraint-27-<Neg/Gener>  ( -- f )  slots( <Neg/Gener> <Ptcl₃> ]-full? ;
+: constraint-27-<Pl₁>        ( -- f )  slots( <Pl₁>       <Ptcl₃> ]-full? ;
+: constraint-27-<Poss₁>      ( -- f )  slots( <Poss₁>     <Ptcl₃> ]-full? ;
+: constraint-27-<Case₁>      ( -- f )  slots( <Case₁>     <Ptcl₃> ]-full? ;
+: constraint-27-<Ptcl₂>      ( -- f )  slots( <Ptcl₂>     <Ptcl₃> ]-full? ;
 : constraint-27  ( -- f )
-  <Ptcl1> => constraint-27-<Ptcl1>
-  <Pl₁>   => constraint-27-<Pl₁>
-  <Poss₁> => constraint-27-<Poss₁>
-  <Case₁> => constraint-27-<Case₁>
-  <Ptcl₂> => constraint-27-<Ptcl₂>
+  <Distr>     => constraint-27-<Distr>
+  <Voice>     => constraint-27-<Voice>
+  <Ptcl1>     => constraint-27-<Ptcl1>
+  <Dur>       => constraint-27-<Dur>
+  <Neg/Gener> => constraint-27-<Neg/Gener>
+  <Pl₁>       => constraint-27-<Pl₁>
+  <Poss₁>     => constraint-27-<Poss₁>
+  <Case₁>     => constraint-27-<Case₁>
+  <Ptcl₂>     => constraint-27-<Ptcl₂>
   TRUE ABORT" Invalid slot for constraint-27!"
   ; IMMEDIATE
 
