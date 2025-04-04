@@ -336,8 +336,9 @@ end-public-class Untransformer
 :+ predict-fallout-coord  ( -- 0 | fallout-start ofs-into-affix TRUE )
   s string-length affix-len - { affix-pos }
   s string-addr  affix-pos + { fallout-start }
-
+  \ \." predict-fallout-coord: affix-pos " affix-pos . ."  fallout-start " fallout-start s string-length affix-pos - type cr
   fallout-start C@  good-xchar-start? &&  \ malformed UTF-8
+  \ \." predict-fallout-coord: good utf-8" cr
 
   \ if u >= affix.len and affix ~= /[гғ]V/, e.g. суу = су+ға
   affix-pos 0>= IF

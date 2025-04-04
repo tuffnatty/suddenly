@@ -11,6 +11,7 @@ T{ S" азыра+ах+чат+ха+м"	S" азырихчатхам"	parse-test ->
 T{ S" акел+ер+ге"		S" акелерге"		parse-test -> TRUE }T
 T{ S" алкоголик+ке"		S" алкоголикке"		parse-test -> TRUE }T
 T{ S" ал+алыс"			S" алалыс"		parse-test -> TRUE }T
+T{ S" ал+0︀+тыр+зың"		S" алтырзың"		parse-test -> TRUE }T  \ #235
 T{ S" алын+ды"			S" алынды"		parse-test DROP expected-found -> 2 }T  \ #221
 T{ S" анда+ох"			S" андох"		parse-test -> TRUE }T
 T{ S" аңмар+ли"			S" аңмарли"		parse-test -> TRUE }T
@@ -406,6 +407,7 @@ T{ S" чығ+ыбыс+хан"		S" чыыбысхан"		parse-test -> TRUE }T
 \ lost from document T{ S" шаш+ы"			S" шашы"		parse-test -> TRUE }T
 T{ S" ырла+ибыс"		S" ырлибыс"		parse-test -> TRUE }T
 T{ S" ырла+им"			S" ырлим"		parse-test -> TRUE }T
+T{ S" ыс+0︀+тыр+зың"		S" ыстырзың"		parse-test -> TRUE }T  \ #235
 T{ S" ыырлас+ча+зар"		S" ыырласчазар"		parse-test DROP expected-found -> 1 }T  \ #232
 T{ S" эг+гей"			S" эгей"		parse-test -> TRUE }T
 T{ S" эг+ер"			S" ээр"			parse-test -> TRUE }T
