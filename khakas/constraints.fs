@@ -819,11 +819,12 @@ require khakas/slotnames.fs
   [: harmony-fb-broken any-form-flag-is? NOT  ||
      dictflag-rus dictflag-composite OR  dictflag-is?  &&
        first-form-flag harmony-fb-broken AND 0<> ;] EXECUTE &&
-  [: harmony-fb-broken any-form-flag-is?  ||
-     dictflag-rus dictflag-is? NOT ||
-     stem-last-char-vowel-row front-vowel = ||
-     stem-last-vowel [CHAR] и <> ;] EXECUTE
-
+  [: harmony-fb-broken any-form-flag-is?
+     || dictflag-rus dictflag-is? NOT
+     || stem-last-char-vowel-row front-vowel =
+     || stem-last-vowel [CHAR] и <>
+     || slots[ 1 <Ptcl₃> ]-empty?
+  ;] EXECUTE
   ;
 
 : constraint-VA>и-fallout-with-slot  { n-slot -- f }
