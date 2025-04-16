@@ -1,4 +1,30 @@
-CELL 4 = [IF]
+require quadruple.fs
+
+128 CONSTANT flag-capacity
+flag-capacity  CELL 8 *  /  CONSTANT flag-cells
+
+flag-cells 4 = [IF]
+  $0. $0. 4CONSTANT flag-none
+  $1. $0. 4CONSTANT flag/1
+  4 CONSTANT flag/sizeof
+  : flag/@  ( ptr -- ud )                 ]] 4@ [[ ; IMMEDIATE
+  : flag/!  ( ud ptr -- )                 ]] 4! [[ ; IMMEDIATE
+  : flag/VARIABLE  ( "name" -- )          4VARIABLE ; IMMEDIATE
+  : flag/0=  ( ud -- f )                  ]] Q0= [[ ; IMMEDIATE
+  : flag/0<>  ( ud -- f )                 ]] Q0<> [[ ; IMMEDIATE
+  : flag/DROP  ( ud -- )                  ]] 4DROP [[ ; IMMEDIATE
+  : flag/DUP  ( ud -- ud ud )             ]] 4DUP [[ ; IMMEDIATE
+  : flag/OVER  ( ud1 ud2 -- ud1 ud2 ud1)  ]] 4OVER [[ ; IMMEDIATE
+  : flag/SWAP  ( ud1 ud2 -- ud2 ud1 )     ]] 4SWAP [[ ; IMMEDIATE
+  : flag/2*  ( ud -- ud')                 ]] Q2* [[ ; IMMEDIATE
+  : flag/OR  ( ud1 ud2 -- ud' )           4OR ; IMMEDIATE
+  : flag/AND  ( ud1 ud2 -- ud' )          ]] 4AND [[ ; IMMEDIATE
+  : flag/INVERT  ( ud -- ud' )            ]] 4INVERT [[ ; IMMEDIATE
+  : flag/CONSTANT  ( id "name" -- )       4CONSTANT ; IMMEDIATE
+  : flag/LITERAL                          ]] 4LITERAL [[ ; IMMEDIATE
+  : flag-mask:  ( u "name" -- )           4CONSTANT ; IMMEDIATE
+[THEN]
+flag-cells 2 = [IF]
   $0. 2CONSTANT flag-none
   $1. 2CONSTANT flag/1
   2 CONSTANT flag/sizeof
@@ -12,13 +38,14 @@ CELL 4 = [IF]
   : flag/OVER  ( ud1 ud2 -- ud1 ud2 ud1)  ]] 2OVER [[ ; IMMEDIATE
   : flag/SWAP  ( ud1 ud2 -- ud2 ud1 )     ]] 2SWAP [[ ; IMMEDIATE
   : flag/2*  ( ud -- ud')                 ]] D2* [[ ; IMMEDIATE
-  : flag/OR  ( ud1 ud2 -- ud' )           >R ROT OR SWAP R> OR ;
-  : flag/AND  ( ud1 ud2 -- ud' )          >R ROT AND SWAP R> AND ;
-  : flag/INVERT  ( ud -- ud' )            INVERT SWAP INVERT SWAP ;
+  : flag/OR  ( ud1 ud2 -- ud' )           2OR ;
+  : flag/AND  ( ud1 ud2 -- ud' )          ]] 2AND [[ ; IMMEDIATE
+  : flag/INVERT  ( ud -- ud' )            ]] 2INVERT [[ ; IMMEDIATE
   : flag/CONSTANT  ( id "name" -- )       2CONSTANT ; IMMEDIATE
-  : flag/]]L POSTPONE ]]2L ; IMMEDIATE
-  : flag/LITERAL POSTPONE 2LITERAL ; IMMEDIATE
-[ELSE]
+  : flag/LITERAL                          ]] 2LITERAL [[ ; IMMEDIATE
+  : flag-mask:  ( u "name" -- )           2CONSTANT ; IMMEDIATE
+[THEN]
+flag-cells 1 = [IF]
   0 CONSTANT flag-none
   1 CONSTANT flag/1
   1 CONSTANT flag/sizeof
@@ -36,11 +63,11 @@ CELL 4 = [IF]
   : flag/AND  ( u1 u2 -- u' )             AND ;
   : flag/INVERT  ( u -- u' )              INVERT ;
   : flag/CONSTANT  ( ud "name" )          CONSTANT ; IMMEDIATE
-  : flag/]]L POSTPONE ]]L ; IMMEDIATE
-  : flag/LITERAL POSTPONE LITERAL ; IMMEDIATE
+  : flag/LITERAL                          ]] LITERAL [[ ; IMMEDIATE
+  : flag-mask:  ( u "name" -- )           CONSTANT ; IMMEDIATE
 [THEN]
 
-CREATE (flag-ids) 64 CELLS flag/sizeof * ALLOT
+CREATE (flag-ids) flag-capacity CELLS flag/sizeof * ALLOT
 (flag-ids) VALUE (flag-id-ptr)
 VARIABLE flags(-sys
 
@@ -75,15 +102,7 @@ SET-CURRENT  ( wordlist -- )
   ALSO flagtype POSTPONE [ ; IMMEDIATE
 
 : flag  ( "name" -- mask )
-  PARSE-NAME flagtype/FIND-NAME  NAME>INT EXECUTE  POSTPONE flag/LITERAL ; IMMEDIATE
-
-: flag-mask:  ( u "name" -- )
-  \ debug-mode? IF
-  \   CELL 4 = IF 2VALUE ELSE DROP VALUE THEN
-  \ ELSE
-    CELL 4 = IF 2CONSTANT ELSE CONSTANT THEN
-  \ THEN
-  ; IMMEDIATE
+  PARSE-NAME flagtype/FIND-NAME  NAME>INTERPRET EXECUTE  POSTPONE flag/LITERAL ; IMMEDIATE
 
 : (flag:-check)  ( mask -- )
   flag/DUP flag/2* flag/0= ABORT"  Flag storage overflow!" ;
@@ -98,7 +117,7 @@ SET-CURRENT  ( wordlist -- )
 
 : flagenum:  ( -- enumsys-wordlist enumsys-mask )
   GET-CURRENT ALSO flagtype DEFINITIONS
-  CELL 4 = IF $1. ELSE $1 THEN ; IMMEDIATE
+  flag/1 ; IMMEDIATE
 
 : flagenum;  ( enumsys-wordlist enumsys-mask -- )
   flag/DROP PREVIOUS SET-CURRENT ; IMMEDIATE

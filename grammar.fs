@@ -92,7 +92,7 @@ flag/VARIABLE local-flag
 : flag-with  ( "name" -- )
   PARSE-NAME flagtype/FIND-NAME ?DUP-IF  ( nt )
     NAME>INTERPRET EXECUTE          ( flag )
-    flag/DUP flag/]]L flag-set [[
+    flag/DUP ]] flag/LITERAL flag-set [[
     local-flag!
   ELSE 1 ABORT"  word not found!" THEN ; IMMEDIATE
 
@@ -108,13 +108,13 @@ TIMER: +slot
   flagtype/FIND-NAME ?DUP-IF  ( ... nt )
     NAME>INTERPRET EXECUTE  ( mask )
     flag/DUP local-flag@ flag/AND flag/0= IF
-      flag/DUP local-flag@ flag/OR  local-flag!  flag/]]L flag-set [[  ( ... )
+      flag/DUP local-flag@ flag/OR  local-flag!  ]] flag/LITERAL flag-set [[  ( ... )
     ELSE flag/DROP THEN
   THEN ;
 
 : (compile-pop-flag)  ( -- )
   local-flag@ flag-any?  IF
-    local-flag@ flag/]]L flag-clear [[
+    local-flag@ ]] flag/LITERAL flag-clear [[
     flag-none local-flag!
   THEN ;
 
