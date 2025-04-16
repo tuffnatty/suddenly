@@ -97,7 +97,7 @@ variable timer-stack-depth
       utime 2dup last-tick dup 2@ 2>r 2! 2r> d- rot 2+! ;
 [THEN]
 
-: timer: Create $0. , , here timer-list !@ ,
+: profile-timer: Create $0. , , here timer-list !@ ,
   DOES> profile(
     timer-stack-depth @ ?DUP-IF 1- CELLS timer-stack + @  +t THEN
     timer-stack timer-stack-depth @ CELLS + !

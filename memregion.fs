@@ -8,10 +8,10 @@ STRUCT
 END-STRUCT region%
 
 : .region  ( region -- )
-  ." region " DUP HEX.
+  ." region " DUP H.
   ."  size " DUP region-size @ .
-  ."  addr " DUP region-addr @ HEX.
-  ."  here " DUP region-here @ HEX.
+  ."  addr " DUP region-addr @ H.
+  ."  here " DUP region-here @ H.
   ."  free " DUP region-size @ SWAP  DUP region-here @ SWAP region-addr @ - - . CR ;
 
 : region-make ( size -- )

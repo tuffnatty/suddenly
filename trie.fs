@@ -101,8 +101,8 @@ optimize-tries 0= [IF]
   LOOP ;
 
 : .trie  ( trie -- )
-  \ DUP HEX. CR DUP 16 DUMP  DUP $D0 CELLS + 16 DUMP CR DROP EXIT
-  DUP HEX. ." : "   0 (.trie) CR ;
+  \ DUP H. CR DUP 16 DUMP  DUP $D0 CELLS + 16 DUMP CR DROP EXIT
+  DUP H. ." : "   0 (.trie) CR ;
 
 
 STRUCT
@@ -114,7 +114,7 @@ END-STRUCT compact-trie%
 CREATE compact-tries-region  180000 compact-trie% %SIZE *  region-make
 
 : .compact-trie-raw  ( compact-trie -- )
-  DUP HEX.
+  DUP H.
   ." : data " DUP compact-trie-data @ .
   ."  start " DUP compact-trie-start @ .
   ."  end " compact-trie-end @ . ;
@@ -150,9 +150,9 @@ CREATE compact-tries-region  180000 compact-trie% %SIZE *  region-make
   PAD RP@ RP0 - 10 * +  0  (compact-trie-each-prefix) ;
 
 : .compact-trie  ( compact-trie -- )
-  ." <CompactTrie " DUP HEX.
+  ." <CompactTrie " DUP H.
   ?DUP-IF
-    ." data=" DUP compact-trie-data @ HEX.
+    ." data=" DUP compact-trie-data @ H.
     [: TYPE ." |" ;]  SWAP compact-trie-each-prefix
   THEN
   ." >" ;

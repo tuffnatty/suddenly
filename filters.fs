@@ -45,9 +45,9 @@ CREATE filters filter% 64 * %ALLOT
   s S" )" COMPARE WHILE
     s string-length IF
       s FIND-NAME ?DUP-IF  ( nt )
-        DUP IMMEDIATE?  IF  NAME?INT EXECUTE  THEN
+        DUP IMMEDIATE?  IF  ?compile-only ?obsolete NAME>INTERPRET EXECUTE  THEN
         ( nt )  bi[ POSTPONE LITERAL
-                 ][ NAME>INT POSTPONE LITERAL ];
+                 ][ NAME>INTERPRET POSTPONE LITERAL ];
       ELSE  1 ABORT"  word not found!"  THEN
       FALSE POSTPONE LITERAL
       POSTPONE >filters
@@ -75,8 +75,8 @@ debug-mode? [IF]
   s S" )" COMPARE WHILE
     s string-length IF
       s FIND-NAME ?DUP-IF  ( nt )
-        DUP IMMEDIATE? IF NAME?INT EXECUTE ( nt' ) THEN
-        NAME>INT COMPILE, ]] IF [[
+        DUP IMMEDIATE? IF ?compile-only ?obsolete NAME>INTERPRET EXECUTE ( nt' ) THEN
+        NAME>INTERPRET COMPILE, ]] IF [[
       ELSE 1 ABORT"  word not found!" THEN
       count 1+ TO count
     ELSE

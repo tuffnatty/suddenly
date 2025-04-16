@@ -59,7 +59,7 @@ language-require phonetics.fs
   >R 2DUP last-char-vowel-row rclass-fb R> 2* + ;] CONSTANT rule-cv-nvu-fb
 
 : .rule  ( xt -- )
-  >NAME ?DUP-IF .NAME ELSE ." rule-0" THEN ;
+  >NAME ?DUP-IF .ID ELSE ." rule-0" THEN ;
 
 : rule+  ( rule1 rule2 -- rule1+rule2 )
   DUP 0= IF DROP EXIT THEN

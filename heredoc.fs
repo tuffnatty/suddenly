@@ -6,8 +6,10 @@
   dup >R dup , here swap move R> allot ;
 : $@   ( a -- ca u )
   dup @ 1 cells under+ ;
+[UNDEFINED] C!+ [IF]
 : c!+   ( c ca - ca+1 )
   tuck c! 1+ ;
+[THEN]
 : $!+   ( a u a' -- a'+u ; string-store-plus )
   2dup + >R swap move R> ;
  

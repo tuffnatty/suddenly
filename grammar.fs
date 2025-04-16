@@ -39,7 +39,7 @@ debug-mode? [IF]
 : slots[  ( "n" -- n1 )
   ; IMMEDIATE
 : slots(  ( "n" -- n1 )
-  PARSE-NAME FIND-NAME NAME>INT EXECUTE 1+ POSTPONE LITERAL ; IMMEDIATE
+  PARSE-NAME FIND-NAME NAME>INTERPRET EXECUTE 1+ POSTPONE LITERAL ; IMMEDIATE
 : ]-empty?  ( n1 n2 -- f )
   ]] slot-range-empty? [[ ; IMMEDIATE
 : )-empty?  ( n1 n2 -- f )
@@ -52,7 +52,7 @@ debug-mode? [IF]
 : slots[  ( "n1" "n2" -- slots-sys )
   POSTPONE [ ; IMMEDIATE COMPILE-ONLY
 : slots(  ( "n1" "n2" -- slots-sys )
-  PARSE-NAME FIND-NAME NAME>INT EXECUTE 1+
+  PARSE-NAME FIND-NAME NAME>INTERPRET EXECUTE 1+
   POSTPONE [ ; IMMEDIATE COMPILE-ONLY
 : ]-empty?  ( slots-sys -- )  ( runtime: -- f )
   ] slot-mask ]]L  paradigm-slot-bitmap @  AND 0= [[ ;
@@ -91,7 +91,7 @@ flag/VARIABLE local-flag
   ;
 : flag-with  ( "name" -- )
   PARSE-NAME flagtype/FIND-NAME ?DUP-IF  ( nt )
-    NAME>INT EXECUTE          ( flag )
+    NAME>INTERPRET EXECUTE          ( flag )
     flag/DUP flag/]]L flag-set [[
     local-flag!
   ELSE 1 ABORT"  word not found!" THEN ; IMMEDIATE
@@ -106,7 +106,7 @@ TIMER: +slot
 
 : (compile-flag-if-exists)  ( D: affix-name -- )
   flagtype/FIND-NAME ?DUP-IF  ( ... nt )
-    NAME>INT EXECUTE  ( mask )
+    NAME>INTERPRET EXECUTE  ( mask )
     flag/DUP local-flag@ flag/AND flag/0= IF
       flag/DUP local-flag@ flag/OR  local-flag!  flag/]]L flag-set [[  ( ... )
     ELSE flag/DROP THEN

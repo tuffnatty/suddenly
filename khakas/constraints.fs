@@ -1,7 +1,7 @@
 require khakas/slotnames.fs
 
 : =>  ( slot-pos "name" )
-  ]] (<this>) = IF [(')] EXIT THEN [[ ; IMMEDIATE
+  ]] (<this>) = IF [[ (') ]]L EXIT THEN [[ ; IMMEDIATE
 
 : is-пар/кил?  ( -- f )
   paradigm-stems @  [: strlist-get t~/ пар|апар|кил ;] list-any? ;

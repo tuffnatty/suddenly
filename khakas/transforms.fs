@@ -227,7 +227,7 @@ REQUIRE heredoc.fs
 fallout-rule-src
 \ уғы > уу
 
-CREATE fallout-repl-uu 2 cyrs ALLOT
+CREATE fallout-repl-uu 4 ( 2cyrs ) ALLOT
 "уу" fallout-repl-uu SWAP MOVE
 TABLE CONSTANT fallout-table
 TABLE CONSTANT fallout-reverse-table

@@ -10,7 +10,9 @@ CREATE utf8-size-table
 : @xc-size  ( addr -- u )
   \ length of UTF-8 char starting at addr
   C@ utf8-size-table + C@ ;
+[UNDEFINED] XCHAR+ [IF]
 : XCHAR+ DUP @xc-size + ;
+[THEN]
 
 : good-xchar-start?  ( c -- f )
   ]] DUP $80 U> IF $C2 U>= THEN [[ ; IMMEDIATE
@@ -196,7 +198,7 @@ VARIABLE sstr-last
   OVER XCHAR+ >R + R> = ;
 
 : is-2-char?  ( addr len -- f )
-  [ 2 cyrs ]L = NIP ;
+  2cyrs = NIP ;
 
 : is-2-char?1  ( addr len -- f )
   OVER + SWAP       ( end-addr addr )

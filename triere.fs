@@ -36,7 +36,7 @@ DEFER (t~/)
   ;
 
 : parse-class  ( addr u -- wid )
-  [CHAR] } string-parse   FIND-NAME NAME>INT EXECUTE ;
+  [CHAR] } string-parse   FIND-NAME NAME>INTERPRET EXECUTE ;
 
 0 VALUE (t~/)-data
 

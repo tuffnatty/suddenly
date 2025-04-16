@@ -30,7 +30,7 @@ trie-new CONSTANT orthographic-variants-trie
 : sound-each  ( wid -- xc )
   ]] WORDLIST-ID @ BEGIN ?DUP-IF [[
   1 CS-ROLL
-  ]] >R R@ NAME>INT EXECUTE [[
+  ]] >R R@ NAME>INTERPRET EXECUTE [[
   ; IMMEDIATE COMPILE-ONLY
 
 : sound-each-str  ( wid -- addr u )
@@ -51,7 +51,7 @@ trie-new CONSTANT orthographic-variants-trie
 
   1+ PAD SWAP NEXTNAME  SET-CURRENT  :  ( )
     wid WORDLIST-ID @  BEGIN DUP WHILE  ( nt )
-      ]]  DUP  [[ DUP NAME>INT EXECUTE ]]L  = ?EXIT [[
+      ]]  DUP  [[ DUP NAME>INTERPRET EXECUTE ]]L  = ?EXIT [[
       >LINK @
     REPEAT DROP
     ]] DROP FALSE ; [[
