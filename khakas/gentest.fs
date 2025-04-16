@@ -148,6 +148,7 @@ T{ S" пар+ған+дағ+зың"		S" парғандағзың"	parse-test -> T
 T{ S" пар+ғла"			S" парғла"		parse-test -> FALSE }T \ #196 #234
 T{ S" пар+ғла+0︀"		S" парғла"		parse-test -> TRUE }T \ #196 #234
 T{ S" пар+и+ған"		S" париған"		parse-test -> TRUE }T
+T{ S" пар+ит+ып"		S" паридып"		parse-test -> TRUE }T  \ #237
 T{ S" пар+и+лар"		S" парилар"		parse-test -> TRUE }T
 T{ S" пар+ит+чат+ып"		S" паритчадып"		parse-test -> TRUE }T
 T{ S" пар+0︀+даа+ча"		S" пардаача"		parse-test -> TRUE }T

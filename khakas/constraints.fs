@@ -157,16 +157,16 @@ require khakas/slotnames.fs
 \ 3) либо непосредственно перед показателями Past ГА(н), CvP,
 \    CvKac АбАс, Cond СА (позиция <Tense/Mood>).
 \ Показатель Dur1Sag ит может стоять перед Dur чАт,
-\ Past ГА(н), Cond СА и PresPtDial чАн.
+\ Past ГА(н), Cond СА, CvP и PresPtDial чАн.
 : constraint-8  ( -- f )
   slots( <NF,Dur1> <Ptcl₃> ]-empty?
   || slots( <NF,Dur1> <Person> )-empty?  <Person> slot-full?  AND
   || slots( <NF,Dur1> <PredPl> )-empty?  <PredPl> slot-full?  AND
-  || flags( Past Cond CvKac|CvP ) flag-is?  <Neg/Gener> slot-empty?  AND
+  || flags( Past Cond CvKac CvP ) flag-is?  <Neg/Gener> slot-empty?  AND
   ;
 : constraint-8sag  ( -- f )
   slots( <NF,Dur1> <Dur> )-empty?  <Dur> slot-full?  AND
-  || slots( <NF,Dur1> <Tense/Mood/Conv> )-empty?  flags( Past Cond PresPtDial ) flag-is? AND
+  || slots( <NF,Dur1> <Tense/Mood/Conv> )-empty?  flags( Past Cond CvP PresPtDial ) flag-is? AND
   ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
@@ -177,7 +177,7 @@ require khakas/slotnames.fs
 \ концом словоформы) варианты и и ир находятся в
 \ свободном (точнее, диалектном) варьировании.
 : constraint-8.1ᵢ  ( -- f )
-  flag CvKac|CvP  flag-empty? ;
+  flags( CvKac CvP ) flag-empty? ;
 : constraint-8.1ᵢᵣ
   flags( Past Cond ) flag-empty? ;
 
@@ -264,7 +264,7 @@ require khakas/slotnames.fs
 \ словоформы [(обрабатывается правилом 27),] Past ГА(н),
 \ CvA, CvP, <Ptcl₂>, <Person>, <PredPl> или <Ptcl₃>.
 : constraint-14  ( -- f )
-  flags( Past CvA|CvP ) flag-is?
+  flags( Past CvA CvP ) flag-is?
   || slots( <Neg/Gener> <Ptcl₂> )-empty?  <Ptcl₂> slot-full?  AND
   || slots( <Neg/Gener> <Person> )-empty?
   ;
@@ -272,8 +272,8 @@ require khakas/slotnames.fs
 \ 14.1. Gener: Перед Past ГА(н), CvP, CvA и Ptcl3 возможна
 \ только форма АдЫр, в остальных случаях - и АдЫ, и АдЫр.
 : constraint-14.1  ( -- f )
-  flag Past     flag-empty?  &&
-  flag CvA|CvP  flag-empty?  &&
+  flag Past        flag-empty?  &&
+  flags( CvA CvP ) flag-empty?  &&
   slots( <Neg/Gener> <Ptcl₃> )-empty?  <Ptcl₃> slot-full?  AND NOT
   ;
 
