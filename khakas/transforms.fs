@@ -269,7 +269,7 @@ fallout-rule-prepare
     EXECUTE
   ELSE 0 THEN THEN ;
 
-CREATE fallout-buf 3 cyrs ALLOT
+CREATE fallout-buf 6 ( 3 cyrs ) ALLOT
 : transform-fallout  ( cs addr len -- cs addr len )
   \." transform-fallout: " 2 pick count type ." +"  2dup type ." :"
   DUP 0= IF EXIT THEN  \ do nothing with empty affix
