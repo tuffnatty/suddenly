@@ -826,19 +826,20 @@ require khakas/slotnames.fs
 : constraint-DistrDial-short  ( -- f )
   <Distr> form-slot-vowel-at-left? NOT ;
 
-: constraint-broken-harmony  ( -- f )
-  [: harmony-vu-broken any-form-flag-is? NOT  ||
-     dictflag-rus dictflag-is?  &&
-       first-form-flag harmony-vu-broken AND 0<> ;] EXECUTE &&
-  [: harmony-fb-broken any-form-flag-is? NOT  ||
-     dictflag-rus dictflag-composite OR  dictflag-is?  &&
-       first-form-flag harmony-fb-broken AND 0<> ;] EXECUTE &&
-  [: harmony-fb-broken any-form-flag-is?
-     || dictflag-rus dictflag-is? NOT
-     || stem-last-char-vowel-row front-vowel =
-     || stem-last-vowel [CHAR] и <>
-     || slots[ 1 <Ptcl₃> ]-empty?
-  ;] EXECUTE
+: constraint-broken-vu-harmony  ( -- f )
+  harmony-vu-broken any-form-flag-is? NOT
+  || dictflag-rus dictflag-is?
+     && first-form-flag harmony-vu-broken AND 0<> ;
+: constraint-broken-fb-harmony-allow  ( -- f )
+  harmony-fb-broken any-form-flag-is? NOT
+  || dictflag-rus dictflag-composite OR  dictflag-is?
+     && first-form-flag harmony-fb-broken AND 0<> ;
+: constraint-broken-fb-harmony-require  ( -- f )
+  harmony-fb-broken any-form-flag-is?
+  || dictflag-rus dictflag-is? NOT
+  || stem-last-char-vowel-row front-vowel =
+  || stem-last-vowel [CHAR] и <>
+  || slots[ 1 <Ptcl₃> ]-empty?
   ;
 
 : constraint-VA>и-fallout-with-slot  { n-slot -- f }

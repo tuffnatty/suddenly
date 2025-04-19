@@ -24,6 +24,7 @@ T{ S" ат+т+ты+ңар"		S" аттар"		parse-test -> FALSE }T \ #216
 T{ S" ат+ыбыс+ах+ча+лар"        S" атыбызахчалар"       parse-test -> TRUE }T  \ #126
 T{ S" ат+ың+а"			S" адаа"		parse-test -> FALSE }T
 T{ S" ах+0︀+чат+аңар"		S" ахчадаңар"		parse-test -> FALSE }T  \ #228
+T{ S" бефстроганов+тар"		S" бефстрогановтар"	parse-test -> TRUE }T  \ #225
 T{ S" ватт+ты"			S" ватты"		parse-test -> TRUE }T
 T{ S" ватт+ы"			S" ватты"		parse-test -> TRUE }T
 T{ S" грузчик+тер"		S" грузчиктер"		parse-test -> TRUE }T
@@ -79,6 +80,7 @@ T{ S" кіртӧң+ге+ӧк"		S" кіртӧңеӧк"		parse-test -> TRUE }T
 T{ S" кіртӧң+ӧк"		S" кіртӧңӧк"		parse-test -> TRUE }T
 T{ S" кіртӧң+ге+ӧк"		S" кіртӧңӧк"		parse-test -> FALSE }T
 T{ S" комиссия+ға"		S" комиссияа"           parse-test -> TRUE }T
+T{ S" кооператив+тер"		S" кооперативтер"       parse-test -> TRUE }T  \ #225
 T{ S" кӧг+і"			S" кӧӧ"			parse-test -> TRUE }T
 T{ S" кӧзӧ+ге"			S" кӧзӧге"		parse-test -> TRUE }T
 T{ S" кӧй+0︀+чары"		S" кӧйчары"		parse-test -> TRUE }T  \ #181

@@ -176,11 +176,11 @@ DEFER yield-stem  ( addr u stem -- addr u )
     0 reduplication-len !
     s stem-find ?DUP-0=-IF
       s is-reduplication? IF
-	s skip-reduplication  { D: origin }
+        s skip-reduplication  { D: origin }
         origin stem-find ?DUP-IF  ( stem )
-	  TRUE dict-reduplication !
-	  origin string-addr  s string-addr  -  reduplication-len !
-	ELSE 0 THEN
+          TRUE dict-reduplication !
+          origin string-addr  s string-addr  -  reduplication-len !
+        ELSE 0 THEN
       ELSE 0 THEN
     THEN { stem }  ( )
     stem IF
@@ -211,6 +211,38 @@ DEFER yield-stem  ( addr u stem -- addr u )
   ?DUP-IF SWAP >R EXECUTE ( rule-result ) R> =
   ELSE DROP TRUE THEN ;
 
+: unvoice-last  ( addr u -- addr u )
+  2DUP last-sound-except-ь-ptr cyr  2DUP unvoice-str DROP -ROT CMOVE
+  \." " indent ." Correcting VU harmony to " 2DUP TYPE
+  ;
+
+: fix-fb-harmony  { D: buffer -- D: buffer }
+  buffer string-end { ptr }
+  BEGIN ptr buffer string-addr > WHILE
+    ptr XCHAR- TO ptr
+    ptr XC@ [CHAR] и = IF
+      [CHAR] і ptr XC!
+      FALSE
+    ELSE TRUE THEN WHILE
+  REPEAT THEN
+  \." " indent ." Correcting FB harmony to " buffer TYPE
+  buffer
+  ;
+
+: try-fix  { harmony-ok? D: left-part slot-flag rule n-rule xt: patch flag -- slot-flag harmony-ok? }
+  harmony-ok? NOT IF
+    PAD left-part string-length { D: buffer }
+    left-part string-addr buffer CMOVE
+    buffer patch  n-rule rule rule-check NIP NIP IF
+      \."  fixes harmony, setting" flag H. ." slot flag" CR
+      slot-flag flag OR  TRUE EXIT
+    ELSE
+      \."  does not fix harmony" CR
+    THEN
+  THEN
+  slot-flag harmony-ok?
+  ;
+
 :+ after-fallout-pair  { D: left-part  D: affix  slot-flag rule n-rule -- }
   \." " indent rule if ." Pair " left-part TYPE ." +" affix TYPE ."  harmony variant: " rule execute . ." left, " n-rule . ." right" cr then
   left-part  n-rule rule rule-check { harmony-ok? }  2DROP
@@ -218,32 +250,17 @@ DEFER yield-stem  ( addr u stem -- addr u )
   harmony-ok? NOT IF
     \." " indent ." slot-flag " slot-flag . cr
     \ slot-flag  AND  0= IF  \ what was it intendend for?
-      PAD left-part string-length { D: buffer }
-      left-part last-sound-except-ь-ptr cyr t~/ {voiced} IF
-        left-part string-addr buffer CMOVE
-        buffer last-sound-except-ь-ptr cyr  2DUP unvoice-str DROP -ROT CMOVE
-        \." " indent ." Correcting VU harmony to " buffer TYPE CR
-        buffer n-rule rule rule-check TO harmony-ok? 2DROP
-        harmony-ok? IF
-          slot-flag harmony-vu-broken OR TO slot-flag
-        THEN
+      left-part last-vowel [CHAR] и = { can-fix-fb-harmony? }
+      left-part last-sound-except-ь-ptr cyr t~/ {voiced} { can-unvoice? }
+      can-unvoice? IF
+        harmony-ok? left-part slot-flag rule n-rule  ['] unvoice-last  harmony-vu-broken try-fix TO harmony-ok? TO slot-flag
       THEN
-      left-part last-vowel [CHAR] и = IF
-        left-part string-addr buffer CMOVE
-        buffer string-end { ptr }
-        BEGIN ptr buffer string-addr > WHILE
-          ptr XCHAR- TO ptr
-          ptr XC@ [CHAR] и = IF
-            [CHAR] і ptr XC!
-            FALSE
-          ELSE TRUE THEN WHILE
-        REPEAT THEN
-        \." " indent ." Correcting FB harmony to " buffer TYPE CR
-        buffer n-rule rule rule-check TO harmony-ok? 2DROP
-        harmony-ok? IF
-          slot-flag harmony-fb-broken OR TO slot-flag
-        THEN
+      can-fix-fb-harmony? IF
+        harmony-ok? left-part slot-flag rule n-rule  ['] fix-fb-harmony  harmony-fb-broken try-fix TO harmony-ok? TO slot-flag
       THEN
+      can-fix-fb-harmony? IF can-unvoice? IF
+        harmony-ok? left-part slot-flag rule n-rule  [: fix-fb-harmony unvoice-last ;]  harmony-vu-broken harmony-fb-broken OR  try-fix TO harmony-ok? TO slot-flag
+      THEN THEN
     \ THEN
   THEN
   harmony-ok? IF
