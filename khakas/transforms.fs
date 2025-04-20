@@ -625,9 +625,9 @@ end-public-class Untransformer
   \stack-check
   ;
 
-:+ unfallout-vv-Imp.1.Incl  ( -- )
+:+ unfallout-vv-Imp.1.Incl-short  ( -- )
   \stack-mark
-  affix t~/ ал|ел|аң|ең  IF
+  affix t~/ аң|ең  IF
     fallout-rslice t~/ аа|яа|ее  IF
       affix t~/ {back-vowel} IF back-vowel ELSE front-vowel THEN sound-each-str \ { D: V1 }
         ( D: V1 ) "" unfallout-add-vv
@@ -637,9 +637,9 @@ end-public-class Untransformer
   \stack-check
   ;
 
-:+ unfallout-vv-Simul  ( -- )
+:+ unfallout-vv-Imp.1.Incl-long-and-Simul  ( -- )
   \stack-mark
-  affix t~/ аачых|еечік IF
+  affix t~/ аах|еек|аалар|еелер|ааң|еең|аачых|еечік IF
     fallout-rslice { D: fallout }
     fallout t~/ аа|яа|ее IF
       fallout second-sound-ptr  cyr { D: V2 }
@@ -746,14 +746,15 @@ end-public-class Untransformer
     ofs-into-affix ?DUP-IF  cyr -  TO ofs-into-affix  THEN
 
     \ II.2. императив инклюзивный. Аффиксы инклюзивного
-    \ императива Imp.1.Incl Аң, Imp.1.Incl.Pl АңАр/Алар при
-    \ присодинении к основам на гласную поглощают гласную
-    \ основы, на месте стяжения образуется долгая аа/ее
+    \ императива Imp.1.Incl (А)Аң/АК, Imp.1.Incl.Pl
+    \ (А)АңАр/ААлар при присодинении к основам на гласную
+    \ поглощают гласную основы или предыдущего морфа, на месте
+    \ стяжения образуется долгая аа/ее.
     \ Так же себя ведет симулятив ААчЫК.
-    \\." vv-Imp.1.Incl? " s TYPE ." +" affix TYPE ." |" \.s
-    unfallout-vv-Imp.1.Incl
-    \\." vv-Simul? " s TYPE ." +" affix TYPE ." |" \.s
-    unfallout-vv-Simul
+    \\." vv-Imp.1.Incl-short? " s TYPE ." +" affix TYPE ." |" \.s
+    unfallout-vv-Imp.1.Incl-short
+    \\." vv-Imp.1.Incl-long-and-Simul? " s TYPE ." +" affix TYPE ." |" \.s
+    unfallout-vv-Imp.1.Incl-long-and-Simul
 
     fallout-pos cyr+  TO fallout-pos
     fallout-rslice cyr /STRING  ( D: fallout-rslice )
