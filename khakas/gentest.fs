@@ -138,6 +138,8 @@ T{ S" палты+мнаң"		S" палтымнаң"		parse-test -> TRUE }T
 T{ S" параан"			S" параан"		parse-test -> TRUE }T
 T{ S" пара+ң+ы+н"		S" параан"		parse-test -> FALSE }T
 T{ S" пар+и+ған"		S" параан"		parse-test -> FALSE }T
+T{ S" пар+ааң"			S" парааң"		parse-test -> TRUE }T  \ #241
+T{ S" пар+ааңар"		S" парааңар"		parse-test -> TRUE }T  \ #241
 T{ S" пар+ат+аң"		S" парадаң"		parse-test -> FALSE }T  \ #228
 T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
