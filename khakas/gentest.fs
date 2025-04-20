@@ -13,6 +13,8 @@ T{ S" алкоголик+ке"		S" алкоголикке"		parse-test -> TRUE }
 T{ S" ал+алыс"			S" алалыс"		parse-test -> TRUE }T
 T{ S" ал+0︀+тыр+зың"		S" алтырзың"		parse-test -> TRUE }T  \ #235
 T{ S" алын+ды"			S" алынды"		parse-test DROP expected-found -> 2 }T  \ #221
+T{ S" ат+ым+а+ох"		S" адымох"		parse-test -> FALSE }T  \ #240
+T{ S" ат+ы+на+ох"		S" адынох"		parse-test -> FALSE }T  \ #240
 T{ S" анда+ох"			S" андох"		parse-test -> TRUE }T
 T{ S" аңмар+ли"			S" аңмарли"		parse-test -> TRUE }T
 T{ S" аннаң+ох"			S" аннаңох"		parse-test -> TRUE }T
@@ -69,6 +71,8 @@ T{ S" кил+0︀+че+біс"		S" килчебіс"		parse-test DROP expected-f
 T{ S" кил+0︀+чен"		S" килчен"		parse-test -> TRUE }T
 T{ S" кил+ир+ебес"		S" килиребес"		parse-test -> TRUE }T  \ #229
 T{ S" киме+ге"			S" кимее"		parse-test -> TRUE }T
+T{ S" киме+ге+ох"		S" кимееох"		parse-test -> TRUE }T  \ #240
+T{ S" киме+ге+ох"		S" кимеох"		parse-test -> FALSE }T  \ #240
 T{ S" кип-азах+ы"		S" кип-азаа"		parse-test -> TRUE }T
 T{ S" кип-азах+ым"		S" кип-азаам"		parse-test -> TRUE }T
 T{ S" кис+0︀+чет+кен"		S" кисчеткен"		parse-test -> TRUE }T
@@ -180,6 +184,7 @@ T{ S" пасты+ңар"		S" пастар"		parse-test -> FALSE }T
 T{ S" пас+ы+ды"			S" пазыды"		parse-test -> FALSE }T  \ #221
 T{ S" пасха+лар+ы+ни+наң"	S" пасхаларынинаң"	parse-test -> TRUE }T
 T{ S" піл+бин+чат+хан"		S" пілбинчатхан"	parse-test -> TRUE }T
+T{ S" піл+ер+ге+ӧк"		S" пілергӧк"		parse-test -> TRUE }T  \ #240
 T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T
 T{ S" піс+тің+нер"		S" пістіңнер"		parse-test -> FALSE }T  \ #186
 T{ S" пир+бе+дек"		S" пирбедек"		parse-test -> TRUE }T
@@ -259,6 +264,7 @@ T{ S" стол+зар+тын"		S" столзартын"		parse-test -> TRUE }T
 T{ S" стол+ы+нзар+тын"		S" столынзартын"	parse-test -> TRUE }T
 T{ S" суғ+ға"			S" суға"		parse-test -> TRUE }T
 T{ S" суғ+ға+ох"		S" суғаох"		parse-test -> TRUE }T
+T{ S" суғ+ға+ох"		S" суғох"		parse-test -> FALSE }T  \ #240
 T{ S" суғ+ы"			S" суу"			parse-test -> TRUE }T
 T{ S" сӱрдег+і"			S" сӱрдее"		parse-test -> TRUE }T
 T{ S" сурығ+ы"			S" сурии"		parse-test -> TRUE }T

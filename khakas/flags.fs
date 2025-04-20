@@ -7,6 +7,7 @@ flagenum:
   flag: All₁
   flag: All₁.Attr
   flag: Ass₁
+  flag: Ass₂
   flag: Ass₃
   flag: Assum|Neg.Fut|Opt
   flag: Comit

@@ -81,19 +81,21 @@ require khakas/slotnames.fs
 \    на (выпадающие, см. ниже) п, г, ғ или ӊ;
 \ 2) он непосредственно следует за основой или аффиксом,
 \    оканчивающимися на гласную;
-\ 3) непосредственно за ним следует Ass ОК или Cont LA
+\ 3) непосредственно за ним следует Ass ОК/AssDial ох или Cont LA
 \    или Add ТАА (см. пример в п. 3).
 \ 4) основа или предшествующий аффикс оканчивается на согласную
 \    (действует опционально для качинского диалекта, но проникло
 \    и в литературные тексты).
 \ NF выбирает алломорф 0 после основы или аффикса на
-\ невыпадающую согласную, если после него не стоит аффикс ОК.
+\ невыпадающую согласную, если после него не стоит аффикс ОК/ох.
 \ [Таким образом, после основы на невыпадающую согласную в конце
 \ словоформы для NF возможны оба алломорфа.]
 : constraint-4.1ₚ  ( -- f )
   <Distr> slot-empty?  <Distr> form-slot-xc-at-left fallout-short?  AND
   || <NF,Dur1> form-slot-vowel-at-left?
   || flags( Add Cont Ass₁ ) flag-is?
+  || slots( <NF,Dur1> <Ptcl₂> )-empty?  flag Ass₂  flag-is?  AND
+  || slots( <NF,Dur1> <Ptcl₃> )-empty?  flag Ass₃  flag-is?  AND
   || <NF,Dur1> form-slot-xc-at-left consonant?
   ;
 : constraint-4.1₀  ( -- f )
@@ -101,7 +103,10 @@ require khakas/slotnames.fs
   && <NF,Dur1> form-slot-xc-at-left fallout-short? NOT
   ;
 : constraint-4.1₀-right  ( -- f )
-  flag Ass₁  flag-empty? ;
+  flag Ass₁  flag-empty?
+  && slots( <NF,Dur1> <Ptcl₂> )-empty?  flag Ass₂  flag-is?  AND NOT
+  && slots( <NF,Dur1> <Ptcl₃> )-empty?  flag Ass₃  flag-is?  AND NOT
+  ;
 
 \ 5. Показатели Ptcl₁ (внутренние частицы) допускаются только
 \ при наличии показателя NF (NF, NF₀, Neg.NF. Neg.NFSh) и
@@ -514,7 +519,7 @@ require khakas/slotnames.fs
 
 \ 25. После деепричастных показателей позиции <Tense/Mood> (Lim ГАли,
 \ CvP (Ы)П, CvA; CvKac; Neg.Conv и Neg.Conv.Abl) может
-\ стоять только показатель Ass ОК из позиции Ptcl3.
+\ стоять только показатель Ass ОК / AssDial ох из позиции Ptcl3.
 : constraint-25  ( -- f )
   slots( <Tense/Mood/Conv> <Ptcl₃> ]-empty?  ||
   flag Ass₃  flag-is?
@@ -665,9 +670,9 @@ require khakas/slotnames.fs
   <Vis> slot-empty? ;
 
 \ 40. Негармонирующие показатели DurDial чат, PresDial ча,
-\ Pres1Kac чады(р) присоединяются только к переднерядным
-\ основам (т.к. сочетание с заднерядными основами получает
-\ аналогичный разбор с гармонирующим показателем).
+\ Pres1Kac чады(р), AssDial ох присоединяются только к
+\ переднерядным основам (т.к. сочетание с заднерядными основами
+\ получает аналогичный разбор с гармонирующим показателем).
 : constraint-40  ( -- f )
   stem-last-char-vowel-row front-vowel =
   ;
@@ -782,9 +787,13 @@ require khakas/slotnames.fs
   ;
 
 \ поглощение гласных перед -ох: 3pos в виде алломорфов -ы/-i не
-\ стягивается: хызох < хыс+ох, но не < хыс-ы-ох. Гласная
-\ дательного падежа и деепричастия на гласную не стягивается:
-\ суғ+ға+ох > суғаох ‘в воду же’.
+\ стягивается: хызох < хыс+ох, но не < хыс-ы-ох. Показатель
+\ деепричастия на гласную не стягивается: Инейлерін тойға алаох
+\ килгеннер ‘жен своих на свадьбу взяв тоже, приехали’ (сказка
+\ Атығӌы Парачап). Также не стягивается гласная дательного
+\ падежа при отсутствии фонетически выраженной согласной Г -
+\ т.е. после основ на Г, ң и гласные (кимееох, суғаох) и в
+\ посессивном склонении (адымаох, адынаох).
 : constraint-OK-fallout-<Tense/Mood/Conv>  ( -- f )
   slots( <Tense/Mood/Conv> <Ptcl₂> )-full?
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT
@@ -814,10 +823,14 @@ require khakas/slotnames.fs
   AND                                                  ||
   <Poss₂> form-slot t~/ {consonant}
   ;
-: constraint-OK-fallout-<Case₂>  ( -- f )
+: constraint-OK-fallout-<Case₂>-poss  ( -- f )
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT  &&
     slots( <Case₂> <Ptcl₃> )-full?  ||
     <Ptcl₃> form-slot-flags untransformed-fallout-OK AND NOT
+  ;
+: constraint-OK-fallout-<Case₂>  ( -- f )
+  <Case₂> form-slot-flags untransformed-fallout-confluence AND NOT ||
+  constraint-OK-fallout-<Case₂>-poss
   ;
 
 : constraint-V+Acc  ( -- f )

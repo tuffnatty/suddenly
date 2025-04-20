@@ -433,9 +433,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       \ Simple declension
       right-context( constraint-29 )
         form" Gen НЫң"
-        right-context( constraint-OK-fallout-<Case₂> )
+        filters( constraint-OK-fallout-<Case₂> )
           form" Dat ГА"
-        right-context-end
+        filters-end
         form" Acc НЫ"
         form" AccDial дЫ"
         form" InstrDial ПАң"
@@ -460,10 +460,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       \ Possessive declension
       right-context( constraint-29 )
         form" Gen нЫң"
-        right-context( constraint-OK-fallout-<Case₂> )
+        right-context( constraint-OK-fallout-<Case₂>-poss )
           form" Dat (н)А"
+	right-context-end
+        filters( constraint-OK-fallout-<Case₂> )
           form" DatDial (н)ГА"
-        right-context-end
+        filters-end
         filters( constraint-V+Acc )
           form" Acc н"
         filter-else
@@ -590,6 +592,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   <this> slot-full!
 
   flag-with Ass₃  form" Ass ОК"
+  filters( constraint-40 )
+    flag-with Ass₃  form" AssDial ох"
+  filters-end
 
   filters( constraint-23 )
     flag-with Neg7|Foc  form" Foc ТЫр"
