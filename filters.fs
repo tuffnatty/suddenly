@@ -91,6 +91,7 @@ debug-mode? [IF]
 [THEN]
 
 
+\ 1 TO debug-mode?
 : filters-check  ( stem -- stem f )
   \." hypothesis:  " DUP .stem-single
   \."  affixes:    " formform .dstack-enum cr
@@ -114,3 +115,4 @@ debug-mode? [IF]
   REPEAT DROP TRUE
   \." " cr ." Filters check complete." cr
   ;
+\ 0 TO debug-mode?

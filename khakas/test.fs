@@ -56,7 +56,7 @@ FALSE VALUE expect-headword?
       \." checking " formform .dstack ."  against " pattern-rest TYPE ." :" CR
       0 BEGIN DUP n-slots <= WHILE ( n )
         DUP IF DUP formform formstack-slot ELSE $0. THEN ( n addr u )
-        \." checking " 2DUP TYPE ."  against " pattern-rest TYPE CR
+        \." [slot " 2 PICK . ." ] checking " 2DUP TYPE ."  against " pattern-rest TYPE CR
         ?DUP-0=-IF
             \." minus" CR
             DROP                          ( n )
@@ -74,19 +74,29 @@ FALSE VALUE expect-headword?
               THEN THEN
             THEN
         ELSE
-          pattern-rest string-length 0= IF 2DROP DROP EXIT THEN
+          pattern-rest string-length 0= IF
+            \." failed" ~~ CR
+	    2DROP DROP EXIT
+	  THEN
           pattern-rest  [CHAR] +  SCAN  { D: pattern-next }
           pattern-next string-addr  pattern-rest string-addr  -  { chunk-len }
           pattern-rest chunk-len left-slice STR= IF  ( n )
             pattern-next string-length 0> TO plusfound
             pattern-next plusfound IF 1 /STRING THEN TO pattern-rest
-          ELSE DROP EXIT THEN
+            \." match" CR
+          ELSE
+            \." failed" ~~ CR
+	    DROP EXIT
+	  THEN
         THEN
         1+
       REPEAT
       DROP
       pattern-rest string-length 0= IF
         expected-found 1+ TO expected-found
+        \." Updating expected-found to " expected-found . CR
+      ELSE
+        \." Keeping expected-found at " expected-found . CR
       THEN
     THEN
   THEN
@@ -101,7 +111,9 @@ FALSE VALUE expect-headword?
   0 TO expected-found
   expect-headword? IF ['] check-result-headword ELSE ['] check-result THEN IS yield-stem
   ['] noop IS debug-bye
-  wordform-buffer parse-khak expected-found 0>
+  wordform-buffer parse-khak
+  \." parse-test: After test, expected-found is " expected-found . CR
+  expected-found 0>
   FALSE TO expect-headword? ;
 
 :+ test-error
