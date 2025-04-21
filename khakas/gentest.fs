@@ -8,6 +8,8 @@ T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
 T{ S" азах+ым+ай"		S" азаамай"		parse-test -> TRUE }T
 T{ S" азыра+ах+чат+ха+м"	S" азырихчатхам"	parse-test -> TRUE }T
+T{ S" айна+зы+ох"		S" айназох"		parse-test -> TRUE }T  \ #243
+T{ S" айна+за+ох"		S" айназох"		parse-test -> FALSE }T  \ #243
 T{ S" акел+ер+ге"		S" акелерге"		parse-test -> TRUE }T
 T{ S" алкоголик+ке"		S" алкоголикке"		parse-test -> TRUE }T
 T{ S" ал+алыс"			S" алалыс"		parse-test -> TRUE }T

@@ -790,7 +790,10 @@ require khakas/slotnames.fs
 \ стягивается: хызох < хыс+ох, но не < хыс-ы-ох. Показатель
 \ деепричастия на гласную не стягивается: Инейлерін тойға алаох
 \ килгеннер ‘жен своих на свадьбу взяв тоже, приехали’ (сказка
-\ Атығӌы Парачап). Также не стягивается гласная дательного
+\ Атығӌы Парачап). Диалектные показатели аллатива СА, САрЫ,
+\ делибератива ДАңАрЫ не стягиваются: айназох < айна-зы-ох
+\ ‘черт-3pos-Ass’,  *< айна-за-ох ‘черт-AllDial-Ass’.
+\ Также не стягивается гласная дательного
 \ падежа при отсутствии фонетически выраженной согласной Г -
 \ т.е. после основ на Г, ң и гласные (кимееох, суғаох) и в
 \ посессивном склонении (адымаох, адынаох).
@@ -823,14 +826,14 @@ require khakas/slotnames.fs
   AND                                                  ||
   <Poss₂> form-slot t~/ {consonant}
   ;
-: constraint-OK-fallout-<Case₂>-poss  ( -- f )
+: constraint-OK-fallout-<Case₂>  ( -- f )
   <Ptcl₂> form-slot-flags untransformed-fallout-OK AND NOT  &&
     slots( <Case₂> <Ptcl₃> )-full?  ||
     <Ptcl₃> form-slot-flags untransformed-fallout-OK AND NOT
   ;
-: constraint-OK-fallout-<Case₂>  ( -- f )
+: constraint-OK-fallout-<Case₂>-G  ( -- f )
   <Case₂> form-slot-flags untransformed-fallout-confluence AND NOT ||
-  constraint-OK-fallout-<Case₂>-poss
+  constraint-OK-fallout-<Case₂>
   ;
 
 : constraint-V+Acc  ( -- f )

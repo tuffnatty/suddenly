@@ -433,7 +433,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       \ Simple declension
       right-context( constraint-29 )
         form" Gen НЫң"
-        filters( constraint-OK-fallout-<Case₂> )
+        filters( constraint-OK-fallout-<Case₂>-G )
           form" Dat ГА"
         filters-end
         form" Acc НЫ"
@@ -442,8 +442,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" InstrDial ПлАң"
         filters( constraint-35 )
           form" All САр"
-          form" AllDial1 СА"
-          form" AllDial2 САрЫ"
+          right-context( constraint-OK-fallout-<Case₂> )
+            form" AllDial1 СА"
+            form" AllDial2 САрЫ"
+          right-context-end
         filters-end
         form" Prol ЧА"
       right-context-end
@@ -451,7 +453,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Abl ДАң"
       form" AblDial нАң"
       form" Delib ДАңАр"
-      form" DelibDial ДАңАрЫ"
+      right-context( constraint-OK-fallout-<Case₂> )
+        form" DelibDial ДАңАрЫ"
+      right-context-end
       form" Comp ТАГ"
       filters( constraint-30 )
         form" AblArch тЫн"
@@ -460,10 +464,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       \ Possessive declension
       right-context( constraint-29 )
         form" Gen нЫң"
-        right-context( constraint-OK-fallout-<Case₂>-poss )
+        right-context( constraint-OK-fallout-<Case₂> )
           form" Dat (н)А"
 	right-context-end
-        filters( constraint-OK-fallout-<Case₂> )
+        filters( constraint-OK-fallout-<Case₂>-G )
           form" DatDial (н)ГА"
         filters-end
         filters( constraint-V+Acc )
@@ -479,15 +483,19 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" InstrDial бАң"
         filters( constraint-35 )
           form" All (н)САр"
-          form" AllDial1 (н)СА"
-          form" AllDial2 (н)САрЫ"
+          right-context( constraint-OK-fallout-<Case₂> )
+            form" AllDial1 (н)СА"
+            form" AllDial2 (н)САрЫ"
+	  right-context-end
         filters-end
         form" Prol (н)ЧА"
       right-context-end
       form" Loc (н)ТА"
       form" Abl нАң"
       form" Delib нАңАр"
-      form" DelibDial нАңАрЫ"
+      right-context( constraint-OK-fallout-<Case₂> )
+        form" DelibDial нАңАрЫ"
+      right-context-end
       form" Comp (н)ТАГ"
       right-context( constraint-33 )
         form" Voc Ай"
