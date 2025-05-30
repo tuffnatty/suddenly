@@ -978,7 +978,7 @@ TIMER: +unenvoice-affix
         left-part guess-make
         guess-yield
       ELSE
-        affix t~/ 0 IF
+        affix t~/ ∅︀ IF
           s guess-make
           guess-yield
         THEN

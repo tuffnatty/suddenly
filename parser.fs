@@ -298,7 +298,7 @@ DEFER yield-stem  ( addr u stem -- addr u )
 
     unfallout
 
-    DUP  affix string-length >  affix t~/ 0  OR  IF
+    DUP  affix string-length >  affix t~/ ∅︀  OR  IF
       \\." " indent ." Unchanged guess: " 2DUP TYPE .s CR
       unjoin
       \\." " indent ." After after-fallout: " .s CR

@@ -78,7 +78,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     filters-end
     right-context( constraint-4.1₀-right )
       filters( constraint-4.1₀ )
-        flag-with NF₀ form" NF 0︀"
+        flag-with NF₀ form" NF ∅︀"
       filters-end
     right-context-end
     right-context( constraint-11.1 constraint-10 )
@@ -576,7 +576,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" ImpInclPl (А)АңАр"
         form" ImpInclPlDial ААлАр"
       flag Imp.Incl  flag-clear
-      form" Imp.2sg 0︀"
+      form" Imp.2sg ∅︀"
       form" Imp.2pl (Ы)ңАр"
       form" Imp.3 СЫн"
     flag Imp  flag-clear
