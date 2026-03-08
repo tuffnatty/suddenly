@@ -12,11 +12,13 @@ language-require phonetics.fs
 [:  ( addr u -- addr u table-index )
   2DUP last-sound-ptr sclass-cv ;] CONSTANT rule-cv
 
-: last-sound-except-ь-ptr  ( addr u -- addr' )
-  last-sound-ptr  DUP cyr "ь" STR=  IF XCHAR- THEN ;
+: last-sound-except-ь-ptr  ( addr u -- addr'|0 )
+  last-sound-ptr  ?DUP-IF  ( addr' )
+    DUP cyr "ь" STR=  IF XCHAR- THEN
+  ELSE 0 THEN ;
 
-: last-sound-except-ь  ( addr u -- xc )
-  last-sound-except-ь-ptr XC@ ;
+: last-sound-except-ь  ( addr u -- xc|0 )
+  last-sound-except-ь-ptr ?DUP-IF XC@ ELSE 0 THEN ;
 
 : rclass-fb ( wid -- class )
   back-vowel = IF cl-back ELSE cl-front THEN ;

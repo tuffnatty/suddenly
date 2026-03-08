@@ -448,8 +448,15 @@ end-public-class Untransformer
     THEN THEN
     >R  s R@ /STRING  TO fallout-rslice  R>
     wordform-addr OVER  ( fallout-start fallout-pos  D: fallout-lslice )
-    2DUP last-char-vowel-row  TO wordform-row
-    2DUP string-end @xc-size +  polysyllabic?  TO stem-polysyllabic?  ( fallout-start fallout-pos )
+    \ \." fallout-lslice " 2dup . . 2dup type cr
+    2DUP string-length IF
+      2DUP last-char-vowel-row  TO wordform-row
+      2DUP string-end @xc-size +  polysyllabic?  TO stem-polysyllabic?  ( fallout-start fallout-pos )
+    ELSE
+      front-vowel TO wordform-row
+      FALSE TO stem-polysyllabic?
+      2DROP  ( fallout-start fallout-pos )
+    THEN
     TO fallout-pos   TO fallout-start  TRUE  ( -- f )
   ELSE FALSE THEN ;
 

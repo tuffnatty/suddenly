@@ -215,8 +215,8 @@ VARIABLE sstr-last
 : second-sound-ptr  ( addr u -- ptr )
   ]] string-addr cyr+ [[ ; IMMEDIATE
 
-: last-sound-ptr  ( addr u -- ptr )
-  ]] string-end XCHAR- [[ ; IMMEDIATE
+: last-sound-ptr  ( addr u -- ptr|0 )
+  ]] ?DUP-IF string-end XCHAR- ELSE DROP 0 THEN [[ ; IMMEDIATE
 
 : prev-sound-ptr  ( addr u -- ptr )
   ]] string-end XCHAR- XCHAR- [[ ; IMMEDIATE

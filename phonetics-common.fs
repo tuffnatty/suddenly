@@ -13,8 +13,10 @@ require minire.fs
   DUP cyr t~/ {nasal} IF DROP cl-nasal
   ELSE cyr t~/ {unvoiced} IF cl-unvoiced
   ELSE cl-voiced THEN THEN ;
-: sclass-vu  ( addr -- class )
-  cyr t~/ {unvoiced} IF cl-unvoiced ELSE cl-voiced THEN ;
+: sclass-vu  ( addr|0 -- class|0 )
+  ?DUP-IF
+    cyr t~/ {unvoiced} IF cl-unvoiced ELSE cl-voiced THEN
+  ELSE 0 THEN ;
 
 0 CONSTANT cl-back
 1 CONSTANT cl-front
