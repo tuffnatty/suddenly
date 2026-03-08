@@ -149,6 +149,8 @@ T{ S" пар+аалар"		S" параалар"		parse-test -> TRUE }T  \ #242
 T{ S" пар+аах"			S" параах"		parse-test -> TRUE }T  \ #242
 T{ S" пар+ат+аң"		S" парадаң"		parse-test -> FALSE }T  \ #228
 T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
+T{ S" пар+аң"			S" параң"		parse-test -> TRUE }T  \ #241
+T{ S" пар+аңар"			S" параңар"		parse-test -> TRUE }T  \ #241
 T{ S" пар+ар+бын"		S" парарбын"		parse-test -> TRUE }T
 \ диал. T{ S" пар+а+ға"		S" параға"		parse-test -> TRUE }T
 T{ S" пар+ады+м"		S" парадым"		parse-test -> TRUE }T
