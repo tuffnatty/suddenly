@@ -86,10 +86,12 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
     right-context-end
   right-context-end
   right-context( constraint-4sh constraint-10 )
+    <this> slot-full!
     form" Neg.NFSh ПААн"
   right-context-end
 
   right-context( constraint-38-Dur1 )
+    <this> slot-full!
     filters( constraint-7 )
       right-context( constraint-8 )
         right-context( constraint-8.1ᵢ )

@@ -411,10 +411,12 @@ require khakas/slotnames.fs
 : constraint-19  ( -- f )
   verb? &&
   slots[ <Tense/Mood/Conv> <Person> )-empty? &&
-  slots( <Voice> <Tense/Mood/Conv> )-empty?
-  || slots( <Perf> <Tense/Mood/Conv> )-empty?
-  || <Neg/Gener> slot-empty?
-  || flag Neg  flag-is?
+  flag Neg  flag-is?
+  || <Neg/Gener> slot-empty? &&
+     <Dur> slot-full?
+     || <Prosp> slot-empty? &&
+        <Perf> slot-full?
+        || slots( <Voice> <Perf> )-empty?
   ;
 
 \ 20. К словам с пометой Nomen присоединяются полные
