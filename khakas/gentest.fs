@@ -35,8 +35,10 @@ T{ S" грузчик+тер"		S" грузчиктер"		parse-test -> TRUE }T
 T{ S" заочно+ға"		S" заочнаа"	        parse-test -> TRUE }T
 T{ S" заочно+ға"		S" заочноға"	        parse-test -> TRUE }T
 T{ S" завод+тар"		S" заводтар"		parse-test -> TRUE }T
+T{ S" ин+∅︀"			S" ин"			parse-test -> TRUE }T	\ #247
 T{ S" иней+лер+і+мең"		S" инейлерімең"		parse-test -> TRUE }T
 T{ S" ин+еліс"			S" инеліс"		parse-test -> TRUE }T
+T{ S" ин+∅︀+че"			S" инче"		parse-test -> TRUE }T	\ #247
 T{ S" ит+і+бең"			S" идібең"		parse-test -> TRUE }T
 T{ S" ирке+м+ей"		S" иркемей"		parse-test -> TRUE }T
 T{ S" ирін+і"			S" ирні"		parse-test -> TRUE }T

@@ -323,6 +323,11 @@ DEFER yield-stem  ( addr u stem -- addr u )
     affix string-length IF
       DUP affix string-length >= IF
         affix rule I process-single-representation
+      ELSE
+        affix t~/ ∅︀ IF
+          \ stem is shorter than ∅︀ (4 bytes), bug #247
+          affix rule I process-single-representation
+	THEN
       THEN
     THEN
   LOOP
