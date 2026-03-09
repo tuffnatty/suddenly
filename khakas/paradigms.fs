@@ -17,7 +17,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   \ Навесим глобальные фильтры на 1-ю позицию с любым
   \ (в том числе нулевым!) аффиксом
   right-context( constraint-(СА|ТЫ)ңАр-fallout
-                 constraint-VңV-fallout )
+                 constraint-VңV-fallout-right )
     filters( constraint-0
              constraint-1
              constraint-2
@@ -27,6 +27,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
              constraint-non-envoiced-rus
              constraint-V[кх]V-fallout
              constraint-VVГV-fallout
+             constraint-VңV-fallout
              constraint-CCC-fallout
              constraint-broken-fb-harmony-allow
              constraint-broken-fb-harmony-require

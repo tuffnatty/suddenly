@@ -400,10 +400,13 @@ T{ S" чит+іп"			S" чидіп"		parse-test -> TRUE }T  \ #209
 T{ S" чіт+іс"			S" чідіс"		parse-test -> FALSE }T  \ #231 #234
 T{ S" чіт+іс+∅︀"			S" чідіс"		parse-test -> TRUE }T  \ #231 #234
 T{ S" чі+гелек"			S" чеелек"		parse-test -> TRUE }T
+T{ S" чиң+іп"			S" чиип"		parse-test -> FALSE }T  \ #245
 T{ S" чилін+і"			S" чилні"		parse-test -> TRUE }T
 T{ S" чі+е+м+дір"		S" чимдір"		parse-test -> TRUE }T
 T{ S" чиң+ер"			S" чиңер"		parse-test -> TRUE }T
-T{ S" чиң+іп"			S" чиип"		parse-test -> TRUE }T
+T{ S" чиң+іп"			S" чиңіп"		parse-test -> TRUE }T  \ #245
+T{ S" чиң+∅︀+че"			S" чиңче"		parse-test -> TRUE }T  \ #245
+T{ S" чиң+∅︀+чет+кен+і+н"	S" чиңчеткенін"		parse-test -> TRUE }T  \ #245
 T{ S" чир-суғ+ы+н"		S" чир-суун"		parse-test -> TRUE }T
 T{ S" чілің+і"			S" чілии"		parse-test -> TRUE }T
 T{ S" чі+п+ле+іс+еді"		S" чіплеізеді"		parse-test -> TRUE }T

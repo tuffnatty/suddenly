@@ -13,6 +13,10 @@ require khakas/slotnames.fs
   verb? &&
     paradigm-dict @ dict-headword COUNT t~/ истерге|систерге ;
 
+: is-чиң?  ( -- f )
+  verb? &&
+    paradigm-dict @ dict-headword COUNT t~/ чиңерге ;
+
 \ 0. Слова с пометой INVAR (не Nomen и не Verbum) никаких
 \ показателей не присоединяют! Слова с пометой Invar1
 \ присоединяют Ptcl3 ОК.
@@ -78,7 +82,8 @@ require khakas/slotnames.fs
 
 \ 4.1. NF выбирает алломорф (Ы)п, если:
 \ 1) он непосредственно следует за основой, которая оканчивается
-\    на (выпадающие, см. ниже) п, г, ғ или ӊ;
+\    на (выпадающие, см. ниже) п, г, ғ или ӊ (NB кроме чиӊ
+\    ‘побеждать’, ср. чиӊче ‘побеждает’);
 \ 2) он непосредственно следует за основой или аффиксом,
 \    оканчивающимися на гласную;
 \ 3) непосредственно за ним следует Ass ОК/AssDial ох или Cont LA
@@ -101,6 +106,7 @@ require khakas/slotnames.fs
 : constraint-4.1₀  ( -- f )
   <NF,Dur1> form-slot-xc-at-left consonant?
   && <NF,Dur1> form-slot-xc-at-left fallout-short? NOT
+     || is-чиң?  \ #245
   ;
 : constraint-4.1₀-right  ( -- f )
   flag Ass₁  flag-empty?
@@ -699,6 +705,11 @@ require khakas/slotnames.fs
 \ Запрещенные контексты для выпадения VңV
 : constraint-VңV-fallout  ( -- f )
   \ флаг выпадения конечного ң находится в слоте справа
+  first-form-flag untransformed-fallout-VңV AND IF is-чиң? NOT ELSE TRUE THEN  \ #245
+  ;
+: constraint-VңV-fallout-right  ( -- f )
+  \ флаг выпадения конечного ң находится в слоте справа
+  first-form-flag untransformed-fallout-VңV AND IF is-чиң? NOT ELSE TRUE THEN &&  \ #245
   <Poss₁> slot-empty?  <Poss₁> untransformed-fallout-VңV next-form-flag-is? NOT  OR  &&
   <Poss₂> slot-empty?  <Poss₂> untransformed-fallout-VңV next-form-flag-is? NOT  OR
   ;
