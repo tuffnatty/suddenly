@@ -438,6 +438,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         form" Gen НЫң"
         filters( constraint-OK-fallout-<Case₂>-G )
           form" Dat ГА"
+	  filters( constraint-Dat-rus )
+            form" Dat ка"
+	  filters-end
         filters-end
         form" Acc НЫ"
         form" AccDial дЫ"

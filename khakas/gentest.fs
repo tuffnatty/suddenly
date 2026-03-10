@@ -226,6 +226,8 @@ T{ S" пол+∅︀+тыр+ох+чых"		S" полтырохчых"		parse-test 
 T{ S" пол+∅︀+чат+сын"		S" полчатсын"		parse-test DROP expected-found -> 2 }T  \ #233
 T{ S" пӧрік+ім"			S" пӧриим"		parse-test -> TRUE }T
 T{ S" пӧрік+ім"			S" пӧрігім"		parse-test -> TRUE }T
+T{ S" потолок+ка"		S" потолокка"		parse-test -> TRUE }T  \ #238
+T{ S" потолок+ха"		S" потолокха"		parse-test -> TRUE }T  \ #238
 T{ S" пуғ+ы"			S" пуу"			parse-test -> TRUE }T
 T{ S" пу+ох"			S" пуох"		parse-test -> TRUE }T
 T{ S" пурун+ы"			S" пурны"		parse-test -> TRUE }T

@@ -855,6 +855,17 @@ require khakas/slotnames.fs
 : constraint-DistrDial-short  ( -- f )
   <Distr> form-slot-vowel-at-left? NOT ;
 
+\ Разрешенные контексты для Dat ка
+\ Основа, предшедствующая аффиксу, имеет пометку rus и
+\ заканчивается на -ак / -ок / -ук / -ык / -як / -ёк / -юк /
+\ -аг / -ог / -уг / -яг / -юг/. Такая основа также может
+\ присоединять Dat ха по регулярным правилам морфонологии.
+: constraint-Dat-rus  ( -- f )
+  dictflag-rus dictflag-is? &&
+  slots[ 1 <Case₂> )-empty? &&
+  stem-prev-sound-ptr 2cyrs t~/ ак|ок|ук|ык|як|ёк|юк|аг|ог|уг|яг|юг
+  ;
+
 : constraint-broken-vu-harmony  ( -- f )
   harmony-vu-broken any-form-flag-is? NOT
   || dictflag-rus dictflag-is?
