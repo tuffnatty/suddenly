@@ -13,6 +13,9 @@ require khakas/slotnames.fs
   verb? &&
     paradigm-dict @ dict-headword COUNT t~/ истерге|систерге ;
 
+: is-стих/цех?  ( -- f )
+  paradigm-dict @ dict-headword COUNT t~/ стих|цех ;
+
 : is-чиң?  ( -- f )
   verb? &&
     paradigm-dict @ dict-headword COUNT t~/ чиңерге ;
@@ -877,9 +880,10 @@ require khakas/slotnames.fs
 : constraint-broken-fb-harmony-require  ( -- f )
   harmony-fb-broken any-form-flag-is?
   || dictflag-rus dictflag-is? NOT
-  || stem-last-char-vowel-row front-vowel =
-  || stem-last-vowel [CHAR] и <>
   || slots[ 1 <Ptcl₃> ]-empty?
+  || is-стих/цех? NOT &&
+     stem-last-char-vowel-row front-vowel =
+     || stem-last-vowel [CHAR] и <>
   ;
 
 : constraint-VA>и-fallout-with-slot  { n-slot -- f }

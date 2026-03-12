@@ -229,6 +229,20 @@ DEFER yield-stem  ( addr u stem -- addr u )
   buffer
   ;
 
+: fix-стих/цех-harmony  { D: buffer -- D: buffer }
+  buffer string-end { ptr }
+  BEGIN  ptr  buffer string-addr  > WHILE
+    ptr XCHAR- TO ptr
+    ptr XC@ CASE
+      [CHAR] е OF  [CHAR] а ptr XC!  FALSE  ENDOF
+      [CHAR] и OF  [CHAR] ы ptr XC!  FALSE  ENDOF
+      TRUE
+    ENDCASE WHILE
+  REPEAT THEN
+  \." " indent ." Correcting FB harmony to " buffer TYPE
+  buffer
+  ;
+
 : try-fix  { harmony-ok? D: left-part slot-flag rule n-rule xt: patch flag -- slot-flag harmony-ok? }
   harmony-ok? NOT IF
     PAD left-part string-length { D: buffer }
@@ -250,17 +264,22 @@ DEFER yield-stem  ( addr u stem -- addr u )
   harmony-ok? NOT IF
     \." " indent ." slot-flag " slot-flag . cr
     \ slot-flag  AND  0= IF  \ what was it intendend for?
+      left-part t~/ стих|цех  { can-fix-стих/цех-harmony? }
       left-part last-vowel [CHAR] и = { can-fix-fb-harmony? }
       left-part last-sound-except-ь-ptr cyr t~/ {voiced} { can-unvoice? }
       can-unvoice? IF
         harmony-ok? left-part slot-flag rule n-rule  ['] unvoice-last  harmony-vu-broken try-fix TO harmony-ok? TO slot-flag
       THEN
-      can-fix-fb-harmony? IF
-        harmony-ok? left-part slot-flag rule n-rule  ['] fix-fb-harmony  harmony-fb-broken try-fix TO harmony-ok? TO slot-flag
+      can-fix-стих/цех-harmony? IF
+        harmony-ok? left-part slot-flag rule n-rule  ['] fix-стих/цех-harmony  harmony-fb-broken try-fix TO harmony-ok? TO slot-flag
+      ELSE
+        can-fix-fb-harmony? IF
+          harmony-ok? left-part slot-flag rule n-rule  ['] fix-fb-harmony  harmony-fb-broken try-fix TO harmony-ok? TO slot-flag
+        THEN
+        can-fix-fb-harmony? IF can-unvoice? IF
+          harmony-ok? left-part slot-flag rule n-rule  [: fix-fb-harmony unvoice-last ;]  harmony-vu-broken harmony-fb-broken OR  try-fix TO harmony-ok? TO slot-flag
+        THEN THEN
       THEN
-      can-fix-fb-harmony? IF can-unvoice? IF
-        harmony-ok? left-part slot-flag rule n-rule  [: fix-fb-harmony unvoice-last ;]  harmony-vu-broken harmony-fb-broken OR  try-fix TO harmony-ok? TO slot-flag
-      THEN THEN
     \ THEN
   THEN
   harmony-ok? IF

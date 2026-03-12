@@ -390,6 +390,8 @@ T{ S" хыс+тар+ы+н"		S" хыстарын"		parse-test -> TRUE }T
 T{ S" хыс+тар+ың+ни"		S" хыстарыңни"		parse-test -> TRUE }T
 T{ S" хыс+ы+м"			S" хызым"		parse-test -> FALSE }T
 T{ S" хыс+ым"			S" хызым"		parse-test -> TRUE }T
+T{ S" цех+ке"			S" цехке"		parse-test -> FALSE }T  \ #236
+T{ S" цех+ха"			S" цехха"		parse-test -> TRUE }T  \ #236
 T{ S" чазы+ға"			S" чазаа"		parse-test -> TRUE }T
 T{ S" чайлағ+ы"			S" чайлаа"		parse-test -> TRUE }T
 T{ S" чарат+ыңар"		S" чарадыңар"		parse-test -> TRUE }T  \ #228
