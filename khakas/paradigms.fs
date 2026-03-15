@@ -102,6 +102,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
           flag-with Dur1@full   form" Dur1 ир"
         right-context-end
         form" Dur1Kyz Ат"
+        form" Dur1Kyz ААт"
       right-context-end
       right-context( constraint-8sag )
         form" Dur1Sag ит"
@@ -184,8 +185,10 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
   right-context( constraint-14 )
     filters( constraint-VA>и-fallout )
       flag-with Gener@full     form" Gener АдЫр"
+      flag-with Gener@full     form" Gener ААдЫр"
       right-context( constraint-14.1 )
         flag-with Gener@short  form" Gener АдЫ"
+        flag-with Gener@short  form" Gener ААдЫ"
       right-context-end
     filters-end
   right-context-end

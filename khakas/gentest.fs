@@ -141,12 +141,14 @@ T{ S" пала+баң"			S" палабаң"		parse-test -> TRUE }T
 T{ S" пала+блаң"		S" палаблаң"		parse-test -> TRUE }T
 T{ S" пала+маң"			S" паламаң"		parse-test -> TRUE }T
 T{ S" палты+мнаң"		S" палтымнаң"		parse-test -> TRUE }T
+T{ S" пар+аадыр"		S" параадыр"		parse-test -> TRUE }T  \ #242
 T{ S" параан"			S" параан"		parse-test -> TRUE }T
 T{ S" пара+ң+ы+н"		S" параан"		parse-test -> FALSE }T
 T{ S" пар+и+ған"		S" параан"		parse-test -> FALSE }T
 T{ S" пар+ааң"			S" парааң"		parse-test -> TRUE }T  \ #241
 T{ S" пар+ааңар"		S" парааңар"		parse-test -> TRUE }T  \ #241
 T{ S" пар+аалар"		S" параалар"		parse-test -> TRUE }T  \ #242
+T{ S" пар+аат+хан"		S" параатхан"		parse-test -> TRUE }T  \ #242
 T{ S" пар+аах"			S" параах"		parse-test -> TRUE }T  \ #242
 T{ S" пар+ат+аң"		S" парадаң"		parse-test -> FALSE }T  \ #228
 T{ S" пар+а+м"			S" парам"		parse-test -> TRUE }T
