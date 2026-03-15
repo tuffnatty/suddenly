@@ -288,6 +288,9 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
           form" CvA А"
         right-context-end
       filters-end
+      filters( constraint-41 )
+        form" CvASag и"
+      filters-end
     flag converbs flag-clear
   right-context-end
 

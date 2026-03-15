@@ -6,6 +6,9 @@ require khakas/slotnames.fs
 : is-пар/кил?  ( -- f )
   paradigm-stems @  [: strlist-get t~/ пар|апар|кил ;] list-any? ;
 
+: is-пар/пол?  ( -- f )
+  paradigm-stems @  [: strlist-get t~/ пар|пол ;] list-any? ;
+
 : is-personal-pronoun?  ( -- f )
   paradigm-stem 2@  [: strlist-get t~/ мин|син|ол|піс|сірер|олар ;] list-any? ;
 
@@ -529,7 +532,7 @@ require khakas/slotnames.fs
   ;
 
 \ 25. После деепричастных показателей позиции <Tense/Mood> (Lim ГАли,
-\ CvP (Ы)П, CvA; CvKac; Neg.Conv и Neg.Conv.Abl) может
+\ CvP (Ы)П, CvA, CvASag, CvKac; Neg.Conv и Neg.Conv.Abl) может
 \ стоять только показатель Ass ОК / AssDial ох из позиции Ptcl3.
 : constraint-25  ( -- f )
   slots( <Tense/Mood/Conv> <Ptcl₃> ]-empty?  ||
@@ -686,6 +689,16 @@ require khakas/slotnames.fs
 \ получает аналогичный разбор с гармонирующим показателем).
 : constraint-40  ( -- f )
   stem-last-char-vowel-row front-vowel =
+  ;
+
+\ 41. Деепричастный показатель CvASag и может присоединяться
+\ только к основам на согласную, за исключением основ пар-
+\ ‘идти’, пол- ‘быть’, а также после Perf -(Ы)бЫс: сарыбызи пир
+: constraint-41  ( -- f )
+  flag Perf  flag-is?  slots( <Perf> <Tense/Mood/Conv> )-empty?  AND
+  || slots[ 1 <Tense/Mood/Conv> )-empty? &&
+     stem-last-sound consonant? &&
+     is-пар/пол? NOT
   ;
 
 \ 42. Заимствования из русского, заканчивающиеся на -к или -г,
