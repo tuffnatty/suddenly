@@ -19,6 +19,14 @@ require khakas/slotnames.fs
 : is-стих/цех?  ( -- f )
   paradigm-dict @ dict-headword COUNT t~/ стих|цех ;
 
+: is-нин?  ( -- f )
+  dictflag-rus dictflag-is? &&
+  nomen? &&
+    paradigm-dict @ dict-headword COUNT  DUP 3 cyrs > IF  ( D: headword )
+      3 cyrs -  +  3 cyrs  t~/ нин                        ( f )
+    ELSE 2DROP FALSE THEN                                 ( 0 )
+  ;
+
 : is-чиң?  ( -- f )
   verb? &&
     paradigm-dict @ dict-headword COUNT t~/ чиңерге ;
@@ -896,9 +904,10 @@ require khakas/slotnames.fs
   || dictflag-rus dictflag-composite OR  dictflag-is?
      && first-form-flag harmony-fb-broken AND 0<> ;
 : constraint-broken-fb-harmony-require  ( -- f )
-  harmony-fb-broken any-form-flag-is?
+  harmony-fb-broken any-form-flag-is? IF is-нин? NOT && TRUE ELSE FALSE THEN
   || dictflag-rus dictflag-is? NOT
   || slots[ 1 <Ptcl₃> ]-empty?
+  || first-form-flag untransformed-fallout-нин AND 0<>
   || is-стих/цех? NOT &&
      stem-last-char-vowel-row front-vowel =
      || stem-last-vowel [CHAR] и <>

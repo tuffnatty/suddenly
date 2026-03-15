@@ -17,22 +17,23 @@ VARIABLE transform-flags
 : transform-performed?  ( flag -- f? )
   transform-flags @ AND ;
 
-%0000000000000001 CONSTANT untransformed-cluster-envoice
-%0000000000000010 CONSTANT untransformed-left-envoice
-%0000000000000100 CONSTANT untransformed-left-envoice-missing
-%0000000000001000 CONSTANT untransformed-fallout
-%0000000000010000 CONSTANT untransformed-fallout-CCC
-%0000000000100000 CONSTANT untransformed-fallout-VГV
-%0000000001000000 CONSTANT untransformed-fallout-VVГV
-%0000000010000000 CONSTANT untransformed-fallout-V[кх]V
-%0000000100000000 CONSTANT untransformed-fallout-VңV
-%0000001000000000 CONSTANT untransformed-fallout-confluence
-%0000010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
-%0000100000000000 CONSTANT untransformed-fallout-OK
-%0001000000000000 CONSTANT untransformed-fallout-VA>и
-%0010000000000000 CONSTANT untransformed-fallout-VVА>VV
-%0100000000000000 CONSTANT harmony-fb-broken
-%1000000000000000 CONSTANT harmony-vu-broken
+%00000000000000001 CONSTANT untransformed-cluster-envoice
+%00000000000000010 CONSTANT untransformed-left-envoice
+%00000000000000100 CONSTANT untransformed-left-envoice-missing
+%00000000000001000 CONSTANT untransformed-fallout
+%00000000000010000 CONSTANT untransformed-fallout-CCC
+%00000000000100000 CONSTANT untransformed-fallout-VГV
+%00000000001000000 CONSTANT untransformed-fallout-VVГV
+%00000000010000000 CONSTANT untransformed-fallout-V[кх]V
+%00000000100000000 CONSTANT untransformed-fallout-VңV
+%00000001000000000 CONSTANT untransformed-fallout-confluence
+%00000010000000000 CONSTANT untransformed-fallout-(СА|ТЫ)ңАр
+%00000100000000000 CONSTANT untransformed-fallout-OK
+%00001000000000000 CONSTANT untransformed-fallout-VA>и
+%00010000000000000 CONSTANT untransformed-fallout-VVА>VV
+%00100000000000000 CONSTANT untransformed-fallout-нин
+%01000000000000000 CONSTANT harmony-fb-broken
+%10000000000000000 CONSTANT harmony-vu-broken
 
 
 : /[ае]($|[бдркх])/  ( D: s -- f )
@@ -341,7 +342,7 @@ end-public-class Untransformer
 :+ predict-fallout-coord  ( -- 0 | fallout-start ofs-into-affix TRUE )
   s string-length affix-len - { affix-pos }
   s string-addr  affix-pos + { fallout-start }
-  \ \." predict-fallout-coord: affix-pos " affix-pos . ."  fallout-start " fallout-start s string-length affix-pos - type cr
+  \ \." predict-fallout-coord: s " s type ."  affix-pos " affix-pos . ."  fallout-start " fallout-start s string-length affix-pos - type cr
   fallout-start C@  good-xchar-start? &&  \ malformed UTF-8
   \ \." predict-fallout-coord: good utf-8" cr
 
@@ -352,12 +353,14 @@ end-public-class Untransformer
 
     affix t~/ г{vowel}|ғ{vowel} IF
       \ (end of form - affix.len (c|уу), 1cyr)
+      \ \." predict-fallout-coord: г found" cr
       fallout-start              cyr   TRUE   EXIT
     THEN
   THEN
 
   \ if u > affix.len
   affix-pos 0> IF
+    \ \." predict-fallout-coord: second part " affix type cr
     affix t~/ {vowel}{vowel} IF  \ e.g улуғ+ла+аачых > улуғлаачых
       \ (end of form - affix.len (улуғл|аачых), 0)
       fallout-start              0     TRUE   EXIT
@@ -367,6 +370,15 @@ end-public-class Untransformer
       \ (end of form - affix.len - 1 (c|уу), 2)
       fallout-start XCHAR-      2cyrs  TRUE   EXIT
     THEN
+
+    affix t~/ нар|нер IF  \ e.g. гражданин+нар > гражданнар, III.3
+      \ \." predict-fallout-coord: нар found s " s type ."  affix " affix type cr
+      s affix string-ends IF
+        \ \." predict-fallout-coord: ннар found" cr
+        fallout-start cyr  fallout-start XCHAR- cyr STR= IF
+	  \ \." predict-fallout-coord: ннар found" cr
+	  fallout-start XCHAR-  3 cyrs  TRUE   EXIT
+    THEN THEN THEN
 
     affix t~/ ңар|ңер IF  \ e.g. пас+са+ңар > пассар
       s  affix +X/STRING  string-ends IF
@@ -741,6 +753,16 @@ end-public-class Untransformer
   \stack-check
   ;
 
+: unfallout-нин  ( -- )
+  \stack-mark
+  affix t~/ нар|нер IF
+    fallout-rslice first-sound  [CHAR] н = IF
+      \ \." unfallout-нин " s TYPE ." +" affix TYPE ." |" cr
+      "н" "и"  unfallout-add-vc
+  THEN THEN
+  \stack-check
+  ;
+
 : unfallout-CCC  ( -- )
   \stack-mark
   affix first-sound { C }
@@ -845,6 +867,15 @@ end-public-class Untransformer
     \\." CCC? " s TYPE ." +" affix TYPE ." |" \.s
     untransformed-fallout-CCC TO flags
     unfallout-CCC
+
+    \ III.3. Упрощение основ на -нин.
+    \ От заимствованных именных основ на -нин множественное
+    \ число образуется следующим образом: гражданин -
+    \ гражданнар, мещанин - мещаннар, армянин - армяннар. Это
+    \ не действует на имена собственные: Щетинин - Щетининнер.
+    untransformed-fallout-нин TO flags
+    unfallout-нин
+
   \stack-check ;
 
 :+ unfallout-all  ( -- )

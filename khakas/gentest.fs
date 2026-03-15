@@ -31,6 +31,9 @@ T{ S" ах+∅︀+чат+аңар"		S" ахчадаңар"		parse-test -> FALSE 
 T{ S" бефстроганов+тар"		S" бефстрогановтар"	parse-test -> TRUE }T  \ #225
 T{ S" ватт+ты"			S" ватты"		parse-test -> TRUE }T
 T{ S" ватт+ы"			S" ватты"		parse-test -> TRUE }T
+T{ S" гражданин+нар"		S" гражданиннар"	parse-test -> FALSE }T  \ #250
+T{ S" гражданин+нер"		S" гражданиннер"	parse-test -> FALSE }T  \ #250
+T{ S" гражданин+нар"		S" гражданнар"		parse-test -> TRUE }T  \ #250
 T{ S" грузчик+тер"		S" грузчиктер"		parse-test -> TRUE }T
 T{ S" заочно+ға"		S" заочнаа"	        parse-test -> TRUE }T
 T{ S" заочно+ға"		S" заочноға"	        parse-test -> TRUE }T
