@@ -688,6 +688,22 @@ require khakas/slotnames.fs
   stem-last-char-vowel-row front-vowel =
   ;
 
+\ 42. Заимствования из русского, заканчивающиеся на -к или -г,
+\ могут присоединять окончание датива -ка: баракка, налогка.
+\ Такая основа также может присоединять Dat ха по регулярным
+\ правилам морфонологии: урокха, геологха.
+\ Или более строгое ограничение из таблицы правил выбора аффиксов:
+\ Основа, предшествующая аффиксу, имеет пометку rus и
+\ заканчивается на -ак / -ок / -ук / -ык / -як / -ёк / -юк /
+\ -аг / -ог / -уг / -яг / -юг/. Такая основа также может
+\ присоединять Dat ха по регулярным правилам морфонологии.
+\ Разрешенные контексты для Dat ка
+: constraint-42  ( -- f )
+  dictflag-rus dictflag-is? &&
+  slots[ 1 <Case₂> )-empty? &&
+  stem-prev-sound-ptr 2cyrs t~/ ак|ок|ук|ык|як|ёк|юк|аг|ог|уг|яг|юг
+  ;
+
 \ Неозвончаемые основы
 : constraint-non-envoiceable-stem  ( -- f )
   first-form-flag untransformed-left-envoice AND NOT  ||
@@ -857,17 +873,6 @@ require khakas/slotnames.fs
 
 : constraint-DistrDial-short  ( -- f )
   <Distr> form-slot-vowel-at-left? NOT ;
-
-\ Разрешенные контексты для Dat ка
-\ Основа, предшедствующая аффиксу, имеет пометку rus и
-\ заканчивается на -ак / -ок / -ук / -ык / -як / -ёк / -юк /
-\ -аг / -ог / -уг / -яг / -юг/. Такая основа также может
-\ присоединять Dat ха по регулярным правилам морфонологии.
-: constraint-Dat-rus  ( -- f )
-  dictflag-rus dictflag-is? &&
-  slots[ 1 <Case₂> )-empty? &&
-  stem-prev-sound-ptr 2cyrs t~/ ак|ок|ук|ык|як|ёк|юк|аг|ог|уг|яг|юг
-  ;
 
 : constraint-broken-vu-harmony  ( -- f )
   harmony-vu-broken any-form-flag-is? NOT
