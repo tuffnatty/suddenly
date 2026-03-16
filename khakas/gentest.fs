@@ -62,7 +62,6 @@ T{ S" ізік+ім"			S" ізігім"		parse-test -> TRUE }T
 T{ S" істі+нде"                 S" істінде" 		parse-test -> TRUE }T
 T{ S" іч+ер+ге"			S" ічерге"		parse-test -> TRUE }T
 T{ S" іч+еліс"			S" ічеліс"		parse-test -> TRUE }T
-T{ S" киле+гедег"		S" килеедег"		parse-test -> TRUE }T
 T{ S" кил"			S" кил"			parse-test -> FALSE }T  \ #234
 T{ S" кил+∅︀"			S" кил"			parse-test DROP expected-found -> 2 }T  \ #234
 T{ S" кил+ге+бін"		S" килгебін"		parse-test -> TRUE }T
@@ -88,6 +87,7 @@ T{ S" кис+∅︀+чет+кен"		S" кисчеткен"		parse-test -> TRUE }
 T{ S" кис+∅︀+чет+ер+ге"		S" кисчедерге"		parse-test -> TRUE }T
 T{ S" кізі+ге"			S" кізее"		parse-test -> TRUE }T
 T{ S" кізі+мнең"		S" кізімнең"		parse-test -> TRUE }T  \ #227
+T{ S" кіле+гедег"		S" кілеедег"		parse-test -> TRUE }T
 T{ S" кіріс+і+нзер+тін"		S" кірізінзертін"	parse-test -> TRUE }T
 T{ S" кіртӧң+ге+ӧк"		S" кіртӧңеӧк"		parse-test -> TRUE }T
 T{ S" кіртӧң+ӧк"		S" кіртӧңӧк"		parse-test -> TRUE }T
