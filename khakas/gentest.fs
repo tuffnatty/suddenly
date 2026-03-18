@@ -291,6 +291,8 @@ T{ S" суғ+ы"			S" суу"			parse-test -> TRUE }T
 T{ S" сӱрдег+і"			S" сӱрдее"		parse-test -> TRUE }T
 T{ S" сурығ+ы"			S" сурии"		parse-test -> TRUE }T
 T{ S" сустал+ып+чат+ып"		S" сусталыпчадып"	parse-test -> TRUE }T
+T{ S" суст+па+∅︀"		S" сустпа"		parse-test -> FALSE }T  \ #246
+T{ S" сустарға"	headword?	S" сусты"		parse-test -> TRUE }T  \ #246
 T{ S" сыда+ӌаң+ы"		S" сыдаӌаа"		parse-test -> TRUE }T
 T{ S" сын+маан+дыр"		S" сынмаандыр"		parse-test -> TRUE }T  \ #188
 T{ S" сын+ма+ған+дыр"		S" сынмаандыр"		parse-test -> FALSE }T  \ #188
