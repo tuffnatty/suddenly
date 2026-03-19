@@ -903,8 +903,16 @@ require khakas/slotnames.fs
   harmony-fb-broken any-form-flag-is? NOT
   || dictflag-rus dictflag-composite OR  dictflag-is?
      && first-form-flag harmony-fb-broken AND 0<> ;
-: constraint-broken-fb-harmony-require  ( -- f )
-  harmony-fb-broken any-form-flag-is? IF is-нин? NOT && TRUE ELSE FALSE THEN
+: constraint-broken-fb-harmony-require  ( -- f )  
+  harmony-fb-broken any-form-flag-is? IF
+    is-нин? IF
+      <Pl₂>    harmony-fb-broken form-flag-is?  slots[ 1 <Pl₂>    )-empty?     <Pl₂> slot-full?  AND AND 
+      <PredPl> harmony-fb-broken form-flag-is?  slots[ 1 <PredPl> )-empty?  <PredPl> slot-full?  AND AND
+      OR IF
+	first-form-flag untransformed-fallout-нин AND &&
+    THEN THEN
+    TRUE
+  ELSE FALSE THEN
   || dictflag-rus dictflag-is? NOT
   || slots[ 1 <Ptcl₃> ]-empty?
   || first-form-flag untransformed-fallout-нин AND 0<>
