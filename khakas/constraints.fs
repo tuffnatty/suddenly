@@ -528,15 +528,19 @@ require khakas/slotnames.fs
 \ залоговым показателям (Pass, Rec, Refl, Caus), Perf (Ы)бЫс,
 \ Dur чАт, чат или к чистой основе слов категории Verbum
 \ (имеющей значение Imp.2sg).
+\ Также он может встретиться в формах условного наклонения на
+\ -СА: ползаңдах ‘если ты являешься’, ӧлчең ползартах ‘хоть бы
+\ вы погибли’.
 : constraint-22  ( -- f )
-  slots( <Person> <Ptcl₃> )-empty?     flag Imp  flag-is?  AND  ||
-  slots( <PredPl> <Ptcl₃> )-empty?    <PredPl> slot-full?  AND  ||
-  slots( <Neg/Gener> <Ptcl₃> )-empty?  flag Neg  flag-is?  AND  ||
-  slots( <Distr> <Ptcl₃> )-empty?  <Distr> slot-full?  AND  ||
-  slots( <Voice> <Ptcl₃> )-empty?  <Voice> slot-full?  AND  ||
-  slots( <Perf> <Ptcl₃> )-empty?  flag Perf  flag-is?  AND  ||
-  slots( <Dur> <Ptcl₃> )-empty?      <Dur> slot-full?  AND  ||
-  slots[ 1 <Ptcl₃> )-empty?  verb?  AND
+  slots( <Person> <Ptcl₃> )-empty?     flag Imp  flag-is?  AND
+  || slots( <PredPl> <Ptcl₃> )-empty?    <PredPl> slot-full?  AND
+  || slots( <Neg/Gener> <Ptcl₃> )-empty?  flag Neg  flag-is?  AND
+  || slots( <Distr> <Ptcl₃> )-empty?  <Distr> slot-full?  AND
+  || slots( <Voice> <Ptcl₃> )-empty?  <Voice> slot-full?  AND
+  || slots( <Perf> <Ptcl₃> )-empty?  flag Perf  flag-is?  AND
+  || slots( <Dur> <Ptcl₃> )-empty?      <Dur> slot-full?  AND
+  || slots[ 1 <Ptcl₃> )-empty?  verb?  AND
+  || flag Cond  flag-is?
   ;
 
 \ 23. Пок-тель Foc может встретиться: а) в словоформах с
