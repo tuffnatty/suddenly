@@ -186,7 +186,7 @@ require khakas/slotnames.fs
 \ 4) Dur1Kyz [А]Ат может стоять перед Gener [А]АдЫр: киледедір
 \ ‘едет (всё еще)’.
 \ Показатель Dur1Sag ит может стоять перед Dur чАт,
-\ Past ГА(н), Cond СА, CvP и PresPtDial чАн.
+\ Past ГА(н), Cond СА, CvP, CvA и PresPtDial чАн.
 : constraint-8  ( -- f )
   slots( <NF,Dur1> <Ptcl₃> ]-empty?
   || slots( <NF,Dur1> <Person> )-empty?  <Person> slot-full?  AND
@@ -199,7 +199,7 @@ require khakas/slotnames.fs
   ;
 : constraint-8sag  ( -- f )
   slots( <NF,Dur1> <Dur> )-empty?  <Dur> slot-full?  AND
-  || slots( <NF,Dur1> <Tense/Mood/Conv> )-empty?  flags( Past Cond CvP PresPtDial ) flag-is? AND
+  || slots( <NF,Dur1> <Tense/Mood/Conv> )-empty?  flags( Past Cond CvP CvA PresPtDial ) flag-is? AND
   ;
 
 \ 8.1. Dur1 в роли видового показателя морфонологически
