@@ -178,11 +178,13 @@ require khakas/slotnames.fs
   is-пар/кил?
   ;
 
-\ 8. Показатели Dur1 и(р) и Dur1Kyz Ат могут стоять:
-\ 1) либо непосредственно в конце словоформы,
+\ 8. Показатели Dur1 и(р) и Dur1Kyz [А]Ат могут стоять:
+\ 1) либо в конце словоформы,
 \ 2) либо непосредственно перед <Person> или <PredPl>,
 \ 3) либо непосредственно перед показателями Past ГА(н), CvP,
 \    CvKac АбАс, Cond СА (позиция <Tense/Mood>).
+\ 4) Dur1Kyz [А]Ат может стоять перед Gener [А]АдЫр: киледедір
+\ ‘едет (всё еще)’.
 \ Показатель Dur1Sag ит может стоять перед Dur чАт,
 \ Past ГА(н), Cond СА, CvP и PresPtDial чАн.
 : constraint-8  ( -- f )
@@ -190,6 +192,10 @@ require khakas/slotnames.fs
   || slots( <NF,Dur1> <Person> )-empty?  <Person> slot-full?  AND
   || slots( <NF,Dur1> <PredPl> )-empty?  <PredPl> slot-full?  AND
   || flags( Past Cond CvKac CvP ) flag-is?  <Neg/Gener> slot-empty?  AND
+  ;
+: constraint-8kyz  ( -- f )
+  constraint-8
+  || slots( <NF,Dur1> <Neg/Gener> )-empty?  flag Gener@full  flag-is?  AND
   ;
 : constraint-8sag  ( -- f )
   slots( <NF,Dur1> <Dur> )-empty?  <Dur> slot-full?  AND

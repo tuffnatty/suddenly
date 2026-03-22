@@ -101,6 +101,8 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
         right-context( constraint-8.1ᵢᵣ )
           flag-with Dur1@full   form" Dur1 ир"
         right-context-end
+      right-context-end
+      right-context( constraint-8kyz )
         form" Dur1Kyz Ат"
         form" Dur1Kyz ААт"
       right-context-end

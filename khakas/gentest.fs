@@ -68,6 +68,8 @@ T{ S" кил"			S" кил"			parse-test -> FALSE }T  \ #234
 T{ S" кил+∅︀"			S" кил"			parse-test DROP expected-found -> 2 }T  \ #234
 T{ S" кил+ге+бін"		S" килгебін"		parse-test -> TRUE }T
 T{ S" кил+ген+ни"		S" килгенни"		parse-test -> TRUE }T
+T{ S" кил+ет+едір"		S" киледедір"		parse-test -> TRUE }T  \ #253
+T{ S" кил+еет+едір"		S" килеедедір"		parse-test -> TRUE }T  \ #253
 T{ S" кил+ер+ім"		S" килерім"		parse-test -> TRUE }T
 T{ S" кил+ет+∅︀"			S" килет"		parse-test -> FALSE }T  \ #234
 T{ S" килін+і"			S" килні"		parse-test -> TRUE }T
