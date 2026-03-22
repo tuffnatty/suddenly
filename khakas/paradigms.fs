@@ -582,6 +582,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
       form" Imp.1sg им"
       form" Imp.1pl ибЫс"
       form" Imp.1plDial АлЫс"
+      form" Imp.1plDial ААлЫс"
       flag Imp.Incl  flag-set
         form" ImpIncl Аң"
         form" ImpIncl (А)Аң"

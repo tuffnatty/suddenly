@@ -152,6 +152,7 @@ T{ S" пар+и+ған"		S" параан"		parse-test -> FALSE }T
 T{ S" пар+ааң"			S" парааң"		parse-test -> TRUE }T  \ #241
 T{ S" пар+ааңар"		S" парааңар"		parse-test -> TRUE }T  \ #241
 T{ S" пар+аалар"		S" параалар"		parse-test -> TRUE }T  \ #242
+T{ S" пар+аалыс"		S" параалыс"		parse-test -> TRUE }T  \ #242
 T{ S" пар+аат+хан"		S" параатхан"		parse-test -> TRUE }T  \ #242
 T{ S" пар+аах"			S" параах"		parse-test -> TRUE }T  \ #242
 T{ S" пар+ат+аң"		S" парадаң"		parse-test -> FALSE }T  \ #228
