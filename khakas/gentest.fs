@@ -326,6 +326,7 @@ T{ S" теп+іп"			S" тееп"		parse-test -> TRUE }T
 T{ S" тетрадь+таң"		S" тетрадьтаң"		parse-test -> TRUE }T
 T{ S" теп+ібіс"			S" теебіс"		parse-test -> TRUE }T
 T{ S" ті+ген"			S" теен"		parse-test -> TRUE }T
+T{ S" ті+ер"			S" тиир"		parse-test -> TRUE }T  \ #256
 T{ S" ті+ер"			S" тир"			parse-test -> TRUE }T
 T{ S" тік+ер"			S" тігер"		parse-test -> TRUE }T
 T{ S" ті+ле"			S" тіле"		parse-test -> FALSE }T  \ #196
@@ -424,6 +425,7 @@ T{ S" чіт+іс"			S" чідіс"		parse-test -> FALSE }T  \ #231 #234
 T{ S" чіт+іс+∅︀"			S" чідіс"		parse-test -> TRUE }T  \ #231 #234
 T{ S" чі+гелек"			S" чеелек"		parse-test -> TRUE }T
 T{ S" чиң+іп"			S" чиип"		parse-test -> FALSE }T  \ #245
+T{ S" чі+ер"			S" чиир"		parse-test -> TRUE }T  \ #256
 T{ S" чилін+і"			S" чилні"		parse-test -> TRUE }T
 T{ S" чі+е+м+дір"		S" чимдір"		parse-test -> TRUE }T
 T{ S" чиң+ер"			S" чиңер"		parse-test -> TRUE }T

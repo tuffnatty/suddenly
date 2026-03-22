@@ -408,7 +408,7 @@ end-public-class Untransformer
   ;
 
 : guess-check  { D: guess-fallout  -- }
-  \\." check:" guess-fallout type ."  affix:" affix type ."  ofs-into:" ofs-into-affix . cr
+  \\." check:" guess-fallout type ."  affix:" affix type ."  ofs-into:" ofs-into-affix . ."  guess: " guess-buffer guess-size TYPE cr
   guess-fallout ofs-into-affix /STRING  affix STR= IF
     \ unjoin affix
     guess-size affix-len - TO guess-size
@@ -707,6 +707,24 @@ end-public-class Untransformer
   \stack-check
   ;
 
+:+ unfallout-іА>ии  ( -- )
+  \stack-mark
+  affix /[ае]($|[бдркх])/ IF
+    \\." affix: " affix type ."  fallout: " fallout-rslice type cr
+    fallout-rslice t~/ ии IF
+      s t~/ тиир|чиир IF
+        untransformed-fallout-VA>и TO flags
+        unfallout-guess-make { D: guess-fallout }
+        "іе" guess-fallout string-addr SWAP CMOVE
+        guess-size cyr - TO guess-size
+	guess-fallout cyr - guess-check
+        untransformed-fallout TO flags
+      THEN
+    THEN
+  THEN
+  \stack-check
+  ;
+
 :+ unfallout-OK  ( -- )
   \stack-mark
   affix t~/ ох|ӧк IF
@@ -788,6 +806,12 @@ end-public-class Untransformer
     \\." vv-Imp.1.Incl-long-and-Simul? " s TYPE ." +" affix TYPE ." |" \.s
     unfallout-vv-Imp.1.Incl-long-and-Simul
 
+    \ II.3. ... При присоединении к глагольным основам чi- ‘есть’, тi-
+    \ ‘сказать’ возможно написание как с кратким, так и с долгим
+    \ и(и): чир / чиир ‘будет есть’, тир / тиир ‘скажет.’
+    \\." іА>ии? " s TYPE ." +" affix TYPE ." |" \.s
+    unfallout-іА>ии
+
     fallout-pos cyr+  TO fallout-pos
     fallout-rslice cyr /STRING  ( D: fallout-rslice )
     stem-polysyllabic? NOT IF 2DUP t~/ {vowel} TO stem-polysyllabic? THEN
@@ -802,8 +826,8 @@ end-public-class Untransformer
     unfallout-vv-Imp.1
 
     \ II.3. А с аллофоном и: В глаголах правила слияния с
-    \ фонетическими преобразованиями для афф. Fut -Ар, Convа
-    \ -А, Convпас A.бАс (диал.), Prosp АК, Iter АдIр. Эти
+    \ фонетическими преобразованиями для афф. Fut -Ар, CvA
+    \ -А, CvKac A.бАс (диал.), Prosp АК, Gener АдЫр. Эти
     \ аффиксы не имеют вариантов, начинающихся на согласную.
     \ При присоединении их к основе на краткую гласную
     \ происходит стяжение двух кратких гласных в нейтральную и
@@ -841,6 +865,7 @@ end-public-class Untransformer
     \ в аффиксе выпадает: тыы + Ар > тыыр.
     \\." VVА>VV? " s TYPE ." +" affix TYPE ." |" \.s
     unfallout-VVА>VV
+
   \stack-check ;
 
 :+ unfallout-consonantaffix  ( -- )
