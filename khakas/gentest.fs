@@ -205,6 +205,7 @@ T{ S" пас+ты+ңар"		S" пастаар"		parse-test -> TRUE }T
 T{ S" пасты+ңар"		S" пастар"		parse-test -> FALSE }T
 T{ S" пас+ы+ды"			S" пазыды"		parse-test -> FALSE }T  \ #221
 T{ S" пасха+лар+ы+ни+наң"	S" пасхаларынинаң"	parse-test -> TRUE }T
+T{ S" піл+бин+іс+кен"		S" пілбиніскен"		parse-test -> TRUE }T  \ #252
 T{ S" піл+бин+чат+хан"		S" пілбинчатхан"	parse-test -> TRUE }T
 T{ S" піл+ер+ге+ӧк"		S" пілергӧк"		parse-test -> TRUE }T  \ #240
 T{ S" піл+ӌең+ің"		S" пілӌеең"		parse-test -> TRUE }T
@@ -226,6 +227,7 @@ T{ S" пол+ба+ған+дыр"		S" полбаандыр"		parse-test -> FALSE 
 T{ S" полбах+ы+н+дыр"		S" полбаандыр"		parse-test -> FALSE }T  \ #220
 T{ S" пол+бас+пыс"		S" полбаспыс"		parse-test -> TRUE }T
 T{ S" пол+бин+ыбыс+хан"		S" полбиныбысхан"	parse-test -> TRUE }T
+T{ S" пол+бин+ыс+хан"		S" полбинысхан"		parse-test -> TRUE }T  \ #252
 T{ S" пол+∅︀+даа+чат"		S" полдаачат"		parse-test -> FALSE }T  \ #234
 T{ S" пол+∅︀+даа+чат+∅︀"		S" полдаачат"		parse-test -> TRUE }T  \ #234
 T{ S" пол+∅︀+даа+чат+са"		S" полдаачатса"		parse-test -> TRUE }T

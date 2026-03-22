@@ -58,7 +58,7 @@ require khakas/slotnames.fs
   || flag participles  flag-is?  slots( <Tense/Mood/Conv> <Pl₁> )-empty?  AND
   ;
 
-\ 3. Показатели позиции 2 (NF) и показатель Perf (Ы)бЫС
+\ 3. Показатели позиции 2 (NF) и показатель Perf -(Ы)бЫС
 \ в пределах одной словоформы встречаются только в
 \ случае заполнения позиции 2 кумулятивным показателем
 \ Neg.NF или если заполнена позиция 3 [тооз-ып-таа-быс-ты-лар
@@ -151,9 +151,11 @@ require khakas/slotnames.fs
 \ a) при наличии Ptcl1 [зачеркнуто: и любого пок-ля времени (позиции
 \ <Tense/Mood/Conv> + Vis ЧЫК + Gener AдЫр + Dur1 и(р) +
 \ Dur1Kyz Ат)]:
-\ б) при диалектном показателе Neg.NFSh ПААн.
+\ б) при диалектном показателе Neg.NFSh ПААн;
+\ в) при литературном показателе Neg.NF: пілбиніскен ‘не узнал’.
 : constraint-5.1  ( -- f )
   flag Neg.NFSh  flag-is?
+  || flag Neg.NF  flag-is?
   || <Ptcl1> slot-full?
      \ && <Tense/Mood/Conv> slot-full?
      \    || <Vis> slot-full?
