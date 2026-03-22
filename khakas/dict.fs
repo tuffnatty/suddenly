@@ -541,7 +541,7 @@
 542 n ай-соо +poss semgloss" вслед"
 543 n ай-суулғын semgloss" шум"
 544 n ай-сым semgloss" тишина"
-545 v айдарға stem айт semgloss" говорить"
+545 v айдарға stem айд stem айт semgloss" говорить"
 546 i1 ай-тӱбен semgloss" очень много"
 547 v айтызарға stem айтыс semgloss" разговаривать"
 548 n ай-тым semgloss" тишина"

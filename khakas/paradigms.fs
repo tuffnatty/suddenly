@@ -33,6 +33,7 @@ VARIABLE slot-stack-here  slot-stack slot-stack-here !
              constraint-broken-fb-harmony-require
              constraint-broken-vu-harmony
              constraint-reduplication
+	     constraint-ayt
              constraint-ist )
       <this> slot-empty!
       form" -nodistr "

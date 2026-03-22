@@ -16,6 +16,10 @@ require khakas/slotnames.fs
   verb? &&
     paradigm-dict @ dict-headword COUNT t~/ истерге|систерге|сустарға ;
 
+: is-айт?  ( -- f )
+  verb? &&
+    paradigm-dict @ dict-headword COUNT t~/ айдарға ;
+
 : is-стих/цех?  ( -- f )
   paradigm-dict @ dict-headword COUNT t~/ стих|цех ;
 
@@ -986,4 +990,10 @@ require khakas/slotnames.fs
   is-ист/сист/суст? NOT ||
   stem-last-sound [CHAR] т =  first-affix first-sound vowel?  AND  ||
   stem-last-sound [CHAR] с =  first-affix first-sound vowel? NOT  AND
+;
+
+: constraint-ayt  ( -- f )
+  is-айт? NOT ||
+  stem-last-sound [CHAR] д =  first-affix first-sound vowel?  AND  ||
+  stem-last-sound [CHAR] т =  first-affix first-sound vowel? NOT  AND
 ;
