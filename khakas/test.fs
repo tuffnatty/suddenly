@@ -116,6 +116,9 @@ FALSE VALUE expect-headword?
   expected-found 0>
   FALSE TO expect-headword? ;
 
+: parse-test-found  ( s1 s2 -- expected-found )
+  parse-test drop expected-found ;
+
 :+ test-error
    ERROR1
    n_failures 1+ TO n_failures
