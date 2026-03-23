@@ -4,6 +4,7 @@ T{ S" аар+лығ+ы"		S" аарлии"		parse-test -> TRUE }T
 T{ S" абылағ+ы"			S" абылаа"		parse-test -> TRUE }T
 T{ S" ағ+ы"			S" аа"			parse-test -> TRUE }T  \ #147
 T{ S" ағ+ы"			S" ағы"			parse-test -> TRUE }T
+T{ S" ат+ар"			S" адар"		parse-test -> TRUE }T  \ #223
 T{ S" ада+а+быс"		S" адибыс"		parse-test -> TRUE }T
 T{ S" ада+ар+быс"		S" адирбыс"		parse-test -> TRUE }T
 T{ S" азах+ым+ай"		S" азаамай"		parse-test -> TRUE }T
@@ -374,6 +375,7 @@ T{ S" фамилия+зы"		S" фамилиязы"		parse-test -> TRUE }T
 T{ S" фамилия+ы"		S" фамилияы"		parse-test -> FALSE }T
 T{ S" финн+нең"			S" финнең"		parse-test -> TRUE }T
 T{ S" финн+нең"			S" финннең"		parse-test -> FALSE }T
+T{ S" хат+ым"			S" хадым"		parse-test-found -> 4 }T  \ #223
 T{ S" хамна"			S" хамна"		parse-test -> FALSE }T  \ #234
 T{ S" хамна+∅︀"			S" хамна"		parse-test -> TRUE }T  \ #234
 \ T{ S" хан-пиг+і"		S" хан-пигі"		parse-test -> TRUE }T

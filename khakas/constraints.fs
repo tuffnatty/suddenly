@@ -742,9 +742,14 @@ require khakas/slotnames.fs
   ;
 
 \ Неозвончаемые основы
+\ I.1.2: Корневая конечная т у некоторых основ (в основном
+\ глагольных) в литературном языке не озвончается: атар (ат)
+\ ‘он будет стрелять’, хатым (хат) ‘моя баба’. У подобных основ
+\ допустимы также и диалектные варианты с озвончением.
 : constraint-non-envoiceable-stem  ( -- f )
-  first-form-flag untransformed-left-envoice AND NOT  ||
-  dictflag-no-envoice dictflag-empty?
+  TRUE  \ TODO: could mark a no-envoice hypothesis as dialectal?
+  \ first-form-flag untransformed-left-envoice AND NOT  ||
+  \ dictflag-no-envoice dictflag-empty?
   ;
 : constraint-non-envoiced-rus  ( -- f )
   first-form-flag untransformed-left-envoice-missing AND NOT  ||
