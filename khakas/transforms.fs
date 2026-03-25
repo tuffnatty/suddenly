@@ -731,12 +731,17 @@ end-public-class Untransformer
     stem-polysyllabic? IF
       s fallout-pos left-slice  last-sound-ptr cyr t~/ {consonant} IF
         untransformed-fallout-OK TO flags
+	\ Reconstruct only the front vowels for -ӧк,
+	\ but both rows for -ох to include AssDial (#257)
         fallout-rslice cyr left-slice { D: V2 }
-        V2 t~/ {back-vowel} IF
-             short-unrounded-back-vowel
-        ELSE short-unrounded-front-vowel THEN sound-each-str { D: V1 }
+        short-unrounded-front-vowel sound-each-str { D: V1 }
           V1 V2 unfallout-add-vv
         sound-next
+        V2 t~/ {back-vowel} IF
+          short-unrounded-back-vowel sound-each-str { D: V1 }
+            V1 V2 unfallout-add-vv
+          sound-next
+	THEN
         untransformed-fallout TO flags
       THEN
     THEN

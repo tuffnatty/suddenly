@@ -421,6 +421,7 @@ T{ S" чарат+ыңар"		S" чарадыңар"		parse-test -> TRUE }T  \ #22
 T{ S" чар+ады+ңар"		S" чарадыңар"		parse-test -> FALSE }T  \ #228
 T{ S" чарын+ы"			S" чарны"		parse-test -> TRUE }T
 T{ S" часка+лығ+ға"		S" часкалыға"		parse-test -> TRUE }T
+T{ S" чі+ген+ді+ох"		S" чеендох"		parse-test -> TRUE }T  \ #257
 T{ S" чі+еді+ңер"		S" чидер"		parse-test -> FALSE }T  \ #212
 T{ S" чі+еді+п"			S" чидіп"		parse-test -> FALSE }T  \ #209
 T{ S" чит+іп"			S" чидіп"		parse-test -> TRUE }T  \ #209
